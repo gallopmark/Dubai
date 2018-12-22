@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#B1B1B1</color>
+    <color name="colorAccent">#FFFF3B30</color>
+
+    <color name="color_baseLine">#DADADA</color>
+    <color name="appTextColor">#333333</color>
+
+    <color name="theme_red">#FD373D</color>
+    <color name="theme_pin">#FE7478</color>
+
+    <color name="color_cc">#cccccc</color>
+    <color name="color_f7">#f7f7f7</color>
+    <color name="color_66">#ff666666</color>
+    <color name="color_b9">#ffb9b9b9</color>
+    <color name="color_df">#ffdfdfdf</color>
+
+
+    <color name="color_calendar">#feedee</color>
+</resources>

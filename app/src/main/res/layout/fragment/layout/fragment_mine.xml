@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/llUserInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/ic_mine_topbg"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Emma"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_24"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="@dimen/space_80"
+                android:layout_height="@dimen/space_80"
+                android:layout_marginLeft="@dimen/space_20"
+                android:layout_marginRight="@dimen/space_20"
+                android:src="@mipmap/ic_user_default" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_arrow_right_white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_message"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_messages"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/llUserInfo" />
+
+        <TextView
+            android:id="@+id/tvFavorites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_favorites"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_favorites"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
+
+        <TextView
+            android:id="@+id/tvCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_calendar"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_calendar"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/tvFavorites" />
+
+        <TextView
+            android:id="@+id/tvSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_settings"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_setting"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/tvCalendar" />
+
+        <TextView
+            android:id="@+id/tvShare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_share"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_share"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/tvSetting" />
+
+        <TextView
+            android:id="@+id/tvContactRTA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_contact_rta"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_contactRTA"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/tvShare" />
+
+        <TextView
+            android:id="@+id/tvFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_15"
+            android:drawableStart="@mipmap/ic_mine_feedback"
+            android:drawableEnd="@mipmap/ic_arrow_right_grey"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center|start"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/mine_feedback"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintTop_toBottomOf="@+id/tvContactRTA" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>

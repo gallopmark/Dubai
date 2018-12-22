@@ -1,0 +1,77 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="PrivateResource">Dubai</string>
+    <string name="confirm">confirm</string>
+    <string name="loading">Loading</string>
+    <string name="nonetwork">Network Error~</string>
+    <string name="reload">Reload</string>
+    <string name="connect_error">Server connection failed~</string>
+    <string name="page_nodata">No data for the time being~</string>
+    <string name="noMoreData">No more data.</string>
+    <string name="loadComplete">Load complete</string>
+    <string name="loadFiled">Failed to load</string>
+    <string name="close">Close</string>
+
+    <string name="home_menu_navigation">Navigation</string>
+    <string name="home_menu_roads">Roads</string>
+    <string name="home_menu_news">News</string>
+    <string name="home_menu_more">More</string>
+    <string name="home_title_favorites">Favorites</string>
+    <string name="home_title_near_me">Near me</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_travel">Travel</string>
+    <string name="tab_me">Me</string>
+
+    <string name="travel_menu_hotels">Hotels</string>
+    <string name="travel_menu_restaurants">Restaurants</string>
+    <string name="travel_menu_goods">Goods</string>
+    <string name="travel_menu_attractions">Attractions</string>
+    <string name="travel_menu_transport">Transport</string>
+    <string name="travel_menu_groups">Groups</string>
+    <string name="travel_menu_RTA_parking">RTA Parking</string>
+    <string name="travel_menu_police">Police</string>
+    <string name="travel_title_recommend">Recommend</string>
+
+    <string name="mine_messages">Messages</string>
+    <string name="mine_favorites">Favorites</string>
+    <string name="mine_calendar">Calendar</string>
+    <string name="mine_setting">Setting</string>
+    <string name="mine_share">Share</string>
+    <string name="mine_contactRTA">Contact RTA</string>
+    <string name="mine_feedback">Feedback</string>
+    <string name="mine_logout">Log out</string>
+
+    <string name="nearMe_roads">Roads</string>
+    <string name="nearMe_events">Events</string>
+    <string name="nearMe_news">News</string>
+    <string name="nearMe_hotel">Hotel</string>
+    <string name="nearMe_restaurants">Restaurants</string>
+    <string name="nearMe_TouristAttractions">Tourist Attractions</string>
+
+    <string name="search">Search</string>
+
+    <string name="roadNavigation_mapType">Map type</string>
+    <string name="roadNavigation_mapType_default">Default</string>
+    <string name="roadNavigation_mapType_3dMap">3D Map</string>
+    <string name="roadNavigation_mapType_satellite">Satellite Map</string>
+    <string name="roadNavigation_events">Events</string>
+    <string name="roadNavigation_others">Others</string>
+    <string name="mapData_events">Events</string>
+    <string name="mapData_parking">Parking</string>
+    <string name="mapData_cctv">CCTV</string>
+    <string name="mapData_dms">DMS</string>
+    <string name="mapData_police">Police</string>
+    <string name="mapData_weather">Weather</string>
+
+    <string name="start_time">Start time</string>
+    <string name="handle_time">Handle time</string>
+    <string name="end_time">End time</string>
+
+    <string name="route_myLocation">My location</string>
+    <string name="route_startPointHint">Please enter the starting point</string>
+    <string name="route_endPointHint">Please enter the end point</string>
+    <string name="route_drive">Drive</string>
+    <string name="route_bicycle">Bicycle</string>
+    <string name="route_walk">Walk</string>
+    <string name="route_save">Save</string>
+    <string name="route_start">Start</string>
+</resources>

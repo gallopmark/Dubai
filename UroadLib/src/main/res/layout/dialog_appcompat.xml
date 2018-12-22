@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_corners_white_5dp"
+    android:minWidth="@dimen/space_280"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/space_20"
+        android:gravity="center"
+        android:paddingLeft="@dimen/space_20"
+        android:paddingRight="@dimen/space_20"
+        android:text="@string/dialog_default_title"
+        android:textColor="@color/dialog_title"
+        android:textSize="@dimen/font_20" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/space_16"
+        android:layout_marginTop="@dimen/space_16"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/space_2"
+        android:maxHeight="@dimen/space_200"
+        android:overScrollMode="never"
+        android:paddingLeft="@dimen/space_20"
+        android:paddingRight="@dimen/space_20"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:textColor="@color/dialog_content"
+        android:textSize="@dimen/font_17" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_0_5"
+        android:background="@color/dialog_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingBottom="@dimen/space_8"
+            android:paddingLeft="@dimen/space_12"
+            android:paddingRight="@dimen/space_12"
+            android:paddingTop="@dimen/space_8"
+            android:text="@string/dialog_button_cancel"
+            android:textColor="@color/dialog_negativeButton"
+            android:textSize="@dimen/font_16"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="@dimen/space_0_5"
+            android:layout_height="match_parent"
+            android:background="@color/dialog_line" />
+
+        <Button
+            android:id="@+id/btConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingBottom="@dimen/space_8"
+            android:paddingLeft="@dimen/space_12"
+            android:paddingRight="@dimen/space_12"
+            android:paddingTop="@dimen/space_8"
+            android:text="@string/dialog_button_confirm"
+            android:textColor="@color/dialog_positiveButton"
+            android:textSize="@dimen/font_16"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

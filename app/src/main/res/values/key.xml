@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mapBoxToken" translatable="false">pk.eyJ1IjoiZ2FsbG9wbWFyayIsImEiOiJjam84YXQzeDQwNjhjM3JwcHViZnZteXk1In0.ptH-24hflAQ622B4Pb_jRg</string>
+    <string name="customTrafficToken" translatable="false">pk.eyJ1IjoibGVld3oiLCJhIjoiY2pvNWI0d3M1MDhodDNwcXEybHNjMW16YiJ9.W3y3iuH6VPoExpPGzmXKXw</string>
+    <string name="customTrafficStyleUrl" translatable="false">mapbox://styles/leewz/cjo6xbigq1w9d2smw2ykwoass</string>
+</resources>

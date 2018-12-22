@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <com.uroad.library.widget.CircularProgressView
+        android:id="@+id/cpvLoading"
+        android:layout_width="@dimen/space_22"
+        android:layout_height="@dimen/space_22"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/space_12"
+        app:border_Width="@dimen/space_3"
+        app:minSweepAngle="60" />
+
+    <TextView
+        android:id="@+id/mLoadingTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/loading"
+        android:textSize="@dimen/font_18" />
+</LinearLayout>

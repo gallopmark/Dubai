@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/space_10"
+        android:paddingBottom="@dimen/space_50">
+
+        <TextView
+            android:id="@+id/tvMapType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:text="@string/roadNavigation_mapType"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/llDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginEnd="@dimen/space_10"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMapType">
+
+            <FrameLayout
+                android:id="@+id/flDefault"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_layer_selector">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_1"
+                    android:src="@mipmap/ic_layer_default" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/space_5"
+                android:text="@string/roadNavigation_mapType_default"
+                android:textColor="@color/maplayer_textcolor_selector"
+                android:textSize="@dimen/font_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll3DMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginEnd="@dimen/space_10"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@+id/llDefault"
+            app:layout_constraintTop_toBottomOf="@+id/tvMapType">
+
+            <FrameLayout
+                android:id="@+id/fl3DMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_layer_selector">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_1"
+                    android:src="@mipmap/ic_layer_3dmap" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/space_5"
+                android:text="@string/roadNavigation_mapType_3dMap"
+                android:textColor="@color/maplayer_textcolor_selector"
+                android:textSize="@dimen/font_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSatellite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llDefault">
+
+            <FrameLayout
+                android:id="@+id/flSatellite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_layer_selector">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_1"
+                    android:src="@mipmap/ic_layer_statellite" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/space_5"
+                android:text="@string/roadNavigation_mapType_satellite"
+                android:textColor="@color/maplayer_textcolor_selector"
+                android:textSize="@dimen/font_14" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/vLine1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_16"
+            android:background="@color/itemDivider"
+            app:layout_constraintTop_toBottomOf="@+id/llSatellite" />
+
+        <TextView
+            android:id="@+id/tvEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginEnd="@dimen/space_10"
+            android:text="@string/roadNavigation_events"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vLine1" />
+
+        <CheckBox
+            android:id="@+id/cbEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/transparent"
+            android:button="@null"
+            android:drawableTop="@drawable/bg_mapdata_events_selector"
+            android:drawablePadding="@dimen/space_3"
+            android:gravity="center"
+            android:text="@string/mapData_events"
+            android:textSize="@dimen/font_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEvents" />
+
+        <View
+            android:id="@+id/vLine2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_16"
+            android:background="@color/itemDivider"
+            app:layout_constraintTop_toBottomOf="@+id/cbEvents" />
+
+        <TextView
+            android:id="@+id/tvOthers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginEnd="@dimen/space_10"
+            android:text="@string/roadNavigation_others"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vLine2" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOthers">
+
+            <CheckBox
+                android:id="@+id/cbParking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_10"
+                android:layout_marginTop="@dimen/space_10"
+                android:background="@color/transparent"
+                android:button="@null"
+                android:drawableTop="@drawable/bg_mapdata_parking_selector"
+                android:drawablePadding="@dimen/space_3"
+                android:gravity="center"
+                android:text="@string/mapData_parking"
+                android:textSize="@dimen/font_14" />
+
+            <CheckBox
+                android:id="@+id/cbCCTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/cbWeather"
+                android:layout_alignEnd="@+id/cbWeather"
+                android:layout_marginTop="@dimen/space_10"
+                android:layout_toEndOf="@+id/cbParking"
+                android:background="@color/transparent"
+                android:button="@null"
+                android:drawableTop="@drawable/bg_mapdata_cctv_selector"
+                android:drawablePadding="@dimen/space_3"
+                android:gravity="center"
+                android:text="@string/mapData_cctv"
+                android:textSize="@dimen/font_14" />
+
+            <CheckBox
+                android:id="@+id/cbDMS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_25"
+                android:layout_marginTop="@dimen/space_10"
+                android:layout_toEndOf="@+id/cbCCTV"
+                android:background="@color/transparent"
+                android:button="@null"
+                android:drawableTop="@drawable/bg_mapdata_dms_selector"
+                android:drawablePadding="@dimen/space_3"
+                android:gravity="center"
+                android:text="@string/mapData_dms"
+                android:textSize="@dimen/font_14" />
+
+            <CheckBox
+                android:id="@+id/cbPolice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cbParking"
+                android:layout_alignStart="@+id/cbParking"
+                android:layout_alignEnd="@+id/cbParking"
+                android:layout_marginTop="@dimen/space_10"
+                android:background="@color/transparent"
+                android:button="@null"
+                android:drawableTop="@drawable/bg_mapdata_police_selector"
+                android:drawablePadding="@dimen/space_3"
+                android:gravity="center"
+                android:text="@string/mapData_police"
+                android:textSize="@dimen/font_14" />
+
+            <CheckBox
+                android:id="@+id/cbWeather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cbCCTV"
+                android:layout_marginStart="@dimen/space_25"
+                android:layout_marginTop="@dimen/space_10"
+                android:layout_toEndOf="@+id/cbPolice"
+                android:background="@color/transparent"
+                android:button="@null"
+                android:drawableTop="@drawable/bg_mapdata_weather_selector"
+                android:drawablePadding="@dimen/space_3"
+                android:gravity="center"
+                android:text="@string/mapData_weather"
+                android:textSize="@dimen/font_14"
+                app:layout_constraintStart_toEndOf="@+id/cbPolice"
+                app:layout_constraintTop_toBottomOf="@+id/cbDMS" />
+        </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>
+

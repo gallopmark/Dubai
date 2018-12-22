@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/content_mapview" />
+
+    <RelativeLayout
+        android:id="@+id/rlSearch"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_size"
+        android:layout_margin="@dimen/space_10"
+        android:background="@drawable/bg_corners_white_5dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingStart="@dimen/space_16"
+            android:paddingEnd="@dimen/space_16"
+            android:src="@mipmap/ic_back" />
+
+        <View
+            android:layout_width="@dimen/space_0_5"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/space_10"
+            android:layout_marginBottom="@dimen/space_10"
+            android:layout_toEndOf="@+id/ivBack"
+            android:background="@color/color_df" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableStart="@mipmap/ic_search_grey"
+            android:drawablePadding="@dimen/space_8"
+            android:gravity="center"
+            android:text="@string/search"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivSwitchLayer"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginTop="@dimen/space_50"
+        android:layout_marginEnd="@dimen/space_10"
+        android:src="@mipmap/ic_switch_layer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlSearch" />
+
+    <ImageView
+        android:id="@+id/ivTrafficLayer"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:src="@mipmap/ic_traffic_layer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivSwitchLayer" />
+
+    <ImageView
+        android:id="@+id/ivTouristLayer"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:src="@mipmap/ic_tourist_layer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivTrafficLayer" />
+
+    <ImageView
+        android:id="@+id/ivReportLayer"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:src="@mipmap/ic_report_layer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivTouristLayer" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginBottom="@dimen/space_10"
+        android:background="@drawable/bg_corners_white_5dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/ivLocation"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/ivEnlarge"
+            android:layout_width="@dimen/space_45"
+            android:layout_height="@dimen/space_45"
+            android:scaleType="center"
+            android:src="@mipmap/ic_map_enlarge" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_0_5"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:background="@color/color_df" />
+
+        <ImageView
+            android:id="@+id/ivNarrow"
+            android:layout_width="@dimen/space_45"
+            android:layout_height="@dimen/space_45"
+            android:scaleType="center"
+            android:src="@mipmap/ic_map_narrow" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivLocation"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginBottom="@dimen/space_60"
+        android:background="@drawable/bg_corners_white_5dp"
+        android:scaleType="center"
+        android:src="@mipmap/ic_location_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

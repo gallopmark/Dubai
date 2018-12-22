@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/baseParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@id/baseToolbar"
+        style="@style/AppToolBarStyle">
+
+        <TextView
+            android:id="@id/baseTitleTv"
+            style="@style/ToolbarTitleTvStyle" />
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@id/baseLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:background="@color/color_baseLine" />
+
+    <com.uroad.dubai.widget.CurrencyLoadView
+        android:id="@id/baseLoadView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mEmptyTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:drawableTop="@mipmap/ic_nodata"
+    android:drawablePadding="@dimen/space_20"
+    android:gravity="center"
+    android:text="@string/page_nodata"
+    android:textSize="@dimen/font_16" />

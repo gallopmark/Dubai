@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    lintOptions {
+        abortOnError false
+    }
+    defaultConfig {
+        applicationId "com.uroad.dubai"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+    /*layout目录分类*/
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layout/activity',
+                    'src/main/res/layout/common',
+                    'src/main/res/layout/fragment',
+                    'src/main/res/layout/item',
+                    'src/main/res/layout/menu',
+                    'src/main/res/layout/dialog',
+                    'src/main/res/layout/include',
+                    'src/main/res/layout',
+                    'src/main/res'
+            ]
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+repositories {
+    mavenCentral()
+    maven { url 'https://mapbox.bintray.com/mapbox' }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':UroadLib')
+    implementation project(':Rxjava2Lib')
+    implementation project(':OkHttpLib')
+    implementation project(":ImageLoader")
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2') {
+        exclude group: 'group_name', module: 'module_name'
+    }
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.2.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.24.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-18'
+}
