@@ -96,7 +96,7 @@ abstract class BaseLucaActivity : AppCompatActivity() {
     }
 
     open fun withOption(actionIcon: Drawable?, option: CharSequence?, onClickListener: View.OnClickListener?) {
-        if (!TextUtils.isEmpty(option)) {
+        if (!TextUtils.isEmpty(option) || actionIcon != null) {
             val view = layoutInflater.inflate(R.layout.menu_action_base, baseToolbar, true)
             val baseMenuTv = view.findViewById<TextView>(R.id.baseMenuTv)
             baseMenuTv.text = option

@@ -106,4 +106,12 @@
         <item name="android:windowEnterAnimation">@anim/operate_in</item>
         <item name="android:windowExitAnimation">@anim/operate_out</item>
     </style>
+
+    <!--解决启动白屏问题-->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 </resources>

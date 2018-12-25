@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivSplash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/tvJump"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_margin="@dimen/space_20"
+        android:background="@color/black_overlay"
+        android:paddingLeft="@dimen/space_10"
+        android:paddingTop="@dimen/space_5"
+        android:paddingRight="@dimen/space_10"
+        android:paddingBottom="@dimen/space_5"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+</FrameLayout>

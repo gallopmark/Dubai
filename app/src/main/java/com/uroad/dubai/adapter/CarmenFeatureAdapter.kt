@@ -1,6 +1,7 @@
 package com.uroad.dubai.adapter
 
 import android.app.Activity
+import android.content.Context
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
@@ -10,7 +11,7 @@ import com.uroad.dubai.common.BaseArrayRecyclerAdapter
  * @create 2018/11/14
  * @describe
  */
-class CarmenFeatureAdapter(context: Activity, mDatas: MutableList<CarmenFeature>)
+class CarmenFeatureAdapter(context: Context, mDatas: MutableList<CarmenFeature>)
     : BaseArrayRecyclerAdapter<CarmenFeature>(context, mDatas) {
     override fun bindView(viewType: Int): Int = R.layout.item_carmenreature
 

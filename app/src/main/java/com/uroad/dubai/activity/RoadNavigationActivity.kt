@@ -27,12 +27,16 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.util.ArrayMap
 import android.widget.CompoundButton
 import com.mapbox.android.core.permissions.PermissionsListener
+import com.mapbox.mapboxsdk.annotations.Icon
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.location.LocationComponent
 import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.uroad.dubai.enumeration.MapDataType
+import com.uroad.dubai.local.DataSource
+import com.uroad.dubai.model.EventsMDL
 
 
 /**
@@ -41,89 +45,6 @@ import com.mapbox.mapboxsdk.location.LocationComponentOptions
  * @describe Road navigation
  */
 class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener {
-
-    private class RoadData {
-        /**
-         * NSArray * latArray = @[@(24.29045862222854),@(25.71109733694287)
-         * ,@(25.50251457879257),@(25.260430807520947),@(24.98663128116354)
-         * ,@(24.861623304922887),@(24.583673073761176),@(24.65789600887483)
-         * ,@(25.035503774803118),@(25.012879832914024),@(24.604357106770124)
-         * ,@(24.628219646337257),@(25.235800209105093),@(24.4970057134079)
-         * ,@(25.151713168516054),@(25.47217244601599),@(24.919234574159304)
-         * ,@(24.218204151399064),@(24.18581475318689),@(24.20949902407014)
-         * ,@(25.303561875079183), @(25.473265821079735), @(24.423435007145386)
-         * , @(25.115663223796332)];
-        NSArray * logArray = @[@(55.852681624449815),@(55.984812838019934)
-        ,@(56.223575439742945),@(56.18408021591233),@(56.13103272127739)
-        ,@(56.069466637252845),@(55.74578456977292),@(55.69731953832229)
-        ,@(55.59616854894591),@(55.28375285528648),@(55.13522740529925)
-        ,@(54.74918917311584),@(55.32494669342714),@(55.43882546263342)
-        ,@(55.8957487204126),@(56.009015219291996),@(56.11049688466619)
-        ,@(55.5668175990312),@(55.26069186566269),@(54.41366434182248)
-        ,@(55.4707649820881), @(55.58799714838494), @(55.02788501046564)
-        , @(55.19529231879494)];
-         */
-        companion object {
-            val latitudeArray = doubleArrayOf(24.29045862222854, 25.71109733694287, 25.50251457879257,
-                    25.260430807520947, 24.98663128116354, 24.861623304922887, 24.583673073761176, 24.65789600887483,
-                    25.035503774803118, 25.012879832914024, 24.604357106770124, 24.628219646337257, 25.235800209105093,
-                    24.4970057134079, 25.151713168516054, 5.47217244601599, 24.919234574159304, 24.218204151399064,
-                    24.18581475318689, 24.20949902407014, 25.303561875079183, 25.473265821079735, 24.423435007145386, 25.115663223796332)
-            val longitudeArray = doubleArrayOf(55.852681624449815, 55.984812838019934, 56.223575439742945,
-                    56.18408021591233, 56.13103272127739, 56.069466637252845, 55.74578456977292, 55.69731953832229,
-                    55.59616854894591, 55.28375285528648, 55.13522740529925, 54.74918917311584, 55.32494669342714,
-                    55.43882546263342, 55.8957487204126, 56.009015219291996, 56.11049688466619, 55.5668175990312,
-                    55.26069186566269, 54.41366434182248, 55.4707649820881, 55.58799714838494, 55.02788501046564, 55.19529231879494)
-
-            fun getAccident(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[0], longitudeArray[0]))
-                add(LatLng(latitudeArray[1], longitudeArray[1]))
-                add(LatLng(latitudeArray[2], longitudeArray[2]))
-            }
-
-            fun getConstruction(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[3], longitudeArray[3]))
-                add(LatLng(latitudeArray[4], longitudeArray[4]))
-                add(LatLng(latitudeArray[5], longitudeArray[5]))
-            }
-
-            fun getParking(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[6], longitudeArray[6]))
-                add(LatLng(latitudeArray[7], longitudeArray[7]))
-                add(LatLng(latitudeArray[8], longitudeArray[8]))
-            }
-
-            fun getCCTV(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[9], longitudeArray[8]))
-                add(LatLng(latitudeArray[10], longitudeArray[10]))
-                add(LatLng(latitudeArray[11], longitudeArray[11]))
-            }
-
-            fun getDMS(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[12], longitudeArray[12]))
-                add(LatLng(latitudeArray[13], longitudeArray[13]))
-                add(LatLng(latitudeArray[14], longitudeArray[14]))
-            }
-
-            fun getPolice(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[15], longitudeArray[15]))
-                add(LatLng(latitudeArray[16], longitudeArray[16]))
-                add(LatLng(latitudeArray[17], longitudeArray[17]))
-            }
-
-            fun getWeather(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[18], longitudeArray[18]))
-                add(LatLng(latitudeArray[19], longitudeArray[19]))
-                add(LatLng(latitudeArray[20], longitudeArray[20]))
-            }
-
-            fun getRWIS(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[21], longitudeArray[21]))
-                add(LatLng(latitudeArray[22], longitudeArray[21]))
-                add(LatLng(latitudeArray[23], longitudeArray[21]))
-            }
-        }
-    }
 
     private var statusHeight = 0
     private var isMapAsync = false
@@ -265,6 +186,9 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     /*map load complete*/
     override fun onMapAsync(mapBoxMap: MapboxMap) {
         isMapAsync = true
+        mapBoxMap.setOnMarkerClickListener {
+            return@setOnMarkerClickListener true
+        }
 //        enableLocationComponent()
     }
 
@@ -328,21 +252,13 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     private fun initMenu() {
         val onCheckChangedListener = CompoundButton.OnCheckedChangeListener { view, isChecked ->
             when (view.id) {
-                R.id.cbEvents -> {
-
-                }
-                R.id.cbParking -> {
-                }
-                R.id.cbCCTV -> {
-                }
-                R.id.cbDMS -> {
-                }
-                R.id.cbPolice -> {
-
-                }
-                R.id.cbWeather -> {
-
-                }
+                R.id.cbEvents -> onMenuCheckChanged(isChecked, MapDataType.ACCIDENT.code)
+                R.id.cbParking -> onMenuCheckChanged(isChecked, MapDataType.PARKING.code)
+                R.id.cbCCTV -> onMenuCheckChanged(isChecked, MapDataType.CCTV.code)
+                R.id.cbDMS -> onMenuCheckChanged(isChecked, MapDataType.DMS.code)
+                R.id.cbPolice -> onMenuCheckChanged(isChecked, MapDataType.POLICE.code)
+                R.id.cbWeather -> onMenuCheckChanged(isChecked, MapDataType.WEATHER.code)
+                R.id.cbRWIS -> onMenuCheckChanged(isChecked, MapDataType.RWIS.code)
             }
         }
         cbEvents.setOnCheckedChangeListener(onCheckChangedListener)
@@ -351,6 +267,64 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
         cbDMS.setOnCheckedChangeListener(onCheckChangedListener)
         cbPolice.setOnCheckedChangeListener(onCheckChangedListener)
         cbWeather.setOnCheckedChangeListener(onCheckChangedListener)
+        cbRWIS.setOnCheckedChangeListener(onCheckChangedListener)
+    }
+
+    private fun onMenuCheckChanged(isChecked: Boolean, code: String) {
+        if (isChecked) {
+            showMapPointByType(code)
+        } else {
+            removePointFromMap(code)
+        }
+    }
+
+    private fun showMapPointByType(code: String) {
+        when (code) {
+            MapDataType.ACCIDENT.code -> {
+                val data = ArrayList<EventsMDL>().apply {
+                    addAll(DataSource.MapData.getAccident())
+                    addAll(DataSource.MapData.getConstruction())
+                }
+                showEventsPoint(code, data)
+            }
+            MapDataType.CONSTRUCTION.code -> {
+
+            }
+            MapDataType.PARKING.code -> {
+
+            }
+            MapDataType.CCTV.code -> {
+
+            }
+            MapDataType.DMS.code -> {
+
+            }
+            MapDataType.POLICE.code -> {
+
+            }
+            MapDataType.WEATHER.code -> {
+
+            }
+            MapDataType.RWIS.code -> {
+
+            }
+        }
+    }
+
+    private fun showEventsPoint(code: String, data: MutableList<EventsMDL>) {
+        val options = ArrayList<MarkerOptions>()
+        for (item in data) {
+            options.add(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
+        }
+        markerMap[code] = mapBoxMap?.addMarkers(options)
+    }
+
+    private fun createMarkerOptions(icon: Icon, latLng: LatLng): MarkerOptions {
+        return MarkerOptions().setIcon(icon).setPosition(latLng)
+    }
+
+    private fun removePointFromMap(code: String) {
+        markerMap[code]?.let { for (marker in it) mapBoxMap?.removeMarker(marker) }
     }
 
     override fun onStart() {
@@ -367,5 +341,4 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
         locationComponent?.onDestroy()
         super.onDestroy()
     }
-
 }

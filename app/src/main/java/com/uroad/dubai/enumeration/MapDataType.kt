@@ -7,5 +7,6 @@ enum class MapDataType(var code: String) {
     CCTV("100004"),
     DMS("100005"),
     POLICE("100006"),
-    WEATHER("100007")
+    WEATHER("100007"),
+    RWIS("100008")
 }

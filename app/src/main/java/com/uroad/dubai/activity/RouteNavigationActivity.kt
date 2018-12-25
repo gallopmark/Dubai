@@ -2,35 +2,27 @@ package com.uroad.dubai.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.graphics.drawable.ColorDrawable
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.PopupWindowCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.SpannableString
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
-import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.api.directions.v5.DirectionsCriteria
-import com.mapbox.api.directions.v5.MapboxDirections
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
-import com.mapbox.api.geocoding.v5.models.GeocodingResponse
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
@@ -47,28 +39,23 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 import com.uroad.dubai.R
-import com.uroad.dubai.adapter.CarmenFeatureAdapter
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.utils.TimeUtils
 import com.uroad.dubai.utils.Utils
+import com.uroad.dubai.webService.api.presenter.RouteNavigationPresenter
+import com.uroad.dubai.webService.api.view.RouteNavigationView
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.InputMethodUtils
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_routenavigation.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /**
  * @author MFB
  * @create 2018/12/22
  * @describe route navigation
  */
-class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener {
+class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, RouteNavigationView {
 
     private var permissionsManager: PermissionsManager? = null
     private var locationComponent: LocationComponent? = null
@@ -88,10 +75,13 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     private var navigationMapRoute: NavigationMapRoute? = null
     private var selectedRoute: DirectionsRoute? = null
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var routePresenter: RouteNavigationPresenter
+    private var isRouteNavigation = false
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
         ivBack.setOnClickListener { onBackPressed() }
+        routePresenter = RouteNavigationPresenter(this, this)
         initPoiSearchView()
         initChangePoi()
         initProfileRg()
@@ -294,22 +284,34 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         }
     }
 
+    override fun onPoiResult(features: MutableList<CarmenFeature>, type: Int) {
+        showPopupWindow(type, features)
+    }
+
+    override fun onNavigationRoutes(routes: MutableList<DirectionsRoute>?) {
+        if (routes == null || routes.isEmpty()) {
+            showShortToast("No routes found")
+        } else {
+            drawRoutes(routes)
+        }
+    }
+
+    override fun onShowLoading() {
+        if (isRouteNavigation) showLoading()
+    }
+
+    override fun onHideLoading() {
+        if (isRouteNavigation) endLoading()
+    }
+
+    override fun onShowError(msg: String?) {
+        if (isRouteNavigation) showShortToast(msg)
+    }
+
     /*Asynchronous search Poi*/
     private fun enqueueCall(content: String, type: Int) {
-        val client = MapboxGeocoding.builder()
-                .accessToken(getString(R.string.mapBoxToken))
-                .country("AE")
-                .query(content).build().apply {
-                    this.enqueueCall(object : Callback<GeocodingResponse> {
-                        override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
-                            response.body()?.features()?.let { showPopupWindow(type, it) }
-                        }
-
-                        override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-
-                        }
-                    })
-                }
+        isRouteNavigation = false
+        val client = routePresenter.getPoi(content, type)
         if (type == 1) {
             startGeoClient = client
         } else {
@@ -318,76 +320,31 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     }
 
     private fun showPopupWindow(type: Int, results: MutableList<CarmenFeature>) {
-        val recyclerView = RecyclerView(this).apply {
-            setBackgroundColor(ContextCompat.getColor(this@RouteNavigationActivity, R.color.white))
-            layoutManager = LinearLayoutManager(this@RouteNavigationActivity).apply { orientation = LinearLayoutManager.VERTICAL }
-        }
         val parent = if (type == 1) etStartPoint else etEndPoint
-        popupWindow = PopupWindow(recyclerView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-            isFocusable = false
-            setBackgroundDrawable(ColorDrawable())
-            isOutsideTouchable = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                val location = IntArray(2)
-                parent.getLocationInWindow(location)
-                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) { // 7.1 版本处理
-                    val screenHeight = DisplayUtils.getWindowHeight(this@RouteNavigationActivity)
-                    height = screenHeight - location[1] - parent.height
+        popupWindow = routePresenter.showPoiWindow(parent, results, object : BaseRecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                if (type == 1) {
+                    startPoint = results[position].center()
+                    isStartSetText = true
+                    etStartPoint.setText(results[position].placeName())
+                    etStartPoint.setSelection(etStartPoint.text.length)
+                } else {
+                    endPoint = results[position].center()
+                    isEndSetText = true
+                    etEndPoint.setText(results[position].placeName())
+                    etEndPoint.setSelection(etEndPoint.text.length)
                 }
-                showAtLocation(parent, Gravity.NO_GRAVITY, location[0], location[1] + parent.height)
-            } else
-                PopupWindowCompat.showAsDropDown(this, parent, 0, 0, Gravity.NO_GRAVITY)
-        }
-        recyclerView.adapter = CarmenFeatureAdapter(this, results).apply {
-            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    if (type == 1) {
-                        startPoint = results[position].center()
-                        isStartSetText = true
-                        etStartPoint.setText(results[position].placeName())
-                        etStartPoint.setSelection(etStartPoint.text.length)
-                    } else {
-                        endPoint = results[position].center()
-                        isEndSetText = true
-                        etEndPoint.setText(results[position].placeName())
-                        etEndPoint.setSelection(etEndPoint.text.length)
-                    }
-                    popupWindow?.dismiss()
-                    startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
-                }
-            })
-        }
+                popupWindow?.dismiss()
+                startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+            }
+        })
     }
 
     private fun navigationRoutes(origin: Point, destination: Point) {
         InputMethodUtils.hideSoftInput(this)
         llBottom.visibility = View.GONE
-        val directions = MapboxDirections.builder()
-                .profile(profile)
-                .origin(origin)
-                .destination(destination)
-                .accessToken(getString(R.string.mapBoxToken))
-                .bannerInstructions(true)
-                .voiceInstructions(true)
-                .overview(DirectionsCriteria.OVERVIEW_FULL)
-                .alternatives(true)
-                .steps(true)
-                .build()
-        addDisposable(Observable.fromCallable { directions.executeCall() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    endLoading()
-                    val routes = it.body()?.routes()
-                    if (routes == null || routes.isEmpty()) {
-                        showShortToast("No routes found")
-                    } else {
-                        drawRoutes(routes)
-                    }
-                }, {
-                    endLoading()
-                    showShortToast(it.message)
-                }, {}, { showLoading() }))
+        isRouteNavigation = true
+        routePresenter.getRoutes(origin, destination, profile)
     }
 
     private fun drawRoutes(routes: List<DirectionsRoute>) {
@@ -501,5 +458,12 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         fun setOnItemSelectedListener(onItemSelectedListener: OnItemSelectedListener) {
             this.onItemSelectedListener = onItemSelectedListener
         }
+    }
+
+    override fun onDestroy() {
+        cancelStartSearch()
+        cancelEndSearch()
+        routePresenter.detachView()
+        super.onDestroy()
     }
 }

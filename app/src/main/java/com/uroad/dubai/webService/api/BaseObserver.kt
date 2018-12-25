@@ -68,5 +68,5 @@ abstract class BaseObserver<T>(var view: BaseView?) : DisposableObserver<T>() {
 
     abstract fun onSuccess(result: T)
 
-    abstract fun onFailure(msg: String?)
+    open fun onFailure(msg: String?){}
 }
