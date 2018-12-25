@@ -10,6 +10,8 @@
     <string name="loadComplete">Load complete</string>
     <string name="loadFiled">Failed to load</string>
     <string name="close">Close</string>
+    <string name="tips">Tips</string>
+    <string name="developing">This feature is under development</string>
 
     <string name="home_menu_navigation">Navigation</string>
     <string name="home_menu_roads">Roads</string>

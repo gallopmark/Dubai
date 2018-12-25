@@ -54,6 +54,7 @@ class EventsDetailDialog(private val context: Activity,
         override fun bindView(viewType: Int): Int = R.layout.item_eventsdetail
 
         override fun onBindHoder(holder: RecyclerHolder, t: EventsMDL, position: Int) {
+            holder.setImageResource(R.id.ivIcon, t.getIcon())
             holder.setText(R.id.tvTitle, t.eventtypename)
             holder.setText(R.id.tvTime, t.updatetime)
             holder.setText(R.id.tvContent, t.roadtitle)

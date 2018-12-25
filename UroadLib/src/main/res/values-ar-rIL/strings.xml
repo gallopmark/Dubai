@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_default_title"> نصائح </string>
+    <string name="dialog_button_cancel"> إلغاء </string>
+    <string name="dialog_button_confirm"> تحديد </string>
+    <string name="dialog_loading"> تحميل  . </string>
+</resources>

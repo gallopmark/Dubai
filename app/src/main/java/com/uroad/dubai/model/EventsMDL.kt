@@ -1,5 +1,8 @@
 package com.uroad.dubai.model
 
+import com.uroad.dubai.R
+import com.uroad.dubai.enumeration.MapDataType
+
 class EventsMDL {
     var subscribestatus: Int? = 0
     var latitude: Double? = 0.0
@@ -18,4 +21,12 @@ class EventsMDL {
     var statuscolor: String? = null
     var updatetime: String? = null
     var isuseful: Int? = 0
+
+    fun getIcon(): Int {
+        subtype?.let {
+            if (it == MapDataType.ACCIDENT.code) return R.mipmap.ic_event_accident
+            if (it == MapDataType.CONSTRUCTION.code) return R.mipmap.ic_construction_round
+        }
+        return 0
+    }
 }

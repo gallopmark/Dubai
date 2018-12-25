@@ -9,9 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/space_16"
-        android:paddingBottom="@dimen/space_16">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +21,7 @@
             <ImageView
                 android:id="@+id/ivBack"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/space_45"
+                android:layout_height="@dimen/space_40"
                 android:paddingStart="@dimen/space_10"
                 android:paddingEnd="@dimen/space_10"
                 android:src="@mipmap/ic_back" />
@@ -37,8 +35,9 @@
                 <EditText
                     android:id="@+id/etStartPoint"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_45"
+                    android:layout_height="@dimen/space_40"
                     android:layout_marginStart="@dimen/space_10"
+                    android:background="@color/transparent"
                     android:drawableStart="@mipmap/ic_red_point"
                     android:drawablePadding="@dimen/space_20"
                     android:gravity="center|start"
@@ -57,8 +56,9 @@
                 <EditText
                     android:id="@+id/etEndPoint"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_45"
+                    android:layout_height="@dimen/space_40"
                     android:layout_marginStart="@dimen/space_10"
+                    android:background="@color/transparent"
                     android:drawableStart="@mipmap/ic_bule_point"
                     android:drawablePadding="@dimen/space_20"
                     android:gravity="center|start"
@@ -80,10 +80,12 @@
 
         <RadioGroup
             android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_5"
+            android:layout_marginBottom="@dimen/space_10"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <RadioButton
@@ -95,8 +97,10 @@
                 android:checked="true"
                 android:drawableStart="@drawable/bg_routedrive_selector"
                 android:drawablePadding="@dimen/space_5"
-                android:paddingStart="@dimen/space_15"
-                android:paddingEnd="@dimen/space_15"
+                android:paddingStart="@dimen/space_20"
+                android:paddingTop="@dimen/space_3"
+                android:paddingEnd="@dimen/space_20"
+                android:paddingBottom="@dimen/space_3"
                 android:text="@string/route_drive"
                 android:textColor="@color/route_rbtextcolor_selector"
                 android:textSize="@dimen/font_16" />
@@ -104,13 +108,16 @@
             <RadioButton
                 android:id="@+id/rbBicycle"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/space_16"
+                android:background="@drawable/bg_routerb_selector"
                 android:button="@null"
                 android:drawableStart="@drawable/bg_routebicycle_selector"
                 android:drawablePadding="@dimen/space_5"
-                android:paddingStart="@dimen/space_15"
-                android:paddingEnd="@dimen/space_15"
+                android:paddingStart="@dimen/space_20"
+                android:paddingTop="@dimen/space_3"
+                android:paddingEnd="@dimen/space_20"
+                android:paddingBottom="@dimen/space_3"
                 android:text="@string/route_bicycle"
                 android:textColor="@color/route_rbtextcolor_selector"
                 android:textSize="@dimen/font_16" />
@@ -120,14 +127,76 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/space_16"
+                android:background="@drawable/bg_routerb_selector"
                 android:button="@null"
                 android:drawableStart="@drawable/bg_routewalk_selector"
                 android:drawablePadding="@dimen/space_5"
-                android:paddingStart="@dimen/space_15"
-                android:paddingEnd="@dimen/space_15"
+                android:paddingStart="@dimen/space_20"
+                android:paddingTop="@dimen/space_3"
+                android:paddingEnd="@dimen/space_20"
+                android:paddingBottom="@dimen/space_3"
                 android:text="@string/route_walk"
                 android:textColor="@color/route_rbtextcolor_selector"
                 android:textSize="@dimen/font_16" />
         </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1"
+            android:layout_marginStart="@dimen/space_16"
+            android:layout_marginEnd="@dimen/space_16"
+            android:background="@color/itemDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_10"
+            android:orientation="horizontal">
+
+            <com.uroad.dubai.widget.DrawableCenterTextView
+                android:id="@+id/tvSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_collect_buttonbg"
+                android:drawableStart="@mipmap/ic_collect"
+                android:drawablePadding="@dimen/space_5"
+                android:gravity="center|start"
+                android:text="@string/route_save"
+                android:textColor="@color/theme_red"
+                android:textSize="@dimen/font_16" />
+
+            <com.uroad.dubai.widget.DrawableCenterTextView
+                android:id="@+id/tvNavigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/space_10"
+                android:background="@mipmap/ic_navigation_buttonbg"
+                android:drawableStart="@mipmap/ic_navigation_start_white"
+                android:drawablePadding="@dimen/space_5"
+                android:gravity="center"
+                android:text="@string/route_start"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_16" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
