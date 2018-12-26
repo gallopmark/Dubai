@@ -43,7 +43,8 @@
             android:launchMode="singleTop"/>
         <activity android:name=".activity.ParkingListActivity"
             android:launchMode="singleTop"/>
-
+        <activity android:name=".activity.AttractionsListActivity"
+            android:launchMode="singleTop"/>
 
     </application>
 

@@ -17,8 +17,6 @@ public class TabUtils {
                     //拿到tabLayout的mTabStrip属性
                     LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
 
-
-
                     for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                         View tabView = mTabStrip.getChildAt(i);
 
@@ -40,8 +38,7 @@ public class TabUtils {
 
                         //设置tab左右间距 注意这里不能使用Padding 因为源码中线的宽度是根据 tabView的宽度来设置的
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-                        params.width = width ;
-                        params.topMargin = 0;
+                        params.width = (int) (width/2);
                         params.leftMargin = padding;
                         params.rightMargin = padding;
                         tabView.setLayoutParams(params);

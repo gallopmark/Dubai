@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.AttractionsListActivity
 import com.uroad.dubai.activity.BusStopListActivity
 import com.uroad.dubai.activity.ParkingListActivity
 import com.uroad.dubai.activity.PoliceListActivity
@@ -38,6 +39,7 @@ class TravelFragment : BaseFragment() {
     }
 
     private fun initView(){
+        tvAttractions.setOnClickListener { openActivity(AttractionsListActivity::class.java) }
         tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
         tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
