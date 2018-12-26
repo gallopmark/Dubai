@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="@dimen/space_10"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/ivPoliceType"
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_msg_accident" />
+
+        <TextView
+            android:id="@+id/tvPoliceName"
+            android:layout_marginLeft="@dimen/space_10"
+            android:textSize="@dimen/font_16"
+            android:textColor="@color/black"
+            android:text="的飞机的妇科大夫"
+            android:layout_toEndOf="@+id/ivPoliceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvPoliceTel"
+            android:text="Tel:123-794644"
+            android:textColor="@color/gary"
+            android:textSize="@dimen/space_14"
+            android:layout_below="@+id/tvPoliceName"
+            android:layout_alignLeft="@+id/tvPoliceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvCallPol"
+            android:background="@drawable/shape_fillet"
+            android:text="Call"
+            android:layout_marginRight="@dimen/space_10"
+            android:paddingLeft="@dimen/space_10"
+            android:paddingRight="@dimen/space_10"
+            android:paddingTop="@dimen/space_5"
+            android:paddingBottom="@dimen/space_5"
+            android:textSize="@dimen/space_16"
+            android:textColor="@color/red"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvPolContext"
+            android:text="华盛顿和思考角度还是速度和世界大会时代精神的卡的婚纱看爱很简单"
+            android:textColor="@color/gary"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="@dimen/space_14"
+            android:paddingRight="@dimen/space_10"
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_10"
+            android:layout_below="@+id/ivPoliceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvPolDistance"
+            android:layout_marginTop="@dimen/space_28"
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_marginRight="@dimen/space_10"
+            android:layout_below="@+id/ivPoliceType"
+            android:layout_alignParentRight="true"
+            android:text="16km"
+            android:textSize="@dimen/space_14"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginRight="@dimen/space_10"
+        android:background="@color/itemDivider" />
+
+</LinearLayout>

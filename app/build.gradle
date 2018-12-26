@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     lintOptions {
         abortOnError false
     }
@@ -48,11 +49,11 @@ repositories {
     maven { url 'https://mapbox.bintray.com/mapbox' }
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':UroadLib')
     implementation project(':Rxjava2Lib')
     implementation project(':OkHttpLib')
-    implementation project(":ImageLoader")
+    implementation project(':ImageLoader')
     implementation 'com.android.support:multidex:1.0.3'
     implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2') {
         exclude group: 'group_name', module: 'module_name'

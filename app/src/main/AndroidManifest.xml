@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.RoadNavigationActivity"
             android:launchMode="singleTop"
@@ -34,8 +34,16 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.RouteNavigationActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:launchMode="singleTop" />
+        <activity android:name=".activity.MessagesListActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PoliceListActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.BusStopListActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.ParkingListActivity"
+            android:launchMode="singleTop"/>
+
 
     </application>
 
