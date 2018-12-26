@@ -1,14 +1,13 @@
 package com.uroad.dubai.activity
 
-import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.ParkingListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.ParkingMDL
-import com.uroad.dubai.webService.api.presenter.ParkingPresenter
-import com.uroad.dubai.webService.api.view.ParkingView
+import com.uroad.dubai.api.presenter.ParkingPresenter
+import com.uroad.dubai.api.view.ParkingView
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
 class ParkingListActivity: BaseRefreshPresenterActivity<ParkingPresenter>(), ParkingView {

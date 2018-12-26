@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:paddingBottom="@dimen/space_20">
 
     <ImageView
@@ -23,7 +24,6 @@
         android:layout_marginStart="@dimen/space_10"
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginBottom="@dimen/space_10"
-        android:orientation="horizontal"
         app:layout_constraintEnd_toStartOf="@+id/ivClose"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -53,7 +53,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Accident"
                     android:textColor="@color/appTextColor"
                     android:textSize="@dimen/font_16" />
 
@@ -64,8 +63,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/space_16"
                     android:gravity="center"
-                    android:text="a min ago"
-                    android:textColor="@color/lightgrey"
+                    android:textColor="@color/color_66"
                     android:textSize="@dimen/font_14" />
             </LinearLayout>
 
@@ -80,8 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Accident"
-                    android:textColor="@color/lightgrey"
+                    android:textColor="@color/color_66"
                     android:textSize="@dimen/font_14" />
 
                 <TextView
@@ -93,7 +90,6 @@
                     android:background="@drawable/bg_corners_orange_3dp"
                     android:paddingStart="@dimen/space_5"
                     android:paddingEnd="@dimen/space_5"
-                    android:text="Jammed"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_10" />
             </LinearLayout>
@@ -119,8 +115,7 @@
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_10"
         android:lineSpacingExtra="@dimen/space_4"
-        android:text="On the morning of 6 February, 22 people were injured in  a majo"
-        android:textColor="@color/darkgrey"
+        android:textColor="@color/color_66"
         android:textSize="@dimen/font_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +139,6 @@
                 android:id="@+id/tvStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="14:23"
                 android:textColor="@color/appTextColor"
                 android:textSize="@dimen/font_20"
                 android:textStyle="bold" />
@@ -153,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/start_time"
-                android:textColor="@color/darkgrey"
+                android:textColor="@color/color_66"
                 android:textSize="@dimen/font_16" />
         </LinearLayout>
 
@@ -168,7 +162,6 @@
                 android:id="@+id/tvHandleTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="14:32"
                 android:textColor="@color/appTextColor"
                 android:textSize="@dimen/font_20"
                 android:textStyle="bold" />
@@ -177,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/handle_time"
-                android:textColor="@color/darkgrey"
+                android:textColor="@color/color_66"
                 android:textSize="@dimen/font_16" />
         </LinearLayout>
 
@@ -201,7 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/end_time"
-                android:textColor="@color/darkgrey"
+                android:textColor="@color/color_66"
                 android:textSize="@dimen/font_16" />
         </LinearLayout>
     </LinearLayout>

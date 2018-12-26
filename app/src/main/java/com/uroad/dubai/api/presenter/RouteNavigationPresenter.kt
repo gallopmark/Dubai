@@ -1,4 +1,4 @@
-package com.uroad.dubai.webService.api.presenter
+package com.uroad.dubai.api.presenter
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
@@ -17,21 +17,15 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
-import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.uroad.dubai.R
-import com.uroad.dubai.R.id.etEndPoint
-import com.uroad.dubai.R.id.etStartPoint
 import com.uroad.dubai.adapter.CarmenFeatureAdapter
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.webService.api.BaseObserver
-import com.uroad.dubai.webService.api.BasePresenter
-import com.uroad.dubai.webService.api.view.RouteNavigationView
+import com.uroad.dubai.api.BaseObserver
+import com.uroad.dubai.api.BasePresenter
+import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.library.utils.DisplayUtils
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_routenavigation.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

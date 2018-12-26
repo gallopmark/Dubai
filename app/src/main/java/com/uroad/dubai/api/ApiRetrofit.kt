@@ -1,4 +1,4 @@
-package com.uroad.dubai.webService.api
+package com.uroad.dubai.api
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

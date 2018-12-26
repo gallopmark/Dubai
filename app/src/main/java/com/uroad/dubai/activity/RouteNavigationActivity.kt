@@ -44,8 +44,8 @@ import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.utils.TimeUtils
 import com.uroad.dubai.utils.Utils
-import com.uroad.dubai.webService.api.presenter.RouteNavigationPresenter
-import com.uroad.dubai.webService.api.view.RouteNavigationView
+import com.uroad.dubai.api.presenter.RouteNavigationPresenter
+import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.activity_routenavigation.*

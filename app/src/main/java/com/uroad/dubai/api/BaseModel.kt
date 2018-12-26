@@ -1,4 +1,4 @@
-package com.uroad.dubai.webService.api
+package com.uroad.dubai.api
 
 class BaseModel<T> {
     var status: Boolean? = false    //接口状态	false异常 true正常

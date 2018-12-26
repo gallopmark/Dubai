@@ -1,10 +1,10 @@
-package com.uroad.dubai.webService.api.presenter
+package com.uroad.dubai.api.presenter
 
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.utils.GsonUtils
-import com.uroad.dubai.webService.api.BasePresenter
-import com.uroad.dubai.webService.api.StringObserver
-import com.uroad.dubai.webService.api.view.NewsView
+import com.uroad.dubai.api.BasePresenter
+import com.uroad.dubai.api.StringObserver
+import com.uroad.dubai.api.view.NewsView
 
 class NewsPresenter(val newsView: NewsView) : BasePresenter<NewsView>(newsView) {
     fun getNewsList(method: String?, params: HashMap<String, String?>) {

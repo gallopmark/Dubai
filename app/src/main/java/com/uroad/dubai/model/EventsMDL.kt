@@ -25,8 +25,8 @@ class EventsMDL : MultiItem {
 
     fun getIcon(): Int {
         subtype?.let {
-            if (it == MapDataType.ACCIDENT.code) return R.mipmap.ic_event_accident
-            if (it == MapDataType.CONSTRUCTION.code) return R.mipmap.ic_event_construction
+            if (it == MapDataType.ACCIDENT.code) return R.mipmap.ic_accident_round
+            if (it == MapDataType.CONSTRUCTION.code) return R.mipmap.ic_construction_round
         }
         return 0
     }

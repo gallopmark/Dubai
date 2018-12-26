@@ -1,4 +1,4 @@
-package com.uroad.dubai.webService.api
+package com.uroad.dubai.api
 
 import io.reactivex.observers.DisposableObserver
 import com.google.gson.JsonParseException

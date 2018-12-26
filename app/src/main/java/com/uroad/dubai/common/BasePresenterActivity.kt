@@ -1,7 +1,7 @@
 package com.uroad.dubai.common
 
-import com.uroad.dubai.webService.api.BasePresenter
-import com.uroad.dubai.webService.api.BaseView
+import com.uroad.dubai.api.BasePresenter
+import com.uroad.dubai.api.BaseView
 
 
 abstract class BasePresenterActivity<P : BasePresenter<*>> : BaseActivity(), BaseView {

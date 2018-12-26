@@ -4,8 +4,8 @@ import com.uroad.dubai.R
 import com.uroad.dubai.adapter.PoliceListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.PoliceMDL
-import com.uroad.dubai.webService.api.presenter.PolicePresenter
-import com.uroad.dubai.webService.api.view.PoliceView
+import com.uroad.dubai.api.presenter.PolicePresenter
+import com.uroad.dubai.api.view.PoliceView
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
 class PoliceListActivity: BaseRefreshPresenterActivity<PolicePresenter>(), PoliceView {
