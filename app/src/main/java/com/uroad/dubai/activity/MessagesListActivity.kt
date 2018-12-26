@@ -7,11 +7,11 @@ import com.uroad.dubai.R
 import com.uroad.dubai.adapter.MessagesListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.MessagesMDL
-import com.uroad.dubai.webService.api.presenter.MessagesPresenter
-import com.uroad.dubai.webService.api.view.MessagesView
+import com.uroad.dubai.api.presenter.MessagesPresenter
+import com.uroad.dubai.api.view.MessagesView
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
-class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(),MessagesView {
+class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), MessagesView {
 
     private var index = 1
     private var size = 10

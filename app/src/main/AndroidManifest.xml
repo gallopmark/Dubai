@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.SplashActivity">
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,16 +37,18 @@
         <activity
             android:name=".activity.RouteNavigationActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.MessagesListActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.PoliceListActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.BusStopListActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.ParkingListActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.AttractionsListActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.MessagesListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.PoliceListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.BusStopListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.ParkingListActivity"
+            android:launchMode="singleTop" />
 
     </application>
 

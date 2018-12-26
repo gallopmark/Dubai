@@ -1,9 +1,9 @@
-package com.uroad.dubai.webService.api.view
+package com.uroad.dubai.api.view
 
+import com.uroad.dubai.api.BaseView
 import com.uroad.dubai.model.MessagesMDL
-import com.uroad.dubai.webService.api.BaseView
 
-interface MessagesView : BaseView{
+interface MessagesView : BaseView {
     fun onGetNewList(list: MutableList<MessagesMDL>)
     fun onHttpResultError(errorMsg: String?, errorCode: Int?)
 }

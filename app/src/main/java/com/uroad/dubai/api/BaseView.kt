@@ -1,4 +1,4 @@
-package com.uroad.dubai.webService.api
+package com.uroad.dubai.api
 
 interface BaseView {
 

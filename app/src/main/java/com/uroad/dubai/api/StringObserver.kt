@@ -1,4 +1,4 @@
-package com.uroad.dubai.webService.api
+package com.uroad.dubai.api
 
 import com.uroad.dubai.utils.AndroidBase64Utils
 import com.uroad.dubai.utils.GsonUtils

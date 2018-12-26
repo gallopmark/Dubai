@@ -4,8 +4,8 @@ import com.uroad.dubai.R
 import com.uroad.dubai.adapter.BusStopListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.BusStopMDL
-import com.uroad.dubai.webService.api.presenter.BusStopPresenter
-import com.uroad.dubai.webService.api.view.BusStopView
+import com.uroad.dubai.api.presenter.BusStopPresenter
+import com.uroad.dubai.api.view.BusStopView
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
 class BusStopListActivity: BaseRefreshPresenterActivity<BusStopPresenter>(), BusStopView {

@@ -5,8 +5,8 @@ import android.support.v7.widget.LinearLayoutManager
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.uroad.dubai.R
-import com.uroad.dubai.webService.api.BasePresenter
-import com.uroad.dubai.webService.api.BaseView
+import com.uroad.dubai.api.BasePresenter
+import com.uroad.dubai.api.BaseView
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
 /**

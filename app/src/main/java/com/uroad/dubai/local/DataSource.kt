@@ -3,6 +3,7 @@ package com.uroad.dubai.local
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.model.EventsMDL
+import com.uroad.dubai.model.ParkingMDL
 
 class DataSource {
     class MapData {
@@ -99,10 +100,31 @@ class DataSource {
                 })
             }
 
-            fun getParking(): MutableList<LatLng> = ArrayList<LatLng>().apply {
-                add(LatLng(latitudeArray[6], longitudeArray[6]))
-                add(LatLng(latitudeArray[7], longitudeArray[7]))
-                add(LatLng(latitudeArray[8], longitudeArray[8]))
+            fun getParking(): MutableList<ParkingMDL> = ArrayList<ParkingMDL>().apply {
+                add(ParkingMDL().apply {
+                    title = "Parking at the shopping center  in dubai"
+                    content = "Financial Center Rd – Dubai "
+                    latitude = latitudeArray[6]
+                    longitude = longitudeArray[6]
+                    available = "5"
+                    total = "40"
+                })
+                add(ParkingMDL().apply {
+                    title = "Parking at the shopping center  in dubai"
+                    content = "Financial Center Rd – Dubai "
+                    latitude = latitudeArray[7]
+                    longitude = longitudeArray[7]
+                    available = "5"
+                    total = "40"
+                })
+                add(ParkingMDL().apply {
+                    title = "Parking at the shopping center  in dubai"
+                    content = "Financial Center Rd – Dubai "
+                    latitude = latitudeArray[8]
+                    longitude = longitudeArray[8]
+                    available = "5"
+                    total = "40"
+                })
             }
 
             fun getCCTV(): MutableList<LatLng> = ArrayList<LatLng>().apply {

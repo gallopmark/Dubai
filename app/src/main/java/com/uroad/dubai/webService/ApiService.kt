@@ -2,7 +2,7 @@ package com.uroad.dubai.webService
 
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.uroad.dubai.webService.api.ApiRetrofit
+import com.uroad.dubai.api.ApiRetrofit
 import com.uroad.dubai.utils.AndroidBase64Utils
 import io.reactivex.Observable
 import okhttp3.MediaType

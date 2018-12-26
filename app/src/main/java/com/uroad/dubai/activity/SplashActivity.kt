@@ -34,10 +34,6 @@ class SplashActivity : BaseLucaActivity() {
         }
     }
 
-    override fun requestWindow() {
-        requestWindowFullScreen()
-    }
-
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentViewWithoutTitle(R.layout.activity_splash)
         handler = MHandler(this).apply { sendEmptyMessage(updateCode) }

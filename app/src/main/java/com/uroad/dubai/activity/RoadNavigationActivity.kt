@@ -34,6 +34,7 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.location.LocationComponent
 import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.uroad.dubai.dialog.EventsDetailDialog
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.DataSource
 import com.uroad.dubai.model.EventsMDL
@@ -53,6 +54,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     private var locationComponent: LocationComponent? = null
     private var userMarker: Marker? = null
     private val markerMap = ArrayMap<String, MutableList<Marker>>()
+    private var markerObjMap = ArrayMap<Long, Any>()
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_roadnavigation
 
@@ -186,10 +188,22 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     /*map load complete*/
     override fun onMapAsync(mapBoxMap: MapboxMap) {
         isMapAsync = true
-        mapBoxMap.setOnMarkerClickListener {
+        mapBoxMap.setOnMarkerClickListener { marker ->
+            markerObjMap[marker.id]?.let { `object` -> onMarkerClick(marker, `object`) }
             return@setOnMarkerClickListener true
         }
 //        enableLocationComponent()
+    }
+
+    private fun onMarkerClick(marker: Marker, `object`: Any) {
+        when (`object`) {
+            is EventsMDL -> {
+                marker.icon = IconFactory.getInstance(this).fromResource(`object`.getBigMarkerIcon())
+                val dialog = EventsDetailDialog(this, `object`)
+                dialog.show()
+                dialog.setOnDismissListener { marker.icon = IconFactory.getInstance(this).fromResource(`object`.getSmallMarkerIcon()) }
+            }
+        }
     }
 
     /*location*/
@@ -312,11 +326,15 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     }
 
     private fun showEventsPoint(code: String, data: MutableList<EventsMDL>) {
-        val options = ArrayList<MarkerOptions>()
+        val markers = ArrayList<Marker>()
         for (item in data) {
-            options.add(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
+            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
+            marker?.let {
+                markerObjMap[it.id] = item
+                markers.add(it)
+            }
         }
-        markerMap[code] = mapBoxMap?.addMarkers(options)
+        markerMap[code] = markers
     }
 
     private fun createMarkerOptions(icon: Icon, latLng: LatLng): MarkerOptions {

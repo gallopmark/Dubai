@@ -5,8 +5,8 @@ import com.uroad.dubai.adapter.NewsListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
-import com.uroad.dubai.webService.api.presenter.NewsPresenter
-import com.uroad.dubai.webService.api.view.NewsView
+import com.uroad.dubai.api.presenter.NewsPresenter
+import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
