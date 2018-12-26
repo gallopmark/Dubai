@@ -9,6 +9,9 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.BusStopListActivity
+import com.uroad.dubai.activity.ParkingListActivity
+import com.uroad.dubai.activity.PoliceListActivity
 import com.uroad.dubai.adapter.TravelRecommendAdapter
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.model.RecommendMDL
@@ -16,6 +19,7 @@ import com.uroad.library.banner.GalleryRecyclerView
 import com.uroad.library.utils.BitmapUtils
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_travel.*
+import kotlinx.android.synthetic.main.travel_content_menu.*
 
 /**
  * @author MFB
@@ -30,6 +34,13 @@ class TravelFragment : BaseFragment() {
         setContentView(R.layout.fragment_travel)
         setTopImage()
         initRv()
+        initView()
+    }
+
+    private fun initView(){
+        tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
+        tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
+        tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
     }
 
     //重新计算图片高度 避免图片压缩

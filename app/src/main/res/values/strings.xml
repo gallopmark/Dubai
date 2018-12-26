@@ -31,7 +31,9 @@
     <string name="travel_menu_transport">Transport</string>
     <string name="travel_menu_groups">Groups</string>
     <string name="travel_menu_RTA_parking">RTA Parking</string>
+    <string name="travel_menu_parking">Parking</string>
     <string name="travel_menu_police">Police</string>
+    <string name="travel_menu_bus_stop">Bus Stop</string>
     <string name="travel_title_recommend">Recommend</string>
 
     <string name="mine_messages">Messages</string>

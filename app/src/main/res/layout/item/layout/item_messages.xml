@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="@dimen/space_10">
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:id="@+id/rlMesIconLeft"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/space_45"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivMsgType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_msg_accident" />
+
+            <TextView
+                android:id="@+id/tvNewMsg"
+                android:visibility="gone"
+                android:layout_width="@dimen/space_10"
+                android:layout_height="@dimen/space_10"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/shape_red_view_bg" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvMsgTitle"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text=""
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_marginRight="@dimen/space_10"
+            android:layout_toEndOf="@+id/rlMesIconLeft"
+            android:textSize="@dimen/font_16"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvMsgTime"
+            android:layout_marginTop="@dimen/space_6"
+            android:layout_below="@+id/tvMsgTitle"
+            android:layout_alignStart="@+id/tvMsgTitle"
+            android:text=""
+            android:textColor="@color/gary"
+            android:textSize="@dimen/space_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_marginTop="@dimen/space_20"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginRight="@dimen/space_10"
+        android:background="@color/itemDivider" />
+
+</LinearLayout>
