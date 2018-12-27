@@ -37,16 +37,5 @@ class NewsListAdapter(context: Context, data: MutableList<NewsMDL>)
         } else {
             holder.setVisibility(R.id.vDivider, View.VISIBLE)
         }
-
-        holder.itemView.setOnClickListener {
-            var intent = Intent(context,DetailsActivity::class.java)
-            var bundle = Bundle()
-            bundle.putString("title",t.title)
-            bundle.putString("time",t.publishtime)
-            bundle.putString("imgUrl",t.headimg)
-            bundle.putString("content",t.content)
-            intent.putExtras(bundle)
-            context.startActivity(intent)
-        }
     }
 }

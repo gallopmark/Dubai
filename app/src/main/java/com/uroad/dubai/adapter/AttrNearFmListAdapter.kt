@@ -12,7 +12,7 @@ import com.uroad.dubai.model.AttractionNearFMMDL
 import com.uroad.dubai.model.ParkingMDL
 import com.uroad.library.utils.DisplayUtils
 
-class AttrNearFmListAdapter(context: Context, data: MutableList<AttractionNearFMMDL>)
+class AttrNearFmListAdapter(private val context: Context, data: MutableList<AttractionNearFMMDL>)
       : BaseArrayRecyclerAdapter<AttractionNearFMMDL>(context,data) {
     private val imageWith = DisplayUtils.getWindowWidth(context) / 3
     private val imageHeight = imageWith * 3 / 4
@@ -26,18 +26,8 @@ class AttrNearFmListAdapter(context: Context, data: MutableList<AttractionNearFM
         holder.setText(R.id.tvDistance, t.distance)
         //holder.setText(R.id.tvNum, t.num)
         holder.setVisibility(R.id.tvNum,false)
-
-        holder.itemView.setOnClickListener {
-            var intent = Intent(context, DetailsActivity::class.java)
-            var bundle = Bundle()
-            bundle.putString("title",t.title)
-            bundle.putString("time",t.publishtime)
-            bundle.putString("imgUrl",t.headimg)
-            bundle.putString("content",t.content)
-            intent.putExtras(bundle)
-            context.startActivity(intent)
-        }
     }
 
     override fun bindView(viewType: Int): Int = R.layout.item_parking
+
 }

@@ -1,11 +1,16 @@
 package com.uroad.dubai.activity
 
+import android.content.Intent
+import android.net.Uri
+import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.PoliceListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.PoliceMDL
 import com.uroad.dubai.api.presenter.PolicePresenter
 import com.uroad.dubai.api.view.PoliceView
+import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.library.utils.PhoneUtils
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
 class PoliceListActivity: BaseRefreshPresenterActivity<PolicePresenter>(), PoliceView {
@@ -18,7 +23,13 @@ class PoliceListActivity: BaseRefreshPresenterActivity<PolicePresenter>(), Polic
     override fun initViewData() {
         withTitle(getString(R.string.travel_menu_police))
         data = ArrayList()
-        adapter = PoliceListAdapter(this,data)
+        adapter = PoliceListAdapter(this,data).apply {
+            setOnItemChildClickListener(object :BaseRecyclerAdapter.OnItemChildClickListener{
+                override fun onItemChildClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                    PhoneUtils.call(this@PoliceListActivity,"1456")
+                }
+            })
+        }
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
     }

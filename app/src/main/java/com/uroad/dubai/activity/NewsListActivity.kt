@@ -1,6 +1,7 @@
 package com.uroad.dubai.activity
 
 import android.os.Bundle
+import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.NewsListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
@@ -8,6 +9,7 @@ import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
+import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
@@ -29,6 +31,18 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
         adapter = NewsListAdapter(this, data)
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
+
+        adapter.setOnItemClickListener(object :BaseRecyclerAdapter.OnItemClickListener{
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                var mdl = data[position]
+                openActivity(DetailsActivity::class.java,Bundle().apply {
+                    putString("title",mdl.title)
+                    putString("time",mdl.publishtime)
+                    putString("imgUrl",mdl.headimg)
+                    putString("content",mdl.content)
+                })
+            }
+        })
     }
 
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)

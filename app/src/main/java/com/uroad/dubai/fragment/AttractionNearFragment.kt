@@ -1,9 +1,13 @@
 package com.uroad.dubai.fragment
 
+import android.os.Bundle
+import android.view.View
+import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.adapter.AttrNearFmListAdapter
 import com.uroad.dubai.api.presenter.AttractionNearFMPresenter
 import com.uroad.dubai.api.view.AttractionNearFMView
 import com.uroad.dubai.common.BasePageRefreshPresenterFragment
+import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.AttractionNearFMMDL
 import com.uroad.dubai.webService.WebApi
@@ -27,6 +31,18 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
         adapter = AttrNearFmListAdapter(context,data)
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
+
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                var mdl = data[position]
+                openActivity(DetailsActivity::class.java,Bundle().apply {
+                    putString("title",mdl.title)
+                    putString("time",mdl.publishtime)
+                    putString("imgUrl",mdl.headimg)
+                    putString("content",mdl.content)
+                })
+            }
+        })
     }
 
 
