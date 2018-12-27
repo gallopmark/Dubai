@@ -40,18 +40,20 @@ class ParkingListActivity: BaseRefreshPresenterActivity<ParkingPresenter>(), Par
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onPresenterCreate() {
+    override fun initData() {
+        super.initData()
         getList()
     }
+
 
     private fun getList(){
         onPullToLoadSuccess()
         val mdl = ParkingMDL()
         mdl.imgPath = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1545730732974&di=40dd62557d68ca4d98a69e65bfa09b29&imgtype=0&src=http%3A%2F%2Fimg1d.xgo-img.com.cn%2Fpics%2F1538%2F1537599.jpg"
-        mdl.title = "数量多少的历史"
-        mdl.content = "的技术肯定就是看"
-        mdl.distance = "距离:12km"
-        mdl.num = data.size.toString()
+        mdl.title = "Parking at the shopp..."
+        mdl.content = "Location Distance Available"
+        mdl.distance = "Financial Center Rd 0.5km 5"
+        mdl.num = "Available "+data.size.toString()
         data.add(mdl)
         adapter.notifyDataSetChanged()
     }

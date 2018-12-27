@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:padding="@dimen/space_10">
+
+        <TextView
+            android:id="@+id/tvDetailTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Major projects to be unveiled in  dubai-Mohammed Bin Rashid Al "
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_20" />
+
+        <TextView
+            android:id="@+id/tvDetailTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDetailTitle"
+            android:layout_marginTop="@dimen/space_20" />
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1"
+            android:layout_below="@+id/tvDetailTime"
+            android:layout_marginBottom="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/itemDivider" />
+
+        <ImageView
+            android:id="@+id/ivDetails"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_200"
+            android:layout_below="@+id/vDivider"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tvDetailContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivDetails"
+            android:layout_marginTop="@dimen/space_10" />
+
+    </RelativeLayout>
+</ScrollView>

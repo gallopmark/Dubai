@@ -93,4 +93,8 @@
     <string name="rwis_temperature">Temperature</string>
     <string name="rwis_dewPoint">Dew point</string>
     <string name="rwis_relativeHumidity">Relative Humidity</string>
+
+    <string name="near_me">Near me</string>
+    <string name="all">All</string>
+    <string name="details">Details</string>
 </resources>

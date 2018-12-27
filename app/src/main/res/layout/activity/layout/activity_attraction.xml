@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+   <!-- <android.support.design.widget.TabLayout
+        android:id="@+id/mTabLayout"
+        app:tabIndicatorColor = "@color/red"
+        app:tabSelectedTextColor = "@color/black"
+        android:textColor = "@color/layoutLoading"
+        app:tabMode="scrollable"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>-->
+
+    <TextView
+        android:id="@+id/tvAttrNearMe"
+        android:padding="@dimen/space_10"
+        android:text="@string/near_me"
+        android:textColor="@color/attractions_textcolor_selector"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_height="@dimen/space_45" />
+
+    <TextView
+        android:id="@+id/tvAttrAll"
+        android:padding="@dimen/space_10"
+        android:layout_toEndOf="@+id/tvAttrNearMe"
+        android:text="@string/all"
+        android:textColor="@color/attractions_textcolor_selector"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_height="@dimen/space_45" />
+
+    <View
+        android:id="@+id/viewTvAttrNearMeInd"
+        android:layout_below="@+id/tvAttrNearMe"
+        android:layout_alignStart="@+id/tvAttrNearMe"
+        android:layout_alignEnd="@+id/tvAttrNearMe"
+        android:background="@color/red"
+        android:layout_marginLeft="@dimen/space_20"
+        android:layout_marginRight="@dimen/space_20"
+        android:layout_width="@dimen/space_30"
+        android:layout_marginTop="@dimen/minus_15"
+        android:layout_height="@dimen/space_4"/>
+
+
+    <View
+        android:id="@+id/viewTvAttrAllInd"
+        android:visibility="invisible"
+        android:layout_below="@+id/tvAttrAll"
+        android:layout_alignStart="@+id/tvAttrAll"
+        android:layout_alignEnd="@+id/tvAttrAll"
+        android:background="@color/red"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginRight="@dimen/space_10"
+        android:layout_width="@dimen/space_30"
+        android:layout_marginTop="@dimen/minus_15"
+        android:layout_height="@dimen/space_4"/>
+
+    <ImageView
+        android:id="@+id/ivSearchAttr"
+        android:layout_marginRight="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:layout_alignTop="@+id/tvAttrNearMe"
+        android:layout_alignBottom="@+id/tvAttrNearMe"
+        android:src="@mipmap/ic_search_grey"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_below="@+id/tvAttrNearMe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</RelativeLayout>

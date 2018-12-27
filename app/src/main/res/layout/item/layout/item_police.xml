@@ -22,14 +22,14 @@
             android:layout_marginLeft="@dimen/space_10"
             android:textSize="@dimen/font_16"
             android:textColor="@color/black"
-            android:text="的飞机的妇科大夫"
+            android:text="DP - Ports Police Station "
             android:layout_toEndOf="@+id/ivPoliceType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tvPoliceTel"
-            android:text="Tel:123-794644"
+            android:text="Tel: 04-4384211"
             android:textColor="@color/gary"
             android:textSize="@dimen/space_14"
             android:layout_below="@+id/tvPoliceName"
@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/tvPolContext"
-            android:text="华盛顿和思考角度还是速度和世界大会时代精神的卡的婚纱看爱很简单"
+            android:text="near to DDC Jumeirah, Jumeirah Road -  DubaiFaqea Police Statio"
             android:textColor="@color/gary"
             android:maxLines="2"
             android:ellipsize="end"
