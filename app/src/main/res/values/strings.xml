@@ -83,4 +83,8 @@
     <string name="available">Available</string>
     <string name="total">Total</string>
     <string name="navigate">Navigate</string>
+    
+    <string name="near_me">Near me</string>
+    <string name="all">All</string>
+    <string name="details">Details</string>
 </resources>

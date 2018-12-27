@@ -76,13 +76,13 @@ class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), 
             val mdl = MessagesMDL()
             mdl.type = "0"
             mdl.isnew = true
-            mdl.title = "时间都是几点上课都是看得见撒啊啊啊 爱迪生"
+            mdl.title = "Accident on AI Kuwait Street. "
             mdl.time = "11:30"
 
             val mes = MessagesMDL()
             mes.type = "1"
             mes.isnew = false
-            mes.title = "啊啊大的老婆给皮肤 爱迪生"
+            mes.title = "Major projects to be unveiled in d..."
             mes.time = "10:30"
 
             data.add(mdl)

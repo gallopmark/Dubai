@@ -14,7 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.uroad.glidev4.GlideV4
 
 
-abstract class BaseRecyclerAdapter(private val context: Context) : RecyclerView.Adapter<BaseRecyclerAdapter.RecyclerHolder>() {
+abstract class BaseRecyclerAdapter(protected open val context: Context) : RecyclerView.Adapter<BaseRecyclerAdapter.RecyclerHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
     private var onItemLongClickListener: OnItemLongClickListener? = null

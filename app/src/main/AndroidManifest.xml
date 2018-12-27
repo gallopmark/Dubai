@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.uroad.dubai">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -49,6 +50,12 @@
         <activity
             android:name=".activity.ParkingListActivity"
             android:launchMode="singleTop" />
+
+        <activity android:name=".activity.AttractionsListActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.DetailsActivity"
+            android:launchMode="singleTop"/>
 
     </application>
 

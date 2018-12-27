@@ -9,7 +9,7 @@ import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.RoadsMDL
 import com.uroad.library.utils.DisplayUtils
 
-class NearMeRoadsAdapter(private val context: Context, data: MutableList<RoadsMDL>)
+class NearMeRoadsAdapter(override val context: Context, data: MutableList<RoadsMDL>)
     : BaseArrayRecyclerAdapter<RoadsMDL>(context, data) {
 
     override fun bindView(viewType: Int): Int = R.layout.item_nearmeroads
