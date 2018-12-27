@@ -4,7 +4,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.R
 import com.uroad.dubai.enumeration.MapDataType
 
-class EventsMDL : MultiItem {
+class EventsMDL : MapPointItem {
     var subscribestatus: Int? = 0
     var latitude: Double? = 0.0
     var longitude: Double? = 0.0
@@ -25,35 +25,33 @@ class EventsMDL : MultiItem {
 
     fun getIcon(): Int {
         subtype?.let {
-            if (it == MapDataType.ACCIDENT.code) return R.mipmap.ic_accident_round
-            if (it == MapDataType.CONSTRUCTION.code) return R.mipmap.ic_construction_round
+            if (it == MapDataType.ACCIDENT.CODE) return R.mipmap.ic_accident_round
+            if (it == MapDataType.CONSTRUCTION.CODE) return R.mipmap.ic_construction_round
         }
         return 0
     }
 
-    fun getSmallMarkerIcon(): Int {
+    override fun getSmallMarkerIcon(): Int {
         subtype?.let {
-            if (it == MapDataType.ACCIDENT.code) return R.mipmap.ic_marker_accident
-            if (it == MapDataType.CONSTRUCTION.code) return R.mipmap.ic_marker_construction
+            if (it == MapDataType.ACCIDENT.CODE) return R.mipmap.ic_marker_accident
+            if (it == MapDataType.CONSTRUCTION.CODE) return R.mipmap.ic_marker_construction
         }
         return 0
     }
 
-    fun getBigMarkerIcon(): Int {
+    override fun getBigMarkerIcon(): Int {
         subtype?.let {
-            if (it == MapDataType.ACCIDENT.code) return R.mipmap.ic_marker_accident_big
-            if (it == MapDataType.CONSTRUCTION.code) return R.mipmap.ic_marker_construction_big
+            if (it == MapDataType.ACCIDENT.CODE) return R.mipmap.ic_marker_accident_big
+            if (it == MapDataType.CONSTRUCTION.CODE) return R.mipmap.ic_marker_construction_big
         }
         return 0
     }
 
-    fun getLatLng(): LatLng {
+    override fun getLatLng(): LatLng {
         var latitude = 0.0
         var longitude = 0.0
         this.latitude?.let { latitude = it }
         this.longitude?.let { longitude = it }
         return LatLng(latitude, longitude)
     }
-
-    override fun getItemType(): Int = 1
 }

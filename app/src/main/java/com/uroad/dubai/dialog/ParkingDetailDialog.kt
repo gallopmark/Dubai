@@ -27,18 +27,7 @@ class ParkingDetailDialog : BaseMapPointDialog<ParkingMDL> {
     }
 
     override fun onInitialization(recyclerView: RecyclerView) {
-        recyclerView.adapter = ParkingAdapter(mContext, data).apply {
-            setOnItemChildClickListener(object : BaseRecyclerAdapter.OnItemChildClickListener {
-                override fun onItemChildClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    if (position in 0 until data.size) {
-                        when (view.id) {
-                            R.id.ivClose -> dismiss()
-                            R.id.tvNavigation -> onNavigateListener?.onNavigate(data[position], this@ParkingDetailDialog)
-                        }
-                    }
-                }
-            })
-        }
+        recyclerView.adapter = ParkingAdapter(mContext, data)
     }
 
     private inner class ParkingAdapter(context: Context, data: MutableList<ParkingMDL>)
@@ -59,8 +48,8 @@ class ParkingDetailDialog : BaseMapPointDialog<ParkingMDL> {
             var mTotal = total
             t.total?.let { mTotal += "\u3000\u2000\u3000$it" }
             holder.setText(R.id.tvTotal, mTotal)
-            holder.bindChildClick(R.id.ivClose)
-            holder.bindChildClick(R.id.tvNavigation)
+            holder.setOnClickListener(R.id.ivClose, View.OnClickListener { dismiss() })
+            holder.setOnClickListener(R.id.tvNavigation, View.OnClickListener { onNavigateListener?.onNavigate(t, this@ParkingDetailDialog) })
         }
     }
 

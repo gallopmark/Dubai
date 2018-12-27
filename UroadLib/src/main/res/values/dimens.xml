@@ -42,6 +42,7 @@
     <dimen name="space_90">90dp</dimen>
     <dimen name="space_95">95dp</dimen>
     <dimen name="space_100">100dp</dimen>
+    <dimen name="space_120">120dp</dimen>
     <dimen name="space_130">130dp</dimen>
     <dimen name="space_200">200dp</dimen>
     <dimen name="space_250">250dp</dimen>

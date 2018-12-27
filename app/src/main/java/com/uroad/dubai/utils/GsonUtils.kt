@@ -129,7 +129,7 @@ class GsonUtils {
         fun getCode(json: String?): Int {
             if (TextUtils.isEmpty(json)) return -1
             return try {
-                JsonParser().parse(json).asJsonObject.get("code").asInt
+                JsonParser().parse(json).asJsonObject.get("CODE").asInt
             } catch (e: Exception) {
                 -1
             }
