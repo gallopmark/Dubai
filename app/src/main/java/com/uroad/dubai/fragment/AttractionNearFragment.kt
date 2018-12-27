@@ -3,13 +3,14 @@ package com.uroad.dubai.fragment
 import com.uroad.dubai.adapter.AttrNearFmListAdapter
 import com.uroad.dubai.api.presenter.AttractionNearFMPresenter
 import com.uroad.dubai.api.view.AttractionNearFMView
+import com.uroad.dubai.common.BasePageRefreshPresenterFragment
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.AttractionNearFMMDL
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 import java.util.*
 
-class AttractionNearFragment : RankFragment<AttractionNearFMPresenter>() , AttractionNearFMView{
+class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFMPresenter>() , AttractionNearFMView{
     override fun createPresenter(): AttractionNearFMPresenter = AttractionNearFMPresenter(this)
 
     private var type : String? = null

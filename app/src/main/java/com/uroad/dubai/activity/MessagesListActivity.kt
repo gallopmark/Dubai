@@ -28,8 +28,9 @@ class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), 
 
     override fun createPresenter(): MessagesPresenter = MessagesPresenter(this)
 
-    override fun onPresenterCreate() {
+    override fun initData() {
         getMsgList()
+
     }
 
     private fun getMsgList(){

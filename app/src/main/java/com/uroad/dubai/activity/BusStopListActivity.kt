@@ -23,7 +23,8 @@ class BusStopListActivity: BaseRefreshPresenterActivity<BusStopPresenter>(), Bus
         baseRefreshLayout.autoRefresh()
     }
 
-    override fun onPresenterCreate() {
+    override fun initData() {
+        super.initData()
         getList()
     }
 

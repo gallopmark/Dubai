@@ -40,9 +40,11 @@ class ParkingListActivity: BaseRefreshPresenterActivity<ParkingPresenter>(), Par
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onPresenterCreate() {
+    override fun initData() {
+        super.initData()
         getList()
     }
+
 
     private fun getList(){
         onPullToLoadSuccess()

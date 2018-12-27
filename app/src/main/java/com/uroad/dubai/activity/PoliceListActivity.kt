@@ -23,9 +23,13 @@ class PoliceListActivity: BaseRefreshPresenterActivity<PolicePresenter>(), Polic
         baseRefreshLayout.autoRefresh()
     }
 
-    override fun onPresenterCreate() {
+
+    override fun initData() {
+        super.initData()
         getList()
+
     }
+
 
     private fun getList(){
         onPullToLoadSuccess()
