@@ -69,7 +69,7 @@ abstract class BasePageFragment : Fragment() {
             fgBaseParent = findViewById(R.id.fgBaseParent)
             fgBaseParent = findViewById(R.id.fgBaseParent)
             fgBaseLoadView = findViewById(R.id.fgBaseLoadView)
-            setUp(this)
+            setUp(this, savedInstanceState)
             setListener()
             isViewInit = true
         }
@@ -93,7 +93,7 @@ abstract class BasePageFragment : Fragment() {
         fgBaseParent.addView(contentView)
     }
 
-    open fun setUp(view: View) {}
+    open fun setUp(view: View, savedInstanceState: Bundle?) {}
     open fun setListener() {}
     /**
      * 在fragment首次可见时回调，可在这里进行加载数据，保证只在第一次打开Fragment时才会加载数据，

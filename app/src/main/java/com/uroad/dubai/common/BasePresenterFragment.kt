@@ -5,13 +5,14 @@ import android.view.View
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
 
-abstract class BasePagePresenterFragment<P : BasePresenter<*>> : BasePageFragment(), BaseView {
+abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseFragment(), BaseView {
     open var presenter: P? = null
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         presenter = createPresenter()
         onPresenterSetUp(view)
     }
+
 
     abstract fun createPresenter(): P?
 
@@ -29,8 +30,8 @@ abstract class BasePagePresenterFragment<P : BasePresenter<*>> : BasePageFragmen
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         presenter?.detachView()
+        super.onDestroyView()
     }
 }
