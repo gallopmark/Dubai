@@ -1,5 +1,6 @@
 package com.uroad.dubai.activity
 
+import android.os.Bundle
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.NewsListAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
@@ -32,21 +33,17 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
 
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)
 
-    override fun onPresenterCreate() {
-        getNewsList()
-    }
-
-    private fun getNewsList() {
+    override fun initData() {
         presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", index, size))
     }
 
     override fun onPullToRefresh() {
         index = 1
-        getNewsList()
+        initData()
     }
 
     override fun onPullToLoadMore() {
-        getNewsList()
+        initData()
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {
@@ -57,7 +54,7 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
         data.addAll(news)
         adapter.notifyDataSetChanged()
         if (news.size < size) {
-           onFinishLoadMoreWithNoMoreData()
+            onFinishLoadMoreWithNoMoreData()
         }
         if (index == 1 && data.size == 0) {
             onPageNoData()

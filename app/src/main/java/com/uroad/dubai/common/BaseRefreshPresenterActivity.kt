@@ -33,6 +33,12 @@ abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseActivity
                 onPullToLoadMore()
             }
         })
+        presenter = createPresenter()
+        onPresenterSetUp(savedInstanceState)
+    }
+
+    open fun onPresenterSetUp(savedInstanceState: Bundle?) {
+
     }
 
     open fun initViewData() {
@@ -46,13 +52,6 @@ abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseActivity
     open fun onPullToLoadMore() {
 
     }
-
-    override fun initData() {
-        presenter = createPresenter()
-        onPresenterCreate()
-    }
-
-    open fun onPresenterCreate() {}
 
     override fun onShowLoading() {
 

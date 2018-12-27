@@ -3,7 +3,7 @@ package com.uroad.dubai.model
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.R
 
-class ParkingMDL {
+class ParkingMDL : MapPointItem {
     var id: String? = null
     var time: String? = null
     var title: String? = null
@@ -19,11 +19,11 @@ class ParkingMDL {
     var total: String? = null
 
     fun getIcon(): Int = R.mipmap.ic_parking_round
-    fun getSmallMarkerIcon(): Int = R.mipmap.ic_marker_parking
+    override fun getSmallMarkerIcon(): Int = R.mipmap.ic_marker_parking
 
-    fun getBigMarkerIcon(): Int = R.mipmap.ic_marker_parking_big
+    override fun getBigMarkerIcon(): Int = R.mipmap.ic_marker_parking_big
 
-    fun getLatLng(): LatLng {
+    override fun getLatLng(): LatLng {
         var latitude = 0.0
         var longitude = 0.0
         this.latitude?.let { latitude = it }

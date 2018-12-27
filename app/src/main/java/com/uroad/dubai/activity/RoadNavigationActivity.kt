@@ -1,6 +1,7 @@
 package com.uroad.dubai.activity
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -34,10 +35,10 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.location.LocationComponent
 import com.mapbox.mapboxsdk.location.LocationComponentOptions
-import com.uroad.dubai.dialog.EventsDetailDialog
+import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.DataSource
-import com.uroad.dubai.model.EventsMDL
+import com.uroad.dubai.model.*
 
 
 /**
@@ -54,7 +55,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     private var locationComponent: LocationComponent? = null
     private var userMarker: Marker? = null
     private val markerMap = ArrayMap<String, MutableList<Marker>>()
-    private var markerObjMap = ArrayMap<Long, Any>()
+    private var markerObjMap = ArrayMap<Long, MapPointItem>()
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_roadnavigation
 
@@ -195,15 +196,39 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
 //        enableLocationComponent()
     }
 
-    private fun onMarkerClick(marker: Marker, `object`: Any) {
-        when (`object`) {
-            is EventsMDL -> {
-                marker.icon = IconFactory.getInstance(this).fromResource(`object`.getBigMarkerIcon())
-                val dialog = EventsDetailDialog(this, `object`)
-                dialog.show()
-                dialog.setOnDismissListener { marker.icon = IconFactory.getInstance(this).fromResource(`object`.getSmallMarkerIcon()) }
+    /*marker onClick*/
+    private fun onMarkerClick(marker: Marker, item: MapPointItem) {
+        var dialog: Dialog? = null
+        marker.icon = IconFactory.getInstance(this).fromResource(item.getBigMarkerIcon())
+        when (item) {
+            is EventsMDL -> dialog = EventsDetailDialog(this, item)
+            is ParkingMDL -> {
+                dialog = ParkingDetailDialog(this, item).setOnNavigateListener(object : ParkingDetailDialog.OnNavigateListener {
+                    override fun onNavigate(mdl: ParkingMDL, dialog: ParkingDetailDialog) {
+
+                    }
+                })
+            }
+            is CCTVSnapMDL -> dialog = CCTVSnapDetailDialog(this, item)
+            is DMSysMDL -> dialog = DMSDetailDialog(this, item)
+            is PoliceMDL -> {
+                dialog = PoliceDetailDialog(this, item).setOnNavigateListener(object : PoliceDetailDialog.OnNavigateListener {
+                    override fun onNavigate(mdl: PoliceMDL, dialog: PoliceDetailDialog) {
+
+                    }
+                })
+            }
+            is RWISMDL -> dialog = RWISDetailDialog(this, item)
+            is BusStopMDL -> {
+                dialog = BusStopDetailDialog(this, item).setOnNavigateListener(object : BusStopDetailDialog.OnNavigateListener {
+                    override fun onNavigate(mdl: BusStopMDL, dialog: BusStopDetailDialog) {
+
+                    }
+                })
             }
         }
+        dialog?.show()
+        dialog?.setOnDismissListener { marker.icon = IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()) }
     }
 
     /*location*/
@@ -266,13 +291,14 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     private fun initMenu() {
         val onCheckChangedListener = CompoundButton.OnCheckedChangeListener { view, isChecked ->
             when (view.id) {
-                R.id.cbEvents -> onMenuCheckChanged(isChecked, MapDataType.ACCIDENT.code)
-                R.id.cbParking -> onMenuCheckChanged(isChecked, MapDataType.PARKING.code)
-                R.id.cbCCTV -> onMenuCheckChanged(isChecked, MapDataType.CCTV.code)
-                R.id.cbDMS -> onMenuCheckChanged(isChecked, MapDataType.DMS.code)
-                R.id.cbPolice -> onMenuCheckChanged(isChecked, MapDataType.POLICE.code)
-                R.id.cbWeather -> onMenuCheckChanged(isChecked, MapDataType.WEATHER.code)
-                R.id.cbRWIS -> onMenuCheckChanged(isChecked, MapDataType.RWIS.code)
+                R.id.cbEvents -> onMenuCheckChanged(isChecked, MapDataType.ACCIDENT.CODE)
+                R.id.cbParking -> onMenuCheckChanged(isChecked, MapDataType.PARKING.CODE)
+                R.id.cbCCTV -> onMenuCheckChanged(isChecked, MapDataType.CCTV.CODE)
+                R.id.cbDMS -> onMenuCheckChanged(isChecked, MapDataType.DMS.CODE)
+                R.id.cbPolice -> onMenuCheckChanged(isChecked, MapDataType.POLICE.CODE)
+                R.id.cbWeather -> onMenuCheckChanged(isChecked, MapDataType.WEATHER.CODE)
+                R.id.cbRWIS -> onMenuCheckChanged(isChecked, MapDataType.RWIS.CODE)
+                R.id.cbBusStop -> onMenuCheckChanged(isChecked, MapDataType.BUS_STOP.CODE)
             }
         }
         cbEvents.setOnCheckedChangeListener(onCheckChangedListener)
@@ -282,6 +308,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
         cbPolice.setOnCheckedChangeListener(onCheckChangedListener)
         cbWeather.setOnCheckedChangeListener(onCheckChangedListener)
         cbRWIS.setOnCheckedChangeListener(onCheckChangedListener)
+        cbBusStop.setOnCheckedChangeListener(onCheckChangedListener)
     }
 
     private fun onMenuCheckChanged(isChecked: Boolean, code: String) {
@@ -294,38 +321,28 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
 
     private fun showMapPointByType(code: String) {
         when (code) {
-            MapDataType.ACCIDENT.code -> {
-                val data = ArrayList<EventsMDL>().apply {
+            MapDataType.ACCIDENT.CODE -> {
+                val data = ArrayList<MapPointItem>().apply {
                     addAll(DataSource.MapData.getAccident())
                     addAll(DataSource.MapData.getConstruction())
                 }
-                showEventsPoint(code, data)
+                showPoint(code, data)
             }
-            MapDataType.CONSTRUCTION.code -> {
+            MapDataType.CONSTRUCTION.CODE -> {
+            }
+            MapDataType.PARKING.CODE -> showPoint(code, DataSource.MapData.getParking())
+            MapDataType.CCTV.CODE -> showPoint(code, DataSource.MapData.getCCTV())
+            MapDataType.DMS.CODE -> showPoint(code, DataSource.MapData.getDMS())
+            MapDataType.POLICE.CODE -> showPoint(code, DataSource.MapData.getPolice())
+            MapDataType.WEATHER.CODE -> {
 
             }
-            MapDataType.PARKING.code -> {
-
-            }
-            MapDataType.CCTV.code -> {
-
-            }
-            MapDataType.DMS.code -> {
-
-            }
-            MapDataType.POLICE.code -> {
-
-            }
-            MapDataType.WEATHER.code -> {
-
-            }
-            MapDataType.RWIS.code -> {
-
-            }
+            MapDataType.RWIS.CODE -> showPoint(code, DataSource.MapData.getRWIS())
+            MapDataType.BUS_STOP.CODE ->showPoint(code,DataSource.MapData.getBusStop())
         }
     }
 
-    private fun showEventsPoint(code: String, data: MutableList<EventsMDL>) {
+    private fun showPoint(code: String, data: MutableList<MapPointItem>) {
         val markers = ArrayList<Marker>()
         for (item in data) {
             val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
