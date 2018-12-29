@@ -8,6 +8,7 @@ import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.NewsListActivity
 import com.uroad.dubai.activity.RoadNavigationActivity
+import com.uroad.dubai.activity.RoadsListActivity
 import com.uroad.dubai.adapter.FavoritesAdapter
 import com.uroad.dubai.adapter.NearMeTabAdapter
 import com.uroad.dubai.common.BaseFragment
@@ -72,8 +73,8 @@ class MainFragment : BaseFragment() {
         ivSearchColl.setOnClickListener {  }
         tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         ivNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
-        tvHighWay.setOnClickListener {  }
-        ivHighWay.setOnClickListener {  }
+        tvHighWay.setOnClickListener {  openActivity(RoadsListActivity::class.java)  }
+        ivHighWay.setOnClickListener {  openActivity(RoadsListActivity::class.java) }
         tvNews.setOnClickListener { openActivity(NewsListActivity::class.java) }
         ivNews.setOnClickListener { openActivity(NewsListActivity::class.java) }
         tvMore.setOnClickListener {  }

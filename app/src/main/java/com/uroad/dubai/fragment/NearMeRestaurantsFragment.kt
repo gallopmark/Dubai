@@ -2,15 +2,12 @@ package com.uroad.dubai.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.NearMeRoadsAdapter
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.model.RoadsMDL
-import com.uroad.library.decoration.ItemDecoration
-import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_nearmeroads.*
 
 class NearMeRestaurantsFragment : BaseFragment() {
@@ -39,7 +36,7 @@ class NearMeRestaurantsFragment : BaseFragment() {
 
     private fun getMDL(position: Int): RoadsMDL {
         return RoadsMDL().apply {
-            icon = when (position) {
+            iconInt = when (position) {
                 0 -> R.mipmap.ic_roads_e11
                 1 -> R.mipmap.ic_roads_e44
                 2 -> R.mipmap.ic_roads_e311

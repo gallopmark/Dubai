@@ -97,4 +97,7 @@
     <string name="near_me">Near me</string>
     <string name="all">All</string>
     <string name="details">Details</string>
+    <string name="accidents">Accidents</string>
+    <string name="roadworks">Roadworks</string>
+    <string name="routes">Routes</string>
 </resources>

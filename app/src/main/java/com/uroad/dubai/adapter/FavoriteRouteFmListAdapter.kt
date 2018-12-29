@@ -3,24 +3,23 @@ package com.uroad.dubai.adapter
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.RelativeLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
-import com.uroad.dubai.model.RoadsMDL
+import com.uroad.dubai.model.RouteMDL
 import com.uroad.library.utils.DisplayUtils
 
-class NearMeRoadsAdapter(private val context: Context, data: MutableList<RoadsMDL>)
-    : BaseArrayRecyclerAdapter<RoadsMDL>(context, data) {
+class FavoriteRouteFmListAdapter(private val context: Context, data: MutableList<RouteMDL>)
+      : BaseArrayRecyclerAdapter<RouteMDL>(context,data) {
+    private val imageWith = DisplayUtils.getWindowWidth(context) / 3
+    private val imageHeight = imageWith * 3 / 4
+    private val params = RelativeLayout.LayoutParams(imageWith, imageHeight)
+    private val dp4 = DisplayUtils.dip2px(context, 4f)
+    override fun bindView(viewType: Int): Int = R.layout.item_favorites_route
 
-    override fun bindView(viewType: Int): Int = R.layout.item_nearmeroads
-
-    override fun onBindHoder(holder: RecyclerHolder, t: RoadsMDL, position: Int) {
-        holder.setImageResource(R.id.ivIcon, t.iconInt)
-        holder.setText(R.id.tvTitle, t.title)
-        holder.setText(R.id.tvContent, t.content)
-        holder.setText(R.id.tvEventInfo, "Event Info")
-        holder.setText(R.id.tvConstruction, "1")
-        holder.setText(R.id.tvAccident, "3")
-        holder.setText(R.id.tvDistance, t.distance)
+    override fun onBindHoder(holder: RecyclerHolder, t: RouteMDL, position: Int) {
+        //holder.setLayoutParams(R.id.ivPic, params)
+        //holder.displayImage(R.id.ivPic, t.headimg, R.color.color_f7, RoundedCorners(dp4))
         val recyclerView = holder.obtainView<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
         recyclerView.adapter = RoadColorAdapter(context, t.getRoadColors())
@@ -28,7 +27,7 @@ class NearMeRoadsAdapter(private val context: Context, data: MutableList<RoadsMD
 
     private inner class RoadColorAdapter(context: Context, colors: MutableList<Int>)
         : BaseArrayRecyclerAdapter<Int>(context, colors) {
-        private val totalWidth = DisplayUtils.getWindowWidth(context) - DisplayUtils.dip2px(context, 16f) * 2 - DisplayUtils.dip2px(context, 10f) * 2
+        private val totalWidth = DisplayUtils.getWindowWidth(context) - DisplayUtils.dip2px(context, 10f) * 4
         private val measureSize = totalWidth / colors.size + totalWidth % colors.size
         override fun bindView(viewType: Int): Int = R.layout.item_nearmeroads_color
 

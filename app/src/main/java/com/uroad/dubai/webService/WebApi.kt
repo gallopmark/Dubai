@@ -11,5 +11,14 @@ class WebApi {
             put("index", index.toString())
             put("size", size.toString())
         }
+
+
+        const val GET_ROADS_LIST = "getRoadList"
+
+        fun getRoadListParams(index : Int, size : Int , keyword: String) = getBaseParams().apply {
+            put("keyword", keyword)
+            put("index", index.toString())
+            put("size", size.toString())
+        }
     }
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+ <TextView
+     android:id="@+id/tvAttrNearMe"
+     android:layout_width="match_parent"
+     android:layout_toLeftOf="@+id/tvAccidents"
+     android:layout_height="@dimen/space_45"
+     android:gravity="center"
+     android:padding="@dimen/space_10"
+     android:text="@string/near_me"
+     android:textColor="@color/attractions_textcolor_selector" />
+
+ <TextView
+     android:id="@+id/tvAccidents"
+     android:layout_width="wrap_content"
+     android:layout_height="@dimen/space_45"
+     android:layout_centerHorizontal="true"
+     android:gravity="center"
+     android:paddingRight="@dimen/space_30"
+     android:paddingLeft="@dimen/space_30"
+     android:text="@string/accidents"
+     android:textColor="@color/attractions_textcolor_selector" />
+
+ <TextView
+     android:id="@+id/tvRoadworks"
+     android:layout_toRightOf="@+id/tvAccidents"
+     android:layout_width="match_parent"
+     android:layout_height="@dimen/space_45"
+     android:gravity="center"
+     android:padding="@dimen/space_10"
+     android:text="@string/roadworks"
+     android:textColor="@color/attractions_textcolor_selector" />
+
+    <View
+        android:id="@+id/viewTvAttrNearMeInd"
+        android:layout_below="@+id/tvAttrNearMe"
+        android:layout_alignStart="@+id/tvAttrNearMe"
+        android:layout_alignEnd="@+id/tvAttrNearMe"
+        android:background="@color/red"
+        android:layout_marginLeft="@dimen/space_45"
+        android:layout_marginRight="@dimen/space_45"
+        android:layout_width="@dimen/space_30"
+        android:layout_marginTop="@dimen/minus_15"
+        android:layout_height="@dimen/space_4"/>
+
+
+    <View
+        android:id="@+id/viewTvAccidents"
+        android:visibility="invisible"
+        android:layout_below="@+id/tvAccidents"
+        android:layout_alignStart="@+id/tvAccidents"
+        android:layout_alignEnd="@+id/tvAccidents"
+        android:background="@color/red"
+        android:layout_marginLeft="@dimen/space_40"
+        android:layout_marginRight="@dimen/space_40"
+        android:layout_width="@dimen/space_30"
+        android:layout_marginTop="@dimen/minus_15"
+        android:layout_height="@dimen/space_4"/>
+
+ <View
+     android:id="@+id/viewTvRoadworks"
+     android:visibility="invisible"
+     android:layout_below="@+id/tvRoadworks"
+     android:layout_alignStart="@+id/tvRoadworks"
+     android:layout_alignEnd="@+id/tvRoadworks"
+     android:background="@color/red"
+     android:layout_marginLeft="@dimen/space_40"
+     android:layout_marginRight="@dimen/space_40"
+     android:layout_width="@dimen/space_30"
+     android:layout_marginTop="@dimen/minus_15"
+     android:layout_height="@dimen/space_4"/>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_below="@+id/tvAttrNearMe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvFavoriteRoutes"
+        android:padding="@dimen/space_10"
+        android:text="@string/routes"
+        android:textColor="@color/attractions_textcolor_selector"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_height="@dimen/space_45" />
+
+    <TextView
+        android:id="@+id/tvFavoriteEvent"
+        android:padding="@dimen/space_10"
+        android:layout_toEndOf="@+id/tvFavoriteRoutes"
+        android:text="@string/nearMe_events"
+        android:textColor="@color/attractions_textcolor_selector"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_height="@dimen/space_45" />
+
+    <View
+        android:id="@+id/viewFavoriteRoutesInd"
+        android:visibility="visible"
+        android:layout_below="@+id/tvFavoriteRoutes"
+        android:layout_alignStart="@+id/tvFavoriteRoutes"
+        android:layout_alignEnd="@+id/tvFavoriteRoutes"
+        android:background="@color/red"
+        android:layout_marginLeft="@dimen/space_20"
+        android:layout_marginRight="@dimen/space_20"
+        android:layout_width="@dimen/space_30"
+        android:layout_marginTop="@dimen/minus_15"
+        android:layout_height="@dimen/space_4"/>
+
+    <View
+        android:id="@+id/viewFavoriteEventInd"
+        android:layout_below="@+id/tvFavoriteEvent"
+        android:layout_alignStart="@+id/tvFavoriteEvent"
+        android:layout_alignEnd="@+id/tvFavoriteEvent"
+        android:background="@color/red"
+        android:visibility="invisible"
+        android:layout_marginLeft="@dimen/space_20"
+        android:layout_marginRight="@dimen/space_20"
+        android:layout_width="@dimen/space_30"
+        android:layout_marginTop="@dimen/minus_15"
+        android:layout_height="@dimen/space_4"/>
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/mViewPager"
+        android:layout_below="@+id/tvFavoriteRoutes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</RelativeLayout>
