@@ -15,7 +15,7 @@
             android:layout_marginLeft="@dimen/space_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/icon_msg_accident" />
+            android:src="@mipmap/icon_bus_stop" />
 
         <TextView
             android:id="@+id/tvBusStopName"

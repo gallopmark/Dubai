@@ -3,6 +3,7 @@ package com.uroad.dubai.fragment
 import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.FavoriteListActivity
 import com.uroad.dubai.activity.MessagesListActivity
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.library.utils.DisplayUtils
@@ -18,7 +19,7 @@ class MineFragment : BaseFragment() {
         setContentView(R.layout.fragment_mine)
         initTopLayout()
         tvMessage.setOnClickListener{ openActivity(MessagesListActivity::class.java)}
-        //tvFavorites.setOnClickListener{ openActivity(ColorViewActivity::class.java)}
+        tvFavorites.setOnClickListener{ openActivity(FavoriteListActivity::class.java)}
     }
 
     private fun initTopLayout() {

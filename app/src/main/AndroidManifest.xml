@@ -57,6 +57,12 @@
         <activity android:name=".activity.DetailsActivity"
             android:launchMode="singleTop"/>
 
+        <activity android:name=".activity.FavoriteListActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.RoadsListActivity"
+            android:launchMode="singleTop"/>
+
     </application>
 
 </manifest>
