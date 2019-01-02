@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomNavigationMapRoute">
+        <item name="routeColor">@color/routeColor</item>
+        <item name="routeModerateCongestionColor">@color/routeModerateCongestionColor</item>
+        <item name="routeSevereCongestionColor">@color/routeSevereCongestionColor</item>
+        <item name="routeShieldColor">@color/routeShieldColor</item>
+        <item name="routeScale">1.0</item>
+        <item name="alternativeRouteColor">@color/alternativeRouteColor</item>
+        <item name="alternativeRouteModerateCongestionColor">
+            @color/alternativeRouteModerateCongestionColor
+        </item>
+        <item name="alternativeRouteSevereCongestionColor">
+            @color/alternativeRouteSevereCongestionColor
+        </item>
+        <item name="alternativeRouteShieldColor">@color/alternativeRouteShieldColor</item>
+        <item name="originWayPointIcon">@mipmap/ic_user_location</item>
+        <item name="destinationWayPointIcon">@mipmap/ic_route_target</item>
+    </style>
+
+    <declare-styleable name="CustomNavigationMapRoute">
+        <!-- Primary route colors -->
+        <attr name="routeColor" format="color" />
+        <attr name="routeModerateCongestionColor" format="color" />
+        <attr name="routeSevereCongestionColor" format="color" />
+        <attr name="routeShieldColor" format="color" />
+
+        <!-- Alternative route colors -->
+        <attr name="alternativeRouteColor" format="color" />
+        <attr name="alternativeRouteModerateCongestionColor" format="color" />
+        <attr name="alternativeRouteSevereCongestionColor" format="color" />
+        <attr name="alternativeRouteShieldColor" format="color" />
+
+        <!--Route width-->
+        <attr name="routeLineWidth" format="float" />
+        <attr name="routeShieldLineWidth" format="float" />
+
+        <!-- Origin/Destination waypoint drawables -->
+        <attr name="originWayPointIcon" format="reference" />
+        <attr name="destinationWayPointIcon" format="reference" />
+
+        <!-- Route Scales -->
+        <attr name="routeScale" format="float" />
+        <attr name="alternativeRouteScale" format="float" />
+
+        <attr name="upcomingManeuverArrowColor" format="color" />
+        <attr name="upcomingManeuverArrowBorderColor" format="color" />
+    </declare-styleable>
+</resources>

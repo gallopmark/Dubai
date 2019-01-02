@@ -39,7 +39,7 @@ class TravelFragment : BaseFragment() {
     }
 
     private fun initView(){
-        var bundle = Bundle()
+        val bundle = Bundle()
 
         tvHotels.setOnClickListener {
             bundle.putString("type","1001002")
@@ -56,6 +56,8 @@ class TravelFragment : BaseFragment() {
         tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
         tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
+        tvGroups.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvWeather.setOnClickListener {  }
     }
 
     //重新计算图片高度 避免图片压缩

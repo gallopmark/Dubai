@@ -26,14 +26,14 @@
 
     <string name="travel_menu_hotels">Hotels</string>
     <string name="travel_menu_restaurants">Restaurants</string>
-    <string name="travel_menu_goods">Goods</string>
+    <string name="travel_menu_weather">Weather</string>
     <string name="travel_menu_attractions">Attractions</string>
     <string name="travel_menu_transport">Transport</string>
     <string name="travel_menu_groups">Groups</string>
     <string name="travel_menu_RTA_parking">RTA Parking</string>
     <string name="travel_menu_parking">Parking</string>
     <string name="travel_menu_police">Police</string>
-    <string name="travel_menu_bus_stop">Bus Stop</string>
+    <string name="travel_menu_bus_stop">Bus stop</string>
     <string name="travel_title_recommend">Recommend</string>
 
     <string name="mine_messages">Messages</string>
@@ -100,4 +100,18 @@
     <string name="accidents">Accidents</string>
     <string name="roadworks">Roadworks</string>
     <string name="routes">Routes</string>
+
+    <string name="more_traffic">Traffic</string>
+    <string name="more_menu_events">Events</string>
+    <string name="more_travel">Travel</string>
+    <string name="more_menu_hotels">@string/travel_menu_hotels</string>
+    <string name="more_menu_restaurants">@string/travel_menu_restaurants</string>
+    <string name="more_menu_attractions">@string/travel_menu_attractions</string>
+    <string name="more_menu_bus_stop">@string/travel_menu_bus_stop</string>
+    <string name="more_menu_RTA_parking">@string/travel_menu_RTA_parking</string>
+    <string name="more_menu_police">@string/travel_menu_police</string>
+    <string name="more_menu_groups">@string/travel_menu_groups</string>
+    <string name="more_menu_weather">@string/travel_menu_weather</string>
+    <string name="more_inner">Inner</string>
+    <string name="more_menu_report">Report</string>
 </resources>

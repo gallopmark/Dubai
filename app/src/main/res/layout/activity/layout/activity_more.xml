@@ -1,15 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/space_16"
-    android:paddingBottom="@dimen/space_16">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <TextView
+        android:id="@+id/tvTraffic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16"
+        android:text="@string/more_traffic"
+        android:textColor="@color/appTextColor"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEvents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_16"
+        android:layout_marginTop="@dimen/space_10"
+        android:drawableTop="@mipmap/ic_more_events"
+        android:drawablePadding="@dimen/space_5"
+        android:gravity="center"
+        android:padding="@dimen/space_5"
+        android:text="@string/travel_menu_groups"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTraffic" />
+
+    <View
+        android:id="@+id/vLine1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_16"
+        android:background="@color/itemDivider"
+        app:layout_constraintTop_toBottomOf="@+id/tvEvents" />
+
+    <TextView
+        android:id="@+id/tvTravel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16"
+        android:text="@string/more_travel"
+        android:textColor="@color/appTextColor"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vLine1" />
 
     <LinearLayout
+        android:id="@+id/llTopMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/space_16"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/tvTravel">
 
         <TextView
             android:id="@+id/tvHotels"
@@ -17,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@mipmap/ic_menu_hotels"
-            android:drawablePadding="@dimen/space_3"
+            android:drawablePadding="@dimen/space_5"
             android:gravity="center"
             android:text="@string/travel_menu_hotels"
             android:textColor="@color/color_66"
@@ -61,10 +109,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llBottomMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_16"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/llTopMenu">
 
         <TextView
             android:id="@+id/tvParking"
@@ -116,4 +166,39 @@
             android:textSize="@dimen/font_12" />
     </LinearLayout>
 
-</LinearLayout>
+    <View
+        android:id="@+id/vLine2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_16"
+        android:background="@color/itemDivider"
+        app:layout_constraintTop_toBottomOf="@+id/llBottomMenu" />
+
+    <TextView
+        android:id="@+id/tvInner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16"
+        android:text="@string/more_inner"
+        android:textColor="@color/appTextColor"
+        android:textSize="@dimen/font_16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vLine2" />
+
+    <TextView
+        android:id="@+id/tvReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_16"
+        android:layout_marginTop="@dimen/space_10"
+        android:drawableTop="@mipmap/ic_more_report"
+        android:drawablePadding="@dimen/space_5"
+        android:gravity="center"
+        android:padding="@dimen/space_5"
+        android:text="@string/more_menu_report"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvInner" />
+
+</android.support.constraint.ConstraintLayout>

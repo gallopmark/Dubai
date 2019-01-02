@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.SpannableString
@@ -17,6 +16,10 @@ import android.text.style.AbsoluteSizeSpan
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import com.mapbox.android.core.location.LocationEngine
+import com.mapbox.android.core.location.LocationEngineListener
+import com.mapbox.android.core.location.LocationEnginePriority
+import com.mapbox.android.core.location.LocationEngineProvider
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.api.directions.v5.DirectionsCriteria
@@ -37,7 +40,7 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
-import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
+import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
@@ -46,6 +49,7 @@ import com.uroad.dubai.utils.TimeUtils
 import com.uroad.dubai.utils.Utils
 import com.uroad.dubai.api.presenter.RouteNavigationPresenter
 import com.uroad.dubai.api.view.RouteNavigationView
+import com.uroad.dubai.widget.AppCompatNavigationMapRoute
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.activity_routenavigation.*
@@ -55,10 +59,10 @@ import kotlinx.android.synthetic.main.activity_routenavigation.*
  * @create 2018/12/22
  * @describe route navigation
  */
-class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, RouteNavigationView {
+class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, RouteNavigationView, LocationEngineListener {
 
     private var permissionsManager: PermissionsManager? = null
-    private var locationComponent: LocationComponent? = null
+    private var locationEngine: LocationEngine? = null
     private var startPoint: Point? = null
     private var endPoint: Point? = null
     private var isFirstSetText = false
@@ -72,7 +76,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     private var profile = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
     private var originMarker: Marker? = null
     private var destinationMarker: Marker? = null
-    private var navigationMapRoute: NavigationMapRoute? = null
+    private var navigationMapRoute: AppCompatNavigationMapRoute? = null
     private var selectedRoute: DirectionsRoute? = null
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var routePresenter: RouteNavigationPresenter
@@ -232,20 +236,24 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
 
     @SuppressLint("MissingPermission")
     private fun onLocation() {
-        val options = LocationComponentOptions.builder(this)
-                .trackingGesturesManagement(false)
-                .enableStaleState(true)
-                .accuracyColor(ContextCompat.getColor(this, R.color.green))
-                .build()
-        // Get an instance of the component
-        locationComponent = mapBoxMap?.locationComponent
-        locationComponent?.let {
-            it.activateLocationComponent(this, options)
-            it.cameraMode = CameraMode.TRACKING
-            it.renderMode = RenderMode.COMPASS
-            it.lastKnownLocation?.let { location -> moveToUserLocation(location) }
-            it.isLocationComponentEnabled = false
+        locationEngine = LocationEngineProvider(this).obtainBestLocationEngineAvailable().apply {
+            val location = this.lastLocation
+            if (location != null) {
+                moveToUserLocation(location)
+            } else {
+                this.priority = LocationEnginePriority.HIGH_ACCURACY
+                this.addLocationEngineListener(this@RouteNavigationActivity)
+                this.activate()
+            }
         }
+    }
+
+    override fun onConnected() {
+
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        location?.let { moveToUserLocation(it) }
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -353,13 +361,13 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         mapBoxMap?.clear()
         mapBoxMap?.let {
             navigationMapRoute?.removeRoute()
-            navigationMapRoute = NavigationMapRoute(mapView, it).apply { addRoutes(routes) }
+            navigationMapRoute = AppCompatNavigationMapRoute(mapView, it).apply { addRoutes(routes) }
         }
         var startPoint: LatLng? = null
         var endPoint: LatLng? = null
         this.startPoint?.let { startPoint = LatLng(it.latitude(), it.longitude()) }
         this.endPoint?.let { endPoint = LatLng(it.latitude(), it.longitude()) }
-        addMarker(startPoint, endPoint)
+//        addMarker(startPoint, endPoint)
         zoomToSpan(startPoint, endPoint)
         updateRoutes(routes.toMutableList())
     }
@@ -399,7 +407,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
             })
         }
         recyclerView.adapter = adapter
-        navigationMapRoute?.setOnRouteSelectionChangeListener {
+        navigationMapRoute?.setOnRouteSelectionChangeListener(OnRouteSelectionChangeListener {
             for (i in 0 until routes.size) {
                 if (TextUtils.equals(it.geometry(), routes[i].geometry()) || it.distance() == routes[i].distance()) {
                     adapter.setSelected(i)
@@ -407,7 +415,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
                 }
             }
             selectedRoute = it
-        }
+        })
     }
 
     private class DirectionsRouteAdapter(context: Activity, routes: MutableList<DirectionsRoute>)
@@ -460,10 +468,29 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         }
     }
 
+    @SuppressLint("MissingPermission")
+    override fun onStart() {
+        locationEngine?.let {
+            it.addLocationEngineListener(this)
+            it.requestLocationUpdates()
+        }
+        super.onStart()
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onStop() {
+        locationEngine?.let {
+            it.removeLocationUpdates()
+            it.removeLocationEngineListener(this)
+        }
+        super.onStop()
+    }
+
     override fun onDestroy() {
         cancelStartSearch()
         cancelEndSearch()
         routePresenter.detachView()
+        locationEngine?.deactivate()
         super.onDestroy()
     }
 }

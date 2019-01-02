@@ -22,19 +22,18 @@ import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_roadnavigation.*
 import kotlinx.android.synthetic.main.content_maplayeroption.*
 import kotlinx.android.synthetic.main.content_roadnavigation.*
-import com.mapbox.mapboxsdk.location.modes.RenderMode
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import android.support.v4.content.ContextCompat
 import android.support.v4.util.ArrayMap
 import android.widget.CompoundButton
+import com.mapbox.android.core.location.LocationEngine
+import com.mapbox.android.core.location.LocationEngineListener
+import com.mapbox.android.core.location.LocationEnginePriority
+import com.mapbox.android.core.location.LocationEngineProvider
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.mapboxsdk.annotations.Icon
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.location.LocationComponent
-import com.mapbox.mapboxsdk.location.LocationComponentOptions
 import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.DataSource
@@ -46,16 +45,24 @@ import com.uroad.dubai.model.*
  * @create 2018/12/18
  * @describe Road navigation
  */
-class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener {
+class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, LocationEngineListener {
 
     private var statusHeight = 0
     private var isMapAsync = false
     private var fillExtrusionLayer: FillExtrusionLayer? = null
     private var permissionsManager: PermissionsManager? = null
-    private var locationComponent: LocationComponent? = null
+    private var locationEngine: LocationEngine? = null
     private var userMarker: Marker? = null
     private val markerMap = ArrayMap<String, MutableList<Marker>>()
     private var markerObjMap = ArrayMap<Long, MapPointItem>()
+
+    companion object {
+        private const val TYPE_DEFAULT = "default"
+        private const val TYPE_3D = "3d"
+        private const val TYPE_SATELLITE = "satellite"
+    }
+
+    private var mapType = TYPE_DEFAULT
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_roadnavigation
 
@@ -70,6 +77,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
         rlSearch.setOnClickListener { openActivity(RouteNavigationActivity::class.java) }
         ivBack.setOnClickListener { onBackPressed() }
         rlSearch.layoutParams = (rlSearch.layoutParams as ConstraintLayout.LayoutParams).apply { this.topMargin = topMargin + statusHeight }
+        setDrawerEdgeSize()
         ivSwitchLayer.setOnClickListener {
             if (drawerLayout.isDrawerOpen(Gravity.END)) {
                 drawerLayout.closeDrawer(Gravity.END)
@@ -77,11 +85,45 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
                 drawerLayout.openDrawer(Gravity.END)
             }
         }
-        setDrawerEdgeSize()
+        cbTrafficLayer.setOnCheckedChangeListener { _, isChecked -> changeTrafficLayer(isChecked) }
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
         ivLocation.setOnClickListener { enableLocationComponent() }
     }
+
+    private fun changeTrafficLayer(isChecked: Boolean) {
+        if (isChecked) {
+            when (mapType) {
+                TYPE_DEFAULT -> {
+                    if (!isMapAsync) return
+                    clearLayer()
+                    setDefaultStyleUrl()
+                }
+                TYPE_3D -> {
+                    if (!isMapAsync) return
+                    clearLayer()
+                    set3DStyleUrl()
+                }
+                TYPE_SATELLITE -> {
+                    if (!isMapAsync) return
+                    clearLayer()
+                    setSatelliteStyleUrl()
+                }
+            }
+        } else {
+            when (mapType) {
+                TYPE_DEFAULT -> setDefaultMapType()
+                TYPE_3D -> set3DMapType()
+                TYPE_SATELLITE -> setSatelliteMapType()
+            }
+        }
+    }
+
+    private fun setDefaultStyleUrl() = mapBoxMap?.setStyleUrl(getString(R.string.map_default_url))
+
+    private fun set3DStyleUrl() = mapBoxMap?.setStyleUrl(getString(R.string.map_3d_url))
+
+    private fun setSatelliteStyleUrl() = mapBoxMap?.setStyleUrl(getString(R.string.map_satellite_url))
 
     //侧滑菜单占屏幕的7/10
     private fun setDrawerEdgeSize() {
@@ -120,38 +162,55 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
     /*default map*/
     private fun setDefaultMapType() {
         if (!isMapAsync) return
+        mapType = TYPE_DEFAULT
         clearLayer()
-        mapBoxMap?.setStyle(Style.LIGHT)
+        if (cbTrafficLayer.isChecked) {
+            setDefaultStyleUrl()
+        } else {
+            mapBoxMap?.setStyle(Style.LIGHT)
+        }
     }
 
     /*3d map*/
     private fun set3DMapType() {
         if (!isMapAsync) return
+        mapType = TYPE_3D
         clearLayer()
-        mapBoxMap?.setStyle(Style.LIGHT) {
-            fillExtrusionLayer?.let { layer -> mapBoxMap?.removeLayer(layer) }
-            fillExtrusionLayer = FillExtrusionLayer("3d-buildings", "composite").apply {
-                sourceLayer = "building"
-                filter = Expression.eq(Expression.get("extrude"), "true")
-                minZoom = 15f
-                setProperties(PropertyFactory.fillExtrusionColor(Color.LTGRAY),
-                        PropertyFactory.fillExtrusionHeight(Expression.interpolate(Expression.exponential(1f),
-                                Expression.zoom(),
-                                Expression.stop(15, Expression.literal(0)),
-                                Expression.stop(16, Expression.get("height")))),
-                        PropertyFactory.fillExtrusionBase(Expression.get("min_height")),
-                        PropertyFactory.fillExtrusionOpacity(0.9f)
-                )
-                mapBoxMap?.addLayer(this)
-            }
+        if (cbTrafficLayer.isChecked) {
+            set3DStyleUrl()
+        } else {
+            mapBoxMap?.setStyle(Style.LIGHT) { fill3DLayer() }
+        }
+    }
+
+    private fun fill3DLayer() {
+        fillExtrusionLayer?.let { layer -> mapBoxMap?.removeLayer(layer) }
+        fillExtrusionLayer = FillExtrusionLayer("3d-buildings", "composite").apply {
+            sourceLayer = "building"
+            filter = Expression.eq(Expression.get("extrude"), "true")
+            minZoom = 15f
+            setProperties(PropertyFactory.fillExtrusionColor(Color.LTGRAY),
+                    PropertyFactory.fillExtrusionHeight(Expression.interpolate(Expression.exponential(1f),
+                            Expression.zoom(),
+                            Expression.stop(15, Expression.literal(0)),
+                            Expression.stop(16, Expression.get("height")))),
+                    PropertyFactory.fillExtrusionBase(Expression.get("min_height")),
+                    PropertyFactory.fillExtrusionOpacity(0.9f)
+            )
+            mapBoxMap?.addLayer(this)
         }
     }
 
     /*satellite map*/
     private fun setSatelliteMapType() {
         if (!isMapAsync) return
+        mapType = TYPE_SATELLITE
         clearLayer()
-        mapBoxMap?.setStyle(Style.SATELLITE)
+        if (cbTrafficLayer.isChecked) {
+            setSatelliteStyleUrl()
+        } else {
+            mapBoxMap?.setStyle(Style.SATELLITE)
+        }
     }
 
     /*clear map*/
@@ -193,6 +252,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
             markerObjMap[marker.id]?.let { `object` -> onMarkerClick(marker, `object`) }
             return@setOnMarkerClickListener true
         }
+        setCheckLayer()
 //        enableLocationComponent()
     }
 
@@ -258,20 +318,25 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
 
     @SuppressLint("MissingPermission")
     private fun onLocation() {
-        val options = LocationComponentOptions.builder(this)
-                .trackingGesturesManagement(false)
-                .enableStaleState(true)
-                .accuracyColor(ContextCompat.getColor(this, R.color.green))
-                .build()
-        // Get an instance of the component
-        locationComponent = mapBoxMap?.locationComponent
-        locationComponent?.let {
-            it.activateLocationComponent(this, options)
-            it.cameraMode = CameraMode.TRACKING
-            it.renderMode = RenderMode.COMPASS
-            it.lastKnownLocation?.let { location -> moveToUserLocation(location) }
-            it.isLocationComponentEnabled = false
+        locationEngine = LocationEngineProvider(this).obtainBestLocationEngineAvailable().apply {
+            val location = this.lastLocation
+            if (location != null) {
+                moveToUserLocation(location)
+            } else {
+                this.priority = LocationEnginePriority.HIGH_ACCURACY
+                this.addLocationEngineListener(this@RoadNavigationActivity)
+                this.activate()
+            }
         }
+    }
+
+    override fun onLocationChanged(location: Location?) {
+        location?.let { moveToUserLocation(it) }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onConnected() {
+        locationEngine?.requestLocationUpdates()
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -338,7 +403,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
 
             }
             MapDataType.RWIS.CODE -> showPoint(code, DataSource.MapData.getRWIS())
-            MapDataType.BUS_STOP.CODE ->showPoint(code,DataSource.MapData.getBusStop())
+            MapDataType.BUS_STOP.CODE -> showPoint(code, DataSource.MapData.getBusStop())
         }
     }
 
@@ -362,18 +427,37 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener 
         markerMap[code]?.let { for (marker in it) mapBoxMap?.removeMarker(marker) }
     }
 
-    override fun onStart() {
-        super.onStart()
-        locationComponent?.onStart()
+    private fun setCheckLayer() {
+        cbEvents.isChecked = true
+        cbParking.isChecked = true
+        cbCCTV.isChecked = true
+        cbDMS.isChecked = true
+        cbPolice.isChecked = true
+        cbWeather.isChecked = true
+        cbRWIS.isChecked = true
+        cbBusStop.isChecked = true
     }
 
+    @SuppressLint("MissingPermission")
+    override fun onStart() {
+        locationEngine?.let {
+            it.addLocationEngineListener(this)
+            it.requestLocationUpdates()
+        }
+        super.onStart()
+    }
+
+    @SuppressLint("MissingPermission")
     override fun onStop() {
+        locationEngine?.let {
+            it.removeLocationUpdates()
+            it.removeLocationEngineListener(this)
+        }
         super.onStop()
-        locationComponent?.onStop()
     }
 
     override fun onDestroy() {
-        locationComponent?.onDestroy()
+        locationEngine?.deactivate()
         super.onDestroy()
     }
 }

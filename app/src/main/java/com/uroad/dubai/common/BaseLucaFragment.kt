@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.widget.CurrencyLoadView
+import com.uroad.library.compat.AppDialog
 import com.uroad.library.utils.NetworkUtils
 
 /**
@@ -173,4 +174,45 @@ abstract class BaseLucaFragment : Fragment() {
         uri?.let { intent.data = it }
         startActivityForResult(intent, requestCode)
     }
+
+    open fun showTipsDialog(message: CharSequence?) {
+        showTipsDialog(message, "", null)
+    }
+
+    open fun showTipsDialog(message: CharSequence?, textPositive: CharSequence?, listener: AppDialog.OnClickListener?) {
+        val dialog = AppDialog(context)
+        dialog.setTitle(getString(R.string.tips))
+        dialog.setMessage(message)
+        dialog.hideDivider()
+        val text = if (TextUtils.isEmpty(textPositive)) getString(R.string.dialog_button_confirm) else textPositive
+        dialog.setPositiveButton(text, object : AppDialog.OnClickListener {
+            override fun onClick(v: View, dialog: AppDialog) {
+                if (listener == null) dialog.dismiss()
+                else listener.onClick(v, dialog)
+            }
+        })
+        dialog.show()
+    }
+
+    open fun showDialog(title: CharSequence?, message: CharSequence?, listener: BaseLucaActivity.DialogViewClickListener?) {
+        showDialog(title, message, getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), listener)
+    }
+
+    open fun showDialog(title: CharSequence?, message: CharSequence?, cancelCs: CharSequence?, confirmCs: CharSequence?, listener: BaseLucaActivity.DialogViewClickListener?) {
+        val dialog = AppDialog(context)
+        dialog.setTitle(title)
+        dialog.setMessage(message)
+        dialog.setNegativeButton(cancelCs, object : AppDialog.OnClickListener {
+            override fun onClick(v: View, dialog: AppDialog) {
+                listener?.onCancel(v, dialog)
+            }
+        })
+        dialog.setPositiveButton(confirmCs, object : AppDialog.OnClickListener {
+            override fun onClick(v: View, dialog: AppDialog) {
+                listener?.onConfirm(v, dialog)
+            }
+        })
+        dialog.show()
+    }
+
 }

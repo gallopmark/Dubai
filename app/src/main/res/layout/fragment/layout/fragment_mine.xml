@@ -12,7 +12,8 @@
         <LinearLayout
             android:id="@+id/llUserInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".25"
             android:background="@mipmap/ic_mine_topbg"
             android:orientation="horizontal"
             android:padding="@dimen/space_16"
@@ -33,6 +34,7 @@
             <ImageView
                 android:layout_width="@dimen/space_80"
                 android:layout_height="@dimen/space_80"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/space_20"
                 android:layout_marginRight="@dimen/space_20"
                 android:src="@mipmap/ic_user_default" />
@@ -47,8 +49,8 @@
         <TextView
             android:id="@+id/tvMessage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_message"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
@@ -63,8 +65,8 @@
         <TextView
             android:id="@+id/tvFavorites"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_favorites"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
@@ -79,8 +81,8 @@
         <TextView
             android:id="@+id/tvCalendar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_calendar"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
@@ -95,8 +97,8 @@
         <TextView
             android:id="@+id/tvSetting"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_settings"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
@@ -111,8 +113,8 @@
         <TextView
             android:id="@+id/tvShare"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_share"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
@@ -127,8 +129,8 @@
         <TextView
             android:id="@+id/tvContactRTA"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_contact_rta"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
@@ -143,8 +145,8 @@
         <TextView
             android:id="@+id/tvFeedback"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_15"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent=".1"
             android:drawableStart="@mipmap/ic_mine_feedback"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"

@@ -4,6 +4,7 @@ import com.uroad.dubai.webService.ApiService
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 open class BasePresenter<V : BaseView>(private var baseView: V?) {
@@ -29,6 +30,10 @@ open class BasePresenter<V : BaseView>(private var baseView: V?) {
         compositeDisposable.add(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(observer))
+    }
+
+    fun addDisposable(disposable: Disposable?) {
+        disposable?.let { compositeDisposable.add(it) }
     }
 
     fun dispose() {

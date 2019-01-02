@@ -72,8 +72,8 @@ class AttractionsListActivity : BaseActivity() {
     }
 
     private fun getFragment() : AttractionNearFragment{
-        var nearFragment = AttractionNearFragment()
-        var bundle = Bundle()
+        val nearFragment = AttractionNearFragment()
+        val bundle = Bundle()
         bundle.putString("type",type)
         //nearFragment.arguments?.putBundle("bundle",bundle)
         nearFragment.arguments = bundle

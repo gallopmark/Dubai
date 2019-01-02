@@ -26,18 +26,24 @@ import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.library.utils.DisplayUtils
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class RouteNavigationPresenter(private val context: Context,
                                private val naviView: RouteNavigationView)
     : BasePresenter<RouteNavigationView>(naviView) {
 
+    private var disposable: Disposable? = null
+
     fun getPoi(content: String, type: Int): MapboxGeocoding {
         return MapboxGeocoding.builder()
                 .accessToken(context.getString(R.string.mapBoxToken))
-                .country("AE")
+//                .country("ae")
                 .query(content).build().apply {
                     this.enqueueCall(object : Callback<GeocodingResponse> {
                         override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
@@ -52,22 +58,34 @@ class RouteNavigationPresenter(private val context: Context,
     }
 
     fun getRoutes(origin: Point, destination: Point, profile: String) {
-        val directions = MapboxDirections.builder()
+        disposable?.dispose()
+        val directions = buildDirections(origin, destination, profile)
+        disposable = Observable.fromCallable { directions.executeCall() }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : BaseObserver<Response<DirectionsResponse>>(naviView) {
+                    override fun onSuccess(result: Response<DirectionsResponse>) {
+                        naviView.onNavigationRoutes(result.body()?.routes())
+                    }
+                })
+        addDisposable(disposable)
+    }
+
+    private fun buildDirections(origin: Point, destination: Point, profile: String): MapboxDirections {
+        return MapboxDirections.builder()
                 .profile(profile)
                 .origin(origin)
                 .destination(destination)
+                .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DISTANCE)
                 .accessToken(context.getString(R.string.mapBoxToken))
-                .bannerInstructions(true)
-                .voiceInstructions(true)
-                .overview(DirectionsCriteria.OVERVIEW_FULL)
-                .alternatives(true)
                 .steps(true)
+                .continueStraight(true)
+                .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+                .overview(DirectionsCriteria.OVERVIEW_FULL)
+                .voiceInstructions(true)
+                .bannerInstructions(true)
+                .alternatives(true)
+                .roundaboutExits(true)
                 .build()
-        addDisposable(Observable.fromCallable { directions.executeCall() }, object : BaseObserver<Response<DirectionsResponse>>(naviView) {
-            override fun onSuccess(result: Response<DirectionsResponse>) {
-                naviView.onNavigationRoutes(result.body()?.routes())
-            }
-        })
     }
 
     fun showPoiWindow(parent: View, features: MutableList<CarmenFeature>, onItemClickListener: BaseRecyclerAdapter.OnItemClickListener): PopupWindow {

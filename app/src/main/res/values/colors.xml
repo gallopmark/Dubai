@@ -18,4 +18,13 @@
     <color name="color_f53839">#f53839</color>
 
     <color name="color_calendar">#feedee</color>
+
+    <color name="routeColor">#13c768</color>
+    <color name="routeModerateCongestionColor">#fdaf43</color>
+    <color name="routeSevereCongestionColor">#ee2e33</color>
+    <color name="routeShieldColor">#0e7b58</color>
+    <color name="alternativeRouteColor">#85dfae</color>
+    <color name="alternativeRouteModerateCongestionColor">#c3c97b</color>
+    <color name="alternativeRouteSevereCongestionColor">#bc8873</color>
+    <color name="alternativeRouteShieldColor">#88bbab</color>
 </resources>

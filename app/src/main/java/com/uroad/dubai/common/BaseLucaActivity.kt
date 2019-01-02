@@ -54,7 +54,7 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
             //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
-            window.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.TRANSPARENT
             //导航栏颜色也可以正常设置
@@ -119,6 +119,20 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         }
     }
 
+    open fun setBaseContentView(@LayoutRes layoutResID: Int, hideLine: Boolean) {
+        if (hideLine) baseParent.removeView(baseLine)
+        baseContentView = layoutInflater.inflate(layoutResID, baseParent, false)
+        baseParent.addView(baseContentView)
+    }
+
+    open fun setBaseContentView(contentView: View?, hideLine: Boolean) {
+        if (hideLine) baseParent.removeView(baseLine)
+        contentView?.let {
+            baseParent.addView(contentView)
+            baseContentView = it
+        }
+    }
+
     open fun setBaseContentViewWithoutTitle(@LayoutRes layoutId: Int) {
         setBaseContentViewWithoutTitle(layoutId, false)
     }
@@ -137,6 +151,10 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         baseParent.removeView(baseToolbar)
         if (hideLine) baseParent.removeView(baseLine)
         setBaseContentView(contentView)
+    }
+
+    open fun removeBaseLine() {
+        baseParent.removeView(baseToolbar)
     }
 
     open fun onPageLoading() {

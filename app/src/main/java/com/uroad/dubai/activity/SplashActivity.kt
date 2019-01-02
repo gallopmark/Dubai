@@ -5,8 +5,10 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.View
+import android.widget.FrameLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseLucaActivity
+import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.lang.ref.WeakReference
 
@@ -42,6 +44,7 @@ class SplashActivity : BaseLucaActivity() {
 
     private fun initView() {
         ivSplash.setImageResource(R.mipmap.ic_splash_bg)
+        tvJump.layoutParams = (tvJump.layoutParams as FrameLayout.LayoutParams).apply { topMargin += DisplayUtils.getStatusHeight(this@SplashActivity) }
         tvJump.setOnClickListener {
             handler.removeMessages(updateCode)
             if (!isGoMain) openMainPage()

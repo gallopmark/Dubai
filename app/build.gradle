@@ -37,6 +37,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    signingConfigs {
+        release {
+            storeFile file("uroadDubai.jks")   //签名文件全路径
+            storePassword "uroadDubai"
+            keyAlias "uroadDubai"
+            keyPassword "uroadDubai"
+            //7.0使用的APK Signature Scheme v2签名方案使外部打入渠道信息会修改签名导致没办法安装 所以目前这里我们需要先禁用掉
+            v2SigningEnabled false
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -55,11 +66,11 @@ dependencies {
     implementation project(':OkHttpLib')
     implementation project(':ImageLoader')
     implementation 'com.android.support:multidex:1.0.3'
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1') {
         exclude group: 'group_name', module: 'module_name'
     }
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.2.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.24.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.3.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.26.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-18'
 }

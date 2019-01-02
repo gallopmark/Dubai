@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.MoreActivity
 import com.uroad.dubai.activity.NewsListActivity
 import com.uroad.dubai.activity.RoadNavigationActivity
 import com.uroad.dubai.activity.RoadsListActivity
@@ -67,18 +68,18 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initMenu() {
-        ivMessage.setOnClickListener {  }
-        ivMessageColl.setOnClickListener {  }
-        ivSearch.setOnClickListener {  }
-        ivSearchColl.setOnClickListener {  }
+        ivMessage.setOnClickListener { }
+        ivMessageColl.setOnClickListener { }
+        ivSearch.setOnClickListener { }
+        ivSearchColl.setOnClickListener { }
         tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         ivNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
-        tvHighWay.setOnClickListener {  openActivity(RoadsListActivity::class.java)  }
-        ivHighWay.setOnClickListener {  openActivity(RoadsListActivity::class.java) }
+        tvHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
+        ivHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
         tvNews.setOnClickListener { openActivity(NewsListActivity::class.java) }
         ivNews.setOnClickListener { openActivity(NewsListActivity::class.java) }
-        tvMore.setOnClickListener {  }
-        ivMore.setOnClickListener {  }
+        tvMore.setOnClickListener { openActivity(MoreActivity::class.java) }
+        ivMore.setOnClickListener { openActivity(MoreActivity::class.java) }
     }
 
     private fun initBanner() {

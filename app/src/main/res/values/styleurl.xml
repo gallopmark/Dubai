@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="map_default_url" translatable="false">mapbox://styles/q19072/cjohxi0q70z8w2sp39ek7cs8q</string>
+    <string name="map_3d_url" translatable="false">mapbox://styles/q19072/cjohxi0q70z8w2sp39ek7cs8q</string>
+    <string name="map_satellite_url" translatable="false">mapbox://styles/q19072/cjpxpvbqw1bcu2rll6jhumqyw</string>
+</resources>
