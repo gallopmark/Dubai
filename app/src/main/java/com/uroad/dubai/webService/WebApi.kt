@@ -20,5 +20,8 @@ class WebApi {
             put("index", index.toString())
             put("size", size.toString())
         }
+
+        const val GET_WEATHER_LIST = "getWeather"
+        fun getWeatherListParams() = getBaseParams()
     }
 }

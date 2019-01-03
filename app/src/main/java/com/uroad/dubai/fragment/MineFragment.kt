@@ -3,6 +3,7 @@ package com.uroad.dubai.fragment
 import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.CalendarListActivity
 import com.uroad.dubai.activity.FavoriteListActivity
 import com.uroad.dubai.activity.MessagesListActivity
 import com.uroad.dubai.common.BaseFragment
@@ -20,6 +21,7 @@ class MineFragment : BaseFragment() {
         initTopLayout()
         tvMessage.setOnClickListener{ openActivity(MessagesListActivity::class.java)}
         tvFavorites.setOnClickListener{ openActivity(FavoriteListActivity::class.java)}
+        tvCalendar.setOnClickListener { openActivity(CalendarListActivity::class.java) }
     }
 
     private fun initTopLayout() {

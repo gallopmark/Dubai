@@ -107,4 +107,5 @@
     <dimen name="font_28">28sp</dimen>
     <dimen name="font_29">29sp</dimen>
     <dimen name="font_30">30sp</dimen>
+    <dimen name="font_120">120sp</dimen>
 </resources>

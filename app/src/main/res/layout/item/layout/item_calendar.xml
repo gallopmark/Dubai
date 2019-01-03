@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivCalendarType"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginLeft="@dimen/space_20"
+        android:src="@mipmap/icon_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvWeekDateTitle"
+        android:text="22/12 Saturday"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_16"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_toRightOf="@+id/ivCalendarType"
+        android:layout_alignTop="@+id/ivCalendarType"
+        android:layout_alignBottom="@+id/ivCalendarType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_marginTop="@dimen/space_13"
+        android:layout_alignTop="@+id/ivCalendarType"
+        android:layout_marginRight="@dimen/space_20"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/icon_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/space_5"
+        android:layout_marginRight="@dimen/space_40"
+        android:layout_marginBottom="@dimen/space_20"
+        android:layout_below="@+id/tvWeekDateTitle"
+        android:layout_alignStart="@+id/tvWeekDateTitle"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="09:00-10:00"
+            android:textColor="@color/layoutLoading"
+            android:textSize="@dimen/font_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Visit Palm Jumeirah"
+            android:textColor="@color/black_overlay"
+            android:textSize="@dimen/font_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/itemDivider" />
+
+        <TextView
+            android:layout_marginTop="@dimen/space_10"
+            android:text="09:00-10:00"
+            android:textColor="@color/layoutLoading"
+            android:textSize="@dimen/font_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Visit Palm Jumeirah"
+            android:textColor="@color/black_overlay"
+            android:textSize="@dimen/font_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_marginTop="@dimen/space_10"
+        android:background="@color/itemDivider" />
+
+</RelativeLayout>
