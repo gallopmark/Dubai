@@ -53,24 +53,25 @@
             android:name=".activity.ParkingListActivity"
             android:launchMode="singleTop" />
 
-        <activity
-            android:name=".activity.AttractionsListActivity"
-            android:launchMode="singleTop" />
-
-        <activity
-            android:name=".activity.DetailsActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".activity.AttractionsListActivity"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name=".activity.FavoriteListActivity"
             android:launchMode="singleTop" />
 
-        <activity
-            android:name=".activity.RoadsListActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activity.MoreActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".activity.MoreActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.RoadsListActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.CalendarListActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.WeatherActivity"
+            android:launchMode="singleTop"/>
+
     </application>
 
 </manifest>

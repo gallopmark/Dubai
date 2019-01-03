@@ -9,10 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.AttractionsListActivity
-import com.uroad.dubai.activity.BusStopListActivity
-import com.uroad.dubai.activity.ParkingListActivity
-import com.uroad.dubai.activity.PoliceListActivity
+import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.TravelRecommendAdapter
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.model.RecommendMDL
@@ -57,7 +54,7 @@ class TravelFragment : BaseFragment() {
         tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
         tvGroups.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        tvWeather.setOnClickListener {  }
+        tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
     }
 
     //重新计算图片高度 避免图片压缩

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:RadarWaveView="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvTemperature"
+        android:text="20°"
+        android:includeFontPadding = "false"
+        android:gravity="bottom"
+        android:padding="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/space_30"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_120"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:textSize="@dimen/font_20"
+        android:text="Warsan First"
+        android:includeFontPadding = "false"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/minus_28"
+        android:gravity="center"
+        android:layout_below="@+id/tvTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/ivWeather"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvTime"
+        android:src="@mipmap/icon_cloudy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_marginTop="@dimen/space_50"
+        android:layout_below="@+id/ivWeather"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <com.uroad.dubai.widget.WaveViewBySinCos
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            RadarWaveView:waveAmplitude="10dp"
+            RadarWaveView:waveColor="@color/color_f58d91"
+            RadarWaveView:waveFillType="bottom"
+            RadarWaveView:waveSpeed="3"
+            RadarWaveView:waveStart="true"
+            RadarWaveView:waveStartPeriod="1.3"
+            RadarWaveView:waveType="sin"/>
+
+        <com.uroad.dubai.widget.WaveViewBySinCos
+            android:layout_width="match_parent"
+            RadarWaveView:waveAmplitude="10dp"
+            RadarWaveView:waveColor="@color/color_f1595f"
+            RadarWaveView:waveFillType="bottom"
+            RadarWaveView:waveSpeed="3"
+            RadarWaveView:waveStart="true"
+            RadarWaveView:waveStartPeriod="0"
+            RadarWaveView:waveType="sin"
+            android:layout_height="50dp" />
+
+    </FrameLayout>
+
+    <View
+        android:layout_marginTop="@dimen/space_100"
+        android:layout_below="@+id/ivWeather"
+        android:background="@drawable/background_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>
