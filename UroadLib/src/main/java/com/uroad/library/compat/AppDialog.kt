@@ -8,7 +8,6 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.uroad.library.R
@@ -33,16 +32,16 @@ class AppDialog(mContext: Context) : Dialog(mContext, R.style.AppDialog) {
     private val contentView: View = LayoutInflater.from(mContext).inflate(R.layout.dialog_appcompat, LinearLayout(mContext), false)
     private val tvTitle: TextView
     private val tvMessage: TextView
-    private val btCancel: Button
+    private val tvCancel: TextView
     private val vDivider: View
-    private val btConfirm: Button
+    private val tvConfirm: TextView
 
     init {
         tvTitle = contentView.findViewById(R.id.tvTitle)
         tvMessage = contentView.findViewById(R.id.tvMessage)
-        btCancel = contentView.findViewById(R.id.btCancel)
+        tvCancel = contentView.findViewById(R.id.tvCancel)
         vDivider = contentView.findViewById(R.id.vDivider)
-        btConfirm = contentView.findViewById(R.id.btConfirm)
+        tvConfirm = contentView.findViewById(R.id.tvConfirm)
         tvMessage.movementMethod = ScrollingMovementMethod.getInstance()
     }
 
@@ -67,28 +66,28 @@ class AppDialog(mContext: Context) : Dialog(mContext, R.style.AppDialog) {
     /* 确定按钮 */
     fun setPositiveButton(text: CharSequence?, onClickListener: OnClickListener?): AppDialog {
         if (!TextUtils.isEmpty(text)) {
-            btConfirm.text = text
-            btConfirm.visibility = View.VISIBLE
-            btConfirm.setOnClickListener {
-                if (onClickListener != null) onClickListener.onClick(btConfirm, this@AppDialog)
+            tvConfirm.text = text
+            tvConfirm.visibility = View.VISIBLE
+            tvConfirm.setOnClickListener {
+                if (onClickListener != null) onClickListener.onClick(tvConfirm, this@AppDialog)
                 else dismiss()
             }
         } else {
-            btConfirm.visibility = View.GONE
+            tvConfirm.visibility = View.GONE
         }
         return this
     }
 
     fun setNegativeButton(negative: CharSequence?, onClickListener: OnClickListener?): AppDialog {
         if (!TextUtils.isEmpty(negative)) {
-            btCancel.text = negative
-            btCancel.visibility = View.VISIBLE
-            btCancel.setOnClickListener {
-                if (onClickListener != null) onClickListener.onClick(btCancel, this@AppDialog)
+            tvCancel.text = negative
+            tvCancel.visibility = View.VISIBLE
+            tvCancel.setOnClickListener {
+                if (onClickListener != null) onClickListener.onClick(tvCancel, this@AppDialog)
                 else dismiss()
             }
         } else {
-            btCancel.visibility = View.GONE
+            tvCancel.visibility = View.GONE
         }
         return this
     }
@@ -104,12 +103,12 @@ class AppDialog(mContext: Context) : Dialog(mContext, R.style.AppDialog) {
     }
 
     fun setPositiveTextColor(color: Int): AppDialog {
-        btConfirm.setTextColor(color)
+        tvConfirm.setTextColor(color)
         return this
     }
 
     fun setNegativeTextColor(color: Int): AppDialog {
-        btCancel.setTextColor(color)
+        tvCancel.setTextColor(color)
         return this
     }
 

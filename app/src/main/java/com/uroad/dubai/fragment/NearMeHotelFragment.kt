@@ -1,71 +1,58 @@
 package com.uroad.dubai.fragment
 
-import android.graphics.Color
-import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.adapter.NearMeRoadsAdapter
-import com.uroad.dubai.common.BaseFragment
-import com.uroad.dubai.model.RoadsMDL
-import kotlinx.android.synthetic.main.fragment_nearmeroads.*
+import com.uroad.dubai.adapter.HotelListAdapter
+import com.uroad.dubai.api.presenter.NewsPresenter
+import com.uroad.dubai.api.view.NewsView
+import com.uroad.dubai.common.BasePresenterFragment
+import com.uroad.dubai.common.DubaiApplication
+import com.uroad.dubai.enumeration.NewsType
+import com.uroad.dubai.model.NewsMDL
+import com.uroad.dubai.webService.WebApi
+import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
-class NearMeHotelFragment : BaseFragment() {
+class NearMeHotelFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
 
-    private val data = ArrayList<RoadsMDL>()
-    private lateinit var adapter: NearMeRoadsAdapter
-    override fun setUp(view: View, savedInstanceState: Bundle?) {
-        setContentView(R.layout.fragment_nearmeroads)
+    private val data = ArrayList<NewsMDL>()
+    private lateinit var adapter: HotelListAdapter
+    private val handler = Handler()
+
+    override fun createPresenter(): NewsPresenter = NewsPresenter(this)
+    override fun onPresenterSetUp(view: View) {
+        setContentView(R.layout.fragment_mainmearme)
         initRv()
     }
 
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
-        adapter = NearMeRoadsAdapter(context, data)
+        adapter = HotelListAdapter(context, data)
         recyclerView.adapter = adapter
     }
 
     override fun initData() {
-        data.add(getMDL(0))
-        data.add(getMDL(1))
-        data.add(getMDL(2))
-        data.add(getMDL(3))
+        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.HOTEL.code, "", 1, 4))
+    }
+
+    override fun onGetNewList(news: MutableList<NewsMDL>) {
+        this.data.clear()
+        this.data.addAll(news)
         adapter.notifyDataSetChanged()
     }
 
-    private fun getMDL(position: Int): RoadsMDL {
-        return RoadsMDL().apply {
-            iconInt = when (position) {
-                0 -> R.mipmap.ic_roads_e11
-                1 -> R.mipmap.ic_roads_e44
-                2 -> R.mipmap.ic_roads_e311
-                else -> R.mipmap.ic_roads_e66
-            }
-            title = "sheikh Mohammed bin rashid al-" +
-                    "maktoum road (E311)"
-            content = "Dubai to ABU dhabi"
-            distance = when(position){
-                0 -> "1.7 km"
-                1 -> "2.1 km"
-                2 -> "3.2 km"
-                else -> "5.6 km"
-            }
-            colors = ArrayList<Int>().apply {
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#ED1C24"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#F7F30A"))
-                add(Color.parseColor("#ED1C24"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-            }
-        }
+    override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onShowError(msg: String?) {
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroyView()
     }
 }

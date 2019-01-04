@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_marginRight="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_10"
             android:drawableLeft="@mipmap/ic_notice_grey"
             android:drawablePadding="@dimen/space_5"
             android:textColor="@color/grey"
@@ -87,11 +88,6 @@
             android:orientation="horizontal"
             android:overScrollMode="always" />
 
-        <FrameLayout
-            android:id="@+id/flNearBy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/space_16"
-            android:layout_marginRight="@dimen/space_16" />
+        <include layout="@layout/content_mainnearby"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

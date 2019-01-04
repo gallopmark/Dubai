@@ -4,7 +4,7 @@ import android.text.TextUtils
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewsMDL {
+open class NewsMDL {
     var newsid: String? = null
     var publishtime: String? = null
     var title: String? = null

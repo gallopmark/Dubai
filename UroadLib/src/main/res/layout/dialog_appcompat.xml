@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/space_16"
         android:layout_marginTop="@dimen/space_16"
+        android:layout_marginBottom="@dimen/space_16"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/space_2"
         android:maxHeight="@dimen/space_200"
@@ -48,20 +48,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btCancel"
+        <TextView
+            android:id="@+id/tvCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
-            android:paddingBottom="@dimen/space_8"
-            android:paddingLeft="@dimen/space_12"
-            android:paddingRight="@dimen/space_12"
-            android:paddingTop="@dimen/space_8"
+            android:padding="@dimen/space_12"
             android:text="@string/dialog_button_cancel"
-            android:textColor="@color/dialog_negativeButton"
+            android:textColor="@color/dialog_positiveButton"
             android:textSize="@dimen/font_16"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <View
             android:id="@+id/vDivider"
@@ -69,18 +66,15 @@
             android:layout_height="match_parent"
             android:background="@color/dialog_line" />
 
-        <Button
-            android:id="@+id/btConfirm"
+        <TextView
+            android:id="@+id/tvConfirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
-            android:paddingBottom="@dimen/space_8"
-            android:paddingLeft="@dimen/space_12"
-            android:paddingRight="@dimen/space_12"
-            android:paddingTop="@dimen/space_8"
+            android:padding="@dimen/space_12"
             android:text="@string/dialog_button_confirm"
-            android:textColor="@color/dialog_positiveButton"
+            android:textColor="@color/dialog_negativeButton"
             android:textSize="@dimen/font_16"
             android:visibility="gone" />
     </LinearLayout>

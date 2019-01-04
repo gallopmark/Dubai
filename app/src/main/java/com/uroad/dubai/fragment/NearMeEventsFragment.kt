@@ -8,14 +8,14 @@ import com.uroad.dubai.R
 import com.uroad.dubai.adapter.NearMeRoadsAdapter
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.model.RoadsMDL
-import kotlinx.android.synthetic.main.fragment_nearmeroads.*
+import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
 class NearMeEventsFragment : BaseFragment() {
 
     private val data = ArrayList<RoadsMDL>()
     private lateinit var adapter: NearMeRoadsAdapter
     override fun setUp(view: View, savedInstanceState: Bundle?) {
-        setContentView(R.layout.fragment_nearmeroads)
+        setContentView(R.layout.fragment_mainmearme)
         initRv()
     }
 

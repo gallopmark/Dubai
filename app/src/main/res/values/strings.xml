@@ -50,7 +50,7 @@
     <string name="nearMe_news">News</string>
     <string name="nearMe_hotel">Hotel</string>
     <string name="nearMe_restaurants">Restaurants</string>
-    <string name="nearMe_TouristAttractions">Tourist Attractions</string>
+    <string name="nearMe_attractions">Attractions</string>
 
     <string name="search">Search</string>
 
@@ -114,4 +114,6 @@
     <string name="more_menu_weather">@string/travel_menu_weather</string>
     <string name="more_inner">Inner</string>
     <string name="more_menu_report">Report</string>
+
+    <string name="hours">Hours</string>
 </resources>

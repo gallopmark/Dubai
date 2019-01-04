@@ -65,13 +65,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivSwitchLayer" />
 
-    <ImageView
-        android:id="@+id/ivTouristLayer"
+    <CheckBox
+        android:id="@+id/cbTouristLayer"
         android:layout_width="@dimen/space_45"
         android:layout_height="@dimen/space_45"
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_10"
-        android:src="@mipmap/ic_tourist_layer"
+        android:background="@mipmap/ic_tourist_layer"
+        android:button="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cbTrafficLayer" />
 
@@ -83,7 +84,7 @@
         android:layout_marginEnd="@dimen/space_10"
         android:src="@mipmap/ic_report_layer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivTouristLayer" />
+        app:layout_constraintTop_toBottomOf="@+id/cbTouristLayer" />
 
     <LinearLayout
         android:layout_width="wrap_content"

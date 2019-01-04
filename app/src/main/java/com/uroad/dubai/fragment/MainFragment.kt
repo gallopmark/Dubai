@@ -16,6 +16,7 @@ import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.library.utils.DisplayUtils
+import kotlinx.android.synthetic.main.content_mainnearby.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.home_content_scroll.*
 import kotlinx.android.synthetic.main.home_top_collapse.*
@@ -37,7 +38,7 @@ class MainFragment : BaseFragment() {
         private const val TAG_NEWS = "news"
         private const val TAG_HOTEL = "hotel"
         private const val TAG_RESTAURANTS = "restaurants"
-        private const val TAG_TOURIST = "TouristAttractions"
+        private const val TAG_ATTRACTIONS = "attractions"
     }
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
@@ -115,7 +116,7 @@ class MainFragment : BaseFragment() {
             add(context.getString(R.string.nearMe_news))
             add(context.getString(R.string.nearMe_hotel))
             add(context.getString(R.string.nearMe_restaurants))
-            add(context.getString(R.string.nearMe_TouristAttractions))
+            add(context.getString(R.string.nearMe_attractions))
         }
         rvNearByTab.adapter = NearMeTabAdapter(context, tabs).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
@@ -128,70 +129,50 @@ class MainFragment : BaseFragment() {
                 }
             })
         }
+        initFragments()
+    }
+
+    private fun initFragments() {
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.flNearMeRoads, NearMeRoadsFragment(), TAG_ROADS)
+        transaction.replace(R.id.flNearMeEvents, NearMeEventsFragment(), TAG_EVENTS)
+        transaction.replace(R.id.flNearMeNews, NearMeNewsFragment(), TAG_NEWS)
+        transaction.replace(R.id.flNearMeHotel, NearMeHotelFragment(), TAG_HOTEL)
+        transaction.replace(R.id.flNearMeRestaurants, NearMeRestaurantsFragment(), TAG_RESTAURANTS)
+        transaction.replace(R.id.flNearMeAttractions, NearMeAttractionsFragment(), TAG_ATTRACTIONS)
+        transaction.commitAllowingStateLoss()
         setCurrentTab(0)
     }
 
     private fun setCurrentTab(tab: Int) {
-        val transaction = childFragmentManager.beginTransaction()
-        hideFragments(transaction)
-        when (tab) {
-            0 -> {
-                val fragment = childFragmentManager.findFragmentByTag(TAG_ROADS)
-                if (fragment == null) {
-                    transaction.add(R.id.flNearBy, NearMeRoadsFragment(), TAG_ROADS)
-                } else {
-                    transaction.show(fragment)
-                }
-            }
-            1 -> {
-                val fragment = childFragmentManager.findFragmentByTag(TAG_EVENTS)
-                if (fragment == null) {
-                    transaction.add(R.id.flNearBy, NearMeEventsFragment(), TAG_EVENTS)
-                } else {
-                    transaction.show(fragment)
-                }
-            }
-            2 -> {
-                val fragment = childFragmentManager.findFragmentByTag(TAG_NEWS)
-                if (fragment == null) {
-                    transaction.add(R.id.flNearBy, NearMeNewsFragment(), TAG_NEWS)
-                } else {
-                    transaction.show(fragment)
-                }
-            }
-            3 -> {
-                val fragment = childFragmentManager.findFragmentByTag(TAG_HOTEL)
-                if (fragment == null) {
-                    transaction.add(R.id.flNearBy, NearMeHotelFragment(), TAG_HOTEL)
-                } else {
-                    transaction.show(fragment)
-                }
-            }
-            4 -> {
-                val fragment = childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)
-                if (fragment == null) {
-                    transaction.add(R.id.flNearBy, NearMeRestaurantsFragment(), TAG_RESTAURANTS)
-                } else {
-                    transaction.show(fragment)
-                }
-            }
-            5 -> {
-                val fragment = childFragmentManager.findFragmentByTag(TAG_TOURIST)
-                if (fragment == null) {
-                    transaction.add(R.id.flNearBy, NearMeTouristFragment(), TAG_TOURIST)
-                } else {
-                    transaction.show(fragment)
-                }
-            }
+        hideFragments()
+        when(tab){
+            0 ->  flNearMeRoads.visibility = View.VISIBLE
+            1 ->  flNearMeEvents.visibility = View.VISIBLE
+            2 ->  flNearMeNews.visibility = View.VISIBLE
+            3 ->  flNearMeHotel.visibility = View.VISIBLE
+            4 ->  flNearMeRestaurants.visibility = View.VISIBLE
+            5 ->  flNearMeAttractions.visibility = View.VISIBLE
         }
-        transaction.commitAllowingStateLoss()
+//        val transaction = childFragmentManager.beginTransaction()
+//        hideFragments(transaction)
+//        when (tab) {
+//            0 -> childFragmentManager.findFragmentByTag(TAG_ROADS)?.let { transaction.show(it) }
+//            1 -> childFragmentManager.findFragmentByTag(TAG_EVENTS)?.let { transaction.show(it) }
+//            2 -> childFragmentManager.findFragmentByTag(TAG_NEWS)?.let { transaction.show(it) }
+//            3 -> childFragmentManager.findFragmentByTag(TAG_HOTEL)?.let { transaction.show(it) }
+//            4 -> childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)?.let { transaction.show(it) }
+//            5 -> childFragmentManager.findFragmentByTag(TAG_ATTRACTIONS)?.let { transaction.show(it) }
+//        }
+//        transaction.commit()
     }
 
-    private fun hideFragments(transaction: FragmentTransaction) {
-        childFragmentManager.findFragmentByTag(TAG_ROADS)?.let { transaction.hide(it) }
-        childFragmentManager.findFragmentByTag(TAG_EVENTS)?.let { transaction.hide(it) }
-        childFragmentManager.findFragmentByTag(TAG_NEWS)?.let { transaction.hide(it) }
-        childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)?.let { transaction.hide(it) }
-        childFragmentManager.findFragmentByTag(TAG_TOURIST)?.let { transaction.hide(it) }
+    private fun hideFragments() {
+        flNearMeRoads.visibility = View.GONE
+        flNearMeEvents.visibility = View.GONE
+        flNearMeNews.visibility = View.GONE
+        flNearMeHotel.visibility = View.GONE
+        flNearMeRestaurants.visibility = View.GONE
+        flNearMeAttractions.visibility = View.GONE
     }
 }

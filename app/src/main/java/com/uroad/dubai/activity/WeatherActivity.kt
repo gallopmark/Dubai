@@ -8,7 +8,7 @@ class WeatherActivity : BaseActivity() {
 
     override fun setUp(savedInstanceState: Bundle?) {
         super.setUp(savedInstanceState)
-        setBaseContentView(R.layout.activity_weather)
+        setBaseContentView(R.layout.activity_weather, true)
     }
 
 }

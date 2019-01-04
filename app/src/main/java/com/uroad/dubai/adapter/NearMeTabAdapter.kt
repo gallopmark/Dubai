@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
+import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.library.utils.DisplayUtils
@@ -34,9 +35,11 @@ class NearMeTabAdapter(context: Context, mDatas: MutableList<String>)
         if (position == selected) {
             holder.setTextSize(R.id.tvTab, TypedValue.COMPLEX_UNIT_PX, ts16)
             holder.setTypeface(R.id.tvTab, Typeface.defaultFromStyle(Typeface.BOLD))
+            holder.setVisibility(R.id.vTab, View.VISIBLE)
         } else {
             holder.setTextSize(R.id.tvTab, TypedValue.COMPLEX_UNIT_PX, ts14)
             holder.setTypeface(R.id.tvTab, Typeface.defaultFromStyle(Typeface.NORMAL))
+            holder.setVisibility(R.id.vTab, View.GONE)
         }
     }
 

@@ -2,6 +2,7 @@ package com.uroad.dubai.activity
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -23,7 +24,11 @@ import kotlinx.android.synthetic.main.activity_roadnavigation.*
 import kotlinx.android.synthetic.main.content_maplayeroption.*
 import kotlinx.android.synthetic.main.content_roadnavigation.*
 import android.support.v4.util.ArrayMap
+import android.view.LayoutInflater
 import android.widget.CompoundButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineListener
 import com.mapbox.android.core.location.LocationEnginePriority
@@ -34,10 +39,13 @@ import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.uroad.dubai.api.presenter.RoadNavigationPresenter
+import com.uroad.dubai.api.view.RoadNavigationView
 import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.DataSource
 import com.uroad.dubai.model.*
+import com.uroad.dubai.utils.SymbolGenerator
 
 
 /**
@@ -45,7 +53,7 @@ import com.uroad.dubai.model.*
  * @create 2018/12/18
  * @describe Road navigation
  */
-class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, LocationEngineListener {
+class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, LocationEngineListener, RoadNavigationView {
 
     private var statusHeight = 0
     private var isMapAsync = false
@@ -55,6 +63,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
     private var userMarker: Marker? = null
     private val markerMap = ArrayMap<String, MutableList<Marker>>()
     private var markerObjMap = ArrayMap<Long, MapPointItem>()
+    private lateinit var presenter: RoadNavigationPresenter
 
     companion object {
         private const val TYPE_DEFAULT = "default"
@@ -71,6 +80,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         initView()
         initLayer()
         initMenu()
+        presenter = RoadNavigationPresenter(this)
     }
 
     private fun initView() {
@@ -86,6 +96,11 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
             }
         }
         cbTrafficLayer.setOnCheckedChangeListener { _, isChecked -> changeTrafficLayer(isChecked) }
+        cbTouristLayer.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) presenter.getScenic()
+            else removePointFromMap(MapDataType.SCENIC.CODE)
+        }
+        ivReportLayer.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
         ivLocation.setOnClickListener { enableLocationComponent() }
@@ -167,7 +182,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         if (cbTrafficLayer.isChecked) {
             setDefaultStyleUrl()
         } else {
-            mapBoxMap?.setStyle(Style.LIGHT)
+            mapBoxMap?.setStyle(Style.MAPBOX_STREETS)
         }
     }
 
@@ -399,9 +414,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
             MapDataType.CCTV.CODE -> showPoint(code, DataSource.MapData.getCCTV())
             MapDataType.DMS.CODE -> showPoint(code, DataSource.MapData.getDMS())
             MapDataType.POLICE.CODE -> showPoint(code, DataSource.MapData.getPolice())
-            MapDataType.WEATHER.CODE -> {
-
-            }
+            MapDataType.WEATHER.CODE -> showWeather(code, DataSource.MapData.getWeather())
             MapDataType.RWIS.CODE -> showPoint(code, DataSource.MapData.getRWIS())
             MapDataType.BUS_STOP.CODE -> showPoint(code, DataSource.MapData.getBusStop())
         }
@@ -417,6 +430,26 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
             }
         }
         markerMap[code] = markers
+    }
+
+    private fun showWeather(code: String, items: MutableList<MapPointItem>) {
+        val markers = ArrayList<Marker>()
+        for (item in items) {
+            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromBitmap(generate(item as WeatherMDL)), item.getLatLng()))
+            marker?.let { markers.add(it) }
+        }
+        markerMap[code] = markers
+    }
+
+    private fun generate(item: WeatherMDL): Bitmap {
+        val view = LayoutInflater.from(this).inflate(R.layout.content_map_weather, LinearLayout(this), false)
+        val tvCity = view.findViewById<TextView>(R.id.tvCity)
+        val tvTemperature = view.findViewById<TextView>(R.id.tvTemperature)
+        val ivWeather = view.findViewById<ImageView>(R.id.ivWeather)
+        tvCity.text = item.city
+        tvTemperature.text = item.temperature
+        ivWeather.setImageResource(R.mipmap.ic_weather_sun)
+        return SymbolGenerator.generate(view)
     }
 
     private fun createMarkerOptions(icon: Icon, latLng: LatLng): MarkerOptions {
@@ -436,6 +469,21 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         cbWeather.isChecked = true
         cbRWIS.isChecked = true
         cbBusStop.isChecked = true
+    }
+
+    override fun onShowLoading() {
+    }
+
+    override fun onHideLoading() {}
+
+    override fun onShowError(msg: String?) {}
+
+    override fun onGetScenic(data: MutableList<ScenicMDL>) {
+        showPoint(MapDataType.SCENIC.CODE, ArrayList<MapPointItem>().apply { addAll(data) })
+    }
+
+    override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+        showShortToast(errorMsg)
     }
 
     @SuppressLint("MissingPermission")

@@ -9,5 +9,6 @@ enum class MapDataType(var CODE: String) {
     POLICE("100006"),
     WEATHER("100007"),
     RWIS("100008"),
-    BUS_STOP("100009")
+    BUS_STOP("100009"),
+    SCENIC("1000010")
 }

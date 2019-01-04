@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tvTab"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:textColor="@color/color_66"
-    android:textSize="@dimen/font_14" />
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <View
+        android:id="@+id/vTab"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_4"
+        android:layout_below="@+id/tvTab"
+        android:layout_alignStart="@+id/tvTab"
+        android:layout_alignEnd="@+id/tvTab"
+        android:layout_marginStart="@dimen/space_4"
+        android:layout_marginTop="@dimen/minus_6"
+        android:layout_marginEnd="@dimen/space_4"
+        android:background="@color/color_calendar" />
+
+    <TextView
+        android:id="@+id/tvTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_14" />
+</RelativeLayout>

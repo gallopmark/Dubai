@@ -16,12 +16,12 @@ abstract class BaseNoTitleMapBoxActivity : BaseActivity() {
         setBaseContentViewWithoutTitle(setBaseMapBoxView(), true)
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
+        onMapSetUp(savedInstanceState)
         mapView.getMapAsync {
             mapBoxMap = it
             setDefaultValue(it)
             onMapAsync(it)
         }
-        onMapSetUp(savedInstanceState)
     }
 
     open fun setDefaultValue(mapBoxMap: MapboxMap) {

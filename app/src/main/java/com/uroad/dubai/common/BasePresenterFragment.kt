@@ -16,7 +16,7 @@ abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseFragment(), Bas
 
     abstract fun createPresenter(): P?
 
-    open fun onPresenterSetUp(view: View) {}
+    abstract fun onPresenterSetUp(view: View)
 
     override fun onShowLoading() {
 
