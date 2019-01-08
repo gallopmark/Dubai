@@ -189,7 +189,8 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                     if (position in 0 until poiData.size) {
-                        PoiSearchSource.saveContent(this@RoadNavigationActivity, GsonUtils.fromObjectToJson(poiData[position]))
+                        PoiSearchSource.saveContent(this@RoadNavigationActivity, poiData[position].toJson())
+                        onSelectCarmenFeature(poiData[position])
                     }
                 }
             })
@@ -206,9 +207,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
                         val itemType = item.getItemType()
                         if (itemType == 1) {
                             val mdl = item as PoiSearchTextMDL
-                            mdl.content?.let { handleWhenInput(it) }
+                            etSearch.setText(mdl.content)
                         } else {
                             val mdl = item as PoiSearchPoiMDL
+                            onSelectCarmenFeature(mdl.carmenFeature)
                         }
                     }
                 }
@@ -216,6 +218,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         }
         rvHistory.adapter = histotyAdapter
         showHistory()
+    }
+
+    private fun onSelectCarmenFeature(carmenFeature: CarmenFeature?) {
+        openActivity(RouteNavigationActivity::class.java, Bundle().apply { putString("carmen", carmenFeature?.toJson()) })
     }
 
     private fun showHistory() {
@@ -228,12 +234,19 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         } else {
             cvHistory.visibility = View.GONE
         }
+        tvClearHistory.setOnClickListener {
+            PoiSearchSource.clear(this)
+            showHistory()
+        }
     }
 
     private fun onInitialState() {
         contentSearch.visibility = View.GONE
         cvSearchIM.visibility = View.VISIBLE
+        rvPoi.visibility = View.GONE
+        etSearch.text = null
         etSearch.clearFocus()
+        InputMethodUtils.hideSoftInput(this, etSearch)
     }
 
     private fun onShowSearchContent() {

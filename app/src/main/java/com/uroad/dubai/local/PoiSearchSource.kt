@@ -64,7 +64,7 @@ class PoiSearchSource {
                 data.reverse()   //倒序排序
                 for (item in data) {
                     if (GsonUtils.isJson(item)) {
-                        list.add(PoiSearchPoiMDL().apply { carmenFeature = GsonUtils.fromJsonToObject(item, CarmenFeature::class.java) })
+                        list.add(PoiSearchPoiMDL().apply { carmenFeature = CarmenFeature.fromJson(item) })
                     } else {
                         list.add(PoiSearchTextMDL().apply { this.content = item })
                     }

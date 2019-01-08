@@ -27,16 +27,10 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
-import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
-import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
-import com.mapbox.mapboxsdk.location.LocationComponent
-import com.mapbox.mapboxsdk.location.LocationComponentOptions
-import com.mapbox.mapboxsdk.location.modes.CameraMode
-import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
@@ -98,6 +92,15 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         etStartPoint.clearFocus()
         etStartPoint.addTextChangedListener(InputWatcher(1))
         etEndPoint.addTextChangedListener(InputWatcher(2))
+        val carmen = intent.extras?.getString("carmen")
+        carmen?.let {
+            val feature = CarmenFeature.fromJson(it)
+            endPoint = feature.center()
+            isEndSetText = true
+            etEndPoint.setText(feature.placeName())
+            etEndPoint.setSelection(etEndPoint.text.length)
+            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+        }
     }
 
     private inner class InputWatcher(private val type: Int) : TextWatcher {
@@ -262,6 +265,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         etStartPoint.setText(getString(R.string.route_myLocation))
         etStartPoint.setSelection(etStartPoint.text.length)
         etStartPoint.clearFocus()
+        startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
     }
 
     private val startPoiRunnable = Runnable {
@@ -373,10 +377,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     }
 
     /*添加起点和终点marker*/
-    private fun addMarker(startPoint: LatLng?, endPoint: LatLng?) {
-        originMarker = mapBoxMap?.addMarker(MarkerOptions().position(startPoint).setIcon(IconFactory.getInstance(this@RouteNavigationActivity).fromResource(R.mipmap.ic_user_location)))
-        destinationMarker = mapBoxMap?.addMarker(MarkerOptions().position(endPoint).icon(IconFactory.getInstance(this@RouteNavigationActivity).fromResource(R.mipmap.ic_route_target)))
-    }
+//    private fun addMarker(startPoint: LatLng?, endPoint: LatLng?) {
+//        originMarker = mapBoxMap?.addMarker(MarkerOptions().position(startPoint).setIcon(IconFactory.getInstance(this@RouteNavigationActivity).fromResource(R.mipmap.ic_user_location)))
+//        destinationMarker = mapBoxMap?.addMarker(MarkerOptions().position(endPoint).icon(IconFactory.getInstance(this@RouteNavigationActivity).fromResource(R.mipmap.ic_route_target)))
+//    }
 
     /*根据起点和终点缩放地图*/
     private fun zoomToSpan(startPoint: LatLng?, endPoint: LatLng?) {

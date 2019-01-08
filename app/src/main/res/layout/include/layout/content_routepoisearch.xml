@@ -69,12 +69,12 @@
         android:id="@+id/cvArrow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/cvSearch"
         android:layout_margin="@dimen/space_10"
         app:cardCornerRadius="@dimen/space_5"
         app:cardElevation="@dimen/space_4"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="false"
-        android:layout_below="@+id/cvSearch">
+        app:cardUseCompatPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -150,13 +150,13 @@
         android:id="@+id/cvHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/cvArrow"
         android:layout_margin="@dimen/space_10"
         android:visibility="gone"
         app:cardCornerRadius="@dimen/space_5"
         app:cardElevation="@dimen/space_4"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="false"
-        android:layout_below="@+id/cvArrow">
+        app:cardUseCompatPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -167,7 +167,9 @@
                 android:id="@+id/rvHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never" />
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
             <TextView
                 android:id="@+id/tvClearHistory"
