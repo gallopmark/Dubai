@@ -241,12 +241,12 @@ class GsonUtils {
          * obj转json数据
          * 可以是任意对象 list、map等
          */
-        fun fromObjectToJson(obj: Any?): String? {
-            if (obj == null) return null
+        fun fromObjectToJson(obj: Any?): String {
+            if (obj == null) return "{}"
             return try {
                 Gson().toJson(obj)
             } catch (e: Exception) {
-                null
+                "{}"
             }
         }
 
@@ -256,6 +256,16 @@ class GsonUtils {
                 Gson().fromJson(json, clazz)
             } catch (e: Exception) {
                 null
+            }
+        }
+
+        fun isJson(json: String?): Boolean {
+            if (TextUtils.isEmpty(json)) return false
+            try {
+                JsonParser().parse(json).asJsonObject
+                return true
+            } catch (e: Exception) {
+                return false
             }
         }
     }

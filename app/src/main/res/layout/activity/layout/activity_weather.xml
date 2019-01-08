@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
-            <com.uroad.dubai.widget.WaveViewBySinCos
+            <com.uroad.dubai.widget.RadarWaveView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 RadarWaveView:waveAmplitude="10dp"
@@ -72,7 +72,7 @@
                 RadarWaveView:waveStartPeriod="1.3"
                 RadarWaveView:waveType="sin" />
 
-            <com.uroad.dubai.widget.WaveViewBySinCos
+            <com.uroad.dubai.widget.RadarWaveView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 RadarWaveView:waveAmplitude="10dp"

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@mipmap/ic_poisearch_poi"
+        android:drawableEnd="@mipmap/ic_route_arrow"
+        android:drawablePadding="@dimen/space_5"
+        android:padding="@dimen/space_14"
+        android:textColor="@color/appTextColor"
+        android:textSize="@dimen/font_16" />
+
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:background="@color/color_f7" />
+</LinearLayout>

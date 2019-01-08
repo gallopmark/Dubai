@@ -39,11 +39,19 @@ class RouteNavigationPresenter(private val context: Context,
     : BasePresenter<RouteNavigationView>(naviView) {
 
     private var disposable: Disposable? = null
+    private var geoClient: MapboxGeocoding? = null
+
+    fun getPoi(content: String): MapboxGeocoding {
+        val client = getPoi(content, 0)
+        this.geoClient = client
+        return client
+    }
 
     fun getPoi(content: String, type: Int): MapboxGeocoding {
         return MapboxGeocoding.builder()
                 .accessToken(context.getString(R.string.mapBoxToken))
 //                .country("ae")
+                .limit(10)
                 .query(content).build().apply {
                     this.enqueueCall(object : Callback<GeocodingResponse> {
                         override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
@@ -55,6 +63,10 @@ class RouteNavigationPresenter(private val context: Context,
                         }
                     })
                 }
+    }
+
+    fun cancelPoiCall() {
+        geoClient?.cancelCall()
     }
 
     fun getRoutes(origin: Point, destination: Point, profile: String) {
