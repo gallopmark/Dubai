@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/black"
     android:layout_height="@dimen/toolbar_size">
 
     <LinearLayout
@@ -13,51 +14,45 @@
 
         <ImageView
             android:id="@+id/ivNavigation"
-            android:layout_width="@dimen/space_35"
-            android:layout_height="@dimen/space_35"
-            android:padding="@dimen/space_5"
+            android:layout_width="@dimen/space_30"
+            android:layout_height="@dimen/space_30"
             android:src="@mipmap/ic_navigation_white" />
 
         <ImageView
             android:id="@+id/ivHighWay"
-            android:layout_width="@dimen/space_35"
-            android:layout_height="@dimen/space_35"
+            android:layout_width="@dimen/space_30"
+            android:layout_height="@dimen/space_30"
             android:layout_marginStart="@dimen/space_5"
-            android:padding="@dimen/space_5"
             android:src="@mipmap/ic_highway_white" />
 
         <ImageView
             android:id="@+id/ivNews"
-            android:layout_width="@dimen/space_35"
-            android:layout_height="@dimen/space_35"
+            android:layout_width="@dimen/space_30"
+            android:layout_height="@dimen/space_30"
             android:layout_marginStart="@dimen/space_5"
-            android:padding="@dimen/space_5"
             android:src="@mipmap/ic_news_white" />
 
         <ImageView
             android:id="@+id/ivMore"
-            android:layout_width="@dimen/space_35"
-            android:layout_height="@dimen/space_35"
+            android:layout_width="@dimen/space_30"
+            android:layout_height="@dimen/space_30"
             android:layout_marginStart="@dimen/space_5"
-            android:padding="@dimen/space_5"
             android:src="@mipmap/ic_more_white" />
 
         <ImageView
             android:id="@+id/ivMessageColl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/space_30"
+            android:layout_height="@dimen/space_30"
             android:layout_marginStart="@dimen/space_5"
-            android:padding="@dimen/space_5"
-            android:scaleType="centerInside"
+            android:scaleType="center"
             android:src="@mipmap/ic_message_white" />
 
         <ImageView
             android:id="@+id/ivSearchColl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/space_30"
+            android:layout_height="@dimen/space_30"
             android:layout_marginStart="@dimen/space_5"
-            android:padding="@dimen/space_5"
-            android:scaleType="centerInside"
+            android:scaleType="center"
             android:src="@mipmap/ic_search_white" />
 
         <ImageView

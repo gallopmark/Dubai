@@ -38,16 +38,21 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     signingConfigs {
-        config {
-            keyAlias 'uroaddubai'
-            keyPassword 'uroadDubai'
-            storeFile file('../uroadDubai.jks')
-            storePassword 'uroadDubai'
+        release {
+            storeFile file("uroadDubai.jks")   //签名文件全路径
+            storePassword "uroadDubai"
+            keyAlias "uroaddubai"
+            keyPassword "uroadDubai"
+            //7.0使用的APK Signature Scheme v2签名方案使外部打入渠道信息会修改签名导致没办法安装 所以目前这里我们需要先禁用掉
+            v2SigningEnabled false
         }
     }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
