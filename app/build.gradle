@@ -39,7 +39,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("uroadDubai.jks")   //签名文件全路径
+            storeFile file("../uroadDubai.jks")   //签名文件全路径
             storePassword "uroadDubai"
             keyAlias "uroadDubai"
             keyPassword "uroadDubai"

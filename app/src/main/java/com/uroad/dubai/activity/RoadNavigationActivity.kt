@@ -175,7 +175,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
 
     private fun whenContentEmpty() {
         if (tvSearchTips.visibility != View.VISIBLE) tvSearchTips.visibility = View.VISIBLE
-        initHistory()
+        showHistory()
         removeRunnable()
     }
 
@@ -198,8 +198,36 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
     }
 
     private fun initHistory() {
-        histotyAdapter = PoiSearchHistoryAdapter(this,historyData)
+        histotyAdapter = PoiSearchHistoryAdapter(this, historyData).apply {
+            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                    if (position in 0 until historyData.size) {
+                        val item = historyData[position]
+                        val itemType = item.getItemType()
+                        if (itemType == 1) {
+                            val mdl = item as PoiSearchTextMDL
+                            mdl.content?.let { handleWhenInput(it) }
+                        } else {
+                            val mdl = item as PoiSearchPoiMDL
+                        }
+                    }
+                }
+            })
+        }
         rvHistory.adapter = histotyAdapter
+        showHistory()
+    }
+
+    private fun showHistory() {
+        val list = PoiSearchSource.getHistoryList(this)
+        if (list.size > 0) {
+            historyData.clear()
+            historyData.addAll(list)
+            histotyAdapter.notifyDataSetChanged()
+            cvHistory.visibility = View.VISIBLE
+        } else {
+            cvHistory.visibility = View.GONE
+        }
     }
 
     private fun onInitialState() {
