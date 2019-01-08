@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:textColor="@color/black"
+        android:text="@string/security_verification"
+        android:textStyle="bold"
+        android:padding="@dimen/space_10"
+        android:textSize="@dimen/font_30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="@string/security_verification_promote"
+        android:padding="@dimen/space_10"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/gary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvSelected"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/black"
+        android:text="+971  05****4567"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnNext"
+        android:textSize="@dimen/font_16"
+        android:textAllCaps="false"
+        android:layout_margin="@dimen/space_20"
+        android:textColor="@color/verify_btn_textcolor_selector"
+        android:background="@drawable/selector_verify_btn_bg"
+        android:text="@string/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvReplace"
+        android:layout_marginTop="@dimen/space_10"
+        android:textSize="@dimen/font_16"
+        android:text="@string/other_phone_number"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

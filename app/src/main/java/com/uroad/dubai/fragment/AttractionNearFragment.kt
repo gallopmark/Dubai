@@ -3,13 +3,16 @@ package com.uroad.dubai.fragment
 import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.activity.DetailsActivity
+import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.AttrNearFmListAdapter
 import com.uroad.dubai.api.presenter.AttractionNearFMPresenter
 import com.uroad.dubai.api.view.AttractionNearFMView
 import com.uroad.dubai.common.BasePageRefreshPresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.AttractionNearFMMDL
+import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 import java.util.*
@@ -34,7 +37,19 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
 
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                var mdl = data[position]
+                val mdl = data[position]
+                if(type.equals("1001004")){
+                    val scenicMDL = ScenicMDL()
+                    scenicMDL.headimg = mdl.headimg
+                    scenicMDL.title = mdl.title
+                    scenicMDL.content = mdl.content
+                    scenicMDL.address = mdl.address
+                    scenicMDL.hours = mdl.time
+                    scenicMDL.phone = mdl.phone
+                    DubaiApplication.clickItemScenic = scenicMDL
+                    openActivity(ScenicDetailActivity::class.java)
+                    return
+                }
                 openActivity(DetailsActivity::class.java,Bundle().apply {
                     putString("title",mdl.title)
                     putString("time",mdl.publishtime)

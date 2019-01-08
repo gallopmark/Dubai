@@ -10,6 +10,7 @@ class AttractionNearFMMDL {
     var content: String? = null
     var address: String? = null
     var headimg: String? = null
+    var phone: String? = null
     var publishtime: String? = null
     var distance: String? = null
     var imgPath: String? = null

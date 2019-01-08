@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/transparent"
+    android:layout_width="@dimen/space_60"
+    android:layout_height="@dimen/space_150">
+
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_marginTop="@dimen/space_10"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/font_16"
+        android:text="--" />
+
+    <TextView
+        android:id="@+id/tvTemperature"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_16"
+        android:text="--" />
+
+    <TextView
+        android:layout_toEndOf="@+id/tvTemperature"
+        android:layout_centerVertical="true"
+        android:text="°"
+        android:textSize="@dimen/font_16"
+        android:gravity="top"
+        android:layout_marginTop="@dimen/minus_5"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/ivTemperatureType"
+        android:layout_width="@dimen/space_30"
+        android:layout_height="@dimen/space_30"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_cloudy"
+        android:visibility="invisible"
+        android:layout_marginBottom="@dimen/space_10" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_alignParentRight="true"
+        android:layout_width="1dp"
+        android:background="@color/color_FAC3C6"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp" />
+</RelativeLayout>

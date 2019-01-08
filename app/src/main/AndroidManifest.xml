@@ -82,6 +82,17 @@
         <activity
             android:name=".activity.ScenicDetailActivity"
             android:launchMode="singleTop" />
+        <activity android:name=".activity.EventsListActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.SettingActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.VerifyActicity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.VerificationCodeActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PhoneActivity"
+            android:launchMode="singleTop"/>
+
     </application>
 
 </manifest>

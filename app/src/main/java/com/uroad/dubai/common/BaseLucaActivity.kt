@@ -101,6 +101,21 @@ abstract class BaseLucaActivity : AppCompatActivity() {
             val baseMenuTv = view.findViewById<TextView>(R.id.baseMenuTv)
             baseMenuTv.text = option
             baseMenuTv.setCompoundDrawablesWithIntrinsicBounds(actionIcon, null, null, null)
+            baseMenuTv.compoundDrawablePadding = 5
+            baseMenuTv.setOnClickListener(onClickListener)
+        }
+    }
+
+    open fun withOption(actionIcon: Drawable?, option: CharSequence?,
+                        drawablePadding: Int,
+                        onClickListener: View.OnClickListener?) {
+        if (!TextUtils.isEmpty(option) || actionIcon != null) {
+            val view = layoutInflater.inflate(R.layout.menu_action_base, baseToolbar, true)
+            val baseMenuTv = view.findViewById<TextView>(R.id.baseMenuTv)
+            baseMenuTv.text = option
+            baseMenuTv.setCompoundDrawablesWithIntrinsicBounds(actionIcon, null, null, null)
+            baseMenuTv.compoundDrawablePadding = drawablePadding
+            baseMenuTv.setTextColor(Color.BLACK)
             baseMenuTv.setOnClickListener(onClickListener)
         }
     }

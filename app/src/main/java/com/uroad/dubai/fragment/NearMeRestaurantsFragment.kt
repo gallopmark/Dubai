@@ -1,13 +1,16 @@
 package com.uroad.dubai.fragment
 
+import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.adapter.RestaurantsListAdapter
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.common.BasePresenterFragment
+import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
@@ -32,6 +35,17 @@ class NearMeRestaurantsFragment : BasePresenterFragment<NewsPresenter>(), NewsVi
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
         adapter = RestaurantsListAdapter(context, data)
         recyclerView.adapter = adapter
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                val mdl = data[position]
+                openActivity(DetailsActivity::class.java, Bundle().apply {
+                    putString("title",mdl.title)
+                    putString("time",mdl.publishtime)
+                    putString("imgUrl",mdl.headimg)
+                    putString("content",mdl.content)
+                })
+            }
+        })
     }
 
     override fun initData() {
