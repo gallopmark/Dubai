@@ -44,21 +44,21 @@
 
         <ImageView
             android:id="@+id/ivMessageColl"
-            android:layout_width="@dimen/space_35"
-            android:layout_height="@dimen/space_35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_5"
             android:padding="@dimen/space_5"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_message_white_big" />
+            android:src="@mipmap/ic_message_white" />
 
         <ImageView
             android:id="@+id/ivSearchColl"
-            android:layout_width="@dimen/space_35"
-            android:layout_height="@dimen/space_35"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_5"
             android:padding="@dimen/space_5"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_search_white_big" />
+            android:src="@mipmap/ic_search_white" />
 
         <ImageView
             android:layout_width="wrap_content"
