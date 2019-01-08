@@ -6,6 +6,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.activity.CalendarListActivity
 import com.uroad.dubai.activity.FavoriteListActivity
 import com.uroad.dubai.activity.MessagesListActivity
+import com.uroad.dubai.activity.SettingActivity
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mine.*
@@ -22,6 +23,7 @@ class MineFragment : BaseFragment() {
         tvMessage.setOnClickListener{ openActivity(MessagesListActivity::class.java)}
         tvFavorites.setOnClickListener{ openActivity(FavoriteListActivity::class.java)}
         tvCalendar.setOnClickListener { openActivity(CalendarListActivity::class.java) }
+        tvSetting.setOnClickListener { openActivity(SettingActivity::class.java) }
     }
 
     private fun initTopLayout() {

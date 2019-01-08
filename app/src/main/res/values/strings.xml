@@ -116,4 +116,29 @@
     <string name="more_menu_report">Report</string>
 
     <string name="hours">Hours</string>
+
+    <string name="settings">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_apptips">APP TIPS</string>
+    <string name="settings_about_rta">About RTA</string>
+    <string name="settings_term">Term &amp; Policies</string>
+    <string name="settings_search">Search History</string>
+    <string name="settings_offline">Offline Map</string>
+    <string name="settings_loading_photos">Loading Photos</string>
+    <string name="settings_logout">Log out</string>
+
+    <string name="next">Next</string>
+    <string name="phone">Phone</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="other_phone_number">Other Phone Number</string>
+    <string name="country">Country</string>
+    <string name="country_choice">United Arab Emirates</string>
+    <string name="security_verification">Security verification</string>
+    <string name="security_verification_promote">In order to ensure the security of your account, we need to verify your identity first.</string>
+    <string name="verify">Verify</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="verification_code_promote">Verification code has been sent to</string>
+    <string name="resend_in">Resend in</string>
+
 </resources>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:gravity="center|start"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:text="@string/settings_language"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_16"/>
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:gravity="center|start"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:text="@string/settings_password"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_16"/>
+
+    <TextView
+        android:id="@+id/tvAppTips"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:gravity="center|start"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:text="@string/settings_apptips"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_16"/>
+
+    <TextView
+        android:id="@+id/tvAbout"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:gravity="center|start"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:text="@string/settings_about_rta"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_16"/>
+
+    <TextView
+        android:id="@+id/tvTerm"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:gravity="center|start"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:text="@string/settings_term"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_16"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_10"
+        android:layout_marginLeft="@dimen/space_6"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/settings_search"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"/>
+
+        <Switch
+            android:id="@+id/swSearchHistory"
+            android:thumb="@drawable/switch_custom_thumb_selector"
+            android:track="@drawable/switch_custom_track_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvOffline"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:padding="@dimen/space_10"
+        android:gravity="center|start"
+        android:paddingStart="@dimen/space_16"
+        android:paddingEnd="@dimen/space_16"
+        android:text="@string/settings_offline"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_16"/>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_10"
+        android:layout_marginLeft="@dimen/space_6"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:paddingEnd="@dimen/space_16"
+            android:text="@string/settings_loading_photos"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/font_16"/>
+
+        <Switch
+            android:id="@+id/swLoadingPhoto"
+            android:thumb="@drawable/switch_custom_thumb_selector"
+            android:track="@drawable/switch_custom_track_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:textSize="@dimen/font_16"
+        android:textAllCaps="false"
+        android:layout_margin="@dimen/space_20"
+        android:textColor="@color/setting_btn_textcolor_selector"
+        android:background="@drawable/selector_setting_btn_bg"
+        android:text="@string/settings_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -157,4 +157,5 @@
     <color name="dialog_negativeButton">#FF007AFF</color>
     <color name="dialog_positiveButton">#FFFF3B30</color>
     <color name="dialog_buttonPress">#FFEAEAEA</color>
+    <color name="color_FAC3C6">#FAC3C6</color>
 </resources>
