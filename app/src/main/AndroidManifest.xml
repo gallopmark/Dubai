@@ -93,6 +93,13 @@
             android:launchMode="singleTop"/>
         <activity android:name=".activity.PhoneActivity"
             android:launchMode="singleTop"/>
+        <activity android:name=".activity.LoginActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.CreatePasswordActivity"
+            android:launchMode="singleTop"/>
+
+        <activity android:name=".activity.PinLoginActivity"
+            android:launchMode="singleTop"/>
 
     </application>
 

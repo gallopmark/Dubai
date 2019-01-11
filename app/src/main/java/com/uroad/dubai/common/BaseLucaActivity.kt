@@ -92,7 +92,7 @@ abstract class BaseLucaActivity : AppCompatActivity() {
     }
 
     open fun withOption(option: CharSequence?, onClickListener: View.OnClickListener?) {
-        withOption(null, option, null)
+        withOption(null, option, onClickListener)
     }
 
     open fun withOption(actionIcon: Drawable?, option: CharSequence?, onClickListener: View.OnClickListener?) {
@@ -102,6 +102,16 @@ abstract class BaseLucaActivity : AppCompatActivity() {
             baseMenuTv.text = option
             baseMenuTv.setCompoundDrawablesWithIntrinsicBounds(actionIcon, null, null, null)
             baseMenuTv.compoundDrawablePadding = 5
+            baseMenuTv.setOnClickListener(onClickListener)
+        }
+    }
+
+    open fun withOption(option: CharSequence?, onClickListener: View.OnClickListener?,color: Int){
+        if (!TextUtils.isEmpty(option) ) {
+            val view = layoutInflater.inflate(R.layout.menu_action_base, baseToolbar, true)
+            val baseMenuTv = view.findViewById<TextView>(R.id.baseMenuTv)
+            baseMenuTv.text = option
+            baseMenuTv.setTextColor(color)
             baseMenuTv.setOnClickListener(onClickListener)
         }
     }

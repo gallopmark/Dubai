@@ -7,10 +7,26 @@ import kotlinx.android.synthetic.main.activity_verify.*
 
 class VerifyActicity : BaseActivity() {
 
+    var phone : String? = null
+
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_verify,true)
 
-        btnNext.setOnClickListener { openActivity(VerificationCodeActivity::class.java) }
+        intent.extras?.let {
+            phone = it.getString("phone")
+            tvSelected.text = "+971 $phone"
+        }
+        btnNext.setOnClickListener {
+            openActivity(VerificationCodeActivity::class.java,Bundle().apply {
+                putString("phone",phone)
+            })
+            finish()
+        }
+
+        tvReplace.setOnClickListener {
+            openActivity(PhoneActivity::class.java)
+            finish()
+        }
     }
 
 }

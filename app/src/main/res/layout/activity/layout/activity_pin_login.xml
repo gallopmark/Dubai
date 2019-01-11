@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_marginTop="@dimen/space_20"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/icon_logo_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvCountryText"
+        android:layout_marginLeft="@dimen/space_25"
+        android:layout_marginTop="@dimen/space_30"
+        android:layout_below="@+id/ivLogo"
+        android:text="@string/country"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/gary"
+        android:padding="@dimen/space_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_toRightOf="@+id/tvCountryText"
+        android:layout_marginTop="@dimen/space_30"
+        android:layout_below="@+id/ivLogo"
+        android:text="@string/country_choice"
+        android:gravity="center_vertical"
+        android:drawableEnd="@mipmap/ic_arrow_right_grey"
+        android:drawablePadding="@dimen/space_10"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/black"
+        android:padding="@dimen/space_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvAreText"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_alignLeft="@+id/tvCountryText"
+        android:layout_below="@+id/tvCountryText"
+        android:text="+971"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/gary"
+        android:padding="@dimen/space_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_alignTop="@+id/tvAreText"
+        android:layout_toRightOf="@+id/tvAreText"
+        android:layout_marginRight="@dimen/space_25"
+        android:layout_below="@+id/tvCountryText"
+        android:id="@+id/edPhone"
+        android:padding="@dimen/space_10"
+        android:hint="@string/phone_number"
+        android:background="@null"
+        android:inputType="number"
+        android:singleLine="true"
+        android:maxEms="20"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <View
+        android:layout_below="@+id/edPhone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_marginLeft="@dimen/space_20"
+        android:layout_marginRight="@dimen/space_20"
+        android:background="@color/itemDivider" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_below="@+id/edPhone"
+        android:textSize="@dimen/font_16"
+        android:textAllCaps="false"
+        android:layout_marginRight="@dimen/space_25"
+        android:layout_marginLeft="@dimen/space_25"
+        android:layout_marginTop="@dimen/space_30"
+        android:textColor="@color/verify_btn_textcolor_selector"
+        android:background="@drawable/selector_verify_btn_bg"
+        android:text="@string/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/space_40"
+        android:layout_marginRight="@dimen/space_40"
+        android:layout_marginTop="@dimen/space_10"
+        android:gravity="center"
+        android:layout_below="@+id/btnLogin"
+        android:layout_centerHorizontal="true"
+        android:text="@string/pinlogin_tips"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/gary"
+        android:padding="@dimen/space_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

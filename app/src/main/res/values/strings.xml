@@ -141,6 +141,16 @@
     <string name="verification_code_promote">Verification code has been sent to</string>
     <string name="resend_in">Resend in</string>
 
+    <string name="login">Log in</string>
+    <string name="login_account_hint">Mobile phone number</string>
+    <string name="login_password">Password</string>
+    <string name="login_forgot">Forgot password?</string>
+    <string name="login_create">Create New Account</string>
+    <string name="login_confirm">Confirm</string>
+    <string name="password_login">Password Login</string>
+    <string name="pin_login">PIN Login</string>
+    <string name="pinlogin_tips">If the phone number is unregistered,it will be automatic logined adter verification</string>
+
     <string name="route_home">Home</string>
     <string name="route_work">Work</string>
     <string name="clear_history">Clear up historical records</string>

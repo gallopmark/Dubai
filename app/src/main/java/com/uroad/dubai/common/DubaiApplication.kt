@@ -1,10 +1,12 @@
 package com.uroad.dubai.common
 
+import android.content.Context
 import android.support.multidex.MultiDexApplication
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.R
 import com.uroad.dubai.model.ScenicMDL
+import kotlin.properties.Delegates
 
 class DubaiApplication : MultiDexApplication() {
     companion object {
@@ -13,6 +15,9 @@ class DubaiApplication : MultiDexApplication() {
         const val DEFAULT_ZOOM = 12.toDouble()
         const val DEFAULT_DELAY_MILLIS = 3000L
         var clickItemScenic: ScenicMDL? = null
+
+        var context: Context by Delegates.notNull()
+            private set
     }
 
     override fun onCreate() {
