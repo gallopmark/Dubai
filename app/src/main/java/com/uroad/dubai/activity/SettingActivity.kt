@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
-import com.uroad.zhgs.helper.UserPreferenceHelper
+import com.uroad.dubai.local.UserPreferenceHelper
 import kotlinx.android.synthetic.main.activity_setting.*
 import java.util.*
 
@@ -39,7 +39,7 @@ class SettingActivity : BaseActivity() {
                 openActivity(LoginActivity::class.java)
                 return@setOnClickListener
             }
-            openActivity(VerifyActicity::class.java,Bundle().apply {
+            openActivity(VerifyActivity::class.java,Bundle().apply {
                 putString("phone",phone)
             })
         }

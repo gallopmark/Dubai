@@ -11,7 +11,7 @@ import java.util.ArrayList
 
 class PoiSearchSource {
     companion object {
-        private const val POI_FILE = "poi_history"
+        private const val POI_FILE = DataSource.POI_FILE
         private const val POI_KEY = "poi_key"
         private const val split = "✈"
 

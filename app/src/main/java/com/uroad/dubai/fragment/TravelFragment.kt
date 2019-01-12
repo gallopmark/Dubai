@@ -1,19 +1,25 @@
 package com.uroad.dubai.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
-import com.uroad.dubai.adapter.TravelRecommendAdapter
-import com.uroad.dubai.common.BaseFragment
-import com.uroad.dubai.model.RecommendMDL
-import com.uroad.library.banner.GalleryRecyclerView
+import com.uroad.dubai.adapter.AttractionCardAdapter
+import com.uroad.dubai.api.presenter.AttractionPresenter
+import com.uroad.dubai.api.view.AttractionView
+import com.uroad.dubai.common.BasePresenterFragment
+import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.common.DubaiApplication
+import com.uroad.dubai.enumeration.NewsType
+import com.uroad.dubai.model.ScenicMDL
+import com.uroad.dubai.webService.WebApi
+import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.BitmapUtils
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_travel.*
@@ -24,37 +30,33 @@ import kotlinx.android.synthetic.main.travel_content_menu.*
  * @create 2018/12/12
  * @describe 旅游
  */
-class TravelFragment : BaseFragment() {
+class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionView {
 
-    private val data = ArrayList<RecommendMDL>()
-    private lateinit var adapter: TravelRecommendAdapter
+    private val data = ArrayList<ScenicMDL>()
+    private lateinit var adapter: AttractionCardAdapter
+    private val handler = Handler()
+
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_travel)
-        setTopImage()
-        initRv()
+        initAppBar()
         initView()
+        initRv()
     }
 
-    private fun initView(){
-        val bundle = Bundle()
-
-        tvHotels.setOnClickListener {
-            bundle.putString("type","1001002")
-            openActivity(AttractionsListActivity::class.java,bundle)
-        }
-        tvRestaurants.setOnClickListener {
-            bundle.putString("type","1001003")
-            openActivity(AttractionsListActivity::class.java,bundle)
-        }
-        tvAttractions.setOnClickListener {
-            bundle.putString("type","1001004")
-            openActivity(AttractionsListActivity::class.java,bundle)
-        }
-        tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
-        tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
-        tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
-        tvGroups.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
+    override fun createPresenter(): AttractionPresenter = AttractionPresenter(this)
+    private fun initAppBar() {
+        val statusHeight = DisplayUtils.getStatusHeight(context)
+        toolbar.layoutParams = (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).apply { topMargin = statusHeight }
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val offset = Math.abs(verticalOffset)
+            val total = appBarLayout.totalScrollRange
+            if (offset <= total / 2) {
+                toolbar.visibility = View.GONE
+            } else {
+                toolbar.visibility = View.VISIBLE
+            }
+        })
+        setTopImage()
     }
 
     //重新计算图片高度 避免图片压缩
@@ -69,51 +71,70 @@ class TravelFragment : BaseFragment() {
         ivTopPic.setImageBitmap(BitmapUtils.decodeSampledBitmapFromResource(resources, R.mipmap.ic_travel_topbg, width, height))
     }
 
+    private fun initView() {
+        val bundle = Bundle()
+        tvHotels.setOnClickListener {
+            bundle.putString("type", NewsType.HOTEL.code)
+            openActivity(AttractionsListActivity::class.java, bundle)
+        }
+        tvRestaurants.setOnClickListener {
+            bundle.putString("type", NewsType.RESTAURANT.code)
+            openActivity(AttractionsListActivity::class.java, bundle)
+        }
+        tvAttractions.setOnClickListener {
+            bundle.putString("type", NewsType.ATTRACTION.code)
+            openActivity(AttractionsListActivity::class.java, bundle)
+        }
+        tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
+        tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
+        tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
+        tvGroups.setOnClickListener { openActivity(GroupsSetupActivity::class.java) }
+        tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
+    }
+
     private fun initRv() {
-        galleryRv.isNestedScrollingEnabled = false
-        galleryRv.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
-        adapter = TravelRecommendAdapter(context, data)
-        galleryRv.adapter = adapter
-        galleryRv.initFlingSpeed(9000).initPageParams(6, 0)
-                .initPosition(0)
-                .setAnimFactor(0.1f).setUp()
+        recyclerView.isNestedScrollingEnabled = false
+        recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
+        adapter = AttractionCardAdapter(context, data).apply {
+            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                    if (position in 0 until data.size) {
+                        DubaiApplication.clickItemScenic = data[position]
+                        openActivity(ScenicDetailActivity::class.java)
+                    }
+                }
+            })
+        }
+        recyclerView.adapter = adapter
     }
 
     override fun initData() {
-        data.add(RecommendMDL().apply {
-            title = "Palazzo Versace Dubai"
-            content = getContent()
-            address = "591 Geor Street, Paris, 75150, France"
-            distance = "1,2 km"
-        })
-        data.add(RecommendMDL().apply {
-            title = "Palazzo Versace Dubai"
-            content = getContent()
-            address = "591 Geor Street, Paris, 75150, France"
-            distance = "2.1 km"
-        })
-        data.add(RecommendMDL().apply {
-            title = "Palazzo Versace Dubai"
-            content = getContent()
-            address = "591 Geor Street, Paris, 75150, France"
-            distance = "3.2 km"
-        })
-        data.add(RecommendMDL().apply {
-            title = "Palazzo Versace Dubai"
-            content = getContent()
-            address = "591 Geor Street, Paris, 75150, France"
-            distance = "5.6 km"
-        })
+        presenter?.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
     }
 
-    private fun getContent(): CharSequence {
-        val source = "Uae national day offer starting from AED 1199 with breakfast"
-        val start = source.indexOf("A")
-        val end = source.lastIndexOf("9") + 1
-        val ts15 = context.resources.getDimensionPixelOffset(R.dimen.font_15)
-        return SpannableString(source).apply {
-            setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.theme_red)), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(AbsoluteSizeSpan(ts15, false), start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+    override fun onGetAttraction(attractions: MutableList<ScenicMDL>) {
+        val array = arrayOf("1.2km", "1.7km", "2.1km", "5.6km")
+        for (i in 0 until attractions.size) {
+            if (i < array.size) {
+                attractions[i].distance = array[i]
+            } else {
+                val pos = i % array.size
+                attractions[i].distance = array[pos]
+            }
         }
+        this.data.clear()
+        this.data.addAll(attractions)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun onShowError(msg: String?) {
+        handler.postDelayed(runnable, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    private val runnable = Runnable { initData() }
+
+    override fun onDestroyView() {
+        handler.removeCallbacks(runnable)
+        super.onDestroyView()
     }
 }

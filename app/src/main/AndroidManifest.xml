@@ -40,7 +40,8 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.RouteNavigationActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".activity.MessagesListActivity"
             android:launchMode="singleTop" />
@@ -83,16 +84,6 @@
         <activity
             android:name=".activity.ScenicDetailActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.EventsListActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.SettingActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.VerifyActicity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.VerificationCodeActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.PhoneActivity"
-            android:launchMode="singleTop"/>
         <activity android:name=".activity.LoginActivity"
             android:launchMode="singleTop"/>
         <activity android:name=".activity.CreatePasswordActivity"
@@ -101,6 +92,35 @@
         <activity android:name=".activity.PinLoginActivity"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".activity.EventsListActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.SettingActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.VerifyActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.VerificationCodeActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.PhoneActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.GroupsSetupActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".activity.GroupsEditActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.GroupsDetailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.GroupsInviteActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

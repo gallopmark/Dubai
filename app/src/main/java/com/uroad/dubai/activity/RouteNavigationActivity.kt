@@ -1,6 +1,5 @@
 package com.uroad.dubai.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.location.Location
 import android.os.Bundle
@@ -16,12 +15,6 @@ import android.text.style.AbsoluteSizeSpan
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import com.mapbox.android.core.location.LocationEngine
-import com.mapbox.android.core.location.LocationEngineListener
-import com.mapbox.android.core.location.LocationEnginePriority
-import com.mapbox.android.core.location.LocationEngineProvider
-import com.mapbox.android.core.permissions.PermissionsListener
-import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
@@ -53,10 +46,8 @@ import kotlinx.android.synthetic.main.activity_routenavigation.*
  * @create 2018/12/22
  * @describe route navigation
  */
-class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, RouteNavigationView, LocationEngineListener {
+class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView {
 
-    private var permissionsManager: PermissionsManager? = null
-    private var locationEngine: LocationEngine? = null
     private var startPoint: Point? = null
     private var endPoint: Point? = null
     private var isFirstSetText = false
@@ -75,6 +66,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var routePresenter: RouteNavigationPresenter
     private var isRouteNavigation = false
+    private var inputType = 1
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
@@ -92,7 +84,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         etStartPoint.clearFocus()
         etStartPoint.addTextChangedListener(InputWatcher(1))
         etEndPoint.addTextChangedListener(InputWatcher(2))
-        val carmen = intent.extras?.getString("carmen")
+        val carmen = intent.extras?.getString("destination")
         carmen?.let {
             val feature = CarmenFeature.fromJson(it)
             endPoint = feature.center()
@@ -210,53 +202,19 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     }
 
     override fun onMapAsync(mapBoxMap: MapboxMap) {
-        enableLocationComponent()
+        openLocation()
     }
 
-    private fun enableLocationComponent() {
-        if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            onLocation()
-        } else {
-            permissionsManager = PermissionsManager(this).apply { requestLocationPermissions(this@RouteNavigationActivity) }
-        }
+    override fun onDismissLocationPermission() {
+        Snackbar.make(mapView, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
-    }
-
-    override fun onPermissionResult(granted: Boolean) {
-        if (granted) {
-            onLocation()
-        } else {
-            Snackbar.make(mapView, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun onLocation() {
-        locationEngine = LocationEngineProvider(this).obtainBestLocationEngineAvailable().apply {
-            val location = this.lastLocation
-            if (location != null) {
-                moveToUserLocation(location)
-            } else {
-                this.priority = LocationEnginePriority.HIGH_ACCURACY
-                this.addLocationEngineListener(this@RouteNavigationActivity)
-                this.activate()
-            }
-        }
-    }
-
-    override fun onConnected() {
+    override fun onExplanationLocationPermission(permissionsToExplain: MutableList<String>?) {
 
     }
 
-    override fun onLocationChanged(location: Location?) {
-        location?.let { moveToUserLocation(it) }
+    override fun afterLocation(location: Location) {
+        moveToUserLocation(location)
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -296,8 +254,8 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         }
     }
 
-    override fun onPoiResult(features: MutableList<CarmenFeature>, type: Int) {
-        showPopupWindow(type, features)
+    override fun onPoiResult(features: MutableList<CarmenFeature>) {
+        showPopupWindow(features)
     }
 
     override fun onNavigationRoutes(routes: MutableList<DirectionsRoute>?) {
@@ -323,7 +281,8 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
     /*Asynchronous search Poi*/
     private fun enqueueCall(content: String, type: Int) {
         isRouteNavigation = false
-        val client = routePresenter.getPoi(content, type)
+        inputType = type
+        val client = routePresenter.doPoiSearch(content)
         if (type == 1) {
             startGeoClient = client
         } else {
@@ -331,11 +290,11 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         }
     }
 
-    private fun showPopupWindow(type: Int, results: MutableList<CarmenFeature>) {
-        val parent = if (type == 1) etStartPoint else etEndPoint
+    private fun showPopupWindow(results: MutableList<CarmenFeature>) {
+        val parent = if (inputType == 1) etStartPoint else etEndPoint
         popupWindow = routePresenter.showPoiWindow(parent, results, object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                if (type == 1) {
+                if (inputType == 1) {
                     startPoint = results[position].center()
                     isStartSetText = true
                     etStartPoint.setText(results[position].placeName())
@@ -472,29 +431,11 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener
         }
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onStart() {
-        locationEngine?.let {
-            it.addLocationEngineListener(this)
-            it.requestLocationUpdates()
-        }
-        super.onStart()
-    }
-
-    @SuppressLint("MissingPermission")
-    override fun onStop() {
-        locationEngine?.let {
-            it.removeLocationUpdates()
-            it.removeLocationEngineListener(this)
-        }
-        super.onStop()
-    }
-
     override fun onDestroy() {
+        InputMethodUtils.hideSoftInput(this)
         cancelStartSearch()
         cancelEndSearch()
         routePresenter.detachView()
-        locationEngine?.deactivate()
         super.onDestroy()
     }
 }

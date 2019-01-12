@@ -28,7 +28,6 @@ import android.support.v4.util.ArrayMap
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -48,17 +47,17 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
+import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.api.presenter.RoadNavigationPresenter
-import com.uroad.dubai.api.presenter.RouteNavigationPresenter
 import com.uroad.dubai.api.view.RoadNavigationView
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.DataSource
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
-import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.utils.SymbolGenerator
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.content_routepoisearch.*
@@ -69,17 +68,15 @@ import kotlinx.android.synthetic.main.content_routepoisearch.*
  * @create 2018/12/18
  * @describe Road navigation
  */
-class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener, LocationEngineListener, RoadNavigationView, RouteNavigationView {
+class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, RouteNavigationView {
     private var statusHeight = 0
     private var isMapAsync = false
     private var fillExtrusionLayer: FillExtrusionLayer? = null
-    private var permissionsManager: PermissionsManager? = null
-    private var locationEngine: LocationEngine? = null
     private var userMarker: Marker? = null
     private val markerMap = ArrayMap<String, MutableList<Marker>>()
     private var markerObjMap = ArrayMap<Long, MapPointItem>()
     private lateinit var presenter: RoadNavigationPresenter
-    private lateinit var routePresenter: RouteNavigationPresenter
+    private lateinit var poiPresenter: PoiSearchPresenter
     private lateinit var handler: Handler
     private var poiKey: String? = null
     private val poiData = ArrayList<CarmenFeature>()
@@ -126,24 +123,28 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         ivReportLayer.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
-        ivLocation.setOnClickListener { enableLocationComponent() }
+        ivLocation.setOnClickListener { openLocation() }
     }
 
     private fun initSearch() {
-        routePresenter = RouteNavigationPresenter(this, this)
+        poiPresenter = PoiSearchPresenter(this, this)
         handler = Handler()
         ivBack.setOnClickListener { onInitialState() }
         cvSearch.layoutParams = (cvSearch.layoutParams as RelativeLayout.LayoutParams).apply { this.topMargin = topMargin + statusHeight }
+        llHome.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        llWork.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         initEtSearch()
         initRvPoi()
         initHistory()
     }
 
+    /*add search imeOption*/
     private fun initEtSearch() {
         etSearch.inputType = EditorInfo.TYPE_CLASS_TEXT
         etSearch.imeOptions = EditorInfo.IME_ACTION_SEARCH
         etSearch.clearFocus()
         etSearch.setOnEditorActionListener { _, actionId, _ ->
+            /*when click search button save content*/
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val content = etSearch.text.toString()
                 if (!TextUtils.isEmpty(content)) {
@@ -173,12 +174,14 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         })
     }
 
+    /*when etSearch content empty*/
     private fun whenContentEmpty() {
         if (tvSearchTips.visibility != View.VISIBLE) tvSearchTips.visibility = View.VISIBLE
         showHistory()
         removeRunnable()
     }
 
+    /*when etSearch fill content*/
     private fun whenContentFill() {
         if (tvSearchTips.visibility != View.GONE) tvSearchTips.visibility = View.GONE
         if (cvHistory.visibility != View.GONE) cvHistory.visibility = View.GONE
@@ -198,6 +201,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         rvPoi.adapter = poiAdapter
     }
 
+    /*Initialization Historical Search Records*/
     private fun initHistory() {
         histotyAdapter = PoiSearchHistoryAdapter(this, historyData).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
@@ -208,6 +212,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
                         if (itemType == 1) {
                             val mdl = item as PoiSearchTextMDL
                             etSearch.setText(mdl.content)
+                            etSearch.setSelection(etSearch.text.length)
                         } else {
                             val mdl = item as PoiSearchPoiMDL
                             onSelectCarmenFeature(mdl.carmenFeature)
@@ -221,7 +226,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
     }
 
     private fun onSelectCarmenFeature(carmenFeature: CarmenFeature?) {
-        openActivity(RouteNavigationActivity::class.java, Bundle().apply { putString("carmen", carmenFeature?.toJson()) })
+        openActivity(RouteNavigationActivity::class.java, Bundle().apply { putString("destination", carmenFeature?.toJson()) })
     }
 
     private fun showHistory() {
@@ -268,11 +273,11 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
     }
 
     private val poiSearchRun = Runnable {
-        routePresenter.cancelPoiCall()
-        poiKey?.let { routePresenter.getPoi(it) }
+        poiPresenter.cancelCall()
+        poiKey?.let { poiPresenter.doPoiSearch(it) }
     }
 
-    override fun onPoiResult(features: MutableList<CarmenFeature>, type: Int) {
+    override fun onPoiResult(features: MutableList<CarmenFeature>) {
         if (features.size > 0) {
             this.poiData.clear()
             this.poiData.addAll(features)
@@ -451,85 +456,55 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
 
     /*marker onClick*/
     private fun onMarkerClick(marker: Marker, item: MapPointItem) {
-        var dialog: Dialog? = null
         marker.icon = IconFactory.getInstance(this).fromResource(item.getBigMarkerIcon())
-        when (item) {
-            is EventsMDL -> dialog = EventsDetailDialog(this, item)
-            is ParkingMDL -> {
-                dialog = ParkingDetailDialog(this, item).setOnNavigateListener(object : ParkingDetailDialog.OnNavigateListener {
-                    override fun onNavigate(mdl: ParkingMDL, dialog: ParkingDetailDialog) {
-
-                    }
-                })
-            }
-            is CCTVSnapMDL -> dialog = CCTVSnapDetailDialog(this, item)
-            is DMSysMDL -> dialog = DMSDetailDialog(this, item)
-            is PoliceMDL -> {
-                dialog = PoliceDetailDialog(this, item).setOnNavigateListener(object : PoliceDetailDialog.OnNavigateListener {
-                    override fun onNavigate(mdl: PoliceMDL, dialog: PoliceDetailDialog) {
-
-                    }
-                })
-            }
-            is RWISMDL -> dialog = RWISDetailDialog(this, item)
-            is BusStopMDL -> {
-                dialog = BusStopDetailDialog(this, item).setOnNavigateListener(object : BusStopDetailDialog.OnNavigateListener {
-                    override fun onNavigate(mdl: BusStopMDL, dialog: BusStopDetailDialog) {
-
-                    }
-                })
-            }
-        }
-        dialog?.show()
-        dialog?.setOnDismissListener { marker.icon = IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()) }
-    }
-
-    /*location*/
-    private fun enableLocationComponent() {
-        if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            onLocation()
+        if (item is ScenicMDL) {
+            DubaiApplication.clickItemScenic = item
+            openActivity(ScenicDetailActivity::class.java)
+            marker.icon = IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon())
         } else {
-            permissionsManager = PermissionsManager(this).apply { requestLocationPermissions(this@RoadNavigationActivity) }
-        }
-    }
+            var dialog: Dialog? = null
+            when (item) {
+                is EventsMDL -> dialog = EventsDetailDialog(this, item)
+                is ParkingMDL -> {
+                    dialog = ParkingDetailDialog(this, item).setOnNavigateListener(object : ParkingDetailDialog.OnNavigateListener {
+                        override fun onNavigate(mdl: ParkingMDL, dialog: ParkingDetailDialog) {
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
+                        }
+                    })
+                }
+                is CCTVSnapMDL -> dialog = CCTVSnapDetailDialog(this, item)
+                is DMSysMDL -> dialog = DMSDetailDialog(this, item)
+                is PoliceMDL -> {
+                    dialog = PoliceDetailDialog(this, item).setOnNavigateListener(object : PoliceDetailDialog.OnNavigateListener {
+                        override fun onNavigate(mdl: PoliceMDL, dialog: PoliceDetailDialog) {
 
-    override fun onExplanationNeeded(permissionsToExplain: MutableList<String>?) {
-    }
+                        }
+                    })
+                }
+                is RWISMDL -> dialog = RWISDetailDialog(this, item)
+                is BusStopMDL -> {
+                    dialog = BusStopDetailDialog(this, item).setOnNavigateListener(object : BusStopDetailDialog.OnNavigateListener {
+                        override fun onNavigate(mdl: BusStopMDL, dialog: BusStopDetailDialog) {
 
-    override fun onPermissionResult(granted: Boolean) {
-        if (granted) {
-            onLocation()
-        } else {
-            Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun onLocation() {
-        locationEngine = LocationEngineProvider(this).obtainBestLocationEngineAvailable().apply {
-            val location = this.lastLocation
-            if (location != null) {
-                moveToUserLocation(location)
-            } else {
-                this.priority = LocationEnginePriority.HIGH_ACCURACY
-                this.addLocationEngineListener(this@RoadNavigationActivity)
-                this.activate()
+                        }
+                    })
+                }
             }
+            dialog?.show()
+            dialog?.setOnDismissListener { marker.icon = IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()) }
         }
     }
 
-    override fun onLocationChanged(location: Location?) {
-        location?.let { moveToUserLocation(it) }
+    override fun onDismissLocationPermission() {
+        Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onConnected() {
-        locationEngine?.requestLocationUpdates()
+    override fun onExplanationLocationPermission(permissionsToExplain: MutableList<String>?) {
+        Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun afterLocation(location: Location) {
+        moveToUserLocation(location)
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -656,6 +631,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
 
     override fun onShowError(msg: String?) {}
 
+
     override fun onGetScenic(data: MutableList<ScenicMDL>) {
         showPoint(MapDataType.SCENIC.CODE, ArrayList<MapPointItem>().apply { addAll(data) })
     }
@@ -672,28 +648,9 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), PermissionsListener,
         return super.onKeyDown(keyCode, event)
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onStart() {
-        locationEngine?.let {
-            it.addLocationEngineListener(this)
-            it.requestLocationUpdates()
-        }
-        super.onStart()
-    }
-
-    @SuppressLint("MissingPermission")
-    override fun onStop() {
-        locationEngine?.let {
-            it.removeLocationUpdates()
-            it.removeLocationEngineListener(this)
-        }
-        super.onStop()
-    }
-
     override fun onDestroy() {
-        locationEngine?.deactivate()
         presenter.detachView()
-        routePresenter.detachView()
+        poiPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }

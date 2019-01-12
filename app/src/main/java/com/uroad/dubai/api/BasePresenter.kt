@@ -13,7 +13,7 @@ open class BasePresenter<V : BaseView>(private var baseView: V?) {
     /**
      * 解除绑定
      */
-    fun detachView() {
+    open fun detachView() {
         baseView = null
         dispose()
     }

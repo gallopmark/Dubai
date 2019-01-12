@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
@@ -184,20 +185,20 @@ abstract class BaseLucaActivity : AppCompatActivity() {
 
     open fun onPageLoading() {
         baseContentView?.visibility = View.GONE
-        baseLoadView.setState(CurrencyLoadView.STATE_LOADING)
+        baseLoadView.setState(CurrencyLoadView.State.STATE_LOADING)
     }
 
     open fun onPageResponse() {
         baseContentView?.visibility = View.VISIBLE
-        baseLoadView.setState(CurrencyLoadView.STATE_IDEA)
+        baseLoadView.setState(CurrencyLoadView.State.STATE_IDEA)
     }
 
     open fun onPageError() {
         baseContentView?.visibility = View.GONE
         if (!NetworkUtils.isConnected(this))
-            baseLoadView.setState(CurrencyLoadView.STATE_NO_NETWORK)
+            baseLoadView.setState(CurrencyLoadView.State.STATE_NO_NETWORK)
         else
-            baseLoadView.setState(CurrencyLoadView.STATE_ERROR)
+            baseLoadView.setState(CurrencyLoadView.State.STATE_ERROR)
         baseLoadView.setOnRetryListener(object : CurrencyLoadView.OnRetryListener {
             override fun onRetry(view: View) {
                 onPageRetry(view)
@@ -215,7 +216,7 @@ abstract class BaseLucaActivity : AppCompatActivity() {
 
     open fun onPageNoData(emptyIcon: Int, emptyTips: CharSequence?) {
         baseContentView?.visibility = View.GONE
-        baseLoadView.setState(CurrencyLoadView.STATE_EMPTY)
+        baseLoadView.setState(CurrencyLoadView.State.STATE_EMPTY)
         if (!TextUtils.isEmpty(emptyTips)) baseLoadView.setEmptyText(emptyTips)
         if (emptyIcon != -1) baseLoadView.setEmptyIco(emptyIcon)
     }
@@ -340,5 +341,15 @@ abstract class BaseLucaActivity : AppCompatActivity() {
     interface DialogViewClickListener {
         fun onCancel(v: View, dialog: AppDialog)
         fun onConfirm(v: View, dialog: AppDialog)
+    }
+
+    fun openSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", applicationContext.packageName, null)
+            intent.data = uri
+            startActivity(intent)
+        } catch (e: Exception) {
+        }
     }
 }

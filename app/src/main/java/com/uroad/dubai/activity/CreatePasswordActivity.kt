@@ -9,7 +9,7 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
-import com.uroad.zhgs.helper.UserPreferenceHelper
+import com.uroad.dubai.local.UserPreferenceHelper
 import kotlinx.android.synthetic.main.activity_create_password.*
 
 class CreatePasswordActivity : BaseActivity() {

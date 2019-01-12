@@ -15,65 +15,70 @@ class CurrencyLoadView : FrameLayout {
     private val mContext: Context
     private var onRetryListener: OnRetryListener? = null
 
-    companion object {
-        const val STATE_IDEA = 0
-        const val STATE_LOADING = 1
-        const val STATE_NO_NETWORK = 2
-        const val STATE_ERROR = 3
-        const val STATE_EMPTY = 4
-        const val STATE_GONE = 5
+    enum class State {
+        STATE_IDEA, STATE_LOADING, STATE_NO_NETWORK, STATE_ERROR, STATE_EMPTY, STATE_GONE
     }
+
+    private var currentState = State.STATE_IDEA
 
     constructor(context: Context) : super(context) {
         mContext = context
-        setState(STATE_IDEA)
+        setState(State.STATE_IDEA)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         mContext = context
-        setState(STATE_IDEA)
+        setState(State.STATE_IDEA)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         mContext = context
-        setState(STATE_IDEA)
+        setState(State.STATE_IDEA)
     }
 
     fun setLoadingText(text: CharSequence?) {
+        if (currentState != State.STATE_LOADING) return
         val mLoadingTv = findViewById<TextView>(R.id.mLoadingTv)
         mLoadingTv?.text = text
     }
 
     fun setEmptyIco(resId: Int) {
+        if (currentState != State.STATE_EMPTY) return
         val mEmptyTv = findViewById<TextView>(R.id.mEmptyTv)
         val drawableTop = ContextCompat.getDrawable(mContext, resId)
         mEmptyTv?.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null)
     }
 
     fun setEmptyText(text: CharSequence?) {
+        if (currentState != State.STATE_EMPTY) return
         val mEmptyTv = findViewById<TextView>(R.id.mEmptyTv)
         mEmptyTv?.text = text
     }
 
     fun setErrorText(text: CharSequence?) {
-        val mErrorTv = findViewById<TextView>(R.id.mErrorTv)
-        mErrorTv?.text = text
+        if (currentState != State.STATE_ERROR || currentState != State.STATE_NO_NETWORK) {
+            val mErrorTv = findViewById<TextView>(R.id.mErrorTv)
+            mErrorTv?.text = text
+        }
     }
 
     fun setErrorIcon(resId: Int) {
-        val mErrorTv = findViewById<TextView>(R.id.mErrorTv)
-        val drawableTop = ContextCompat.getDrawable(mContext, resId)
-        mErrorTv?.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null)
+        if (currentState != State.STATE_ERROR || currentState != State.STATE_NO_NETWORK) {
+            val mErrorTv = findViewById<TextView>(R.id.mErrorTv)
+            val drawableTop = ContextCompat.getDrawable(mContext, resId)
+            mErrorTv?.setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null)
+        }
     }
 
-    fun setState(state: Int) {
+    fun setState(state: State) {
+        currentState = state
         when (state) {
-            STATE_IDEA -> onIdea()
-            STATE_LOADING -> onLoading()
-            STATE_NO_NETWORK -> onError(1)
-            STATE_ERROR -> onError(2)
-            STATE_EMPTY -> onEmpty()
-            STATE_GONE -> visibility = View.GONE
+            State.STATE_IDEA -> onIdea()
+            State.STATE_LOADING -> onLoading()
+            State.STATE_NO_NETWORK -> onError(1)
+            State.STATE_ERROR -> onError(2)
+            State.STATE_EMPTY -> onEmpty()
+            State.STATE_GONE -> visibility = View.GONE
         }
     }
 
@@ -104,7 +109,7 @@ class CurrencyLoadView : FrameLayout {
             setErrorIcon(R.mipmap.ic_nonetwork)
         }
         findViewById<TextView>(R.id.tvReload).setOnClickListener {
-            setState(STATE_IDEA)
+            setState(State.STATE_IDEA)
             onRetryListener?.onRetry(this@CurrencyLoadView)
         }
     }

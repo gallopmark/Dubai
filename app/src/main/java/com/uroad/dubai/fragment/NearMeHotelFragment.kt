@@ -24,7 +24,8 @@ class NearMeHotelFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
     private val handler = Handler()
 
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)
-    override fun onPresenterSetUp(view: View) {
+
+    override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainmearme)
         initRv()
     }

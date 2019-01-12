@@ -29,7 +29,7 @@ class PhoneActivity : BaseActivity() {
                     putString("phone",phone)
                 })
             else
-                openActivity(VerifyActicity::class.java,Bundle().apply {
+                openActivity(VerifyActivity::class.java,Bundle().apply {
                     putString("phone",phone)
                 })
             finish()

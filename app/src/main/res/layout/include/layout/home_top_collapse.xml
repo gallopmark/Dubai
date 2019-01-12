@@ -1,69 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/black"
-    android:layout_height="@dimen/toolbar_size">
+    android:layout_height="@dimen/toolbar_size"
+    android:paddingStart="@dimen/space_16"
+    android:paddingEnd="@dimen/space_16">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center|start"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/space_16"
-        android:paddingRight="@dimen/space_16">
+    <ImageView
+        android:id="@+id/ivNavigation"
+        android:layout_width="@dimen/space_35"
+        android:layout_height="@dimen/space_35"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/space_5"
+        android:contentDescription="@string/navigate"
+        android:src="@mipmap/ic_navigation_white" />
 
-        <ImageView
-            android:id="@+id/ivNavigation"
-            android:layout_width="@dimen/space_30"
-            android:layout_height="@dimen/space_30"
-            android:src="@mipmap/ic_navigation_white" />
+    <ImageView
+        android:id="@+id/ivHighWay"
+        android:layout_width="@dimen/space_35"
+        android:layout_height="@dimen/space_35"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ivNavigation"
+        android:contentDescription="@string/home_menu_roads"
+        android:padding="@dimen/space_5"
+        android:src="@mipmap/ic_highway_white" />
 
-        <ImageView
-            android:id="@+id/ivHighWay"
-            android:layout_width="@dimen/space_30"
-            android:layout_height="@dimen/space_30"
-            android:layout_marginStart="@dimen/space_5"
-            android:src="@mipmap/ic_highway_white" />
+    <ImageView
+        android:id="@+id/ivNews"
+        android:layout_width="@dimen/space_35"
+        android:layout_height="@dimen/space_35"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ivHighWay"
+        android:contentDescription="@string/home_menu_news"
+        android:padding="@dimen/space_5"
+        android:src="@mipmap/ic_news_white" />
 
-        <ImageView
-            android:id="@+id/ivNews"
-            android:layout_width="@dimen/space_30"
-            android:layout_height="@dimen/space_30"
-            android:layout_marginStart="@dimen/space_5"
-            android:src="@mipmap/ic_news_white" />
+    <ImageView
+        android:id="@+id/ivMore"
+        android:layout_width="@dimen/space_35"
+        android:layout_height="@dimen/space_35"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ivNews"
+        android:contentDescription="@string/home_menu_more"
+        android:padding="@dimen/space_5"
+        android:src="@mipmap/ic_more_white" />
 
-        <ImageView
-            android:id="@+id/ivMore"
-            android:layout_width="@dimen/space_30"
-            android:layout_height="@dimen/space_30"
-            android:layout_marginStart="@dimen/space_5"
-            android:src="@mipmap/ic_more_white" />
+    <ImageView
+        android:id="@+id/ivMessageColl"
+        android:layout_width="@dimen/space_35"
+        android:layout_height="@dimen/space_35"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ivMore"
+        android:padding="@dimen/space_5"
+        android:contentDescription="@string/mine_messages"
+        android:src="@mipmap/ic_message_white_big" />
 
-        <ImageView
-            android:id="@+id/ivMessageColl"
-            android:layout_width="@dimen/space_30"
-            android:layout_height="@dimen/space_30"
-            android:layout_marginStart="@dimen/space_5"
-            android:scaleType="center"
-            android:src="@mipmap/ic_message_white" />
+    <ImageView
+        android:id="@+id/ivSearchColl"
+        android:layout_width="@dimen/space_35"
+        android:layout_height="@dimen/space_35"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ivMessageColl"
+        android:padding="@dimen/space_5"
+        android:contentDescription="@string/search"
+        android:src="@mipmap/ic_search_white_big" />
 
-        <ImageView
-            android:id="@+id/ivSearchColl"
-            android:layout_width="@dimen/space_30"
-            android:layout_height="@dimen/space_30"
-            android:layout_marginStart="@dimen/space_5"
-            android:scaleType="center"
-            android:src="@mipmap/ic_search_white" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
+        android:src="@mipmap/ic_main_logo" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_5"
-            android:src="@mipmap/ic_main_logo" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/bgToolbarClose"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+</RelativeLayout>

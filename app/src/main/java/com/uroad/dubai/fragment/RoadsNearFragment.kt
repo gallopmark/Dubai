@@ -1,6 +1,7 @@
 package com.uroad.dubai.fragment
 
 import android.graphics.Color
+import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.adapter.RoadsNearFmListAdapter
 import com.uroad.dubai.api.presenter.RoadsNearFMPresenter
@@ -19,7 +20,7 @@ class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>
     private lateinit var data: MutableList<RoadsMDL>
     private lateinit var adapter: RoadsNearFmListAdapter
 
-    override fun initViewData() {
+    override fun initViewData(view: View, savedInstanceState: Bundle?) {
         data = ArrayList()
         adapter = RoadsNearFmListAdapter(context,data)
         recyclerView.adapter = adapter

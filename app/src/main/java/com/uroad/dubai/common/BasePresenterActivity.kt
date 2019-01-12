@@ -1,5 +1,6 @@
 package com.uroad.dubai.common
 
+import android.os.Bundle
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
 
@@ -9,9 +10,13 @@ abstract class BasePresenterActivity<P : BasePresenter<*>> : BaseActivity(), Bas
 
     protected abstract fun createPresenter(): P
 
-    override fun initData() {
+    override fun setUp(savedInstanceState: Bundle?) {
+
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
         presenter = createPresenter()
         onPresenterCreate()
+        super.onCreate(savedInstanceState)
     }
 
     open fun onPresenterCreate() {}

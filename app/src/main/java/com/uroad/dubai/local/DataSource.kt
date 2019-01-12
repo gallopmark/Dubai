@@ -4,6 +4,11 @@ import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.model.*
 
 class DataSource {
+    companion object {
+        const val APP_FILE = "app_data"
+        const val POI_FILE = "poi_history"
+    }
+
     class MapData {
         companion object {
             /**

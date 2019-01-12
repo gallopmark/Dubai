@@ -3,7 +3,9 @@ package com.uroad.dubai.common
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
@@ -15,13 +17,13 @@ abstract class BasePageRefreshPresenterFragment<P : BasePresenter<*>> : BasePage
     open lateinit var baseRefreshLayout: SmartRefreshLayout
     open lateinit var recyclerView: RecyclerView
     open var presenter: P? = null
+
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_base_refresh)
         baseRefreshLayout = view.findViewById(R.id.baseRefreshLayout)
         recyclerView = view.findViewById(R.id.recyclerView)
         val layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
         recyclerView.layoutManager = layoutManager
-        initViewData()
         baseRefreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 onPullToRefresh()
@@ -31,17 +33,15 @@ abstract class BasePageRefreshPresenterFragment<P : BasePresenter<*>> : BasePage
                 onPullToLoadMore()
             }
         })
+        initViewData(view, savedInstanceState)
         presenter = createPresenter()
-        onPresenterSetUp(view)
     }
 
-    abstract fun initViewData()
+    abstract fun initViewData(view: View, savedInstanceState: Bundle?)
     abstract fun onPullToRefresh()
     abstract fun onPullToLoadMore()
 
     abstract fun createPresenter(): P?
-
-    open fun onPresenterSetUp(view: View) {}
 
     override fun onShowLoading() {
 

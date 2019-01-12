@@ -9,13 +9,13 @@ abstract class BasePagePresenterFragment<P : BasePresenter<*>> : BasePageFragmen
     open var presenter: P? = null
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
+        initViewData(view, savedInstanceState)
         presenter = createPresenter()
-        onPresenterSetUp(view)
     }
 
     abstract fun createPresenter(): P?
 
-    open fun onPresenterSetUp(view: View) {}
+    abstract fun initViewData(view: View, savedInstanceState: Bundle?)
 
     override fun onShowLoading() {
 

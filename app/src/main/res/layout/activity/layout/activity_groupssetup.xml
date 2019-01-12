@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/minus_30"
+        android:scaleType="fitXY" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/llInput"
+        android:layout_marginStart="@dimen/space_15"
+        android:layout_marginEnd="@dimen/space_15"
+        android:layout_marginBottom="@dimen/minus_15">
+
+        <ImageView
+            android:id="@+id/ivMember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/space_18"
+            android:layout_marginBottom="@dimen/minus_14"
+            android:src="@mipmap/ic_groups_member" />
+
+        <TextView
+            android:id="@+id/tvCreate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivMember"
+            android:background="@mipmap/ic_groups_createbg"
+            android:gravity="center"
+            android:paddingBottom="@dimen/space_10"
+            android:scaleType="fitXY"
+            android:text="@string/groups_create"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_18" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/space_15"
+        android:layout_marginEnd="@dimen/space_15"
+        android:layout_marginBottom="@dimen/space_25"
+        android:background="@mipmap/ic_groups_joinbg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/groups_join"
+            android:textColor="@color/theme_red"
+            android:textSize="@dimen/font_16" />
+
+        <EditText
+            android:id="@+id/etInput"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_40"
+            android:layout_marginStart="@dimen/space_30"
+            android:layout_marginTop="@dimen/space_5"
+            android:layout_marginEnd="@dimen/space_30"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:hint="@string/groups_input"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="@dimen/font_14" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1"
+            android:layout_marginStart="@dimen/space_30"
+            android:layout_marginEnd="@dimen/space_30"
+            android:background="@color/itemDivider" />
+    </LinearLayout>
+</RelativeLayout>

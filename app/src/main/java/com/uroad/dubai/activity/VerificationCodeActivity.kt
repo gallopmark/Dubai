@@ -7,7 +7,7 @@ import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.widget.NumberEditText
-import com.uroad.zhgs.helper.UserPreferenceHelper
+import com.uroad.dubai.local.UserPreferenceHelper
 import io.reactivex.Observable
 import io.reactivex.Observer
 import kotlinx.android.synthetic.main.activity_verify_code.*

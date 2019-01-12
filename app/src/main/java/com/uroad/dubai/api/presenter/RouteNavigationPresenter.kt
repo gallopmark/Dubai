@@ -16,70 +16,43 @@ import com.mapbox.api.directions.v5.MapboxDirections
 import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
-import com.mapbox.api.geocoding.v5.models.GeocodingResponse
 import com.mapbox.geojson.Point
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.CarmenFeatureAdapter
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.api.BaseObserver
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.library.utils.DisplayUtils
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class RouteNavigationPresenter(private val context: Context,
                                private val naviView: RouteNavigationView)
     : BasePresenter<RouteNavigationView>(naviView) {
 
-    private var disposable: Disposable? = null
-    private var geoClient: MapboxGeocoding? = null
+    private val presenter = PoiSearchPresenter(context, naviView)
+    private var directions: MapboxDirections? = null
 
-    fun getPoi(content: String): MapboxGeocoding {
-        val client = getPoi(content, 0)
-        this.geoClient = client
-        return client
-    }
-
-    fun getPoi(content: String, type: Int): MapboxGeocoding {
-        return MapboxGeocoding.builder()
-                .accessToken(context.getString(R.string.mapBoxToken))
-//                .country("ae")
-                .limit(10)
-                .query(content).build().apply {
-                    this.enqueueCall(object : Callback<GeocodingResponse> {
-                        override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
-                            response.body()?.features()?.let { naviView.onPoiResult(it, type) }
-                        }
-
-                        override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-
-                        }
-                    })
-                }
-    }
-
-    fun cancelPoiCall() {
-        geoClient?.cancelCall()
+    fun doPoiSearch(content: String): MapboxGeocoding {
+        return presenter.doPoiSearch(content)
     }
 
     fun getRoutes(origin: Point, destination: Point, profile: String) {
-        disposable?.dispose()
-        val directions = buildDirections(origin, destination, profile)
-        disposable = Observable.fromCallable { directions.executeCall() }.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : BaseObserver<Response<DirectionsResponse>>(naviView) {
-                    override fun onSuccess(result: Response<DirectionsResponse>) {
-                        naviView.onNavigationRoutes(result.body()?.routes())
-                    }
-                })
-        addDisposable(disposable)
+        naviView.onShowLoading()
+        directions = buildDirections(origin, destination, profile).apply {
+            enqueueCall(object : Callback<DirectionsResponse> {
+                override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
+                    naviView.onHideLoading()
+                    naviView.onNavigationRoutes(response.body()?.routes())
+                }
+
+                override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
+                    naviView.onHideLoading()
+                    naviView.onShowError("")
+                }
+            })
+        }
     }
 
     private fun buildDirections(origin: Point, destination: Point, profile: String): MapboxDirections {
@@ -128,5 +101,10 @@ class RouteNavigationPresenter(private val context: Context,
             })
         }
         return popupWindow
+    }
+
+    override fun detachView() {
+        directions?.cancelCall()
+        super.detachView()
     }
 }

@@ -17,26 +17,26 @@ class MoreActivity : BaseActivity() {
         initView()
     }
 
-    private fun initView(){
+    private fun initView() {
         val bundle = Bundle()
         tvHotels.setOnClickListener {
-            bundle.putString("type","1001002")
-            openActivity(AttractionsListActivity::class.java,bundle)
+            bundle.putString("type", "1001002")
+            openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvRestaurants.setOnClickListener {
-            bundle.putString("type","1001003")
-            openActivity(AttractionsListActivity::class.java,bundle)
+            bundle.putString("type", "1001003")
+            openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvAttractions.setOnClickListener {
-            bundle.putString("type","1001004")
-            openActivity(AttractionsListActivity::class.java,bundle)
+            bundle.putString("type", "1001004")
+            openActivity(AttractionsListActivity::class.java, bundle)
         }
 
         tvEvents.setOnClickListener { openActivity(EventsListActivity::class.java) }
         tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
         tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
-        tvGroups.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvGroups.setOnClickListener { openActivity(GroupsSetupActivity::class.java) }
         tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
     }
 }

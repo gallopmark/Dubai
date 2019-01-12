@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" tools:ignore="PrivateResource">RTA Smart</string>
-    <string name="confirm">confirm</string>
+    <string name="confirm">Confirm</string>
     <string name="loading">Loading</string>
     <string name="nonetwork">Network Error~</string>
     <string name="reload">Reload</string>
@@ -13,6 +13,8 @@
     <string name="tips">Tips</string>
     <string name="developing">This feature is under development</string>
     <string name="skip">Skip</string>
+    <string name="selected">Selected</string>
+    <string name="home">Home</string>
 
     <string name="home_menu_navigation">Navigation</string>
     <string name="home_menu_roads">Roads</string>
@@ -20,10 +22,11 @@
     <string name="home_menu_more">More</string>
     <string name="home_title_favorites">Favorites</string>
     <string name="home_title_near_me">Near me</string>
-    <string name="tab_home">Home</string>
+    <string name="tab_home">@string/home</string>
     <string name="tab_travel">Travel</string>
     <string name="tab_me">Me</string>
 
+    <string name="travel_content_title">Best Fast Food In Dubai</string>
     <string name="travel_menu_hotels">Hotels</string>
     <string name="travel_menu_restaurants">Restaurants</string>
     <string name="travel_menu_weather">Weather</string>
@@ -112,7 +115,7 @@
     <string name="more_menu_police">@string/travel_menu_police</string>
     <string name="more_menu_groups">@string/travel_menu_groups</string>
     <string name="more_menu_weather">@string/travel_menu_weather</string>
-    <string name="more_inner">Inner</string>
+    <string name="more_inner">Manage Road Closure</string>
     <string name="more_menu_report">Report</string>
 
     <string name="hours">Hours</string>
@@ -154,4 +157,20 @@
     <string name="route_home">Home</string>
     <string name="route_work">Work</string>
     <string name="clear_history">Clear up historical records</string>
+
+    <string name="groups_title">@string/travel_menu_groups</string>
+    <string name="groups_create">Create a group</string>
+    <string name="groups_join">Join a group</string>
+    <string name="groups_input">Input invite code</string>
+    <string name="groups_input_tips">please input command</string>
+    <string name="groups_input_name_hint">please input team name</string>
+    <string name="groups_input_destination_hint">please input destination</string>
+    <string name="groups_destination">Destination</string>
+    <string name="groups_invite">Invite</string>
+    <string name="groups_navigation">@string/navigate</string>
+    <string name="groups_modify">modify</string>
+    <string name="groups_lastGroup">Last group</string>
+    <string name="groups_myFollow">My follow</string>
+    <string name="groups_invite_active">Active</string>
+
 </resources>

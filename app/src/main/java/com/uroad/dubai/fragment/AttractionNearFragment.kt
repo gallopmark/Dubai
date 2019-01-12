@@ -26,7 +26,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
     private lateinit var data: MutableList<AttractionNearFMMDL>
     private lateinit var adapter: AttrNearFmListAdapter
 
-    override fun initViewData() {
+    override fun initViewData(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
             type = it.getString("type")
         }

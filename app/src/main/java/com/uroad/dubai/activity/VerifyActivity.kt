@@ -5,7 +5,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_verify.*
 
-class VerifyActicity : BaseActivity() {
+class VerifyActivity : BaseActivity() {
 
     var phone : String? = null
 

@@ -8,15 +8,13 @@ import com.uroad.dubai.api.BaseView
 abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseFragment(), BaseView {
     open var presenter: P? = null
 
-    override fun setUp(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter = createPresenter()
-        onPresenterSetUp(view)
     }
-
 
     abstract fun createPresenter(): P?
 
-    abstract fun onPresenterSetUp(view: View)
 
     override fun onShowLoading() {
 

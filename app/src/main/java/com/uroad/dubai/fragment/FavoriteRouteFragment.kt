@@ -19,7 +19,7 @@ class FavoriteRouteFragment  : BasePageRefreshPresenterFragment<FavoriteRouteFMP
     private lateinit var data: MutableList<RouteMDL>
     private lateinit var adapter : FavoriteRouteFmListAdapter
 
-    override fun initViewData() {
+    override fun initViewData(view: View, savedInstanceState: Bundle?) {
         data = ArrayList()
         adapter = FavoriteRouteFmListAdapter(context,data)
         recyclerView.adapter = adapter

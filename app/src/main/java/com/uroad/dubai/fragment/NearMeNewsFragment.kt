@@ -24,7 +24,7 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
     private lateinit var adapter: NewsListAdapter
     private val handler = Handler()
 
-    override fun onPresenterSetUp(view: View) {
+    override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainmearme)
         initRv()
     }

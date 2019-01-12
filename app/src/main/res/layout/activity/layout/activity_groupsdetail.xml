@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/content_mapview" />
+
+    <TextView
+        android:id="@+id/tvDestination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white20transparency"
+        android:drawableStart="@mipmap/ic_navigation_red"
+        android:drawablePadding="@dimen/space_5"
+        android:lineSpacingExtra="@dimen/space_10"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:padding="@dimen/space_14"
+        android:textColor="@color/appTextColor"
+        android:textSize="@dimen/font_14" />
+
+    <ImageView
+        android:id="@+id/ivLocation"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_20"
+        android:background="@drawable/bg_corners_white_5dp"
+        android:scaleType="center"
+        android:src="@mipmap/ic_location_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDestination" />
+
+    <ImageView
+        android:id="@+id/ivScenic"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginTop="@dimen/space_20"
+        android:layout_marginEnd="@dimen/space_10"
+        android:src="@mipmap/ic_scenic_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDestination" />
+
+    <ImageView
+        android:id="@+id/ivTraffic"
+        android:layout_width="@dimen/space_45"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginTop="@dimen/space_15"
+        android:layout_marginEnd="@dimen/space_10"
+        android:src="@mipmap/ic_traffic_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivScenic" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_15"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tvInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/ic_button_corners_hollow"
+            android:gravity="center"
+            android:text="@string/groups_invite"
+            android:textColor="@color/theme_red"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            android:id="@+id/tvNavigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_25"
+            android:background="@mipmap/ic_button_corners_fill"
+            android:gravity="center"
+            android:text="@string/groups_navigation"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_16" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

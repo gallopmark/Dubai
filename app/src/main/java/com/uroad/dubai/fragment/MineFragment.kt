@@ -6,7 +6,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.library.utils.DisplayUtils
-import com.uroad.zhgs.helper.UserPreferenceHelper
+import com.uroad.dubai.local.UserPreferenceHelper
 import kotlinx.android.synthetic.main.fragment_mine.*
 
 /**

@@ -1,5 +1,6 @@
 package com.uroad.dubai.fragment
 
+import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.adapter.FavoriteEventFmListAdapter
 import com.uroad.dubai.api.presenter.FavoriteEventFMPresenter
@@ -16,7 +17,7 @@ class FavoriteEventFragment  : BasePageRefreshPresenterFragment<FavoriteEventFMP
     private lateinit var data: MutableList<EventsMDL>
     private lateinit var adapter : FavoriteEventFmListAdapter
 
-    override fun initViewData() {
+    override fun initViewData(view: View, savedInstanceState: Bundle?) {
         data = ArrayList()
         adapter = FavoriteEventFmListAdapter(context,data)
         recyclerView.adapter = adapter

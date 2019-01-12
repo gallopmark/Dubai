@@ -1,5 +1,6 @@
 package com.uroad.dubai.fragment
 
+import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -19,7 +20,7 @@ class MainBannerFragment : BasePresenterFragment<MainBannerPresenter>(), MainBan
     private val handler = Handler()
     override fun createPresenter(): MainBannerPresenter? = MainBannerPresenter(this)
 
-    override fun onPresenterSetUp(view: View) {
+    override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainbanner)
         fgBaseParent.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
         galleryRv.isNestedScrollingEnabled = false

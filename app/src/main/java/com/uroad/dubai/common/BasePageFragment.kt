@@ -115,20 +115,20 @@ abstract class BasePageFragment : Fragment() {
 
     open fun onPageLoading() {
         contentView?.visibility = View.GONE
-        fgBaseLoadView.setState(CurrencyLoadView.STATE_LOADING)
+        fgBaseLoadView.setState(CurrencyLoadView.State.STATE_LOADING)
     }
 
     open fun onPageResponse() {
         contentView?.visibility = View.VISIBLE
-        fgBaseLoadView.setState(CurrencyLoadView.STATE_IDEA)
+        fgBaseLoadView.setState(CurrencyLoadView.State.STATE_IDEA)
     }
 
     open fun onPageError() {
         contentView?.visibility = View.GONE
         if (!NetworkUtils.isConnected(this@BasePageFragment.context))
-            fgBaseLoadView.setState(CurrencyLoadView.STATE_NO_NETWORK)
+            fgBaseLoadView.setState(CurrencyLoadView.State.STATE_NO_NETWORK)
         else
-            fgBaseLoadView.setState(CurrencyLoadView.STATE_ERROR)
+            fgBaseLoadView.setState(CurrencyLoadView.State.STATE_ERROR)
         fgBaseLoadView.setOnRetryListener(object : CurrencyLoadView.OnRetryListener {
             override fun onRetry(view: View) {
                 onPageRetry(view)
@@ -146,7 +146,7 @@ abstract class BasePageFragment : Fragment() {
 
     open fun onPageNoData(emptyIcon: Int, emptyTips: CharSequence?) {
         contentView?.visibility = View.GONE
-        fgBaseLoadView.setState(CurrencyLoadView.STATE_EMPTY)
+        fgBaseLoadView.setState(CurrencyLoadView.State.STATE_EMPTY)
         if (!TextUtils.isEmpty(emptyTips)) fgBaseLoadView.setEmptyText(emptyTips)
         if (emptyIcon != -1) fgBaseLoadView.setEmptyIco(emptyIcon)
     }

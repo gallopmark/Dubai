@@ -1,6 +1,5 @@
 package com.uroad.dubai.adapter
 
-import android.app.Activity
 import android.content.Context
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.uroad.dubai.R

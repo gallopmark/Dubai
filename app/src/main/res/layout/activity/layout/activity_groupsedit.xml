@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/etTeamName"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_45"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:background="@color/transparent"
+        android:gravity="center|start"
+        android:hint="@string/groups_input_name_hint"
+        android:maxLines="1"
+        android:textColor="@color/appTextColor"
+        android:textSize="@dimen/font_18" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:background="@color/itemDivider" />
+
+    <TextView
+        android:id="@+id/tvDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_16"
+        android:layout_marginEnd="@dimen/space_10"
+        android:text="@string/groups_destination"
+        android:textColor="@color/darkgrey"
+        android:textSize="@dimen/font_12" />
+
+    <LinearLayout
+        android:id="@+id/llDestination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/space_10"
+        app:layout_constraintTop_toBottomOf="@+id/tvDestination">
+
+        <EditText
+            android:id="@+id/etDestination"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_50"
+            android:layout_marginStart="@dimen/space_10"
+            android:background="@color/transparent"
+            android:drawableStart="@mipmap/ic_navigation_red"
+            android:drawablePadding="@dimen/space_5"
+            android:gravity="center|start"
+            android:hint="@string/groups_input_destination_hint"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textSize="@dimen/font_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_1"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:background="@color/itemDivider" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mapbox.mapboxsdk.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
+            app:mapbox_uiAttribution="false"
+            app:mapbox_uiCompass="false"
+            app:mapbox_uiLogo="false" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPoi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+    </FrameLayout>
+</LinearLayout>

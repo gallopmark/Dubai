@@ -9,7 +9,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
-import com.uroad.zhgs.helper.UserPreferenceHelper
+import com.uroad.dubai.local.UserPreferenceHelper
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_login.*
 

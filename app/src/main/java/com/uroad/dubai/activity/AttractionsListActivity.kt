@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.fragment.AttractionNearFragment
 import kotlinx.android.synthetic.main.activity_attraction.*
 
@@ -33,8 +34,8 @@ class AttractionsListActivity : BaseActivity() {
             type = it.getString("type")
         }
         when (type) {
-            "1001002" -> withTitle(getString(R.string.travel_menu_hotels))      //酒店
-            "1001003" -> withTitle(getString(R.string.travel_menu_restaurants)) //餐厅
+            NewsType.HOTEL.code -> withTitle(getString(R.string.travel_menu_hotels))      //酒店
+            NewsType.RESTAURANT.code -> withTitle(getString(R.string.travel_menu_restaurants)) //餐厅
             else -> withTitle(getString(R.string.travel_menu_attractions))      //1001004 景点
         }
         initTab()
