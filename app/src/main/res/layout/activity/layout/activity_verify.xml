@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/tvReplace"
-        android:layout_marginTop="@dimen/space_10"
+        android:padding="@dimen/space_10"
         android:textSize="@dimen/font_16"
         android:text="@string/other_phone_number"
         android:gravity="center"

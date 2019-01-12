@@ -31,4 +31,9 @@
     <color name="alternativeRouteModerateCongestionColor">#c3c97b</color>
     <color name="alternativeRouteSevereCongestionColor">#bc8873</color>
     <color name="alternativeRouteShieldColor">#88bbab</color>
+
+    <color name="e7yoo_number_edittext_color_bg">#ffffff</color>
+    <color name="e7yoo_number_edittext_color_text">#303030</color>
+    <color name="e7yoo_number_edittext_color_textbg">#808080</color>
+    <color name="color_FF9094">#FF9094</color>
 </resources>

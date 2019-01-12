@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/tvRemainingTime"
-            android:text="59s"
+            android:text="60s"
             android:textSize="@dimen/font_16"
             android:layout_marginRight="@dimen/space_10"
             android:layout_marginLeft="@dimen/space_5"
@@ -58,17 +58,26 @@
     </LinearLayout>
 
     <com.uroad.dubai.widget.VerifyCodeEditText
-        android:id="@+id/edVerify"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/space_10"
         android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content" />
 
+    <com.uroad.dubai.widget.NumberEditText
+        android:id="@+id/edVerify"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
     <Button
         android:id="@+id/btnVerify"
         android:textSize="@dimen/font_16"
         android:textAllCaps="false"
-        android:layout_margin="@dimen/space_20"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_marginLeft="@dimen/space_20"
+        android:layout_marginRight="@dimen/space_20"
         android:textColor="@color/verify_btn_textcolor_selector"
         android:background="@drawable/selector_verify_btn_bg"
         android:text="@string/verify"

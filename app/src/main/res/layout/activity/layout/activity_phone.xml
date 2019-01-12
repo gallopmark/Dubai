@@ -54,6 +54,7 @@
             android:layout_height="wrap_content" />
 
         <EditText
+            android:id="@+id/edPhone"
             android:padding="@dimen/space_10"
             android:hint="@string/phone_number"
             android:background="@null"

@@ -115,6 +115,22 @@
         <item name="android:windowDisablePreview">true</item>
     </style>
 
+    <style name="e7yoo_number_edittext_text">
+        <item name="android:paddingTop">@dimen/e7yoo_number_edittext_textpadding</item>
+        <item name="android:paddingBottom">@dimen/e7yoo_number_edittext_textpadding</item>
+        <item name="android:textColor">@color/e7yoo_number_edittext_color_text</item>
+        <item name="android:textSize">@dimen/e7yoo_number_edittext_textsize</item>
+        <item name="android:background">@drawable/e7yoo_number_edittext_textbg</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:focusable">false</item>
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">1</item>
+    </style>
+
     <style name="TranslucentThemeWithOutAnimation" parent="TranslucentTheme">
         <item name="android:windowAnimationStyle">@style/ActivityWithOutAnimation</item>
     </style>

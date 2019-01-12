@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/e7yoo_number_edittext_rootlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@android:color/transparent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/e7yoo_number_edittext_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_10"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/e7yoo_number_edittext_tv0"
+            style="@style/e7yoo_number_edittext_text"/>
+        <TextView
+            android:id="@+id/e7yoo_number_edittext_tv1"
+            style="@style/e7yoo_number_edittext_text"/>
+        <TextView
+            android:id="@+id/e7yoo_number_edittext_tv2"
+            style="@style/e7yoo_number_edittext_text"/>
+        <TextView
+            android:id="@+id/e7yoo_number_edittext_tv3"
+            style="@style/e7yoo_number_edittext_text"/>
+        <TextView
+            android:id="@+id/e7yoo_number_edittext_tv4"
+            style="@style/e7yoo_number_edittext_text"/>
+        <TextView
+            android:id="@+id/e7yoo_number_edittext_tv5"
+            android:layout_marginRight="@dimen/space_10"
+            style="@style/e7yoo_number_edittext_text"/>
+    </LinearLayout>
+    <EditText
+        android:id="@+id/e7yoo_number_edittext_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/e7yoo_number_edittext_layout"
+        android:layout_alignTop="@id/e7yoo_number_edittext_layout"
+        android:layout_alignRight="@id/e7yoo_number_edittext_layout"
+        android:layout_alignBottom="@id/e7yoo_number_edittext_layout"
+        android:background="@android:color/transparent"
+        android:cursorVisible="false"
+        android:textCursorDrawable="@null"
+        android:textColor="@android:color/transparent"
+        android:textColorHint="@android:color/transparent"
+        android:inputType="number"
+        android:maxLength="6" />
+</RelativeLayout>
