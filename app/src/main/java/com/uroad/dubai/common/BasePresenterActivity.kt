@@ -3,11 +3,13 @@ package com.uroad.dubai.common
 import android.os.Bundle
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
+import org.jetbrains.annotations.NotNull
 
 
 abstract class BasePresenterActivity<P : BasePresenter<*>> : BaseActivity(), BaseView {
-    open var presenter: P? = null
 
+    open lateinit var presenter: P
+    @NotNull
     protected abstract fun createPresenter(): P
 
     override fun setUp(savedInstanceState: Bundle?) {
@@ -35,6 +37,6 @@ abstract class BasePresenterActivity<P : BasePresenter<*>> : BaseActivity(), Bas
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter?.detachView()
+        presenter.detachView()
     }
 }

@@ -2,6 +2,7 @@ package com.uroad.dubai.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
@@ -17,6 +18,7 @@ import com.uroad.dubai.common.BasePresenterActivity
 import com.uroad.dubai.model.GroupsInviteMDL
 import com.uroad.dubai.model.MultiItem
 import com.uroad.library.utils.DisplayUtils
+import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_groupsinvite.*
 
 /**
@@ -33,7 +35,7 @@ class GroupsInviteActivity : BasePresenterActivity<GroupsInvitePresenter>(), Gro
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_groupsinvite)
         withTitle(getString(R.string.groups_invite))
-        withOption(getString(R.string.confirm), View.OnClickListener { })
+        withOption(getString(R.string.confirm), View.OnClickListener { whenConfirm() })
         initDataView()
     }
 
@@ -64,7 +66,7 @@ class GroupsInviteActivity : BasePresenterActivity<GroupsInvitePresenter>(), Gro
 
     override fun createPresenter(): GroupsInvitePresenter = GroupsInvitePresenter(this)
     override fun initData() {
-        presenter?.getInviteList("", "")
+        presenter.getInviteList("", "")
     }
 
     override fun onShowLoading() {
@@ -95,6 +97,14 @@ class GroupsInviteActivity : BasePresenterActivity<GroupsInvitePresenter>(), Gro
         } else {
             rvList.visibility = View.GONE
             onPageNoData()
+        }
+    }
+
+    private fun whenConfirm() {
+        if (mSelected.size > 0) { //when selected do something
+
+        } else {
+            showLongToast(getString(R.string.groups_invite_unselected))
         }
     }
 

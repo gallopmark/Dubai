@@ -12,6 +12,7 @@
 
     <color name="color_cc">#cccccc</color>
     <color name="color_f7">#f7f7f7</color>
+    <color name="color_f2">#f2f2f2</color>
     <color name="color_66">#ff666666</color>
     <color name="color_b9">#ffb9b9b9</color>
     <color name="color_df">#ffdfdfdf</color>
@@ -37,4 +38,7 @@
     <color name="e7yoo_number_edittext_color_text">#303030</color>
     <color name="e7yoo_number_edittext_color_textbg">#808080</color>
     <color name="color_FF9094">#FF9094</color>
+
+    <color name="snackBar_solid">#B0000000</color>
+    <color name="snackBar_stroke">#B0757575</color>
 </resources>

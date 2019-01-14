@@ -47,4 +47,44 @@
         <attr name="upcomingManeuverArrowColor" format="color" />
         <attr name="upcomingManeuverArrowBorderColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="EnhanceTabLayout">
+        <attr name="tab_Mode" format="enum">
+            <enum name="mode_fixed" value="1" />
+            <enum name="mode_scrollable" value="2" />
+        </attr>
+        <attr name="tabIndicatorColor" format="color" />
+        <attr name="tabSelectTextColor" format="color" />
+        <attr name="tabTextColor" format="color" />
+        <attr name="tabIndicatorHeight" format="dimension" />
+        <attr name="tabIndicatorWidth" format="dimension" />
+        <attr name="tabTextSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="RadarWaveView">
+        <attr name="waveType" format="integer">
+            <enum name="sin" value="0" />
+            <enum name="cos" value="1" />
+        </attr>
+        <attr name="waveFillType" format="integer">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+        </attr>
+        <attr name="waveAmplitude" format="dimension" />
+        <attr name="waveColor" format="integer" />
+        <attr name="waveSpeed" format="float" />
+        <attr name="waveStartPeriod" format="float" />
+        <attr name="waveStart" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CropImageView">
+        <attr name="cropMaskColor" format="color" />
+        <attr name="cropBorderColor" format="color" />
+        <attr name="cropBorderWidth" format="dimension" />
+        <attr name="cropFocusWidth" format="dimension" />
+        <attr name="cropFocusHeight" format="dimension" />
+        <attr name="cropStyle" format="enum">
+            <enum name="rectangle" value="0" />
+            <enum name="circle" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

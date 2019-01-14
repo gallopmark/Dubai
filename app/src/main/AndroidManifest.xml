@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".common.DubaiApplication"
@@ -84,13 +87,16 @@
         <activity
             android:name=".activity.ScenicDetailActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.LoginActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.CreatePasswordActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.CreatePasswordActivity"
+            android:launchMode="singleTop" />
 
-        <activity android:name=".activity.PinLoginActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.PinLoginActivity"
+            android:launchMode="singleTop" />
 
         <activity
             android:name=".activity.EventsListActivity"
@@ -120,6 +126,27 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.GroupsInviteActivity"
+            android:launchMode="singleTop" />
+
+        <!--photopicker-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
+
+        <activity
+            android:name=".photopicker.ui.PhotoPickerActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".photopicker.ui.ImagePreViewActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".photopicker.ui.ImageCropActivity"
             android:launchMode="singleTop" />
     </application>
 

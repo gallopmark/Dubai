@@ -71,6 +71,7 @@ abstract class BaseLucaActivity : AppCompatActivity() {
     open fun setUpToolbar() {
         baseToolbar.title = ""
         setSupportActionBar(baseToolbar)
+        actionBar?.setDisplayShowTitleEnabled(false)
         baseToolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
@@ -98,6 +99,7 @@ abstract class BaseLucaActivity : AppCompatActivity() {
 
     open fun withOption(actionIcon: Drawable?, option: CharSequence?, onClickListener: View.OnClickListener?) {
         if (!TextUtils.isEmpty(option) || actionIcon != null) {
+            getOptionView()?.let { baseToolbar.removeView(it) }
             val view = layoutInflater.inflate(R.layout.menu_action_base, baseToolbar, true)
             val baseMenuTv = view.findViewById<TextView>(R.id.baseMenuTv)
             baseMenuTv.text = option
@@ -107,8 +109,8 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         }
     }
 
-    open fun withOption(option: CharSequence?, onClickListener: View.OnClickListener?,color: Int){
-        if (!TextUtils.isEmpty(option) ) {
+    open fun withOption(option: CharSequence?, onClickListener: View.OnClickListener?, color: Int) {
+        if (!TextUtils.isEmpty(option)) {
             val view = layoutInflater.inflate(R.layout.menu_action_base, baseToolbar, true)
             val baseMenuTv = view.findViewById<TextView>(R.id.baseMenuTv)
             baseMenuTv.text = option

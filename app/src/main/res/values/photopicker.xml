@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="photopicker_recent_pictures">Recent pictures</string>
+    <string name="photopicker_load_error">Failed to load album</string>
+    <string name="photopicker_choose_albums">Choosing albums</string>
+    <string name="photopicker_albums_empty">Your album is empty.</string>
+    <string name="photopicker_preview">Preview</string>
+    <string name="photopicker_confirm">Confirm</string>
+    <string name="photopicker_dismiss_sdcard">Disable storage permission application unable to read system album, please reopen</string>
+    <string name="photopicker_noSdcard">Storage permission has been prohibited, the application can not read the system album, if you need to open please click "OK"</string>
+    <string name="photopicker_frame">Frame</string>
+    <string name="photopicker_take_photo">Photograph</string>
+    <string name="photopicker_noCamera">Camera privileges have been prohibited, the application can not start the camera, if you need to open please click "OK"</string>
+    <string name="photopicker_dismiss_camera">Camera permission application is prohibited. Camera cannot be started. Please reopen it.</string>
+    <string name="photopicker_luban_error">Abnormal image processing, please try again later</string>
+    <string name="photopicker_over_limit">You can only choose %d pictures at most.</string>
+    <string name="photopicker_select">Choice</string>
+    <string name="photopicker_finish">Finish</string>
+    <string name="photopicker_crop_title">Move and zoom</string>
+    <string name="photopicker_crop_finish">@string/photopicker_finish</string>
+    <string name="photopicker_saving">Saving…</string>
+    <string name="photopicker_save_failed">Failed to save picture</string>
+</resources>
