@@ -3,25 +3,26 @@ package com.uroad.dubai.photopicker.utils
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import com.uroad.dubai.photopicker.ui.PhotoPickerActivity
-import com.uroad.library.utils.DisplayUtils
 
-class ImagePicker private constructor(private val context: Activity) {
+class ImagePicker private constructor(private val tag: Any) {
+
     private var isMultiple = false //选择模式（单选或多选）
     private var limit = 1   //最大图片选择数量
     private var crop = false    //是否需要裁剪
     private var isSaveRectangle = true  //裁剪后的图片是否是矩形，否者跟随裁剪框的形状
     private var isCompress = false   //是否对图片压缩处理
-    private var outPutX = DisplayUtils.getWindowWidth(context) / 2           //裁剪保存宽度
-    private var outPutY = outPutX           //裁剪保存高度
-    private var focusWidth = DisplayUtils.getWindowWidth(context) / 2         //焦点框的宽度
-    private var focusHeight = focusWidth        //焦点框的高度
+    private var outPutX = 800        //裁剪保存宽度
+    private var outPutY = 800           //裁剪保存高度
+    private var focusWidth = 800         //焦点框的宽度
+    private var focusHeight = 800        //焦点框的高度
     private var requestCode: Int = 1
 
     companion object {
         const val EXTRA_PATHS = "extra_paths"
-        fun with(context: Activity): ImagePicker {
-            return ImagePicker(context)
+        fun with(`object`: Any): ImagePicker {
+            return ImagePicker(`object`)
         }
     }
 
@@ -75,19 +76,29 @@ class ImagePicker private constructor(private val context: Activity) {
     }
 
     fun start() {
-        val intent = Intent(context, PhotoPickerActivity::class.java)
-        val bundle = Bundle().apply {
-            putBoolean("isMultiple", isMultiple)
-            putInt("limit", limit)
-            putBoolean("isCompress", isCompress)
-            putBoolean("isCrop", crop)
-            putBoolean("isSaveRectangle", isSaveRectangle)
-            putInt("outPutX", outPutX)
-            putInt("outPutY", outPutY)
-            putInt("focusWidth", focusWidth)
-            putInt("focusHeight", focusHeight)
+        if (tag is Activity) {
+            val activity = tag
+            val intent = Intent(activity, PhotoPickerActivity::class.java)
+            intent.putExtras(getBundle())
+            activity.startActivityForResult(intent, requestCode)
+        } else if (tag is Fragment) {
+            val fragment = tag
+            if (fragment.activity == null) return
+            val intent = Intent(fragment.activity, PhotoPickerActivity::class.java)
+            intent.putExtras(getBundle())
+            fragment.startActivityForResult(intent, requestCode)
         }
-        intent.putExtras(bundle)
-        context.startActivityForResult(intent, requestCode)
+    }
+
+    private fun getBundle() = Bundle().apply {
+        putBoolean("isMultiple", isMultiple)
+        putInt("limit", limit)
+        putBoolean("isCompress", isCompress)
+        putBoolean("isCrop", crop)
+        putBoolean("isSaveRectangle", isSaveRectangle)
+        putInt("outPutX", outPutX)
+        putInt("outPutY", outPutY)
+        putInt("focusWidth", focusWidth)
+        putInt("focusHeight", focusHeight)
     }
 }
