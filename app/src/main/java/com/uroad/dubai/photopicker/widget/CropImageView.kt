@@ -2,7 +2,15 @@ package com.uroad.dubai.photopicker.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.PointF
+import android.graphics.RectF
+import android.graphics.Shader
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -12,22 +20,21 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.widget.ImageView
 import com.uroad.dubai.R
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
-import android.graphics.RectF
+import java.util.Date
+import java.util.Locale
 
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
-class CropImageView : ImageView {
-    /******************************** 中间的FocusView绘图相关的参数  */
-    enum class Style {
-        RECTANGLE, CIRCLE
-    }
+@SuppressLint("AppCompatCustomView")
+class CropImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : ImageView(context, attrs, defStyle) {
 
     companion object {
 
@@ -78,11 +85,85 @@ class CropImageView : ImageView {
     private var isInited = false   //是否经过了 onSizeChanged 初始化
     private var mSaving = false    //是否正在保存
     private var disposable: Disposable? = null
+    /**
+     * 图片保存完成的监听
+     */
     private var mListener: OnBitmapSaveListener? = null
+    /**
+     * @return 获取当前图片显示的矩形区域
+     */
+    private val imageMatrixRect: RectF
+        get() {
+            val rectF = RectF()
+            rectF.set(0f, 0f, drawable.intrinsicWidth.toFloat(), drawable.intrinsicHeight.toFloat())
+            mMatrix.mapRect(rectF)
+            return rectF
+        }
 
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
+    /**
+     * 返回焦点框宽度
+     */
+    /**
+     * 设置焦点框的宽度
+     */
+    var focusWidth: Int
+        get() = mFocusWidth
+        set(width) {
+            mFocusWidth = width
+            initImage()
+        }
+
+    /**
+     * 获取焦点框的高度
+     */
+    /**
+     * 设置焦点框的高度
+     */
+    var focusHeight: Int
+        get() = mFocusHeight
+        set(height) {
+            mFocusHeight = height
+            initImage()
+        }
+
+    /**
+     * 返回阴影颜色
+     */
+    /**
+     * 设置阴影颜色
+     */
+    var maskColor: Int
+        get() = mMaskColor
+        set(color) {
+            mMaskColor = color
+            invalidate()
+        }
+
+    /**
+     * 返回焦点框边框绘制宽度
+     */
+    val borderWidth: Float
+        get() = mBorderWidth.toFloat()
+
+    /**
+     * 获取焦点框的形状
+     */
+    /**
+     * 设置焦点框的形状
+     */
+    var focusStyle: Style
+        get() = mStyle
+        set(style) {
+            this.mStyle = style
+            invalidate()
+        }
+
+    /******************************** 中间的FocusView绘图相关的参数  */
+    enum class Style {
+        RECTANGLE, CIRCLE
+    }
+
+    init {
         mFocusWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mFocusWidth.toFloat(), resources.displayMetrics).toInt()
         mFocusHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mFocusHeight.toFloat(), resources.displayMetrics).toInt()
         mBorderWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mBorderWidth.toFloat(), resources.displayMetrics).toInt()
@@ -95,101 +176,9 @@ class CropImageView : ImageView {
         mDefaultStyleIndex = a.getInteger(R.styleable.CropImageView_cropStyle, mDefaultStyleIndex)
         mStyle = styles[mDefaultStyleIndex]
         a.recycle()
+
         //只允许图片为当前的缩放模式
         scaleType = ImageView.ScaleType.MATRIX
-    }
-
-    /**
-     * @return 获取当前图片显示的矩形区域
-     */
-    private fun getImageMatrixRect(): RectF {
-        val rectF = RectF()
-        rectF.set(0f, 0f, drawable.intrinsicWidth.toFloat(), drawable.intrinsicHeight.toFloat())
-        matrix.mapRect(rectF)
-        return rectF
-    }
-
-    /**
-     * 返回焦点框宽度
-     */
-    fun getFocusWidth(): Int {
-        return mFocusWidth
-    }
-
-    /**
-     * 设置焦点框的宽度
-     */
-    fun setFocusWidth(width: Int) {
-        mFocusWidth = width
-        initImage()
-    }
-
-    /**
-     * 获取焦点框的高度
-     */
-    fun getFocusHeight(): Int {
-        return mFocusHeight
-    }
-
-    /**
-     * 设置焦点框的高度
-     */
-    fun setFocusHeight(height: Int) {
-        mFocusHeight = height
-        initImage()
-    }
-
-    /**
-     * 返回阴影颜色
-     */
-    fun getMaskColor(): Int {
-        return mMaskColor
-    }
-
-    /**
-     * 设置阴影颜色
-     */
-    fun setMaskColor(color: Int) {
-        mMaskColor = color
-        invalidate()
-    }
-
-    /**
-     * 返回焦点框边框颜色
-     */
-    fun getFocusColor(): Int {
-        return focusColor
-    }
-
-    /**
-     * 设置焦点框的形状
-     */
-    fun setFocusStyle(style: Style) {
-        this.mStyle = style
-        invalidate()
-    }
-
-    /**
-     * 获取焦点框的形状
-     */
-    fun getFocusStyle(): Style {
-        return mStyle
-    }
-
-    /**
-     * 设置焦点框边框颜色
-     */
-    fun setBorderColor(color: Int) {
-        focusColor = color
-        invalidate()
-    }
-
-    /**
-     * 设置焦点边框宽度
-     */
-    fun setBorderWidth(width: Int) {
-        mBorderWidth = width
-        invalidate()
     }
 
     override fun setImageBitmap(bm: Bitmap?) {
@@ -428,6 +417,7 @@ class CropImageView : ImageView {
         val currentScale = Math.abs(imageMatrixValues[0]) + Math.abs(imageMatrixValues[1])
         val minScale = getScale(mRotatedImageWidth, mRotatedImageHeight, mFocusWidth, mFocusHeight, true)
         mMaxScale = minScale * MAX_SCALE
+
         //保证图片最小是占满中间的焦点空间
         if (currentScale < minScale) {
             val scale = minScale / currentScale
@@ -515,7 +505,7 @@ class CropImageView : ImageView {
         if (expectWidth <= 0 || exceptHeight < 0) return null
         var srcBitmap: Bitmap? = (drawable as BitmapDrawable).bitmap
         srcBitmap = rotate(srcBitmap, sumRotateLevel * 90)  //最好用level，因为角度可能不是90的整数
-        return if (srcBitmap != null) makeCropBitmap(srcBitmap, mFocusRect, getImageMatrixRect(), expectWidth, exceptHeight, isSaveRectangle)
+        return if (srcBitmap != null) makeCropBitmap(srcBitmap, mFocusRect, imageMatrixRect, expectWidth, exceptHeight, isSaveRectangle)
         else null
     }
 
@@ -555,10 +545,12 @@ class CropImageView : ImageView {
         var top = ((focusRect.top - imageMatrixRect.top) / scale).toInt()
         var width = (focusRect.width() / scale).toInt()
         var height = (focusRect.height() / scale).toInt()
+
         if (left < 0) left = 0
         if (top < 0) top = 0
         if (left + width > bitmap.width) width = bitmap.width - left
         if (top + height > bitmap.height) height = bitmap.height - top
+
         try {
             var newBitmap = Bitmap.createBitmap(bitmap, left, top, width, height)
             if (expectWidth != width || exceptHeight != height) {
@@ -627,7 +619,7 @@ class CropImageView : ImageView {
      * 将图片保存在本地
      */
     private fun saveOutput(croppedImage: Bitmap, outputFormat: Bitmap.CompressFormat, saveFile: File) {
-        disposable = Flowable.fromCallable {
+        disposable = Observable.fromCallable {
             val outputStream = context.contentResolver.openOutputStream(Uri.parse("file://$saveFile"))
             if (outputStream != null) {
                 croppedImage.compress(outputFormat, 90, outputStream)
@@ -640,9 +632,24 @@ class CropImageView : ImageView {
         }, {
             mListener?.onBitmapSaveError(saveFile)
         }, {}, {
-            it.request(1)
             mListener?.onBitmapSaveStart()
         })
+    }
+
+    /**
+     * 设置焦点框边框颜色
+     */
+    fun setBorderColor(color: Int) {
+        focusColor = color
+        invalidate()
+    }
+
+    /**
+     * 设置焦点边框宽度
+     */
+    fun setBorderWidth(width: Int) {
+        mBorderWidth = width
+        invalidate()
     }
 
     override fun onDetachedFromWindow() {
@@ -653,10 +660,11 @@ class CropImageView : ImageView {
     interface OnBitmapSaveListener {
         fun onBitmapSaveStart()
         fun onBitmapSaveSuccess(file: File)
+
         fun onBitmapSaveError(file: File)
     }
 
-    fun setOnBitmapSaveCompleteListener(listener: OnBitmapSaveListener) {
+    fun setOnBitmapSaveListener(listener: OnBitmapSaveListener) {
         mListener = listener
     }
 }

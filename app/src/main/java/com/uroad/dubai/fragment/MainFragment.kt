@@ -154,17 +154,6 @@ class MainFragment : BaseFragment() {
             4 ->  flNearMeRestaurants.visibility = View.VISIBLE
             5 ->  flNearMeAttractions.visibility = View.VISIBLE
         }
-//        val transaction = childFragmentManager.beginTransaction()
-//        hideFragments(transaction)
-//        when (tab) {
-//            0 -> childFragmentManager.findFragmentByTag(TAG_ROADS)?.let { transaction.show(it) }
-//            1 -> childFragmentManager.findFragmentByTag(TAG_EVENTS)?.let { transaction.show(it) }
-//            2 -> childFragmentManager.findFragmentByTag(TAG_NEWS)?.let { transaction.show(it) }
-//            3 -> childFragmentManager.findFragmentByTag(TAG_HOTEL)?.let { transaction.show(it) }
-//            4 -> childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)?.let { transaction.show(it) }
-//            5 -> childFragmentManager.findFragmentByTag(TAG_ATTRACTIONS)?.let { transaction.show(it) }
-//        }
-//        transaction.commit()
     }
 
     private fun hideFragments() {

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.uroad.dubai.photopicker.ui.PhotoPickerActivity
+import com.uroad.library.utils.DisplayUtils
 
 class ImagePicker private constructor(private val context: Activity) {
     private var isMultiple = false //选择模式（单选或多选）
@@ -11,10 +12,10 @@ class ImagePicker private constructor(private val context: Activity) {
     private var crop = false    //是否需要裁剪
     private var isSaveRectangle = true  //裁剪后的图片是否是矩形，否者跟随裁剪框的形状
     private var isCompress = false   //是否对图片压缩处理
-    private var outPutX = 800           //裁剪保存宽度
-    private var outPutY = 800           //裁剪保存高度
-    private var focusWidth = 280         //焦点框的宽度
-    private var focusHeight = 280        //焦点框的高度
+    private var outPutX = DisplayUtils.getWindowWidth(context) / 2           //裁剪保存宽度
+    private var outPutY = outPutX           //裁剪保存高度
+    private var focusWidth = DisplayUtils.getWindowWidth(context) / 2         //焦点框的宽度
+    private var focusHeight = focusWidth        //焦点框的高度
     private var requestCode: Int = 1
 
     companion object {

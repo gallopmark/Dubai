@@ -49,10 +49,10 @@ class ImageCropActivity : BaseActivity(), CropImageView.OnBitmapSaveListener {
     }
 
     private fun initView() {
-        cropImageView.setFocusWidth(focusWidth)
-        cropImageView.setFocusHeight(focusHeight)
-        if (isSaveRectangle) cropImageView.setFocusStyle(CropImageView.Style.RECTANGLE)
-        else cropImageView.setFocusStyle(CropImageView.Style.CIRCLE)
+        cropImageView.focusWidth = focusWidth
+        cropImageView.focusHeight = focusHeight
+        if (isSaveRectangle) cropImageView.focusStyle = CropImageView.Style.RECTANGLE
+        else cropImageView.focusStyle = CropImageView.Style.CIRCLE
         //缩放图片
         cropPath?.let {
             val options = BitmapFactory.Options()
@@ -63,7 +63,7 @@ class ImageCropActivity : BaseActivity(), CropImageView.OnBitmapSaveListener {
             options.inJustDecodeBounds = false
             mBitmap = BitmapFactory.decodeFile(it, options)
             cropImageView.setImageBitmap(mBitmap)
-            cropImageView.setOnBitmapSaveCompleteListener(this@ImageCropActivity)
+            cropImageView.setOnBitmapSaveListener(this@ImageCropActivity)
         }
     }
 
