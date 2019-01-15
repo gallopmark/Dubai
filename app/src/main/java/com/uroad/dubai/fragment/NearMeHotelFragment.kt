@@ -49,7 +49,7 @@ class NearMeHotelFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
     }
 
     override fun initData() {
-        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.HOTEL.code, "", 1, 4))
+        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.HOTEL.code, "", 1, 4))
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {

@@ -9,9 +9,8 @@ import com.uroad.dubai.model.PoiSearchTextMDL
 import com.uroad.dubai.utils.GsonUtils
 import java.util.ArrayList
 
-class PoiSearchSource {
+class PoiSearchSource : DataSource() {
     companion object {
-        private const val POI_FILE = DataSource.POI_FILE
         private const val POI_KEY = "poi_key"
         private const val split = "✈"
 

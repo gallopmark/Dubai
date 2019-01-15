@@ -49,7 +49,7 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
 
 
     override fun initData() {
-        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", 1, 4))
+        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", 1, 4))
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {

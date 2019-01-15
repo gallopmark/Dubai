@@ -2,9 +2,8 @@ package com.uroad.dubai.local
 
 import android.content.Context
 
-class AppSource {
+class AppSource : DataSource() {
     companion object {
-        private const val APP_FILE = DataSource.APP_FILE
         private const val GUIDE_KEY = "isGuide"  //是否已经展现引导图
 
         private fun getSharedPreferences(context: Context) = context.getSharedPreferences(APP_FILE, Context.MODE_PRIVATE)

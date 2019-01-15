@@ -1,72 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="@dimen/space_10"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:padding="@dimen/space_10">
 
     <ImageView
         android:id="@+id/ivRoadsType"
-        android:src="@mipmap/icon_enent_type"
-        android:layout_marginLeft="@dimen/space_10"
         android:layout_width="@dimen/space_40"
-        android:layout_height="@dimen/space_50" />
+        android:layout_height="@dimen/space_50"
+        android:layout_marginLeft="@dimen/space_10"
+        android:src="@mipmap/icon_enent_type" />
 
     <TextView
         android:id="@+id/tvRoadsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space_10"
         android:layout_marginTop="@dimen/space_5"
-        android:text="Al Khail Road; Dubai-Hatta Highway"
+        android:layout_marginRight="@dimen/space_10"
+        android:layout_toEndOf="@+id/ivRoadsType"
         android:ellipsize="end"
         android:singleLine="true"
+        android:text="Al Khail Road; Dubai-Hatta Highway"
         android:textColor="@color/black"
-        android:textSize="@dimen/font_14"
-        android:layout_marginRight="@dimen/space_10"
-        android:layout_marginLeft="@dimen/space_10"
-        android:layout_toEndOf="@+id/ivRoadsType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="@dimen/font_14" />
 
     <TextView
         android:id="@+id/tvRoadsDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvRoadsTitle"
+        android:layout_alignStart="@+id/tvRoadsTitle"
+        android:layout_marginTop="@dimen/space_5"
         android:text="67.4km"
         android:textColor="@color/gary"
-        android:textSize="@dimen/font_12"
-        android:layout_marginTop="@dimen/space_5"
-        android:layout_alignStart="@+id/tvRoadsTitle"
-        android:layout_below="@+id/tvRoadsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="@dimen/font_12" />
 
     <TextView
         android:id="@+id/tvConstruction"
-        android:text="1"
-        android:layout_below="@+id/ivRoadsType"
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ivRoadsType"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/space_10"
         android:drawableStart="@mipmap/ic_event_construction"
         android:drawablePadding="@dimen/space_5"
-        android:layout_marginRight="@dimen/space_10"
         android:gravity="center"
+        android:text="1"
         android:textSize="@dimen/font_14" />
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_below="@+id/tvConstruction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvConstruction"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_10"
         android:layout_marginRight="@dimen/space_10"
-        android:layout_marginTop="@dimen/space_10" />
+        android:orientation="horizontal"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     <View
         android:id="@+id/vDivider"
-        android:layout_below="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_1"
-        android:layout_marginTop="@dimen/space_20"
+        android:layout_below="@+id/recyclerView"
         android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_20"
         android:layout_marginRight="@dimen/space_10"
         android:layout_marginBottom="@dimen/space_5"
         android:background="@color/itemDivider" />

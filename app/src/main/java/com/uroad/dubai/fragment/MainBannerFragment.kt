@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_mainbanner.*
 
 class MainBannerFragment : BasePresenterFragment<MainBannerPresenter>(), MainBannerView {
     private val handler = Handler()
-    override fun createPresenter(): MainBannerPresenter? = MainBannerPresenter(this)
+    override fun createPresenter(): MainBannerPresenter = MainBannerPresenter(this)
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainbanner)
@@ -28,7 +28,7 @@ class MainBannerFragment : BasePresenterFragment<MainBannerPresenter>(), MainBan
     }
 
     override fun initData() {
-        presenter?.getBanner()
+        presenter.getBanner()
     }
 
     override fun onGetBanner(list: MutableList<ScenicMDL>) {

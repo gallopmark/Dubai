@@ -6,14 +6,14 @@ import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
 
 abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseFragment(), BaseView {
-    open var presenter: P? = null
+    open lateinit var presenter: P
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter = createPresenter()
     }
 
-    abstract fun createPresenter(): P?
+    abstract fun createPresenter(): P
 
 
     override fun onShowLoading() {
@@ -29,7 +29,7 @@ abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseFragment(), Bas
     }
 
     override fun onDestroyView() {
-        presenter?.detachView()
+        presenter.detachView()
         super.onDestroyView()
     }
 }

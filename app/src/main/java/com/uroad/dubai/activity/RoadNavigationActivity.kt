@@ -1,23 +1,17 @@
 package com.uroad.dubai.activity
 
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
 import android.view.Gravity
-import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.constants.Style
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.style.expressions.Expression
 import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.library.utils.DisplayUtils
@@ -29,15 +23,9 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import com.mapbox.android.core.location.LocationEngine
-import com.mapbox.android.core.location.LocationEngineListener
-import com.mapbox.android.core.location.LocationEnginePriority
-import com.mapbox.android.core.location.LocationEngineProvider
-import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.annotations.Icon
@@ -52,13 +40,9 @@ import com.uroad.dubai.api.presenter.RoadNavigationPresenter
 import com.uroad.dubai.api.view.RoadNavigationView
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.common.DubaiApplication
-import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
-import com.uroad.dubai.local.DataSource
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
-import com.uroad.dubai.utils.SymbolGenerator
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.content_routepoisearch.*
 
@@ -95,12 +79,16 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     override fun setBaseMapBoxView(): Int = R.layout.activity_roadnavigation
 
     override fun onMapSetUp(savedInstanceState: Bundle?) {
-        statusHeight = DisplayUtils.getStatusHeight(this)
+        initSource()
         initView()
         initSearch()
         initLayer()
         initMenu()
-        presenter = RoadNavigationPresenter(this)
+    }
+
+    private fun initSource() {
+        statusHeight = DisplayUtils.getStatusHeight(this)
+        presenter = RoadNavigationPresenter(this, this)
     }
 
     private fun initView() {
@@ -383,20 +371,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
 
     private fun fill3DLayer() {
         fillExtrusionLayer?.let { layer -> mapBoxMap?.removeLayer(layer) }
-        fillExtrusionLayer = FillExtrusionLayer("3d-buildings", "composite").apply {
-            sourceLayer = "building"
-            filter = Expression.eq(Expression.get("extrude"), "true")
-            minZoom = 15f
-            setProperties(PropertyFactory.fillExtrusionColor(Color.LTGRAY),
-                    PropertyFactory.fillExtrusionHeight(Expression.interpolate(Expression.exponential(1f),
-                            Expression.zoom(),
-                            Expression.stop(15, Expression.literal(0)),
-                            Expression.stop(16, Expression.get("height")))),
-                    PropertyFactory.fillExtrusionBase(Expression.get("min_height")),
-                    PropertyFactory.fillExtrusionOpacity(0.9f)
-            )
-            mapBoxMap?.addLayer(this)
-        }
+        fillExtrusionLayer = presenter.get3DBuildingLayer().apply { mapBoxMap?.addLayer(this) }
     }
 
     /*satellite map*/
@@ -447,52 +422,11 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     override fun onMapAsync(mapBoxMap: MapboxMap) {
         isMapAsync = true
         mapBoxMap.setOnMarkerClickListener { marker ->
-            markerObjMap[marker.id]?.let { `object` -> onMarkerClick(marker, `object`) }
+            markerObjMap[marker.id]?.let { `object` -> presenter.onMarkerClick(marker, `object`) }
             return@setOnMarkerClickListener true
         }
         setCheckLayer()
 //        enableLocationComponent()
-    }
-
-    /*marker onClick*/
-    private fun onMarkerClick(marker: Marker, item: MapPointItem) {
-        marker.icon = IconFactory.getInstance(this).fromResource(item.getBigMarkerIcon())
-        if (item is ScenicMDL) {
-            DubaiApplication.clickItemScenic = item
-            openActivity(ScenicDetailActivity::class.java)
-            marker.icon = IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon())
-        } else {
-            var dialog: Dialog? = null
-            when (item) {
-                is EventsMDL -> dialog = EventsDetailDialog(this, item)
-                is ParkingMDL -> {
-                    dialog = ParkingDetailDialog(this, item).setOnNavigateListener(object : ParkingDetailDialog.OnNavigateListener {
-                        override fun onNavigate(mdl: ParkingMDL, dialog: ParkingDetailDialog) {
-
-                        }
-                    })
-                }
-                is CCTVSnapMDL -> dialog = CCTVSnapDetailDialog(this, item)
-                is DMSysMDL -> dialog = DMSDetailDialog(this, item)
-                is PoliceMDL -> {
-                    dialog = PoliceDetailDialog(this, item).setOnNavigateListener(object : PoliceDetailDialog.OnNavigateListener {
-                        override fun onNavigate(mdl: PoliceMDL, dialog: PoliceDetailDialog) {
-
-                        }
-                    })
-                }
-                is RWISMDL -> dialog = RWISDetailDialog(this, item)
-                is BusStopMDL -> {
-                    dialog = BusStopDetailDialog(this, item).setOnNavigateListener(object : BusStopDetailDialog.OnNavigateListener {
-                        override fun onNavigate(mdl: BusStopMDL, dialog: BusStopDetailDialog) {
-
-                        }
-                    })
-                }
-            }
-            dialog?.show()
-            dialog?.setOnDismissListener { marker.icon = IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()) }
-        }
     }
 
     override fun onDismissLocationPermission() {
@@ -553,60 +487,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun showMapPointByType(code: String) {
-        when (code) {
-            MapDataType.ACCIDENT.CODE -> {
-                val data = ArrayList<MapPointItem>().apply {
-                    addAll(DataSource.MapData.getAccident())
-                    addAll(DataSource.MapData.getConstruction())
-                }
-                showPoint(code, data)
-            }
-            MapDataType.CONSTRUCTION.CODE -> {
-            }
-            MapDataType.PARKING.CODE -> showPoint(code, DataSource.MapData.getParking())
-            MapDataType.CCTV.CODE -> showPoint(code, DataSource.MapData.getCCTV())
-            MapDataType.DMS.CODE -> showPoint(code, DataSource.MapData.getDMS())
-            MapDataType.POLICE.CODE -> showPoint(code, DataSource.MapData.getPolice())
-            MapDataType.WEATHER.CODE -> showWeather(code, DataSource.MapData.getWeather())
-            MapDataType.RWIS.CODE -> showPoint(code, DataSource.MapData.getRWIS())
-            MapDataType.BUS_STOP.CODE -> showPoint(code, DataSource.MapData.getBusStop())
-        }
-    }
-
-    private fun showPoint(code: String, data: MutableList<MapPointItem>) {
-        val markers = ArrayList<Marker>()
-        for (item in data) {
-            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
-            marker?.let {
-                markerObjMap[it.id] = item
-                markers.add(it)
-            }
-        }
-        markerMap[code] = markers
-    }
-
-    private fun showWeather(code: String, items: MutableList<MapPointItem>) {
-        val markers = ArrayList<Marker>()
-        for (item in items) {
-            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromBitmap(generate(item as WeatherMDL)), item.getLatLng()))
-            marker?.let { markers.add(it) }
-        }
-        markerMap[code] = markers
-    }
-
-    private fun generate(item: WeatherMDL): Bitmap {
-        val view = LayoutInflater.from(this).inflate(R.layout.content_map_weather, LinearLayout(this), false)
-        val tvCity = view.findViewById<TextView>(R.id.tvCity)
-        val tvTemperature = view.findViewById<TextView>(R.id.tvTemperature)
-        val ivWeather = view.findViewById<ImageView>(R.id.ivWeather)
-        tvCity.text = item.city
-        tvTemperature.text = item.temperature
-        ivWeather.setImageResource(R.mipmap.ic_weather_sun)
-        return SymbolGenerator.generate(view)
-    }
-
-    private fun createMarkerOptions(icon: Icon, latLng: LatLng): MarkerOptions {
-        return MarkerOptions().setIcon(icon).setPosition(latLng)
+        presenter.getMapPointByType(code)
     }
 
     private fun removePointFromMap(code: String) {
@@ -636,8 +517,45 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         showPoint(MapDataType.SCENIC.CODE, ArrayList<MapPointItem>().apply { addAll(data) })
     }
 
+    override fun onGetMapPoi(code: String, data: MutableList<MapPointItem>) {
+        if (code == MapDataType.WEATHER.CODE) {
+            showWeather(code, data)
+        } else {
+            showPoint(code, data)
+        }
+    }
+
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
         showShortToast(errorMsg)
+    }
+
+    private fun showPoint(code: String, data: MutableList<MapPointItem>) {
+        val markers = ArrayList<Marker>()
+        for (item in data) {
+            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
+            marker?.let {
+                markerObjMap[it.id] = item
+                markers.add(it)
+            }
+        }
+        markerMap[code] = markers
+    }
+
+    private fun showWeather(code: String, items: MutableList<MapPointItem>) {
+        val markers = ArrayList<Marker>()
+        for (item in items) {
+            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromBitmap(generate(item as WeatherMDL)), item.getLatLng()))
+            marker?.let { markers.add(it) }
+        }
+        markerMap[code] = markers
+    }
+
+    private fun generate(item: WeatherMDL): Bitmap {
+        return presenter.generateWeather(item)
+    }
+
+    private fun createMarkerOptions(icon: Icon, latLng: LatLng): MarkerOptions {
+        return MarkerOptions().setIcon(icon).setPosition(latLng)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

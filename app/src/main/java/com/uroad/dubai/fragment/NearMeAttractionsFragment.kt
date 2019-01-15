@@ -45,7 +45,7 @@ class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), 
     }
 
     override fun initData() {
-        presenter?.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
+        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
     }
 
     override fun onGetAttraction(attractions: MutableList<ScenicMDL>) {

@@ -26,7 +26,7 @@
         android:drawablePadding="@dimen/space_5"
         android:gravity="center"
         android:padding="@dimen/space_5"
-        android:text="@string/travel_menu_groups"
+        android:text="@string/more_menu_events"
         android:textColor="@color/color_66"
         android:textSize="@dimen/font_12"
         app:layout_constraintStart_toStartOf="parent"
