@@ -109,7 +109,6 @@ class MainFragment : BaseFragment() {
 
     private fun initNearBy() {
         rvNearByTab.isNestedScrollingEnabled = false
-        rvNearByTab.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
         val tabs = ArrayList<String>().apply {
             add(context.getString(R.string.nearMe_roads))
             add(context.getString(R.string.nearMe_events))

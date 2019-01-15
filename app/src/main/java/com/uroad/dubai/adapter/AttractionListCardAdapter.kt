@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.view.View
 import android.widget.RelativeLayout
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.uroad.dubai.R
@@ -13,27 +12,30 @@ import com.uroad.dubai.model.ScenicMDL
 import com.uroad.library.utils.DisplayUtils
 
 
-class AttractionListAdapter(context: Context, data: MutableList<ScenicMDL>)
+class AttractionListCardAdapter(context: Context, data: MutableList<ScenicMDL>, private val type: Int)
     : BaseArrayRecyclerAdapter<ScenicMDL>(context, data) {
-
-    private val imageWith = DisplayUtils.getWindowWidth(context) / 3
-    private val imageHeight = imageWith * 3 / 4
-    private val params = RelativeLayout.LayoutParams(imageWith, imageHeight).apply { addRule(RelativeLayout.CENTER_VERTICAL) }
+    private var imageWith = DisplayUtils.getWindowWidth(context) / 3
+    private var imageHeight = imageWith * 3 / 4
+    private var params = RelativeLayout.LayoutParams(imageWith, imageHeight).apply { addRule(RelativeLayout.CENTER_VERTICAL) }
     private val dp4 = DisplayUtils.dip2px(context, 4f)
     private val color66 = ContextCompat.getColor(context, R.color.color_66)
 
-    override fun bindView(viewType: Int): Int = R.layout.item_attraction
+    override fun bindView(viewType: Int): Int = if (type == 1)
+        R.layout.item_attractionlist_card else R.layout.item_attraction_card
 
     override fun onBindHoder(holder: RecyclerHolder, t: ScenicMDL, position: Int) {
-        holder.setLayoutParams(R.id.ivPic, params)
-        holder.displayImage(R.id.ivPic, t.headimg, R.color.color_f7, RoundedCorners(dp4))
-        holder.setText(R.id.tvTitle, t.title)
-        holder.setText(R.id.tvLocation, getLocation(t.address))
-        holder.setText(R.id.tvHours, getHours(t.hours))
-        if (position == itemCount - 1) {
-            holder.setVisibility(R.id.vDivider, View.GONE)
+        if (type == 1) {
+            holder.setLayoutParams(R.id.ivPic, params)
+            holder.displayImage(R.id.ivPic, t.headimg, R.color.color_f7, RoundedCorners(dp4))
+            holder.setText(R.id.tvTitle, t.title)
+            holder.setText(R.id.tvLocation, getLocation(t.address))
+            holder.setText(R.id.tvHours, getHours(t.hours))
         } else {
-            holder.setVisibility(R.id.vDivider, View.VISIBLE)
+            holder.displayImage(R.id.ivPic, t.headimg, R.color.color_f7)
+            holder.setText(R.id.tvTitle, t.title)
+            holder.setText(R.id.tvContent, t.content)
+            holder.setText(R.id.tvAddress, t.address)
+            holder.setText(R.id.tvDistance, t.distance)
         }
     }
 

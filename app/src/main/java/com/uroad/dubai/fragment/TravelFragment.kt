@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
-import com.uroad.dubai.adapter.AttractionCardAdapter
+import com.uroad.dubai.adapter.AttractionListCardAdapter
 import com.uroad.dubai.api.presenter.AttractionPresenter
 import com.uroad.dubai.api.view.AttractionView
 import com.uroad.dubai.common.BasePresenterFragment
@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.travel_content_menu.*
 class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionView {
 
     private val data = ArrayList<ScenicMDL>()
-    private lateinit var adapter: AttractionCardAdapter
+    private lateinit var adapter: AttractionListCardAdapter
     private val handler = Handler()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
@@ -95,7 +95,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
-        adapter = AttractionCardAdapter(context, data).apply {
+        adapter = AttractionListCardAdapter(context, data, 2).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                     if (position in 0 until data.size) {

@@ -3,16 +3,19 @@ package com.uroad.dubai.fragment
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.adapter.RoadsNearFmListAdapter
+import com.uroad.dubai.adapter.RoadsListCardAdapter
 import com.uroad.dubai.api.presenter.RoadsNearFMPresenter
 import com.uroad.dubai.api.view.RoadsNearFMView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.RoadsMDL
 import com.uroad.dubai.webService.WebApi
+import com.uroad.library.decoration.ItemDecoration
+import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
 class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), RoadsNearFMView {
@@ -20,7 +23,7 @@ class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), Roads
     override fun createPresenter(): RoadsNearFMPresenter = RoadsNearFMPresenter(this)
 
     private val data = ArrayList<RoadsMDL>()
-    private lateinit var adapter: RoadsNearFmListAdapter
+    private lateinit var cardAdapter: RoadsListCardAdapter
     private val handler = Handler()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
@@ -30,9 +33,9 @@ class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), Roads
 
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
-        recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
-        adapter = RoadsNearFmListAdapter(context, data)
-        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
+        cardAdapter = RoadsListCardAdapter(context, data)
+        recyclerView.adapter = cardAdapter
     }
 
     override fun initData() {
@@ -43,6 +46,8 @@ class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), Roads
         data.clear()
         data.addAll(list)
         data.forEach {
+            it.content = "Dubai to ABU dhabi"
+            it.distance = "3.2km"
             it.colors = ArrayList<Int>().apply {
                 add(Color.parseColor("#06A72B"))
                 add(Color.parseColor("#ED1C24"))
@@ -61,7 +66,7 @@ class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), Roads
                 add(Color.parseColor("#06A72B"))
             }
         }
-        adapter.notifyDataSetChanged()
+        cardAdapter.notifyDataSetChanged()
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {

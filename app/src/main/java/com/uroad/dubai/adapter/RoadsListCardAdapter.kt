@@ -8,14 +8,13 @@ import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.RoadsMDL
 import com.uroad.library.utils.DisplayUtils
 
-class NearMeRoadsAdapter(private val context: Context, data: MutableList<RoadsMDL>)
+class RoadsListCardAdapter(private val context: Context, data: MutableList<RoadsMDL>)
     : BaseArrayRecyclerAdapter<RoadsMDL>(context, data) {
-
-    override fun bindView(viewType: Int): Int = R.layout.item_nearmeroads
+    override fun bindView(viewType: Int): Int = R.layout.item_roadslist_card
 
     override fun onBindHoder(holder: RecyclerHolder, t: RoadsMDL, position: Int) {
-        holder.setImageResource(R.id.ivIcon, t.iconInt)
-        holder.setText(R.id.tvTitle, t.title)
+        holder.displayImage(R.id.ivIcon, t.icon)
+        holder.setText(R.id.tvTitle, t.roadname)
         holder.setText(R.id.tvContent, t.content)
         holder.setText(R.id.tvEventInfo, "Event Info")
         holder.setText(R.id.tvConstruction, "1")

@@ -5,6 +5,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.enumeration.MapDataType
 
 class EventsMDL : MapPointItem {
+    var iconInt: Int = 0
     var subscribestatus: Int? = 0
     var latitude: Double? = 0.0
     var longitude: Double? = 0.0
