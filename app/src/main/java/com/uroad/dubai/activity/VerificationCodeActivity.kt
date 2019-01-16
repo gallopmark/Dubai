@@ -32,7 +32,8 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
         init()
     }
 
-    override fun onInputFinish(text: String?) {
+    @SuppressLint("NewApi")
+    override fun onInputFinish(text: String) {
         if (TextUtils.equals(text,"123456") && isCreateNewAccount){
             UserPreferenceHelper.saveAccount(this@VerificationCodeActivity, this.phone!!)
             UserPreferenceHelper.login(this@VerificationCodeActivity)
@@ -41,8 +42,14 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
         }
         else
             hasContent = TextUtils.equals(text,"123456")
+
+        if (btnVerify.visibility == View.VISIBLE && !btnVerify.isEnabled){
+            btnVerify.isEnabled = true
+            btnVerify.background = getDrawable(R.drawable.selector_verify_btn_bg)
+        }
     }
 
+    @SuppressLint("NewApi")
     private fun init() {
         intent.extras?.let {
             isCreateNewAccount = it.getBoolean("isCreate", false)
@@ -53,13 +60,14 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
         edVerify.setOnInputFinish(this@VerificationCodeActivity)
         if (isCreateNewAccount) btnVerify.visibility = View.GONE
         btnVerify.setOnClickListener {
-            if (hasContent){
+            if (hasContent && edVerify.condition()){
                 openActivity(CreatePasswordActivity::class.java)
                 finish()
             }
         }
+        btnVerify.isEnabled = false
+        btnVerify.background = getDrawable(R.drawable.shape_btn_bg_not_enabled)
         interval(1000)
-
     }
 
     private fun interval(milliseconds : Long){

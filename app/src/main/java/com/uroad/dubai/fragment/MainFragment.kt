@@ -1,19 +1,19 @@
 package com.uroad.dubai.fragment
 
+import android.app.SearchManager
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.MoreActivity
-import com.uroad.dubai.activity.NewsListActivity
-import com.uroad.dubai.activity.RoadNavigationActivity
-import com.uroad.dubai.activity.RoadsListActivity
+import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.FavoritesAdapter
 import com.uroad.dubai.adapter.NearMeTabAdapter
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.content_mainnearby.*
@@ -69,8 +69,14 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initMenu() {
-        ivMessage.setOnClickListener { }
-        ivMessageColl.setOnClickListener { }
+        ivMessage.setOnClickListener {
+            if (check()) return@setOnClickListener
+            openActivity(MessagesListActivity::class.java)
+        }
+        ivMessageColl.setOnClickListener {
+            if (check()) return@setOnClickListener
+            openActivity(MessagesListActivity::class.java)
+        }
         ivSearch.setOnClickListener { }
         ivSearchColl.setOnClickListener { }
         tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
@@ -163,5 +169,22 @@ class MainFragment : BaseFragment() {
         flNearMeHotel.visibility = View.GONE
         flNearMeRestaurants.visibility = View.GONE
         flNearMeAttractions.visibility = View.GONE
+    }
+
+    private fun check() : Boolean{
+        if (!UserPreferenceHelper.isLogin(context)){
+            openActivity(LoginActivity::class.java)
+            return true
+        }
+        return false
+    }
+
+    private fun sendEmail(){
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "message/rfc822"
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("Test@dubai.com"))
+        intent.putExtra(Intent.EXTRA_SUBJECT,"Your suggestion")
+        intent.putExtra(Intent.EXTRA_TEXT,"We hope to get your advice.")
+        context.startActivity(Intent.createChooser(intent,"Select email application."))
     }
 }
