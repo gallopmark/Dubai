@@ -13,9 +13,8 @@ class PinLoginActivity : BaseActivity(){
 
     var phone : String = ""
 
-    @SuppressLint("NewApi")
     override fun setUp(savedInstanceState: Bundle?) {
-        baseToolbar.navigationIcon = getDrawable(R.mipmap.icon_finish)
+        baseToolbar.navigationIcon = drawable(R.mipmap.icon_finish)
         setBaseContentView(R.layout.activity_pin_login,true)
         withOption(getString(R.string.password_login), onClickListener = View.OnClickListener {
             finish()
@@ -23,7 +22,7 @@ class PinLoginActivity : BaseActivity(){
 
         btnLogin.setOnClickListener {
             phone = edPhone.text.toString().trim()
-            if (phone.isEmpty()) return@setOnClickListener
+            if (phone.isEmpty()) phone = "123"//return@setOnClickListener
 
             openActivity(VerificationCodeActivity::class.java,Bundle().apply {
                 putBoolean("isCreate",true)

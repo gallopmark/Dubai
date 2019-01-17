@@ -28,10 +28,11 @@
                 android:layout_weight="1"
                 android:text="Emma"
                 android:textColor="@color/white"
-                android:textSize="@dimen/font_24"
-                android:textStyle="bold" />
+                android:textSize="@dimen/font_26"
+                android:textStyle="normal" />
 
             <ImageView
+                android:id="@+id/ivUserHead"
                 android:layout_width="@dimen/space_80"
                 android:layout_height="@dimen/space_80"
                 android:layout_gravity="center"
