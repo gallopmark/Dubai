@@ -31,7 +31,7 @@ class WeatherActivity : BaseActivity() ,WeatherView {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
-        withOption(getDrawable(R.mipmap.icon_clock), "${repair(hour)}:${repair(minute)}",6,
+        withOption(drawable(R.mipmap.icon_clock), "${repair(hour)}:${repair(minute)}",6,
                 onClickListener = View.OnClickListener {})
         setBaseContentView(R.layout.activity_weather,true)
     }
@@ -60,7 +60,7 @@ class WeatherActivity : BaseActivity() ,WeatherView {
         data.add(mdl)
     }
 
-    @SuppressLint("LogNotTimber", "NewApi")
+    @SuppressLint("LogNotTimber")
     override fun onGetNewList(mdl: WeatherMDL?) {
         mdl?.let {
             data.clear()
@@ -75,7 +75,7 @@ class WeatherActivity : BaseActivity() ,WeatherView {
                 val wd = ((maximum?.Value!! /*+ minimum?.Value!!*/ -32)/1.8f )
                 tvTemperature.text = changeDouble(wd).toString()
                 tvTime.text = phrase
-                ivWeather.setImageDrawable(getDrawable(R.mipmap.icon_cloudy))
+                ivWeather.setImageDrawable(drawable(R.mipmap.icon_cloudy))
 
             }
             adapter.notifyDataSetChanged()

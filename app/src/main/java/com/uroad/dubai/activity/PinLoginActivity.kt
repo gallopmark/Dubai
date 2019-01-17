@@ -13,9 +13,8 @@ class PinLoginActivity : BaseActivity(){
 
     var phone : String = ""
 
-    @SuppressLint("NewApi")
     override fun setUp(savedInstanceState: Bundle?) {
-        baseToolbar.navigationIcon = getDrawable(R.mipmap.icon_finish)
+        baseToolbar.navigationIcon = drawable(R.mipmap.icon_finish)
         setBaseContentView(R.layout.activity_pin_login,true)
         withOption(getString(R.string.password_login), onClickListener = View.OnClickListener {
             finish()

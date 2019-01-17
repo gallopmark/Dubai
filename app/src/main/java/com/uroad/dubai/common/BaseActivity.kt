@@ -1,5 +1,8 @@
 package com.uroad.dubai.common
 
+import android.support.annotation.IntegerRes
+import android.support.annotation.RawRes
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -69,4 +72,7 @@ abstract class BaseActivity : BaseLucaActivity() {
         mLoadingDialog?.dismiss()
         super.onDestroy()
     }
+
+    open fun drawable(id : Int) = ContextCompat.getDrawable(this@BaseActivity, id)
+
 }

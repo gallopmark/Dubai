@@ -22,9 +22,8 @@ class LoginActivity : BaseActivity() {
     private var password : String? = ""
     private var isInvisible : Boolean = false
 
-    @SuppressLint("NewApi")
     override fun setUp(savedInstanceState: Bundle?) {
-        baseToolbar.navigationIcon = getDrawable(R.mipmap.icon_finish)
+        baseToolbar.navigationIcon = drawable(R.mipmap.icon_finish)
         setBaseContentView(R.layout.activity_login,true)
         withOption(getString(R.string.pin_login), onClickListener = View.OnClickListener {
             openActivity(PinLoginActivity::class.java)
@@ -34,16 +33,15 @@ class LoginActivity : BaseActivity() {
         login()
     }
 
-    @SuppressLint("NewApi")
     private fun initView() {
         ivInvisible.setOnClickListener {
             isInvisible = !isInvisible
             if (isInvisible) {
                 edPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                ivInvisible.setImageDrawable(getDrawable(R.mipmap.icon_visual))
+                ivInvisible.setImageDrawable(drawable(R.mipmap.icon_visual))
             } else {
                 edPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                ivInvisible.setImageDrawable(getDrawable(R.mipmap.icon_invisible))
+                ivInvisible.setImageDrawable(drawable(R.mipmap.icon_invisible))
             }
             edPassword.setSelection(edPassword.text.length)
         }

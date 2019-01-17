@@ -32,7 +32,6 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
         init()
     }
 
-    @SuppressLint("NewApi")
     override fun onInputFinish(text: String) {
         if (TextUtils.equals(text,"123456") && isCreateNewAccount){
             UserPreferenceHelper.saveAccount(this@VerificationCodeActivity, this.phone!!)
@@ -45,11 +44,10 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
 
         if (btnVerify.visibility == View.VISIBLE && !btnVerify.isEnabled){
             btnVerify.isEnabled = true
-            btnVerify.background = getDrawable(R.drawable.selector_verify_btn_bg)
+            btnVerify.background = drawable(R.drawable.selector_verify_btn_bg)
         }
     }
 
-    @SuppressLint("NewApi")
     private fun init() {
         intent.extras?.let {
             isCreateNewAccount = it.getBoolean("isCreate", false)
@@ -66,7 +64,7 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
             }
         }
         btnVerify.isEnabled = false
-        btnVerify.background = getDrawable(R.drawable.shape_btn_bg_not_enabled)
+        btnVerify.background = drawable(R.drawable.shape_btn_bg_not_enabled)
         interval(1000)
     }
 
