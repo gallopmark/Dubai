@@ -26,7 +26,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.annotations.Icon
 import com.mapbox.mapboxsdk.annotations.IconFactory
@@ -37,8 +36,8 @@ import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
 import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.api.presenter.RoadNavigationPresenter
+import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RoadNavigationView
-import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.PoiSearchSource
@@ -52,7 +51,7 @@ import kotlinx.android.synthetic.main.content_routepoisearch.*
  * @create 2018/12/18
  * @describe Road navigation
  */
-class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, RouteNavigationView {
+class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, PoiSearchView {
     private var statusHeight = 0
     private var isMapAsync = false
     private var fillExtrusionLayer: FillExtrusionLayer? = null
@@ -66,7 +65,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     private val poiData = ArrayList<CarmenFeature>()
     private lateinit var poiAdapter: PoiSearchAdapter
     private val historyData = ArrayList<MultiItem>()
-    private lateinit var histotyAdapter: PoiSearchHistoryAdapter
+    private lateinit var historyAdapter: PoiSearchHistoryAdapter
 
     companion object {
         private const val TYPE_DEFAULT = "default"
@@ -176,40 +175,36 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun initRvPoi() {
-        poiAdapter = PoiSearchAdapter(this, poiData).apply {
-            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    if (position in 0 until poiData.size) {
-                        PoiSearchSource.saveContent(this@RoadNavigationActivity, poiData[position].toJson())
-                        onSelectCarmenFeature(poiData[position])
-                    }
+        poiAdapter = poiPresenter.getPoiSearchAdapter(poiData, object : BaseRecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                if (position in 0 until poiData.size) {
+                    PoiSearchSource.saveContent(this@RoadNavigationActivity, poiData[position].toJson())
+                    onSelectCarmenFeature(poiData[position])
                 }
-            })
-        }
+            }
+        })
         rvPoi.adapter = poiAdapter
     }
 
     /*Initialization Historical Search Records*/
     private fun initHistory() {
-        histotyAdapter = PoiSearchHistoryAdapter(this, historyData).apply {
-            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    if (position in 0 until historyData.size) {
-                        val item = historyData[position]
-                        val itemType = item.getItemType()
-                        if (itemType == 1) {
-                            val mdl = item as PoiSearchTextMDL
-                            etSearch.setText(mdl.content)
-                            etSearch.setSelection(etSearch.text.length)
-                        } else {
-                            val mdl = item as PoiSearchPoiMDL
-                            onSelectCarmenFeature(mdl.carmenFeature)
-                        }
+        historyAdapter = poiPresenter.getPoiSearchHistoryAdapter(historyData, object : BaseRecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                if (position in 0 until historyData.size) {
+                    val item = historyData[position]
+                    val itemType = item.getItemType()
+                    if (itemType == 1) {
+                        val mdl = item as PoiSearchTextMDL
+                        etSearch.setText(mdl.content)
+                        etSearch.setSelection(etSearch.text.length)
+                    } else {
+                        val mdl = item as PoiSearchPoiMDL
+                        onSelectCarmenFeature(mdl.carmenFeature)
                     }
                 }
-            })
-        }
-        rvHistory.adapter = histotyAdapter
+            }
+        })
+        rvHistory.adapter = historyAdapter
         showHistory()
     }
 
@@ -222,7 +217,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         if (list.size > 0) {
             historyData.clear()
             historyData.addAll(list)
-            histotyAdapter.notifyDataSetChanged()
+            historyAdapter.notifyDataSetChanged()
             cvHistory.visibility = View.VISIBLE
         } else {
             cvHistory.visibility = View.GONE
@@ -272,9 +267,6 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
             poiAdapter.notifyDataSetChanged()
             rvPoi.visibility = View.VISIBLE
         }
-    }
-
-    override fun onNavigationRoutes(routes: MutableList<DirectionsRoute>?) {
     }
 
     private fun changeTrafficLayer(isChecked: Boolean) {

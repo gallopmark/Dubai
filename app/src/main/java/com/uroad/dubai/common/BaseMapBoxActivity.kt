@@ -36,6 +36,10 @@ abstract class BaseMapBoxActivity : BaseActivity(), LocationEngineListener, Perm
         }
     }
 
+    fun initMap(){
+
+    }
+
     open fun setDefaultValue(mapBoxMap: MapboxMap) {
         val position = CameraPosition.Builder()
                 .target(DubaiApplication.DEFAULT_LATLNG)

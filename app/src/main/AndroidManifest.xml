@@ -38,6 +38,10 @@
             android:name=".activity.RoadNavigationActivity"
             android:launchMode="singleTop"
             android:theme="@style/TranslucentTheme" />
+        <!--  <activity
+              android:name=".activity.RoadNavigationV7Activity"
+              android:launchMode="singleTop"
+              android:theme="@style/TranslucentTheme" />-->
         <activity
             android:name=".activity.NewsListActivity"
             android:launchMode="singleTop" />
@@ -126,6 +130,9 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.GroupsInviteActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.MapNavigationActivity"
             android:launchMode="singleTop" />
 
         <!--photopicker-->

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.dialog.WelcomeDialog
 import com.uroad.dubai.fragment.MainFragment
 import com.uroad.dubai.fragment.MineFragment
 import com.uroad.dubai.fragment.TravelFragment
+import com.uroad.dubai.local.AppSource
 
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,6 +24,7 @@ class MainActivity : BaseActivity() {
         requestWindowFullScreen()
         setBaseContentViewWithoutTitle(R.layout.activity_main, true)
         initTab()
+        onWelcome()
     }
 
     private fun initTab() {
@@ -69,5 +72,12 @@ class MainActivity : BaseActivity() {
 
     private fun hideFragments(transaction: FragmentTransaction) {
         for (fragment in supportFragmentManager.fragments) transaction.hide(fragment)
+    }
+
+    private fun onWelcome() {
+        if (!AppSource.isWelcome(this)) {
+            WelcomeDialog(this).show()
+            AppSource.saveWelcome(this)
+        }
     }
 }

@@ -18,6 +18,8 @@
     <string name="selected">Selected</string>
     <string name="home">Home</string>
     <string name="openSettings">Open Settings</string>
+    <string name="exit">Exit</string>
+    <string name="ok">OK</string>
 
     <string name="home_menu_navigation">Navigation</string>
     <string name="home_menu_roads">Roads</string>

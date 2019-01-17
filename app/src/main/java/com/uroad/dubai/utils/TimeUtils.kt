@@ -41,7 +41,7 @@ class TimeUtils {
         }
 
         fun convertSecond2Min(second: Int): String {
-            if (second < 60) return "$second"
+            if (second < 60) return "${second}s"
             return "${second / 60}mins"
         }
     }

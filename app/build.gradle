@@ -67,6 +67,7 @@ dependencies {
     implementation project(':OkHttpLib')
     implementation project(':ImageLoader')
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:6.8.1') {
         exclude group: 'group_name', module: 'module_name'
     }

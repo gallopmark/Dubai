@@ -1,5 +1,6 @@
 package com.uroad.dubai.api.presenter
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -14,11 +15,13 @@ import android.widget.PopupWindow
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.MapboxDirections
 import com.mapbox.api.directions.v5.models.DirectionsResponse
+import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.CarmenFeatureAdapter
+import com.uroad.dubai.adapter.DirectionsRouteAdapter
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.view.RouteNavigationView
@@ -31,12 +34,7 @@ class RouteNavigationPresenter(private val context: Context,
                                private val naviView: RouteNavigationView)
     : BasePresenter<RouteNavigationView>(naviView) {
 
-    private val presenter = PoiSearchPresenter(context, naviView)
     private var directions: MapboxDirections? = null
-
-    fun doPoiSearch(content: String): MapboxGeocoding {
-        return presenter.doPoiSearch(content)
-    }
 
     fun getRoutes(origin: Point, destination: Point, profile: String) {
         naviView.onShowLoading()
@@ -101,6 +99,10 @@ class RouteNavigationPresenter(private val context: Context,
             })
         }
         return popupWindow
+    }
+
+    fun getDirectionsRouteAdapter(context: Activity, routes: MutableList<DirectionsRoute>, onItemSelectedListener: DirectionsRouteAdapter.OnItemSelectedListener): DirectionsRouteAdapter {
+        return DirectionsRouteAdapter(context, routes).apply { setOnItemSelectedListener(onItemSelectedListener) }
     }
 
     override fun detachView() {

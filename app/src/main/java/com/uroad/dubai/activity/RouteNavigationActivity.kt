@@ -1,23 +1,21 @@
 package com.uroad.dubai.activity
 
-import android.app.Activity
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.text.SpannableString
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.text.style.AbsoluteSizeSpan
+import android.view.KeyEvent
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.PopupWindow
+import android.view.inputmethod.EditorInfo
+import android.widget.RelativeLayout
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsRoute
-import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.Marker
@@ -29,35 +27,42 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
 import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseArrayRecyclerAdapter
+import com.uroad.dubai.adapter.DirectionsRouteAdapter
+import com.uroad.dubai.adapter.PoiSearchAdapter
+import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
+import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.utils.TimeUtils
-import com.uroad.dubai.utils.Utils
 import com.uroad.dubai.api.presenter.RouteNavigationPresenter
+import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RouteNavigationView
+import com.uroad.dubai.local.PoiSearchSource
+import com.uroad.dubai.model.MultiItem
+import com.uroad.dubai.model.PoiSearchPoiMDL
+import com.uroad.dubai.model.PoiSearchTextMDL
 import com.uroad.dubai.widget.AppCompatNavigationMapRoute
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.activity_routenavigation.*
+import kotlinx.android.synthetic.main.content_routenavigation.*
+import kotlinx.android.synthetic.main.content_routepoisearch.*
 
 /**
  * @author MFB
  * @create 2018/12/22
  * @describe route navigation
  */
-class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView {
+class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView, PoiSearchView {
 
     private var startPoint: Point? = null
     private var endPoint: Point? = null
-    private var isFirstSetText = false
-    private var isStartSetText = false
-    private var startKey: String? = ""
-    private var isEndSetText = false
-    private var endKey: String? = ""
-    private var startGeoClient: MapboxGeocoding? = null
-    private var endGeoClient: MapboxGeocoding? = null
-    private var popupWindow: PopupWindow? = null
+    private var poiKey: String? = ""
+    private val poiData = ArrayList<CarmenFeature>()
+    private lateinit var poiAdapter: PoiSearchAdapter
+    private val historyData = ArrayList<MultiItem>()
+    private lateinit var historyAdapter: PoiSearchHistoryAdapter
+    private lateinit var poiPresenter: PoiSearchPresenter
+    private var poiType = 1
     private var profile = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
     private var originMarker: Marker? = null
     private var destinationMarker: Marker? = null
@@ -66,13 +71,13 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var routePresenter: RouteNavigationPresenter
     private var isRouteNavigation = false
-    private var inputType = 1
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
-        ivBack.setOnClickListener { onBackPressed() }
+        ivBackIM.setOnClickListener { onBackPressed() }
         routePresenter = RouteNavigationPresenter(this, this)
-        initPoiSearchView()
+        initPoiTextView()
+        initSearch()
         initChangePoi()
         initProfileRg()
         initRoutesRv()
@@ -80,90 +85,187 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         initNavigation()
     }
 
-    private fun initPoiSearchView() {
-        etStartPoint.clearFocus()
-        etStartPoint.addTextChangedListener(InputWatcher(1))
-        etEndPoint.addTextChangedListener(InputWatcher(2))
+    private fun initPoiTextView() {
+        tvStartPoint.setOnClickListener {
+            poiType = 1
+            onShowSearchContent()
+        }
+        tvEndPoint.setOnClickListener {
+            poiType = 2
+            onShowSearchContent()
+        }
         val carmen = intent.extras?.getString("destination")
         carmen?.let {
             val feature = CarmenFeature.fromJson(it)
             endPoint = feature.center()
-            isEndSetText = true
-            etEndPoint.setText(feature.placeName())
-            etEndPoint.setSelection(etEndPoint.text.length)
+            tvEndPoint.text = feature.placeName()
             startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
         }
     }
 
-    private inner class InputWatcher(private val type: Int) : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-
-        }
-
-        override fun onTextChanged(cs: CharSequence, p1: Int, p2: Int, p3: Int) {
-            val content = cs.toString()
-            if (TextUtils.isEmpty(content)) resetWhenTextEmpty(type)
-            else handleWhenInput(type, content)
-        }
-
-        override fun beforeTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        }
+    private fun initSearch() {
+        poiPresenter = PoiSearchPresenter(this, this)
+        contentSearch.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+        ivBack.setOnClickListener { onInitialState() }
+        cvSearch.layoutParams = (cvSearch.layoutParams as RelativeLayout.LayoutParams)
+        llHome.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        llWork.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        initEtSearch()
+        initRvPoi()
+        initHistory()
     }
 
-    private fun resetWhenTextEmpty(type: Int) {
-        when (type) {
-            1 -> {
-                startPoint = null
-                handler.removeCallbacks(startPoiRunnable)
+    /*add search imeOption*/
+    private fun initEtSearch() {
+        etSearch.inputType = EditorInfo.TYPE_CLASS_TEXT
+        etSearch.imeOptions = EditorInfo.IME_ACTION_SEARCH
+        etSearch.clearFocus()
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            /*when click search button save content*/
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val content = etSearch.text.toString()
+                if (!TextUtils.isEmpty(content)) {
+                    PoiSearchSource.saveContent(this@RouteNavigationActivity, content)
+                    handleWhenInput(content)
+                }
             }
-            else -> {
-                endPoint = null
-                handler.removeCallbacks(endPoiRunnable)
-            }
+            return@setOnEditorActionListener true
         }
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
+
+            }
+
+            override fun onTextChanged(cs: CharSequence, p1: Int, p2: Int, p3: Int) {
+                val content = cs.toString()
+                if (TextUtils.isEmpty(content)) {
+                    whenContentEmpty()
+                } else {
+                    whenContentFill()
+                    handleWhenInput(content)
+                }
+            }
+
+            override fun beforeTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
     }
 
-    private fun handleWhenInput(type: Int, content: String?) {
-        when (type) {
-            1 -> {
-                when {
-                    isFirstSetText -> isFirstSetText = false
-                    isStartSetText -> isStartSetText = false
-                    else -> {
-                        startPoint = null
-                        startKey = content
-                        handler.removeCallbacks(startPoiRunnable)
-                        handler.postDelayed(startPoiRunnable, 500)
+    /*when etSearch content empty*/
+    private fun whenContentEmpty() {
+        if (tvSearchTips.visibility != View.VISIBLE) tvSearchTips.visibility = View.VISIBLE
+        showHistory()
+        removeRunnable()
+    }
+
+    /*when etSearch fill content*/
+    private fun whenContentFill() {
+        if (tvSearchTips.visibility != View.GONE) tvSearchTips.visibility = View.GONE
+        if (cvHistory.visibility != View.GONE) cvHistory.visibility = View.GONE
+    }
+
+    private fun initRvPoi() {
+        poiAdapter = poiPresenter.getPoiSearchAdapter(poiData, object : BaseRecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                if (position in 0 until poiData.size) {
+                    PoiSearchSource.saveContent(this@RouteNavigationActivity, poiData[position].toJson())
+                    onSelectCarmenFeature(poiData[position])
+                }
+            }
+        })
+        rvPoi.adapter = poiAdapter
+    }
+
+    /*Initialization Historical Search Records*/
+    private fun initHistory() {
+        historyAdapter = poiPresenter.getPoiSearchHistoryAdapter(historyData, object : BaseRecyclerAdapter.OnItemClickListener {
+            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                if (position in 0 until historyData.size) {
+                    val item = historyData[position]
+                    val itemType = item.getItemType()
+                    if (itemType == 1) {
+                        val mdl = item as PoiSearchTextMDL
+                        etSearch.setText(mdl.content)
+                        etSearch.setSelection(etSearch.text.length)
+                    } else {
+                        val mdl = item as PoiSearchPoiMDL
+                        onSelectCarmenFeature(mdl.carmenFeature)
                     }
                 }
             }
-            else -> {
-                when {
-                    isEndSetText -> isEndSetText = false
-                    else -> {
-                        endPoint = null
-                        endKey = content
-                        handler.removeCallbacks(endPoiRunnable)
-                        handler.postDelayed(endPoiRunnable, 500)
-                    }
-                }
-            }
+        })
+        rvHistory.adapter = historyAdapter
+        showHistory()
+    }
+
+    private fun onSelectCarmenFeature(carmenFeature: CarmenFeature?) {
+        if (poiType == 1) {
+            startPoint = carmenFeature?.center()
+            tvStartPoint.text = carmenFeature?.placeName()
+        } else {
+            endPoint = carmenFeature?.center()
+            tvEndPoint.text = carmenFeature?.placeName()
+        }
+        onInitialState()
+        startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+    }
+
+    private fun showHistory() {
+        val list = PoiSearchSource.getHistoryList(this)
+        if (list.size > 0) {
+            historyData.clear()
+            historyData.addAll(list)
+            historyAdapter.notifyDataSetChanged()
+            cvHistory.visibility = View.VISIBLE
+        } else {
+            cvHistory.visibility = View.GONE
+        }
+        tvClearHistory.setOnClickListener {
+            PoiSearchSource.clear(this)
+            showHistory()
         }
     }
+
+    private fun onInitialState() {
+        contentSearch.visibility = View.GONE
+        rvPoi.visibility = View.GONE
+        etSearch.text = null
+        etSearch.clearFocus()
+        InputMethodUtils.hideSoftInput(this, etSearch)
+    }
+
+    private fun onShowSearchContent() {
+        contentSearch.visibility = View.VISIBLE
+        etSearch.requestFocus()
+        InputMethodUtils.showSoftInput(this, etSearch)
+    }
+
+    private fun removeRunnable() {
+        handler.removeCallbacks(poiSearchRun)
+        rvPoi.visibility = View.GONE
+    }
+
+    private fun handleWhenInput(content: String) {
+        removeRunnable()
+        poiKey = content
+        handler.postDelayed(poiSearchRun, 500)
+    }
+
+    private val poiSearchRun = Runnable {
+        poiPresenter.cancelCall()
+        poiKey?.let { poiPresenter.doPoiSearch(it) }
+    }
+
 
     /*Exchange starting point and end poi*/
     private fun initChangePoi() {
         ivChange.setOnClickListener {
-            isStartSetText = true
-            isEndSetText = true
             val temp = startPoint
             startPoint = endPoint
             endPoint = temp
-            val tempText = etStartPoint.text
-            etStartPoint.text = etEndPoint.text
-            etEndPoint.text = tempText
-            etStartPoint.setSelection(etStartPoint.text.length)
-            etEndPoint.setSelection(etEndPoint.text.length)
+            val tempText = tvStartPoint.text
+            tvStartPoint.text = tvEndPoint.text
+            tvEndPoint.text = tempText
             startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
         }
     }
@@ -191,12 +293,13 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         tvNavigation.setOnClickListener {
             selectedRoute?.let { route ->
                 // Create a NavigationLauncherOptions object to package everything together
-                val options = NavigationLauncherOptions.builder()
-                        .directionsRoute(route)
-                        .shouldSimulateRoute(true)
-                        .build()
-                // Call this method with Context from within an Activity
-                NavigationLauncher.startNavigation(this, options)
+//                val options = NavigationLauncherOptions.builder()
+//                        .directionsRoute(route)
+//                        .shouldSimulateRoute(true)
+//                        .build()
+//                // Call this method with Context from within an Activity
+//                NavigationLauncher.startNavigation(this, options)
+                openActivity(MapNavigationActivity::class.java, Bundle().apply { putString("route", route.toJson()) })
             }
         }
     }
@@ -219,43 +322,17 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
 
     private fun moveToUserLocation(location: Location) {
         startPoint = Point.fromLngLat(location.longitude, location.latitude)
-        isFirstSetText = true
-        etStartPoint.setText(getString(R.string.route_myLocation))
-        etStartPoint.setSelection(etStartPoint.text.length)
-        etStartPoint.clearFocus()
+        tvStartPoint.text = getString(R.string.route_myLocation)
         startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
     }
 
-    private val startPoiRunnable = Runnable {
-        cancelStartSearch()
-        startKey?.let { enqueueCall(it, 1) }
-    }
-
-    /*cancel start poi search*/
-    private fun cancelStartSearch() {
-        startGeoClient?.cancelCall()
-        popupWindow?.let {
-            it.dismiss()
-            popupWindow = null
-        }
-    }
-
-    private val endPoiRunnable = Runnable {
-        cancelEndSearch()
-        endKey?.let { enqueueCall(it, 2) }
-    }
-
-    /*cancel end poi search*/
-    private fun cancelEndSearch() {
-        endGeoClient?.cancelCall()
-        popupWindow?.let {
-            it.dismiss()
-            popupWindow = null
-        }
-    }
-
     override fun onPoiResult(features: MutableList<CarmenFeature>) {
-        showPopupWindow(features)
+        if (features.size > 0) {
+            this.poiData.clear()
+            this.poiData.addAll(features)
+            poiAdapter.notifyDataSetChanged()
+            rvPoi.visibility = View.VISIBLE
+        }
     }
 
     override fun onNavigationRoutes(routes: MutableList<DirectionsRoute>?) {
@@ -276,39 +353,6 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
 
     override fun onShowError(msg: String?) {
         if (isRouteNavigation) showShortToast(msg)
-    }
-
-    /*Asynchronous search Poi*/
-    private fun enqueueCall(content: String, type: Int) {
-        isRouteNavigation = false
-        inputType = type
-        val client = routePresenter.doPoiSearch(content)
-        if (type == 1) {
-            startGeoClient = client
-        } else {
-            endGeoClient = client
-        }
-    }
-
-    private fun showPopupWindow(results: MutableList<CarmenFeature>) {
-        val parent = if (inputType == 1) etStartPoint else etEndPoint
-        popupWindow = routePresenter.showPoiWindow(parent, results, object : BaseRecyclerAdapter.OnItemClickListener {
-            override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                if (inputType == 1) {
-                    startPoint = results[position].center()
-                    isStartSetText = true
-                    etStartPoint.setText(results[position].placeName())
-                    etStartPoint.setSelection(etStartPoint.text.length)
-                } else {
-                    endPoint = results[position].center()
-                    isEndSetText = true
-                    etEndPoint.setText(results[position].placeName())
-                    etEndPoint.setSelection(etEndPoint.text.length)
-                }
-                popupWindow?.dismiss()
-                startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
-            }
-        })
     }
 
     private fun navigationRoutes(origin: Point, destination: Point) {
@@ -355,20 +399,18 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private fun updateRoutes(routes: MutableList<DirectionsRoute>) {
         llBottom.visibility = View.VISIBLE
         selectedRoute = routes[0]
-        val adapter = DirectionsRouteAdapter(this, routes).apply {
-            setOnItemSelectedListener(object : DirectionsRouteAdapter.OnItemSelectedListener {
-                override fun onItemSelected(t: DirectionsRoute, position: Int) {
-                    navigationMapRoute?.removeRoute()
-                    val data = ArrayList<DirectionsRoute>()
-                    data.add(t)
-                    for (i in 0 until routes.size) {
-                        if (i != position) data.add(routes[i])
-                    }
-                    navigationMapRoute?.addRoutes(data)
-                    selectedRoute = t
+        val adapter = routePresenter.getDirectionsRouteAdapter(this, routes, object : DirectionsRouteAdapter.OnItemSelectedListener {
+            override fun onItemSelected(t: DirectionsRoute, position: Int) {
+                navigationMapRoute?.removeRoute()
+                val data = ArrayList<DirectionsRoute>()
+                data.add(t)
+                for (i in 0 until routes.size) {
+                    if (i != position) data.add(routes[i])
                 }
-            })
-        }
+                navigationMapRoute?.addRoutes(data)
+                selectedRoute = t
+            }
+        })
         recyclerView.adapter = adapter
         navigationMapRoute?.setOnRouteSelectionChangeListener(OnRouteSelectionChangeListener {
             for (i in 0 until routes.size) {
@@ -381,61 +423,19 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         })
     }
 
-    private class DirectionsRouteAdapter(context: Activity, routes: MutableList<DirectionsRoute>)
-        : BaseArrayRecyclerAdapter<DirectionsRoute>(context, routes) {
-        private val params = if (routes.size > 3) {
-            LinearLayout.LayoutParams(DisplayUtils.getWindowWidth(context) / 3, LinearLayout.LayoutParams.WRAP_CONTENT)
-        } else {
-            LinearLayout.LayoutParams(DisplayUtils.getWindowWidth(context) / routes.size, LinearLayout.LayoutParams.WRAP_CONTENT)
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK && contentSearch.visibility != View.GONE) {
+            onInitialState()
+            return true
         }
-        private var selected: Int = 0
-        private val sp14 = context.resources.getDimensionPixelOffset(R.dimen.font_14)
-        private var onItemSelectedListener: OnItemSelectedListener? = null
-
-        override fun bindView(viewType: Int): Int = R.layout.item_directionsroute
-
-        override fun onBindHoder(holder: RecyclerHolder, t: DirectionsRoute, position: Int) {
-            val duration = t.duration()
-            if (duration != null) {
-                val source = TimeUtils.convertSecond2Min(duration.toInt())
-                val ss = SpannableString(source).apply { setSpan(AbsoluteSizeSpan(sp14, false), source.indexOf("m"), source.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE) }
-                holder.setText(R.id.tvDuration, ss)
-            } else {
-                holder.setText(R.id.tvDuration, "")
-            }
-            val distance = t.distance()
-            if (distance != null) {
-                holder.setText(R.id.tvDistance, Utils.convertDistance(distance.toInt()))
-            } else {
-                holder.setText(R.id.tvDistance, "")
-            }
-            holder.itemView.layoutParams = params
-            holder.itemView.setOnClickListener {
-                setSelected(position)
-                onItemSelectedListener?.onItemSelected(t, position)
-            }
-            holder.itemView.isSelected = selected == position
-        }
-
-        fun setSelected(position: Int) {
-            this.selected = position
-            notifyDataSetChanged()
-        }
-
-        interface OnItemSelectedListener {
-            fun onItemSelected(t: DirectionsRoute, position: Int)
-        }
-
-        fun setOnItemSelectedListener(onItemSelectedListener: OnItemSelectedListener) {
-            this.onItemSelectedListener = onItemSelectedListener
-        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onDestroy() {
         InputMethodUtils.hideSoftInput(this)
-        cancelStartSearch()
-        cancelEndSearch()
+        poiPresenter.detachView()
         routePresenter.detachView()
+        handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
 }

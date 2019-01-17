@@ -71,14 +71,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.mapbox.mapboxsdk.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
-            app:mapbox_uiAttribution="false"
-            app:mapbox_uiCompass="false"
-            app:mapbox_uiLogo="false" />
+        <include layout="@layout/content_mapview"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvPoi"
