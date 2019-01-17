@@ -1,6 +1,5 @@
 package com.uroad.dubai.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -17,7 +16,6 @@ class CreatePasswordActivity : BaseActivity() {
     private var password : String = ""
     private var isInvisible : Boolean = false
 
-    @SuppressLint("NewApi")
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_create_password,true)
 
@@ -34,10 +32,10 @@ class CreatePasswordActivity : BaseActivity() {
             isInvisible = !isInvisible
             if (isInvisible){
                 edCreate.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                ivInvisible.setImageDrawable(getDrawable(R.mipmap.icon_visual))
+                ivInvisible.setImageDrawable(drawable(R.mipmap.icon_visual))
             } else{
                 edCreate.transformationMethod = PasswordTransformationMethod.getInstance()
-                ivInvisible.setImageDrawable(getDrawable(R.mipmap.icon_invisible))
+                ivInvisible.setImageDrawable(drawable(R.mipmap.icon_invisible))
             }
             edCreate.setSelection(edCreate.text.length)
         }
@@ -54,14 +52,14 @@ class CreatePasswordActivity : BaseActivity() {
                 val empty = edCreate.text.isNullOrEmpty()
                 btnConfirm.isEnabled = !empty
                 if (!empty)
-                    btnConfirm.background = getDrawable(R.drawable.selector_verify_btn_bg)
+                    btnConfirm.background = drawable(R.drawable.selector_verify_btn_bg)
                 else
-                    btnConfirm.background = getDrawable(R.drawable.shape_btn_bg_not_enabled)
+                    btnConfirm.background = drawable(R.drawable.shape_btn_bg_not_enabled)
             }
 
         })
         btnConfirm.isEnabled = !edCreate.text.isNullOrEmpty()
-        btnConfirm.background = getDrawable(R.drawable.shape_btn_bg_not_enabled)
+        btnConfirm.background = drawable(R.drawable.shape_btn_bg_not_enabled)
     }
 
 }

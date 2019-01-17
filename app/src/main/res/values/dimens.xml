@@ -9,4 +9,6 @@
     <dimen name="e7yoo_number_edittext_radius">12dp</dimen>
     <dimen name="e7yoo_number_edittext_textsize">16dp</dimen>
     <dimen name="e7yoo_number_edittext_strokewidth">0.5dp</dimen>
+
+    <integer name="integer_14">14</integer>
 </resources>
