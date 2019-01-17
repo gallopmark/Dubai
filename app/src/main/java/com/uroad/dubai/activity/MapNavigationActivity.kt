@@ -54,7 +54,6 @@ class MapNavigationActivity : BaseNoTitleMapBoxActivity(), LocationEngineListene
     }
 
     private fun initialize() {
-
     }
 
     override fun willVoice(announcement: SpeechAnnouncement?): String {

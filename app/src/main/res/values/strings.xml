@@ -180,4 +180,7 @@
     <string name="groups_invite_active">Active</string>
     <string name="groups_invite_unselected">Please choose your best friend first.</string>
 
+    <string name="information">Information</string>
+    <string name="congestion_distance">Congestion distance</string>
+
 </resources>

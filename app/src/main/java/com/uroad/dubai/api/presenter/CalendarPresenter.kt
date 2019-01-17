@@ -20,38 +20,16 @@ import java.util.*
 class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<CalendarView>(calendarView) {
 
     //private var CALENDER_URL: String = "content://com.android.calendar/calendars"
-    private var CALENDER_EVENT_URL : String = "content://com.android.calendar/events"
+    private var CALENDER_EVENT_URL: String = "content://com.android.calendar/events"
     //private var CALENDER_REMINDER_URL: String = "content://com.android.calendar/reminders"
 
     @SuppressLint("CheckResult")
-    fun getCalendar(context: Context){
-        val observable  =  ObservableOnSubscribe<ArrayList<CalendarMDL>> {
-            val list = getCalendar2(context)
-            if (list.size != 0)
-                it.onNext(list)
-            else
-                it.onComplete()
-        }
-
-        val disposableObserver = object : DisposableObserver<ArrayList<CalendarMDL>>() {
-            override fun onComplete() {}
-
-            override fun onNext(it: ArrayList<CalendarMDL>) {
-                calendarView.loadCalendarSuccess(it)
-            }
-
-            override fun onError(e: Throwable) {
-                calendarView.loadError(e.toString())
-            }
-
-        }
-
-        Observable.create(observable)
+    fun getCalendar(context: Context) {
+        addDisposable(Observable.fromCallable { getCalendar2(context) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(disposableObserver)
-
-        addDisposable(disposableObserver)
+                .subscribe({ calendarView.loadCalendarSuccess(it)
+                }, { calendarView.loadError(it.toString()) }))
     }
 
     private fun getCalendar2(context: Context): ArrayList<CalendarMDL> {
@@ -87,18 +65,18 @@ class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<Calendar
                 //事件的地点
                 val eventLocation = it.getString(it.getColumnIndex(CalendarContract.Events.EVENT_LOCATION))
                 //事件持续时间，例如“PT1H”表示事件持续1小时的状态， “P2W”指明2周的持续时间。P3600S表示3600秒
-                val duration = it.getString( it.getColumnIndex(CalendarContract.Events.DURATION))
+                val duration = it.getString(it.getColumnIndex(CalendarContract.Events.DURATION))
                 //事件组织者（所有者）的电子邮件。
                 val organizer = it.getString(it.getColumnIndex(CalendarContract.Events.ORGANIZER))
 
-                val current = getWeekOfDate(timeStamp2Date(dtstart).substring(0,10))
-                var mdl : CalendarMDL? = null
-                var currentList :  ArrayList<CalendarListMDL>? = null
+                val current = getWeekOfDate(timeStamp2Date(dtstart).substring(0, 10))
+                var mdl: CalendarMDL?
+                var currentList: ArrayList<CalendarListMDL>? = null
 
-                if (TextUtils.equals(theLast,current)){
+                if (TextUtils.equals(theLast, current)) {
                     mdl = last
                     currentList = lastList
-                }else{
+                } else {
                     currentList = ArrayList()
                     mdl = CalendarMDL()
                     last = mdl
@@ -133,19 +111,19 @@ class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<Calendar
 
 
     private fun timeStamp2Date(time: Long): String {
-        return try{
+        return try {
             val format = "yyyy-MM-dd HH:mm:ss"
             val sdf = SimpleDateFormat(format, Locale.getDefault())
             sdf.format(Date(time))
-        }catch (e : Exception){
+        } catch (e: Exception) {
             ""
         }
     }
 
-    private fun getPeriodDate(mode:Int) : Calendar {
-        val c= Calendar.getInstance()
-        val day = when(mode){
-            0-> c.get(Calendar.DAY_OF_MONTH) - 30 //一个月前
+    private fun getPeriodDate(mode: Int): Calendar {
+        val c = Calendar.getInstance()
+        val day = when (mode) {
+            0 -> c.get(Calendar.DAY_OF_MONTH) - 30 //一个月前
             else -> c.get(Calendar.DAY_OF_MONTH) + 30 // 一个月后
         }
         c.set(Calendar.DAY_OF_MONTH, day)

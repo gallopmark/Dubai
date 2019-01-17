@@ -5,9 +5,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.EventsDetailActivity
 import com.uroad.dubai.adapter.EventsListCardAdapter
 import com.uroad.dubai.common.BaseFragment
+import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.model.EventsMDL
+import com.uroad.dubai.utils.GsonUtils
 import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mainmearme.*
@@ -24,7 +27,15 @@ class NearMeEventsFragment : BaseFragment() {
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
-        cardAdapter = EventsListCardAdapter(context, data)
+        cardAdapter = EventsListCardAdapter(context, data).apply {
+            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                    if (position in 0 until data.size) {
+                        openActivity(EventsDetailActivity::class.java, Bundle().apply { putString("eventMDL", GsonUtils.fromObjectToJson(data[position])) })
+                    }
+                }
+            })
+        }
         recyclerView.adapter = cardAdapter
     }
 
@@ -44,7 +55,7 @@ class NearMeEventsFragment : BaseFragment() {
                 2 -> R.mipmap.ic_roads_e311
                 else -> R.mipmap.ic_roads_e66
             }
-            updatetime = when(position){
+            updatetime = when (position) {
                 0 -> "58 mins ago"
                 1 -> "1h ago"
                 2 -> "12/11 14:22"
