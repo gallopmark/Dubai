@@ -48,7 +48,7 @@ class MainFragment : BaseFragment() {
         initMenu()
         initBanner()
         initNotice()
-        initFavorites()
+        //initFavorites()
         initNearBy()
     }
 
@@ -177,6 +177,7 @@ class MainFragment : BaseFragment() {
         }
         return false
     }
+
 
     private fun sendEmail(){
         val intent = Intent(Intent.ACTION_SEND)

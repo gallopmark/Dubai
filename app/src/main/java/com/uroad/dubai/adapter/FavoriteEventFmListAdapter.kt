@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.RelativeLayout
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.EventsMDL
@@ -19,8 +20,12 @@ class FavoriteEventFmListAdapter(private val context: Context, data: MutableList
     override fun bindView(viewType: Int): Int = R.layout.item_favorites_event
 
     override fun onBindHoder(holder: RecyclerHolder, t: EventsMDL, position: Int) {
-        //holder.setLayoutParams(R.id.ivPic, params)
-        //holder.displayImage(R.id.ivPic, t.headimg, R.color.color_f7, RoundedCorners(dp4))
+        //holder.setLayoutParams(R.id.ivFavEventType, params)
+        holder.setImageResource(R.id.ivFavEventType, t.iconInt)
+        holder.setText(R.id.tvFavEventName,t.roadtitle)
+        holder.setText(R.id.tvFavEventTime,t.updatetime)
+        holder.setText(R.id.tvFavEventContent,t.reportout)
+        //holder.displayImage(R.id.ivFavEventType, t.iconInt, R.color.color_f7, RoundedCorners(dp4))
     }
 
 }

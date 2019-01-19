@@ -2,6 +2,7 @@ package com.uroad.dubai.model
 
 class CalendarListMDL {
     var weekDataTitle : String? = null
+    var titleTimeData : String? = null
     var title : String? = null
     var dtstart : String? = null
     var dtend : String? = null

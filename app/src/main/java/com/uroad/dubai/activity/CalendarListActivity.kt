@@ -72,7 +72,7 @@ class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), 
 
     override fun loadError(e: String) {
         onPullToLoadSuccess()
-        showShortToast(e)
+        //showShortToast(e)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -97,7 +97,7 @@ class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), 
     }
 
     override fun requestPermissionsFail() {
-
+        onPullToLoadSuccess()
     }
 
 }

@@ -10,9 +10,7 @@ import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.model.CalendarListMDL
 import com.uroad.dubai.model.CalendarMDL
 import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,17 +20,28 @@ class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<Calendar
     //private var CALENDER_URL: String = "content://com.android.calendar/calendars"
     private var CALENDER_EVENT_URL: String = "content://com.android.calendar/events"
     //private var CALENDER_REMINDER_URL: String = "content://com.android.calendar/reminders"
+    var isToday : Boolean = false
 
     @SuppressLint("CheckResult")
     fun getCalendar(context: Context) {
-        addDisposable(Observable.fromCallable { getCalendar2(context) }
+        addDisposable(Observable.fromCallable { analysis(context) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ calendarView.loadCalendarSuccess(it)
                 }, { calendarView.loadError(it.toString()) }))
     }
 
-    private fun getCalendar2(context: Context): ArrayList<CalendarMDL> {
+    @SuppressLint("CheckResult")
+    fun getCalendar(context: Context,isToday : Boolean) {
+        this.isToday = isToday
+        addDisposable(Observable.fromCallable { analysis(context) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ calendarView.loadCalendarSuccess(it)
+                }, { calendarView.loadError(it.toString()) }))
+    }
+
+    private fun analysis(context: Context): ArrayList<CalendarMDL> {
         val list = ArrayList<CalendarMDL>()
         val cStart = getPeriodDate(0)
         val cEnd = getPeriodDate(1)
@@ -40,9 +49,9 @@ class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<Calendar
         var last = CalendarMDL()
         var lastList = ArrayList<CalendarListMDL>()
 
-        val selection = "((dtstart >= " + cStart.timeInMillis + ") AND (dtend <= " + cEnd.timeInMillis + "))"
+        val selection = "((${CalendarContract.Events.DTSTART} >= " + cStart.timeInMillis + ") AND (${CalendarContract.Events.DTEND} <= " + cEnd.timeInMillis + "))"
         val eventCursor = context.contentResolver.query(Uri.parse(CALENDER_EVENT_URL), null,
-                selection, null, "${CalendarContract.Events.DTSTART} DESC")
+                selection, null, "${CalendarContract.Events.DTSTART} DESC")//ASC 升序, DESC 降序
         eventCursor?.let {
             while (it.moveToNext()) {
                 CalendarContract.ACCOUNT_TYPE_LOCAL
@@ -123,9 +132,12 @@ class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<Calendar
     private fun getPeriodDate(mode: Int): Calendar {
         val c = Calendar.getInstance()
         val day = when (mode) {
-            0 -> c.get(Calendar.DAY_OF_MONTH) - 30 //一个月前
-            else -> c.get(Calendar.DAY_OF_MONTH) + 30 // 一个月后
+                                    //一个月前                              一天前
+            0 -> if (!isToday) c.get(Calendar.DAY_OF_MONTH) - 30 else c.get(Calendar.DAY_OF_MONTH) - 1
+                                    // 一个月后
+            else -> if (!isToday) c.get(Calendar.DAY_OF_MONTH) + 30  else c.get(Calendar.DAY_OF_MONTH) + 1
         }
+
         c.set(Calendar.DAY_OF_MONTH, day)
         return c
     }

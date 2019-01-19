@@ -1,7 +1,9 @@
 package com.uroad.dubai.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import com.google.gson.Gson
 import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.AttrNearFmListAdapter
@@ -52,7 +54,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
                 }
                 openActivity(DetailsActivity::class.java,Bundle().apply {
                     putString("title",mdl.title)
-                    putString("time",mdl.publishtime)
+                    putString("time",mdl.hours)
                     putString("imgUrl",mdl.headimg)
                     putString("content",mdl.content)
                 })

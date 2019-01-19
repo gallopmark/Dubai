@@ -2,12 +2,16 @@ package com.uroad.dubai.fragment
 
 import android.os.Bundle
 import android.view.View
+import com.google.gson.Gson
+import com.uroad.dubai.R
+import com.uroad.dubai.activity.EventsDetailActivity
 import com.uroad.dubai.adapter.FavoriteEventFmListAdapter
 import com.uroad.dubai.api.presenter.FavoriteEventFMPresenter
 import com.uroad.dubai.api.view.FavoriteEventFMView
 import com.uroad.dubai.common.BasePageRefreshPresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.model.EventsMDL
+import java.util.*
 
 class FavoriteEventFragment  : BasePageRefreshPresenterFragment<FavoriteEventFMPresenter>() , FavoriteEventFMView {
 
@@ -25,7 +29,9 @@ class FavoriteEventFragment  : BasePageRefreshPresenterFragment<FavoriteEventFMP
 
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-
+                openActivity(EventsDetailActivity::class.java,Bundle().apply {
+                    putString("eventMDL",Gson().toJson( data[position]))
+                })
             }
         })
     }
@@ -41,7 +47,8 @@ class FavoriteEventFragment  : BasePageRefreshPresenterFragment<FavoriteEventFMP
 
     private fun getMsgList(){
         onPullToLoadSuccess()
-        data.add(EventsMDL())
+        val mdl = getMDL(Random().nextInt(5)-1)
+        data.add(mdl)
         adapter.notifyDataSetChanged()
     }
 
@@ -66,5 +73,24 @@ class FavoriteEventFragment  : BasePageRefreshPresenterFragment<FavoriteEventFMP
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
         showShortToast(errorMsg)
+    }
+
+    private fun getMDL(position: Int): EventsMDL {
+        return EventsMDL().apply {
+            iconInt = when (position) {
+                0 -> R.mipmap.ic_roads_e11
+                1 -> R.mipmap.ic_roads_e44
+                2 -> R.mipmap.ic_roads_e311
+                else -> R.mipmap.ic_roads_e66
+            }
+            updatetime = when(position){
+                0 -> "58 mins ago"
+                1 -> "1h ago"
+                2 -> "12/11 14:22"
+                else -> "1/15 16:17"
+            }
+            roadtitle = "Dubai to ABU dhabi"
+            reportout = "On the morning of 6 February, 22 people were injured in a major road accident along sheikh M-ohammed bin rashid al-maktoum road (E311) from dubai to ABU dhabi."
+        }
     }
 }
