@@ -1,5 +1,8 @@
 package com.uroad.dubai.api
 
+import com.uroad.dubai.common.DubaiApplication
+import com.uroad.dubai.utils.PackageInfoUtils
+import com.uroad.library.utils.DeviceUtils
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -12,6 +15,16 @@ object ApiRetrofit {
             .writeTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
+//            .addInterceptor {
+//                val request = it.request().newBuilder()
+//                        .addHeader("x-app-type", "Android")
+//                        .addHeader("x-user-uuid", DubaiApplication.getUserId())
+//                        .addHeader("x-app-version", PackageInfoUtils.getVersionName(DubaiApplication.instance))
+//                        .addHeader("x-device-uuid", DeviceUtils.getAndroidID(DubaiApplication.instance))
+//                        .addHeader("x-device-info", DeviceUtils.getModel())
+//                        .build()
+//                return@addInterceptor it.proceed(request)
+//            }
             .build()
     private val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
