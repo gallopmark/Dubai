@@ -13,11 +13,11 @@ import com.mapbox.mapboxsdk.style.expressions.Expression
 import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.RoadNavigationActivity
 import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.view.RoadNavigationView
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
@@ -27,7 +27,7 @@ import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.utils.SymbolGenerator
 import com.uroad.dubai.webService.WebApi
 
-class RoadNavigationPresenter(private val activity: RoadNavigationActivity,
+class RoadNavigationPresenter(private val activity: BaseActivity,
                               private val navigationView: RoadNavigationView)
     : BasePresenter<RoadNavigationView>(navigationView) {
     private val latitudeArray = doubleArrayOf(24.29045862222854, 25.71109733694287, 25.50251457879257,
@@ -45,7 +45,7 @@ class RoadNavigationPresenter(private val activity: RoadNavigationActivity,
 
     fun get3DBuildingLayer(): FillExtrusionLayer = FillExtrusionLayer("3d-buildings", "composite").apply {
         sourceLayer = "building"
-        filter = Expression.eq(Expression.get("extrude"), "true")
+        setFilter(Expression.eq(Expression.get("extrude"), "true"))
         minZoom = 15f
         setProperties(PropertyFactory.fillExtrusionColor(Color.LTGRAY),
                 PropertyFactory.fillExtrusionHeight(Expression.interpolate(Expression.exponential(1f),

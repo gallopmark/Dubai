@@ -4,7 +4,10 @@
 //import android.arch.lifecycle.LifecycleObserver
 //import android.arch.lifecycle.OnLifecycleEvent
 //import android.location.Location
-//import android.support.annotation.*
+//import android.support.annotation.ColorInt
+//import android.support.annotation.DrawableRes
+//import android.support.annotation.Size
+//import android.support.annotation.StyleRes
 //import android.support.v4.content.ContextCompat
 //import android.support.v4.graphics.drawable.DrawableCompat
 //import android.support.v7.content.res.AppCompatResources
@@ -22,7 +25,6 @@
 //import com.mapbox.mapboxsdk.geometry.LatLng
 //import com.mapbox.mapboxsdk.maps.MapView
 //import com.mapbox.mapboxsdk.maps.MapboxMap
-//import com.mapbox.mapboxsdk.maps.Style
 //import com.mapbox.mapboxsdk.style.expressions.Expression
 //import com.mapbox.mapboxsdk.style.expressions.Expression.*
 //import com.mapbox.mapboxsdk.style.layers.*
@@ -34,6 +36,7 @@
 //import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 //import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener
 //import com.mapbox.services.android.navigation.ui.v5.utils.MapImageUtils
+//import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils
 //import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation
 //import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 //import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
@@ -41,6 +44,7 @@
 //import com.mapbox.turf.TurfMeasurement
 //import com.mapbox.turf.TurfMisc
 //import com.uroad.dubai.R
+//import com.uroad.dubai.R.string.routes
 //import java.util.*
 //
 ///**
@@ -129,7 +133,6 @@
 //    private var directionsRoutes: MutableList<DirectionsRoute>
 //    private var layerIds: MutableList<String>
 //    private var mapView: MapView
-//    private var style: Style? = null
 //    private var primaryRouteIndex: Int = 0
 //    //    private float routeScale;
 //    //    private float alternativeRouteScale;
@@ -219,7 +222,6 @@
 //        this.styleRes = styleRes
 //        this.mapView = mapView
 //        this.mapboxMap = mapboxMap
-//        this.style = mapboxMap.style
 //        this.navigation = navigation
 //        this.belowLayer = belowLayer
 //        featureCollections = ArrayList()
@@ -336,7 +338,7 @@
 //            if (layerId.contains(primaryRouteIndex.toString()) || layerId.contains(WAYPOINT_LAYER_ID)) {
 //                continue
 //            }
-//            val layer = style?.getLayer(layerId)
+//            val layer = mapboxMap.getLayer(layerId)
 //            layer?.setProperties(visibility(if (visible) Property.VISIBLE else Property.NONE))
 //        }
 //    }
@@ -456,8 +458,8 @@
 //    }
 //
 //    private fun initializeUpcomingManeuverArrow() {
-//        arrowShaftGeoJsonSource = style?.getSource(ARROW_SHAFT_SOURCE_ID) as GeoJsonSource?
-//        arrowHeadGeoJsonSource = style?.getSource(ARROW_HEAD_SOURCE_ID) as GeoJsonSource?
+//        arrowShaftGeoJsonSource = mapboxMap.getSource(ARROW_SHAFT_SOURCE_ID) as GeoJsonSource?
+//        arrowHeadGeoJsonSource = mapboxMap.getSource(ARROW_HEAD_SOURCE_ID) as GeoJsonSource?
 //
 //        val shaftLayer = createArrowShaftLayer()
 //        val shaftCasingLayer = createArrowShaftCasingLayer()
@@ -471,11 +473,11 @@
 //            addArrowHeadIcon()
 //            addArrowHeadIconCasing()
 //
-//            style?.addLayerBelow(shaftCasingLayer, LAYER_ABOVE_UPCOMING_MANEUVER_ARROW)
-//            style?.addLayerAbove(headCasingLayer, shaftCasingLayer.id)
+//            mapboxMap.addLayerBelow(shaftCasingLayer, LAYER_ABOVE_UPCOMING_MANEUVER_ARROW)
+//            mapboxMap.addLayerAbove(headCasingLayer, shaftCasingLayer.id)
 //
-//            style?.addLayerAbove(shaftLayer, headCasingLayer.id)
-//            style?.addLayerAbove(headLayer, shaftLayer.id)
+//            mapboxMap.addLayerAbove(shaftLayer, headCasingLayer.id)
+//            mapboxMap.addLayerAbove(headLayer, shaftLayer.id)
 //        }
 //        initializeArrowLayers(shaftLayer, shaftCasingLayer, headLayer, headCasingLayer)
 //    }
@@ -485,7 +487,7 @@
 //                ARROW_SHAFT_SOURCE_ID,
 //                arrowShaftGeoJsonFeature,
 //                GeoJsonOptions().withMaxZoom(16)
-//        ).apply { style?.addSource(this) }
+//        ).apply { mapboxMap.addSource(this) }
 //    }
 //
 //    private fun initializeArrowHead() {
@@ -493,7 +495,7 @@
 //                ARROW_HEAD_SOURCE_ID,
 //                arrowShaftGeoJsonFeature,
 //                GeoJsonOptions().withMaxZoom(16)
-//        ).apply { style?.addSource(this) }
+//        ).apply { mapboxMap.addSource(this) }
 //    }
 //
 //    private fun addArrowHeadIcon() {
@@ -501,7 +503,7 @@
 //            val head = DrawableCompat.wrap(it)
 //            DrawableCompat.setTint(head.mutate(), arrowColor)
 //            val icon = MapImageUtils.getBitmapFromDrawable(head)
-//            style?.addImage(ARROW_HEAD_ICON, icon)
+//            mapboxMap.addImage(ARROW_HEAD_ICON, icon)
 //        }
 //    }
 //
@@ -510,12 +512,12 @@
 //            val headCasing = DrawableCompat.wrap(it)
 //            DrawableCompat.setTint(headCasing.mutate(), arrowBorderColor)
 //            val icon = MapImageUtils.getBitmapFromDrawable(headCasing)
-//            style?.addImage(ARROW_HEAD_ICON_CASING, icon)
+//            mapboxMap.addImage(ARROW_HEAD_ICON_CASING, icon)
 //        }
 //    }
 //
 //    private fun createArrowShaftLayer(): LineLayer {
-//        val shaftLayer = style?.getLayer(ARROW_SHAFT_LINE_LAYER_ID) as LineLayer?
+//        val shaftLayer = mapboxMap.getLayer(ARROW_SHAFT_LINE_LAYER_ID) as LineLayer?
 //        return shaftLayer
 //                ?: LineLayer(ARROW_SHAFT_LINE_LAYER_ID, ARROW_SHAFT_SOURCE_ID).withProperties(
 //                        PropertyFactory.lineColor(color(arrowColor)),
@@ -533,7 +535,7 @@
 //    }
 //
 //    private fun createArrowShaftCasingLayer(): LineLayer {
-//        val shaftCasingLayer = style?.getLayer(ARROW_SHAFT_CASING_LINE_LAYER_ID) as LineLayer?
+//        val shaftCasingLayer = mapboxMap.getLayer(ARROW_SHAFT_CASING_LINE_LAYER_ID) as LineLayer?
 //        return shaftCasingLayer
 //                ?: LineLayer(ARROW_SHAFT_CASING_LINE_LAYER_ID, ARROW_SHAFT_SOURCE_ID).withProperties(
 //                        PropertyFactory.lineColor(color(arrowBorderColor)),
@@ -551,7 +553,7 @@
 //    }
 //
 //    private fun createArrowHeadLayer(): SymbolLayer {
-//        val headLayer = style?.getLayer(ARROW_HEAD_LAYER_ID) as SymbolLayer?
+//        val headLayer = mapboxMap.getLayer(ARROW_HEAD_LAYER_ID) as SymbolLayer?
 //        return headLayer ?: SymbolLayer(ARROW_HEAD_LAYER_ID, ARROW_HEAD_SOURCE_ID)
 //                .withProperties(
 //                        PropertyFactory.iconImage(ARROW_HEAD_ICON),
@@ -570,7 +572,7 @@
 //    }
 //
 //    private fun createArrowHeadCasingLayer(): SymbolLayer {
-//        val headCasingLayer = style?.getLayer(ARROW_HEAD_CASING_LAYER_ID) as SymbolLayer?
+//        val headCasingLayer = mapboxMap.getLayer(ARROW_HEAD_CASING_LAYER_ID) as SymbolLayer?
 //        return headCasingLayer
 //                ?: SymbolLayer(ARROW_HEAD_CASING_LAYER_ID, ARROW_HEAD_SOURCE_ID).withProperties(
 //                        PropertyFactory.iconImage(ARROW_HEAD_ICON_CASING),
@@ -605,7 +607,7 @@
 //     * appearance.
 //     */
 //    private fun updatePrimaryRoute(layerId: String, index: Int) {
-//        val layer = style?.getLayer(layerId)
+//        val layer = mapboxMap.getLayer(layerId)
 //        layer?.let {
 //            it.setProperties(PropertyFactory.lineColor(match(
 //                    Expression.toString(get(CONGESTION_KEY)),
@@ -614,19 +616,19 @@
 //                    stop("heavy", color(if (index == primaryRouteIndex) routeSevereColor else alternativeRouteSevereColor)),
 //                    stop("severe", color(if (index == primaryRouteIndex) routeSevereColor else alternativeRouteSevereColor)))))
 //            if (index == primaryRouteIndex) {
-//                style?.removeLayer(it)
-//                style?.addLayerBelow(it, WAYPOINT_LAYER_ID)
+//                mapboxMap.removeLayer(it)
+//                mapboxMap.addLayerBelow(it, WAYPOINT_LAYER_ID)
 //            }
 //        }
 //    }
 //
 //    private fun updatePrimaryShieldRoute(layerId: String, index: Int) {
-//        val layer = style?.getLayer(layerId)
+//        val layer = mapboxMap.getLayer(layerId)
 //        layer?.let {
 //            it.setProperties(PropertyFactory.lineColor(if (index == primaryRouteIndex) routeShieldColor else alternativeRouteShieldColor))
 //            if (index == primaryRouteIndex) {
-//                style?.removeLayer(it)
-//                style?.addLayerBelow(it, WAYPOINT_LAYER_ID)
+//                mapboxMap.removeLayer(it)
+//                mapboxMap.addLayerBelow(it, WAYPOINT_LAYER_ID)
 //            }
 //        }
 //    }
@@ -659,13 +661,13 @@
 //                )
 //                )
 //        )
-//        addLayerToMap(routeLayer, belowLayer)
+//        MapUtils.addLayerToMap(mapboxMap, routeLayer, belowLayer)
 //    }
 //
 //    private fun removeLayerIds() {
 //        if (!layerIds.isEmpty()) {
 //            for (id in layerIds) {
-//                style?.removeLayer(id)
+//                mapboxMap.removeLayer(id)
 //            }
 //        }
 //    }
@@ -702,18 +704,7 @@
 //                //                ),
 //                PropertyFactory.lineColor(if (index == primaryRouteIndex) routeShieldColor else alternativeRouteShieldColor)
 //        )
-//        addLayerToMap(routeLayer, belowLayer)
-//    }
-//
-//    private fun addLayerToMap(@NonNull layer: Layer, @Nullable idBelowLayer: String?) {
-//        if (style?.getLayer(layer.id) != null) {
-//            return
-//        }
-//        if (idBelowLayer == null) {
-//            style?.addLayer(layer)
-//        } else {
-//            style?.addLayerBelow(layer, idBelowLayer)
-//        }
+//        MapUtils.addLayerToMap(mapboxMap, routeLayer, belowLayer)
 //    }
 //
 //    /**
@@ -769,7 +760,7 @@
 //     */
 //    private fun placeRouteBelow() {
 //        if (TextUtils.isEmpty(belowLayer)) {
-//            val styleLayers = style?.layers ?: return
+//            val styleLayers = mapboxMap.layers
 //            for (i in styleLayers.indices) {
 //                if (styleLayers[i] !is SymbolLayer
 //                        // Avoid placing the route on top of the user location layer
@@ -850,15 +841,14 @@
 //    private fun initializeListeners() {
 //        mapClickListener = MapboxMap.OnMapClickListener { point ->
 //            if (invalidMapClick()) {
-//                return@OnMapClickListener true
+//                return@OnMapClickListener
 //            }
 //            val currentRouteIndex = primaryRouteIndex
 //
 //            if (findClickedRoute(point)) {
-//                return@OnMapClickListener true
+//                return@OnMapClickListener
 //            }
 //            checkNewRouteFound(currentRouteIndex)
-//            return@OnMapClickListener true
 //        }
 //        didFinishLoadingStyleListener = MapView.OnDidFinishLoadingStyleListener {
 //            placeRouteBelow()
@@ -953,7 +943,7 @@
 //    private fun updateRoute() {
 //        // Update all route geometries to reflect their appropriate colors depending on if they are
 //        // alternative or primary.
-//        if (primaryRouteIndex !in 0 until directionsRoutes.size) return
+//        if(primaryRouteIndex !in 0 until directionsRoutes.size) return
 //        val data = ArrayList<DirectionsRoute>()
 //        data.add(directionsRoutes[primaryRouteIndex])
 //        for (i in 0 until directionsRoutes.size) {
@@ -1064,11 +1054,11 @@
 //        if (fc == null) {
 //            fc = FeatureCollection.fromFeatures(arrayOf())
 //        }
-//        val source = style?.getSourceAs<GeoJsonSource>(sourceId)
+//        val source = mapboxMap.getSourceAs<GeoJsonSource>(sourceId)
 //        if (source == null) {
 //            val routeGeoJsonOptions = GeoJsonOptions().withMaxZoom(16)
 //            val routeSource = GeoJsonSource(sourceId, fc, routeGeoJsonOptions)
-//            style?.addSource(routeSource)
+//            mapboxMap.addSource(routeSource)
 //        } else {
 //            source.setGeoJson(fc)
 //        }

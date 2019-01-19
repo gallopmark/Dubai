@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="MyNavigationMapRoute">
+        <item name="routeColor">@color/routeColor</item>
+        <item name="routeModerateCongestionColor">@color/routeModerateCongestionColor</item>
+        <item name="routeSevereCongestionColor">@color/routeSevereCongestionColor</item>
+        <item name="routeShieldColor">@color/routeShieldColor</item>
+        <item name="routeScale">2.0</item>
+        <item name="alternativeRouteColor">@color/alternativeRouteColor</item>
+        <item name="alternativeRouteModerateCongestionColor">
+            @color/alternativeRouteModerateCongestionColor
+        </item>
+        <item name="alternativeRouteSevereCongestionColor">
+            @color/alternativeRouteSevereCongestionColor
+        </item>
+        <item name="alternativeRouteShieldColor">@color/alternativeRouteShieldColor</item>
+    </style>
+
     <style name="CustomNavigationMapRoute">
         <item name="routeColor">@color/routeColor</item>
         <item name="routeModerateCongestionColor">@color/routeModerateCongestionColor</item>
@@ -88,7 +104,25 @@
         </attr>
     </declare-styleable>
 
-    <style name="CustomInstructionView" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppNavigationMapRoute">
+        <item name="routeColor">@color/routeColor</item>
+        <item name="routeModerateCongestionColor">@color/routeModerateCongestionColor</item>
+        <item name="routeSevereCongestionColor">@color/routeSevereCongestionColor</item>
+        <item name="routeShieldColor">@color/routeShieldColor</item>
+        <item name="routeScale">1.0</item>
+        <item name="alternativeRouteColor">@color/alternativeRouteColor</item>
+        <item name="alternativeRouteModerateCongestionColor">
+            @color/alternativeRouteModerateCongestionColor
+        </item>
+        <item name="alternativeRouteSevereCongestionColor">
+            @color/alternativeRouteSevereCongestionColor
+        </item>
+        <item name="alternativeRouteShieldColor">@color/alternativeRouteShieldColor</item>
+        <item name="originWaypointIcon">@mipmap/ic_user_location</item>
+        <item name="destinationWaypointIcon">@mipmap/ic_route_target</item>
+    </style>
+
+    <style name="MyNavigationViewLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="navigationViewPrimary">@color/mapbox_navigation_view_color_primary</item>
         <item name="navigationViewSecondary">@color/mapbox_navigation_view_color_secondary</item>
         <item name="navigationViewAccent">@color/mapbox_navigation_view_color_accent</item>
@@ -96,38 +130,59 @@
         <item name="navigationViewSecondaryText">@color/mapbox_navigation_view_color_accent_text
         </item>
         <item name="navigationViewDivider">@color/mapbox_navigation_view_color_divider</item>
-        <item name="navigationViewListBackground">
-            @color/mapbox_navigation_view_color_list_background
-        </item>
-        <item name="navigationViewBannerBackground">
-            @color/mapbox_navigation_view_color_banner_background
-        </item>
-        <item name="navigationViewBannerPrimaryText">
-            @color/mapbox_navigation_view_color_banner_primary_text
-        </item>
-        <item name="navigationViewBannerSecondaryText">
-            @color/mapbox_navigation_view_color_banner_secondary_text
-        </item>
-        <item name="navigationViewBannerManeuverPrimary">
-            @color/mapbox_navigation_view_color_banner_maneuver_primary
-        </item>
-        <item name="navigationViewBannerManeuverSecondary">
-            @color/mapbox_navigation_view_color_banner_maneuver_secondary
-        </item>
+        <item name="navigationViewListBackground">@color/white</item>
+        <item name="navigationViewBannerBackground">@color/white</item>
+        <item name="navigationViewBannerPrimaryText">@color/appTextColor</item>
+        <item name="navigationViewBannerSecondaryText">@color/appTextColor</item>
+        <item name="navigationViewBannerManeuverPrimary">@color/colorAccent</item>
+        <item name="navigationViewBannerManeuverSecondary">@color/colorAccent</item>
 
         <item name="navigationViewProgress">@color/mapbox_navigation_view_color_progress</item>
         <item name="navigationViewProgressBackground">
             @color/mapbox_navigation_view_color_progress_background
         </item>
 
-        <item name="navigationViewRouteStyle">@style/NavigationMapRoute</item>
+        <item name="navigationViewRouteStyle">@style/MyNavigationMapRoute</item>
 
         <item name="navigationViewLocationLayerStyle">@style/NavigationLocationLayerStyle</item>
 
-        <item name="navigationViewDestinationMarker">@drawable/map_marker_light</item>
+        <item name="navigationViewDestinationMarker">@mipmap/ic_route_target</item>
 
         <item name="navigationViewRouteOverviewDrawable">@drawable/ic_route_preview</item>
 
         <item name="navigationViewMapStyle">@string/navigation_guidance_day</item>
+    </style>
+
+    <style name="MyNavigationViewDark" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="navigationViewPrimary">@color/mapbox_navigation_view_color_primary_dark</item>
+        <item name="navigationViewSecondary">@color/mapbox_navigation_view_color_secondary_dark
+        </item>
+        <item name="navigationViewAccent">@color/mapbox_navigation_view_color_accent_dark</item>
+        <item name="navigationViewPrimaryText">@color/mapbox_navigation_view_color_secondary_dark
+        </item>
+        <item name="navigationViewSecondaryText">
+            @color/mapbox_navigation_view_color_accent_text_dark
+        </item>
+        <item name="navigationViewDivider">@color/mapbox_navigation_view_color_divider_dark</item>
+        <item name="navigationViewListBackground">@color/white</item>
+        <item name="navigationViewBannerBackground">@color/white</item>
+        <item name="navigationViewBannerPrimaryText">@color/appTextColor</item>
+        <item name="navigationViewBannerSecondaryText">@color/appTextColor</item>
+        <item name="navigationViewBannerManeuverPrimary">@color/colorAccent</item>
+        <item name="navigationViewBannerManeuverSecondary">@color/colorAccent</item>
+        <item name="navigationViewProgress">@color/mapbox_navigation_view_color_progress_dark</item>
+        <item name="navigationViewProgressBackground">
+            @color/mapbox_navigation_view_color_progress_background_dark
+        </item>
+
+        <item name="navigationViewRouteStyle">@style/MyNavigationMapRoute</item>
+
+        <item name="navigationViewLocationLayerStyle">@style/NavigationLocationLayerStyle</item>
+
+        <item name="navigationViewDestinationMarker">@mipmap/ic_route_target</item>
+
+        <item name="navigationViewRouteOverviewDrawable">@drawable/ic_route_preview_dark</item>
+
+        <item name="navigationViewMapStyle">@string/navigation_guidance_night</item>
     </style>
 </resources>

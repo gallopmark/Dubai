@@ -1,0 +1,10 @@
+TranslateAnimation anim = new TranslateAnimation(imageView.getWidth(),
+				imageView.getWidth() + 10, imageView.getHeight(), imageView.getHeight());
+				anim.setInterpolator(new CycleInterpolator(6f));  //循环次数
+                                   //CycleInterpolator：动画从开始到结束，变化率是循环给定次数的正弦曲线。
+				anim.setDuration( 500 );
+
+TranslateAnimation anim = new TranslateAnimation(imageView.getWidth(),
+                				imageView.getWidth(), imageView.getHeight(), imageView.getHeight()+10);
+                				anim.setInterpolator(new CycleInterpolator(6f));
+                				anim.setDuration( 500 );

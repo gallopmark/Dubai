@@ -41,4 +41,6 @@
 
     <color name="snackBar_solid">#B0000000</color>
     <color name="snackBar_stroke">#B0757575</color>
+
+    <color name="black80transparency">#33000000</color>
 </resources>

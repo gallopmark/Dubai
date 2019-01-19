@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/translucence"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="end"
+    android:paddingStart="@dimen/space_10"
+    android:paddingTop="@dimen/space_120"
+    android:paddingEnd="@dimen/space_10">
+
+    <CheckBox
+        android:id="@+id/cbParking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@null"
+        android:layout_alignParentEnd="true"
+        android:drawableEnd="@drawable/bg_navioption_parking_selector"
+        android:drawablePadding="@dimen/space_5"
+        android:text="@string/mapData_parking"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_14" />
+
+    <CheckBox
+        android:id="@+id/cbGasStation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cbParking"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_alignParentEnd="true"
+        android:button="@null"
+        android:drawableEnd="@drawable/bg_navioption_gasstation_selector"
+        android:drawablePadding="@dimen/space_5"
+        android:text="@string/mapData_gasStation"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_14" />
+
+    <CheckBox
+        android:id="@+id/cbAttraction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cbGasStation"
+        android:layout_marginTop="@dimen/space_10"
+        android:button="@null"
+        android:layout_alignParentEnd="true"
+        android:drawableEnd="@drawable/bg_navioption_attraction_selector"
+        android:drawablePadding="@dimen/space_5"
+        android:text="@string/mapData_attractions"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_14" />
+
+    <CheckBox
+        android:id="@+id/cbShopping"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cbAttraction"
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_alignParentEnd="true"
+        android:drawableEnd="@drawable/bg_navioption_shopping_selector"
+        android:drawablePadding="@dimen/space_5"
+        android:text="@string/mapData_store"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_14"
+        android:button="@null" />
+
+    <ImageView
+        android:id="@+id/ivSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cbShopping"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/space_5"
+        android:layout_marginTop="@dimen/space_10"
+        android:src="@mipmap/ic_search_redwhite" />
+</RelativeLayout>

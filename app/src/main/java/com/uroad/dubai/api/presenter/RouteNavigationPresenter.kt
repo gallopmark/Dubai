@@ -47,7 +47,7 @@ class RouteNavigationPresenter(private val context: Context,
 
                 override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
                     naviView.onHideLoading()
-                    naviView.onShowError("")
+                    naviView.onShowError(t.message)
                 }
             })
         }

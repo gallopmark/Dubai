@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
 import android.view.Gravity
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.constants.Style
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer
@@ -32,6 +31,7 @@ import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
 import com.uroad.dubai.api.presenter.PoiSearchPresenter
@@ -103,6 +103,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
             }
         }
         cbTrafficLayer.setOnCheckedChangeListener { _, isChecked -> changeTrafficLayer(isChecked) }
+        cbTrafficLayer.isChecked = true
         cbTouristLayer.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) presenter.getScenic()
             else removePointFromMap(MapDataType.SCENIC.CODE)
@@ -111,6 +112,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
         ivLocation.setOnClickListener { openLocation() }
+        ivRouteArrow.setOnClickListener { openActivity(RouteNavigationActivity::class.java) }
     }
 
     private fun initSearch() {
@@ -297,11 +299,11 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         }
     }
 
-    private fun setDefaultStyleUrl() = mapBoxMap?.setStyleUrl(getString(R.string.map_default_url))
+    private fun setDefaultStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_default_url))
 
-    private fun set3DStyleUrl() = mapBoxMap?.setStyleUrl(getString(R.string.map_3d_url))
+    private fun set3DStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_3d_url))
 
-    private fun setSatelliteStyleUrl() = mapBoxMap?.setStyleUrl(getString(R.string.map_satellite_url))
+    private fun setSatelliteStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_satellite_url))
 
     //侧滑菜单占屏幕的7/10
     private fun setDrawerEdgeSize() {
@@ -362,8 +364,8 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun fill3DLayer() {
-        fillExtrusionLayer?.let { layer -> mapBoxMap?.removeLayer(layer) }
-        fillExtrusionLayer = presenter.get3DBuildingLayer().apply { mapBoxMap?.addLayer(this) }
+        fillExtrusionLayer?.let { layer -> mapBoxMap?.style?.removeLayer(layer) }
+        fillExtrusionLayer = presenter.get3DBuildingLayer().apply { mapBoxMap?.style?.addLayer(this) }
     }
 
     /*satellite map*/
@@ -381,7 +383,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     /*clear map*/
     private fun clearLayer() {
 //        mapBoxMap?.clear()
-        fillExtrusionLayer?.let { layer -> mapBoxMap?.removeLayer(layer) }
+        fillExtrusionLayer?.let { layer -> mapBoxMap?.style?.removeLayer(layer) }
         fillExtrusionLayer = null
     }
 

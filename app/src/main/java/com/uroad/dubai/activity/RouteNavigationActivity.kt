@@ -18,7 +18,10 @@ import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
+import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
+import com.mapbox.mapboxsdk.annotations.MarkerOptions
+import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
@@ -71,6 +74,9 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var routePresenter: RouteNavigationPresenter
     private var isRouteNavigation = false
+    private var isFromUserClick = false
+    private var userMarker: Marker? = null
+    private var isSimulate = false
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
@@ -82,7 +88,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         initProfileRg()
         initRoutesRv()
         initSave()
-        initNavigation()
+        initBottomView()
     }
 
     private fun initPoiTextView() {
@@ -289,17 +295,18 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         tvSave.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
     }
 
-    private fun initNavigation() {
+    private fun initBottomView() {
+        ivLocation.setOnClickListener {
+            isFromUserClick = true
+            openLocation()
+        }
+        cbSimulate.setOnCheckedChangeListener { _, isChecked -> isSimulate = isChecked }
         tvNavigation.setOnClickListener {
             selectedRoute?.let { route ->
-                // Create a NavigationLauncherOptions object to package everything together
-//                val options = NavigationLauncherOptions.builder()
-//                        .directionsRoute(route)
-//                        .shouldSimulateRoute(true)
-//                        .build()
-//                // Call this method with Context from within an Activity
-//                NavigationLauncher.startNavigation(this, options)
-                openActivity(MapNavigationActivity::class.java, Bundle().apply { putString("route", route.toJson()) })
+                openActivity(MapNavigationActivity::class.java, Bundle().apply {
+                    putString("route", route.toJson())
+                    putBoolean("shouldSimulateRoute", isSimulate)
+                })
             }
         }
     }
@@ -317,13 +324,30 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     override fun afterLocation(location: Location) {
-        moveToUserLocation(location)
+        initMyLocation(location)
+        if (isFromUserClick) {
+            moveToUserLocation(location)
+        }
     }
 
-    private fun moveToUserLocation(location: Location) {
+    private fun initMyLocation(location: Location) {
         startPoint = Point.fromLngLat(location.longitude, location.latitude)
         tvStartPoint.text = getString(R.string.route_myLocation)
         startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+    }
+
+    private fun moveToUserLocation(location: Location) {
+        userMarker?.let { mapBoxMap?.removeMarker(it) }
+        val options = MarkerOptions()
+                .position(LatLng(location.latitude, location.longitude))
+                .icon(IconFactory.getInstance(this).fromResource(R.mipmap.ic_user_location))
+        userMarker = mapBoxMap?.addMarker(options)
+        var zoom = 17.toDouble()
+        mapBoxMap?.cameraPosition?.let { zoom = it.zoom }
+        val position = CameraPosition.Builder()
+                .target(LatLng(location.latitude, location.longitude))
+                .zoom(zoom).build()
+        mapBoxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
     }
 
     override fun onPoiResult(features: MutableList<CarmenFeature>) {

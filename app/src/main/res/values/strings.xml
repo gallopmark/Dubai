@@ -75,6 +75,9 @@
     <string name="mapData_weather">Weather</string>
     <string name="mapData_RWIS">RWIS</string>
     <string name="mapData_busStop">Bus stop</string>
+    <string name="mapData_gasStation">Gas stations</string>
+    <string name="mapData_attractions">Attractions</string>
+    <string name="mapData_store">Store</string>
 
     <string name="start_time">Start time</string>
     <string name="handle_time">Handle time</string>

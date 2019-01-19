@@ -141,61 +141,91 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:layout_marginBottom="@dimen/space_10">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_1"
-            android:layout_marginStart="@dimen/space_16"
-            android:layout_marginEnd="@dimen/space_16"
-            android:background="@color/itemDivider" />
+            <ImageView
+                android:id="@+id/ivLocation"
+                android:layout_width="@dimen/space_45"
+                android:layout_height="@dimen/space_45"
+                android:background="@drawable/bg_corners_white_5dp"
+                android:scaleType="center"
+                android:src="@mipmap/ic_location_grey" />
+
+            <CheckBox
+                android:id="@+id/cbSimulate"
+                android:layout_width="@dimen/space_45"
+                android:layout_height="@dimen/space_45"
+                android:layout_gravity="end"
+                android:background="@drawable/bg_simulate_selector"
+                android:button="@null" />
+        </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/llBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/space_10"
-            android:orientation="horizontal">
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <com.uroad.dubai.widget.DrawableCenterTextView
-                android:id="@+id/tvSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@mipmap/ic_collect_buttonbg"
-                android:drawableStart="@mipmap/ic_collect"
-                android:drawablePadding="@dimen/space_5"
-                android:gravity="center|start"
-                android:text="@string/route_save"
-                android:textColor="@color/theme_red"
-                android:textSize="@dimen/font_16" />
-
-            <com.uroad.dubai.widget.DrawableCenterTextView
-                android:id="@+id/tvNavigation"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/space_10"
-                android:background="@mipmap/ic_navigation_buttonbg"
-                android:drawableStart="@mipmap/ic_navigation_start_white"
-                android:drawablePadding="@dimen/space_5"
-                android:gravity="center"
-                android:text="@string/route_start"
-                android:textColor="@color/white"
-                android:textSize="@dimen/font_16" />
+                android:orientation="horizontal" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_1"
+                android:layout_marginStart="@dimen/space_16"
+                android:layout_marginEnd="@dimen/space_16"
+                android:background="@color/itemDivider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_10"
+                android:orientation="horizontal">
+
+                <com.uroad.dubai.widget.DrawableCenterTextView
+                    android:id="@+id/tvSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/ic_collect_buttonbg"
+                    android:drawableStart="@mipmap/ic_collect"
+                    android:drawablePadding="@dimen/space_5"
+                    android:gravity="center|start"
+                    android:text="@string/route_save"
+                    android:textColor="@color/theme_red"
+                    android:textSize="@dimen/font_16" />
+
+                <com.uroad.dubai.widget.DrawableCenterTextView
+                    android:id="@+id/tvNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/space_10"
+                    android:background="@mipmap/ic_navigation_buttonbg"
+                    android:drawableStart="@mipmap/ic_navigation_start_white"
+                    android:drawablePadding="@dimen/space_5"
+                    android:gravity="center"
+                    android:text="@string/route_start"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_16" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

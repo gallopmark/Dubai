@@ -91,6 +91,7 @@
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_10"
         android:src="@mipmap/ic_report_layer"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cbTouristLayer" />
 
@@ -137,6 +138,17 @@
         android:src="@mipmap/ic_location_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivRouteArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_10"
+        android:layout_marginBottom="@dimen/space_60"
+        android:scaleType="center"
+        android:src="@mipmap/ic_route_navipage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <include
         android:id="@+id/contentSearch"

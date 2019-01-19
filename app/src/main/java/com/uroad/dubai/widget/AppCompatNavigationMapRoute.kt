@@ -4,10 +4,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.location.Location
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.annotation.Size
-import android.support.annotation.StyleRes
+import android.support.annotation.*
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.content.res.AppCompatResources
@@ -25,6 +22,7 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.expressions.Expression
 import com.mapbox.mapboxsdk.style.expressions.Expression.*
 import com.mapbox.mapboxsdk.style.layers.*
@@ -36,7 +34,6 @@ import com.mapbox.mapboxsdk.utils.MathUtils
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute
 import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener
 import com.mapbox.services.android.navigation.ui.v5.utils.MapImageUtils
-import com.mapbox.services.android.navigation.ui.v5.utils.MapUtils
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
@@ -44,7 +41,6 @@ import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.turf.TurfMisc
 import com.uroad.dubai.R
-import com.uroad.dubai.R.string.routes
 import java.util.*
 
 /**
@@ -133,6 +129,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     private var directionsRoutes: MutableList<DirectionsRoute>
     private var layerIds: MutableList<String>
     private var mapView: MapView
+    private var style: Style? = null
     private var primaryRouteIndex: Int = 0
     //    private float routeScale;
     //    private float alternativeRouteScale;
@@ -222,6 +219,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
         this.styleRes = styleRes
         this.mapView = mapView
         this.mapboxMap = mapboxMap
+        this.style = mapboxMap.style
         this.navigation = navigation
         this.belowLayer = belowLayer
         featureCollections = ArrayList()
@@ -338,7 +336,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
             if (layerId.contains(primaryRouteIndex.toString()) || layerId.contains(WAYPOINT_LAYER_ID)) {
                 continue
             }
-            val layer = mapboxMap.getLayer(layerId)
+            val layer = style?.getLayer(layerId)
             layer?.setProperties(visibility(if (visible) Property.VISIBLE else Property.NONE))
         }
     }
@@ -458,8 +456,8 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     }
 
     private fun initializeUpcomingManeuverArrow() {
-        arrowShaftGeoJsonSource = mapboxMap.getSource(ARROW_SHAFT_SOURCE_ID) as GeoJsonSource?
-        arrowHeadGeoJsonSource = mapboxMap.getSource(ARROW_HEAD_SOURCE_ID) as GeoJsonSource?
+        arrowShaftGeoJsonSource = style?.getSource(ARROW_SHAFT_SOURCE_ID) as GeoJsonSource?
+        arrowHeadGeoJsonSource = style?.getSource(ARROW_HEAD_SOURCE_ID) as GeoJsonSource?
 
         val shaftLayer = createArrowShaftLayer()
         val shaftCasingLayer = createArrowShaftCasingLayer()
@@ -473,11 +471,11 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
             addArrowHeadIcon()
             addArrowHeadIconCasing()
 
-            mapboxMap.addLayerBelow(shaftCasingLayer, LAYER_ABOVE_UPCOMING_MANEUVER_ARROW)
-            mapboxMap.addLayerAbove(headCasingLayer, shaftCasingLayer.id)
+            style?.addLayerBelow(shaftCasingLayer, LAYER_ABOVE_UPCOMING_MANEUVER_ARROW)
+            style?.addLayerAbove(headCasingLayer, shaftCasingLayer.id)
 
-            mapboxMap.addLayerAbove(shaftLayer, headCasingLayer.id)
-            mapboxMap.addLayerAbove(headLayer, shaftLayer.id)
+            style?.addLayerAbove(shaftLayer, headCasingLayer.id)
+            style?.addLayerAbove(headLayer, shaftLayer.id)
         }
         initializeArrowLayers(shaftLayer, shaftCasingLayer, headLayer, headCasingLayer)
     }
@@ -487,7 +485,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
                 ARROW_SHAFT_SOURCE_ID,
                 arrowShaftGeoJsonFeature,
                 GeoJsonOptions().withMaxZoom(16)
-        ).apply { mapboxMap.addSource(this) }
+        ).apply { style?.addSource(this) }
     }
 
     private fun initializeArrowHead() {
@@ -495,7 +493,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
                 ARROW_HEAD_SOURCE_ID,
                 arrowShaftGeoJsonFeature,
                 GeoJsonOptions().withMaxZoom(16)
-        ).apply { mapboxMap.addSource(this) }
+        ).apply { style?.addSource(this) }
     }
 
     private fun addArrowHeadIcon() {
@@ -503,7 +501,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
             val head = DrawableCompat.wrap(it)
             DrawableCompat.setTint(head.mutate(), arrowColor)
             val icon = MapImageUtils.getBitmapFromDrawable(head)
-            mapboxMap.addImage(ARROW_HEAD_ICON, icon)
+            style?.addImage(ARROW_HEAD_ICON, icon)
         }
     }
 
@@ -512,12 +510,12 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
             val headCasing = DrawableCompat.wrap(it)
             DrawableCompat.setTint(headCasing.mutate(), arrowBorderColor)
             val icon = MapImageUtils.getBitmapFromDrawable(headCasing)
-            mapboxMap.addImage(ARROW_HEAD_ICON_CASING, icon)
+            style?.addImage(ARROW_HEAD_ICON_CASING, icon)
         }
     }
 
     private fun createArrowShaftLayer(): LineLayer {
-        val shaftLayer = mapboxMap.getLayer(ARROW_SHAFT_LINE_LAYER_ID) as LineLayer?
+        val shaftLayer = style?.getLayer(ARROW_SHAFT_LINE_LAYER_ID) as LineLayer?
         return shaftLayer
                 ?: LineLayer(ARROW_SHAFT_LINE_LAYER_ID, ARROW_SHAFT_SOURCE_ID).withProperties(
                         PropertyFactory.lineColor(color(arrowColor)),
@@ -535,7 +533,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     }
 
     private fun createArrowShaftCasingLayer(): LineLayer {
-        val shaftCasingLayer = mapboxMap.getLayer(ARROW_SHAFT_CASING_LINE_LAYER_ID) as LineLayer?
+        val shaftCasingLayer = style?.getLayer(ARROW_SHAFT_CASING_LINE_LAYER_ID) as LineLayer?
         return shaftCasingLayer
                 ?: LineLayer(ARROW_SHAFT_CASING_LINE_LAYER_ID, ARROW_SHAFT_SOURCE_ID).withProperties(
                         PropertyFactory.lineColor(color(arrowBorderColor)),
@@ -553,7 +551,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     }
 
     private fun createArrowHeadLayer(): SymbolLayer {
-        val headLayer = mapboxMap.getLayer(ARROW_HEAD_LAYER_ID) as SymbolLayer?
+        val headLayer = style?.getLayer(ARROW_HEAD_LAYER_ID) as SymbolLayer?
         return headLayer ?: SymbolLayer(ARROW_HEAD_LAYER_ID, ARROW_HEAD_SOURCE_ID)
                 .withProperties(
                         PropertyFactory.iconImage(ARROW_HEAD_ICON),
@@ -572,7 +570,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     }
 
     private fun createArrowHeadCasingLayer(): SymbolLayer {
-        val headCasingLayer = mapboxMap.getLayer(ARROW_HEAD_CASING_LAYER_ID) as SymbolLayer?
+        val headCasingLayer = style?.getLayer(ARROW_HEAD_CASING_LAYER_ID) as SymbolLayer?
         return headCasingLayer
                 ?: SymbolLayer(ARROW_HEAD_CASING_LAYER_ID, ARROW_HEAD_SOURCE_ID).withProperties(
                         PropertyFactory.iconImage(ARROW_HEAD_ICON_CASING),
@@ -607,7 +605,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
      * appearance.
      */
     private fun updatePrimaryRoute(layerId: String, index: Int) {
-        val layer = mapboxMap.getLayer(layerId)
+        val layer = style?.getLayer(layerId)
         layer?.let {
             it.setProperties(PropertyFactory.lineColor(match(
                     Expression.toString(get(CONGESTION_KEY)),
@@ -616,19 +614,19 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
                     stop("heavy", color(if (index == primaryRouteIndex) routeSevereColor else alternativeRouteSevereColor)),
                     stop("severe", color(if (index == primaryRouteIndex) routeSevereColor else alternativeRouteSevereColor)))))
             if (index == primaryRouteIndex) {
-                mapboxMap.removeLayer(it)
-                mapboxMap.addLayerBelow(it, WAYPOINT_LAYER_ID)
+                style?.removeLayer(it)
+                style?.addLayerBelow(it, WAYPOINT_LAYER_ID)
             }
         }
     }
 
     private fun updatePrimaryShieldRoute(layerId: String, index: Int) {
-        val layer = mapboxMap.getLayer(layerId)
+        val layer = style?.getLayer(layerId)
         layer?.let {
             it.setProperties(PropertyFactory.lineColor(if (index == primaryRouteIndex) routeShieldColor else alternativeRouteShieldColor))
             if (index == primaryRouteIndex) {
-                mapboxMap.removeLayer(it)
-                mapboxMap.addLayerBelow(it, WAYPOINT_LAYER_ID)
+                style?.removeLayer(it)
+                style?.addLayerBelow(it, WAYPOINT_LAYER_ID)
             }
         }
     }
@@ -661,13 +659,13 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
                 )
                 )
         )
-        MapUtils.addLayerToMap(mapboxMap, routeLayer, belowLayer)
+        addLayerToMap(routeLayer, belowLayer)
     }
 
     private fun removeLayerIds() {
         if (!layerIds.isEmpty()) {
             for (id in layerIds) {
-                mapboxMap.removeLayer(id)
+                style?.removeLayer(id)
             }
         }
     }
@@ -704,7 +702,18 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
                 //                ),
                 PropertyFactory.lineColor(if (index == primaryRouteIndex) routeShieldColor else alternativeRouteShieldColor)
         )
-        MapUtils.addLayerToMap(mapboxMap, routeLayer, belowLayer)
+        addLayerToMap(routeLayer, belowLayer)
+    }
+
+    private fun addLayerToMap(@NonNull layer: Layer, @Nullable idBelowLayer: String?) {
+        if (style?.getLayer(layer.id) != null) {
+            return
+        }
+        if (idBelowLayer == null) {
+            style?.addLayer(layer)
+        } else {
+            style?.addLayerBelow(layer, idBelowLayer)
+        }
     }
 
     /**
@@ -760,7 +769,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
      */
     private fun placeRouteBelow() {
         if (TextUtils.isEmpty(belowLayer)) {
-            val styleLayers = mapboxMap.layers
+            val styleLayers = style?.layers ?: return
             for (i in styleLayers.indices) {
                 if (styleLayers[i] !is SymbolLayer
                         // Avoid placing the route on top of the user location layer
@@ -841,14 +850,15 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     private fun initializeListeners() {
         mapClickListener = MapboxMap.OnMapClickListener { point ->
             if (invalidMapClick()) {
-                return@OnMapClickListener
+                return@OnMapClickListener true
             }
             val currentRouteIndex = primaryRouteIndex
 
             if (findClickedRoute(point)) {
-                return@OnMapClickListener
+                return@OnMapClickListener true
             }
             checkNewRouteFound(currentRouteIndex)
+            return@OnMapClickListener true
         }
         didFinishLoadingStyleListener = MapView.OnDidFinishLoadingStyleListener {
             placeRouteBelow()
@@ -943,7 +953,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     private fun updateRoute() {
         // Update all route geometries to reflect their appropriate colors depending on if they are
         // alternative or primary.
-        if(primaryRouteIndex !in 0 until directionsRoutes.size) return
+        if (primaryRouteIndex !in 0 until directionsRoutes.size) return
         val data = ArrayList<DirectionsRoute>()
         data.add(directionsRoutes[primaryRouteIndex])
         for (i in 0 until directionsRoutes.size) {
@@ -1054,11 +1064,11 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
         if (fc == null) {
             fc = FeatureCollection.fromFeatures(arrayOf())
         }
-        val source = mapboxMap.getSourceAs<GeoJsonSource>(sourceId)
+        val source = style?.getSourceAs<GeoJsonSource>(sourceId)
         if (source == null) {
             val routeGeoJsonOptions = GeoJsonOptions().withMaxZoom(16)
             val routeSource = GeoJsonSource(sourceId, fc, routeGeoJsonOptions)
-            mapboxMap.addSource(routeSource)
+            style?.addSource(routeSource)
         } else {
             source.setGeoJson(fc)
         }
