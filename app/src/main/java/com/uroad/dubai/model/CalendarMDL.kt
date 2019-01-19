@@ -1,6 +1,6 @@
 package com.uroad.dubai.model
 
-class CalendarMDL {
+open class CalendarMDL {
 
     var weekDataTitle : String? = null
     var list : ArrayList<CalendarListMDL>?= null

@@ -1,5 +1,6 @@
 package com.uroad.dubai.api.presenter
 
+import android.util.Log
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.view.AttractionNearFMView

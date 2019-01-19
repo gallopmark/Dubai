@@ -1,7 +1,12 @@
 package com.uroad.dubai.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.pm.PackageInfoCompat
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.dialog.WelcomeDialog
@@ -20,6 +25,9 @@ class MainActivity : BaseActivity() {
         private const val TAB_MINE = "mine"
     }
 
+    val arrayOf = arrayOf(Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR)
+
     override fun setUp(savedInstanceState: Bundle?) {
         requestWindowFullScreen()
         setBaseContentViewWithoutTitle(R.layout.activity_main, true)
@@ -28,6 +36,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initTab() {
+        requestPermissions()
         radioGroup.setOnCheckedChangeListener { _, checkId ->
             when (checkId) {
                 R.id.rbHome -> setCurrentTab(1)
@@ -78,6 +87,20 @@ class MainActivity : BaseActivity() {
         if (!AppSource.isWelcome(this)) {
             WelcomeDialog(this).show()
             AppSource.saveWelcome(this)
+        }
+    }
+
+    private fun requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (ContextCompat.checkSelfPermission(this@MainActivity,
+                            arrayOf[0]) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this@MainActivity,
+                            arrayOf[1]) == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                requestPermissions(arrayOf, 2000)
+            }
         }
     }
 }

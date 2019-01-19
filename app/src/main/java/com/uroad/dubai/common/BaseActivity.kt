@@ -1,7 +1,6 @@
 package com.uroad.dubai.common
 
-import android.support.annotation.IntegerRes
-import android.support.annotation.RawRes
+
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.LayoutInflater

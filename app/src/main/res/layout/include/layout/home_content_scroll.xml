@@ -52,6 +52,7 @@
             android:textSize="@dimen/font_14" />
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space_10"
@@ -60,6 +61,7 @@
             android:textSize="@dimen/font_18" />
 
         <com.uroad.library.banner.GalleryRecyclerView
+            android:visibility="gone"
             android:id="@+id/bannerFavorites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

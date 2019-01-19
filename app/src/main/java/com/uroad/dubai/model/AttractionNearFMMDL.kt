@@ -5,13 +5,19 @@ import com.uroad.dubai.R
 
 class AttractionNearFMMDL {
     var id: String? = null
+    var newsid: String? = null
     var time: String? = null
     var title: String? = null
     var content: String? = null
     var address: String? = null
     var headimg: String? = null
     var phone: String? = null
+    var subtitle: String? = null
+    var hours: String? = null
+    var commentstar: String? = null
     var publishtime: String? = null
+    var newstypename: String? = null
+    var website: String? = null
     var distance: String? = null
     var imgPath: String? = null
     var type: String? = null

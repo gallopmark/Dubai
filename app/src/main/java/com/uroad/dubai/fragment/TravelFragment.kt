@@ -1,5 +1,8 @@
 package com.uroad.dubai.fragment
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.AppBarLayout
@@ -11,12 +14,17 @@ import android.widget.ImageView
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.AttractionListCardAdapter
+import com.uroad.dubai.adapter.FavoritesAdapter
 import com.uroad.dubai.api.presenter.AttractionPresenter
+import com.uroad.dubai.api.presenter.CalendarPresenter
 import com.uroad.dubai.api.view.AttractionView
+import com.uroad.dubai.api.view.CalendarView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
+import com.uroad.dubai.model.CalendarMDL
+import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.decoration.ItemDecoration
@@ -30,17 +38,20 @@ import kotlinx.android.synthetic.main.travel_content_menu.*
  * @create 2018/12/12
  * @describe 旅游
  */
-class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionView {
+class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionView, CalendarView {
 
     private val data = ArrayList<ScenicMDL>()
     private lateinit var adapter: AttractionListCardAdapter
     private val handler = Handler()
+    private lateinit var calendarPresenter: CalendarPresenter
+    private val favorites = ArrayList<FavoritesMDL>()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_travel)
         initAppBar()
         initView()
-        initRv()
+        //initRv()
+        initFavorites()
     }
 
     override fun createPresenter(): AttractionPresenter = AttractionPresenter(this)
@@ -57,6 +68,16 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
             }
         })
         setTopImage()
+    }
+
+    private fun initFavorites() {
+        bannerFavorites.isNestedScrollingEnabled = false
+        bannerFavorites.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
+        bannerFavorites.adapter = FavoritesAdapter(context, favorites)
+        bannerFavorites.initFlingSpeed(9000).initPageParams(-10, 35)
+                .initPosition(0)
+                .setAnimFactor(0.1f)
+                .autoPlay(false)
     }
 
     //重新计算图片高度 避免图片压缩
@@ -90,6 +111,9 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
         tvGroups.setOnClickListener { openActivity(GroupsSetupActivity::class.java) }
         tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
+        tvMoreClan.setOnClickListener { openActivity(CalendarListActivity::class.java) }
+
+        inspectPermissions()
     }
 
     private fun initRv() {
@@ -109,7 +133,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     }
 
     override fun initData() {
-        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
+        //presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
     }
 
     override fun onGetAttraction(attractions: MutableList<ScenicMDL>) {
@@ -137,4 +161,36 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         handler.removeCallbacks(runnable)
         super.onDestroyView()
     }
+
+    override fun loadCalendarSuccess(list: ArrayList<CalendarMDL>) {
+        val mdl = list[0]
+        mdl.let {
+            favorites.clear()
+            it.list?.forEach { it1 ->
+                val fa = FavoritesMDL()
+                fa.calendarMDL = it1
+                it1.titleTimeData = it.weekDataTitle?.let { it2 -> fa.showTime(it2) }
+                favorites.add(fa)
+            }
+            bannerFavorites.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    override fun loadError(e: String) {
+
+    }
+
+    private fun inspectPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                calendarPresenter = CalendarPresenter(this@TravelFragment)
+                calendarPresenter.getCalendar(context,true)
+            }
+        }
+    }
+
 }

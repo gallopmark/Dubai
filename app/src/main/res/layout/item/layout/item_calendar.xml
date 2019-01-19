@@ -25,6 +25,7 @@
         android:layout_height="wrap_content" />
 
     <ImageView
+        android:visibility="gone"
         android:layout_marginTop="@dimen/space_13"
         android:layout_alignTop="@+id/ivCalendarType"
         android:layout_marginRight="@dimen/space_20"

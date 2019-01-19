@@ -64,18 +64,58 @@
 
             <include layout="@layout/travel_content_menu" />
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/home_title_favorites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_16"
+                    android:layout_marginRight="@dimen/space_16"
+                    android:textColor="@color/color_66"
+                    android:textSize="@dimen/font_20" />
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:id="@+id/tvMoreClan"
+                    android:text="@string/home_menu_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/space_16"
+                    android:textColor="@color/color_66"
+                    android:textSize="@dimen/font_14" />
+
+            </LinearLayout>
+
+            <com.uroad.library.banner.GalleryRecyclerView
+                android:id="@+id/bannerFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:helper="PagerSnapHelper" />
+
             <TextView
+                android:visibility="gone"
+                android:text="@string/travel_title_recommend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_16"
                 android:layout_marginRight="@dimen/space_16"
                 android:layout_marginBottom="@dimen/space_10"
-                android:text="@string/travel_title_recommend"
                 android:textColor="@color/color_66"
                 android:textSize="@dimen/font_20" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

@@ -34,7 +34,7 @@ class ParkingListActivity: BaseRefreshPresenterActivity<ParkingPresenter>(), Par
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.id_menu_search -> {
-                showShortToast("程序员正在日以继夜的开发中...")
+
             }
         }
         return super.onOptionsItemSelected(item)

@@ -43,7 +43,7 @@ class NearMeRestaurantsFragment : BasePresenterFragment<NewsPresenter>(), NewsVi
                 val mdl = data[position]
                 openActivity(DetailsActivity::class.java, Bundle().apply {
                     putString("title",mdl.title)
-                    putString("time",mdl.publishtime)
+                    putString("time",mdl.hours)
                     putString("imgUrl",mdl.headimg)
                     putString("content",mdl.content)
                 })
