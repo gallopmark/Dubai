@@ -11,22 +11,25 @@
     app:cardUseCompatPadding="true"
     app:contentPadding="@dimen/space_10">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/ivPic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/space_130"
+            android:layout_height="@dimen/space_100"
             android:layout_gravity="center"
             android:scaleType="fitXY" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_toEndOf="@+id/ivPic"
+            android:layout_alignTop="@+id/ivPic"
+            android:layout_alignBottom="@+id/ivPic"
             android:layout_marginStart="@dimen/space_10"
             android:orientation="vertical">
 
@@ -34,9 +37,9 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_5"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="4"
+                android:textAllCaps="false"
                 android:minLines="2"
                 android:textColor="@color/appTextColor"
                 android:textSize="@dimen/font_14" />
@@ -45,10 +48,9 @@
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/space_25"
+                android:layout_alignParentBottom="true"
                 android:textColor="@color/gary"
                 android:textSize="@dimen/font_13" />
-        </LinearLayout>
-    </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

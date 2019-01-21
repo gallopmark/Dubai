@@ -15,10 +15,14 @@ import com.uroad.library.utils.DisplayUtils
  */
 class MainBannerAdapter(private val context: Context, data: MutableList<ScenicMDL>)
     : BannerBaseArrayAdapter<ScenicMDL>(context, data) {
-    private val itemHeight = DisplayUtils.getWindowHeight(context) * 3 / 10
+    private val itemWidth = DisplayUtils.getWindowWidth(context) - DisplayUtils.dip2px(context, 10f) * 2
+    private val itemHeight = itemWidth / 2
     override fun bindView(viewType: Int): Int = R.layout.item_main_banner
     override fun bindHolder(holder: RecyclerHolder, t: ScenicMDL, position: Int) {
-        holder.itemView.layoutParams = holder.itemView.layoutParams.apply { height = itemHeight }
+        holder.itemView.layoutParams = holder.itemView.layoutParams.apply {
+            width = itemWidth
+            height = itemHeight
+        }
         val ivPic = holder.obtainView<ImageView>(R.id.ivPic)
         GlideV4.getInstance().displayImage(context, t.headimg, ivPic)
     }

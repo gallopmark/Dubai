@@ -4,8 +4,8 @@ import android.support.v7.widget.RecyclerView
 
 class AnimManager {
     companion object {
-        private const val ANIM_BOTTOM_TO_TOP = 0
-        private const val ANIM_TOP_TO_BOTTOM = 1
+        const val ANIM_BOTTOM_TO_TOP = 0
+        const val ANIM_TOP_TO_BOTTOM = 1
     }
 
     /**

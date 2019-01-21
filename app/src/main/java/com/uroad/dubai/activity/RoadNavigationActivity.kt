@@ -103,11 +103,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
             }
         }
         cbTrafficLayer.setOnCheckedChangeListener { _, isChecked -> changeTrafficLayer(isChecked) }
-        cbTrafficLayer.isChecked = true
-        cbTouristLayer.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) presenter.getScenic()
-            else removePointFromMap(MapDataType.SCENIC.CODE)
-        }
+        ivTouristLayer.setOnClickListener { onScenic() }
         ivReportLayer.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
@@ -312,6 +308,12 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         layerOption.layoutParams = params
     }
 
+    private fun onScenic(){
+        removePointFromMap(MapDataType.SCENIC.CODE)
+        presenter.getScenic()
+        clearChecks()
+    }
+
     private fun initLayer() {
         llDefault.isSelected = true
         llDefault.setOnClickListener { if (!llDefault.isSelected) setSelected(1) }
@@ -489,6 +491,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun setCheckLayer() {
+        cbTrafficLayer.isChecked = true
         cbEvents.isChecked = true
         cbParking.isChecked = true
         cbCCTV.isChecked = true
@@ -497,6 +500,17 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         cbWeather.isChecked = true
         cbRWIS.isChecked = true
         cbBusStop.isChecked = true
+    }
+
+    private fun clearChecks() {
+        cbEvents.isChecked = false
+        cbParking.isChecked = false
+        cbCCTV.isChecked = false
+        cbDMS.isChecked = false
+        cbPolice.isChecked = false
+        cbWeather.isChecked = false
+        cbRWIS.isChecked = false
+        cbBusStop.isChecked = false
     }
 
     override fun onShowLoading() {

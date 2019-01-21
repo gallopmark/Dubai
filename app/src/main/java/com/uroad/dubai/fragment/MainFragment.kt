@@ -1,20 +1,14 @@
 package com.uroad.dubai.fragment
 
-import android.app.SearchManager
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
-import android.support.v4.app.FragmentTransaction
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
-import com.uroad.dubai.adapter.FavoritesAdapter
 import com.uroad.dubai.adapter.NearMeTabAdapter
 import com.uroad.dubai.common.BaseFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.local.UserPreferenceHelper
-import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.content_mainnearby.*
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -48,7 +42,6 @@ class MainFragment : BaseFragment() {
         initMenu()
         initBanner()
         initNotice()
-        //initFavorites()
         initNearBy()
     }
 
@@ -77,8 +70,8 @@ class MainFragment : BaseFragment() {
             if (check()) return@setOnClickListener
             openActivity(MessagesListActivity::class.java)
         }
-        ivSearch.setOnClickListener { }
-        ivSearchColl.setOnClickListener { }
+        ivSearch.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        ivSearchColl.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         ivNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         tvHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
@@ -94,23 +87,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initNotice() {
-        tvNotice.text = "Extended floating bridge hours and free toll period AI Maktoum Bridge"
-    }
-
-    private fun initFavorites() {
-        bannerFavorites.isNestedScrollingEnabled = false
-        val favorites = ArrayList<FavoritesMDL>().apply {
-            add(FavoritesMDL())
-            add(FavoritesMDL())
-            add(FavoritesMDL())
-            add(FavoritesMDL())
-        }
-        bannerFavorites.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }
-        bannerFavorites.adapter = FavoritesAdapter(context, favorites)
-        bannerFavorites.initFlingSpeed(9000).initPageParams(-10, 35)
-                .initPosition(0)
-                .setAnimFactor(0.1f)
-                .autoPlay(false)
+        childFragmentManager.beginTransaction().replace(R.id.flNotice,MainNoticeFragment()).commitAllowingStateLoss()
     }
 
     private fun initNearBy() {
@@ -151,13 +128,13 @@ class MainFragment : BaseFragment() {
 
     private fun setCurrentTab(tab: Int) {
         hideFragments()
-        when(tab){
-            0 ->  flNearMeRoads.visibility = View.VISIBLE
-            1 ->  flNearMeEvents.visibility = View.VISIBLE
-            2 ->  flNearMeNews.visibility = View.VISIBLE
-            3 ->  flNearMeHotel.visibility = View.VISIBLE
-            4 ->  flNearMeRestaurants.visibility = View.VISIBLE
-            5 ->  flNearMeAttractions.visibility = View.VISIBLE
+        when (tab) {
+            0 -> flNearMeRoads.visibility = View.VISIBLE
+            1 -> flNearMeEvents.visibility = View.VISIBLE
+            2 -> flNearMeNews.visibility = View.VISIBLE
+            3 -> flNearMeHotel.visibility = View.VISIBLE
+            4 -> flNearMeRestaurants.visibility = View.VISIBLE
+            5 -> flNearMeAttractions.visibility = View.VISIBLE
         }
     }
 
@@ -170,21 +147,11 @@ class MainFragment : BaseFragment() {
         flNearMeAttractions.visibility = View.GONE
     }
 
-    private fun check() : Boolean{
-        if (!UserPreferenceHelper.isLogin(context)){
+    private fun check(): Boolean {
+        if (!UserPreferenceHelper.isLogin(context)) {
             openActivity(LoginActivity::class.java)
             return true
         }
         return false
-    }
-
-
-    private fun sendEmail(){
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "message/rfc822"
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("Test@dubai.com"))
-        intent.putExtra(Intent.EXTRA_SUBJECT,"Your suggestion")
-        intent.putExtra(Intent.EXTRA_TEXT,"We hope to get your advice.")
-        context.startActivity(Intent.createChooser(intent,"Select email application."))
     }
 }

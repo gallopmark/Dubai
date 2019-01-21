@@ -88,6 +88,7 @@
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
             android:drawablePadding="@dimen/space_10"
             android:gravity="center|start"
+            android:visibility="gone"
             android:paddingStart="@dimen/space_16"
             android:paddingEnd="@dimen/space_16"
             android:text="@string/mine_calendar"

@@ -20,10 +20,11 @@ open class BasePresenter<V : BaseView>(private var baseView: V?) {
 
     fun getBaseV() = baseView
 
-    fun request(method: String?, params: HashMap<String, String?>, observer: StringObserver) {
+    fun request(method: String?, params: HashMap<String, String?>, observer: StringObserver): Disposable {
         val disposable = ApiService.doRequest(method, params).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribeWith(observer)
         compositeDisposable.add(disposable)
+        return disposable
     }
 
     fun <T> addDisposable(observable: Observable<T>, observer: BaseObserver<T>) {

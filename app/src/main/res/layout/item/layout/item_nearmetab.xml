@@ -13,7 +13,7 @@
         android:layout_alignStart="@+id/tvTab"
         android:layout_alignEnd="@+id/tvTab"
         android:layout_marginStart="@dimen/space_4"
-        android:layout_marginTop="@dimen/minus_6"
+        android:layout_marginTop="@dimen/minus_11"
         android:layout_marginEnd="@dimen/space_4"
         android:background="@color/color_calendar" />
 
@@ -22,6 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="@dimen/space_5"
+        android:text="Roads"
         android:textColor="@color/color_66"
         android:textSize="@dimen/font_14" />
 </RelativeLayout>

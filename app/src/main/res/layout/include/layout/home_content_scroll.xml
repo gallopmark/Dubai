@@ -39,32 +39,28 @@
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/tvNotice"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/flNotice"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/space_16"
             android:layout_marginTop="@dimen/space_10"
-            android:layout_marginRight="@dimen/space_16"
-            android:drawableLeft="@mipmap/ic_notice_grey"
-            android:drawablePadding="@dimen/space_5"
-            android:textColor="@color/grey"
-            android:textSize="@dimen/font_14" />
+            android:layout_marginRight="@dimen/space_16" />
 
         <TextView
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space_10"
             android:text="@string/home_title_favorites"
             android:textColor="@color/black"
-            android:textSize="@dimen/font_18" />
+            android:textSize="@dimen/font_18"
+            android:visibility="gone" />
 
         <com.uroad.library.banner.GalleryRecyclerView
-            android:visibility="gone"
             android:id="@+id/bannerFavorites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:helper="PagerSnapHelper" />
 
         <TextView

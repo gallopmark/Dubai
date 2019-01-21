@@ -48,15 +48,15 @@ class GalleryRecyclerView : RecyclerView, View.OnTouchListener, GalleryItemDecor
 
     private val mAutoPlayTask = object : Runnable {
         override fun run() {
-            val adapter = adapter
-            if (adapter == null || adapter.itemCount <= 0) {
+            removeAutoPlayTask()
+            val adapter = adapter ?: return
+            if (adapter.itemCount <= 0) {
                 return
             }
             val position = getScrolledPosition()
             val itemCount = adapter.itemCount
             val newPosition = (position + 1) % itemCount
             smoothScrollToPosition(newPosition)
-            mHandler.removeCallbacks(this)
             mHandler.postDelayed(this, mInterval.toLong())
         }
     }

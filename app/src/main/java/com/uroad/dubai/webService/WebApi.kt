@@ -15,7 +15,7 @@ class WebApi {
 
         const val GET_ROADS_LIST = "getRoadList"
 
-        fun getRoadListParams(index : Int, size : Int , keyword: String) = getBaseParams().apply {
+        fun getRoadListParams(index: Int, size: Int, keyword: String) = getBaseParams().apply {
             put("keyword", keyword)
             put("index", index.toString())
             put("size", size.toString())
@@ -23,5 +23,7 @@ class WebApi {
 
         const val GET_WEATHER_LIST = "getWeather"
         fun getWeatherListParams() = getBaseParams()
+
+        const val GET_NOTICE = "getNotice"
     }
 }

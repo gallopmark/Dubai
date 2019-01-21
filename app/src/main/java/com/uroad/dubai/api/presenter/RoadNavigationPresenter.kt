@@ -26,10 +26,12 @@ import com.uroad.dubai.model.*
 import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.utils.SymbolGenerator
 import com.uroad.dubai.webService.WebApi
+import io.reactivex.disposables.Disposable
 
 class RoadNavigationPresenter(private val activity: BaseActivity,
                               private val navigationView: RoadNavigationView)
     : BasePresenter<RoadNavigationView>(navigationView) {
+    private var disposable: Disposable? = null
     private val latitudeArray = doubleArrayOf(24.29045862222854, 25.71109733694287, 25.50251457879257,
             25.260430807520947, 24.98663128116354, 24.861623304922887, 24.583673073761176, 24.65789600887483,
             25.035503774803118, 25.012879832914024, 24.604357106770124, 24.628219646337257, 25.235800209105093,
@@ -58,7 +60,8 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
     }
 
     fun getScenic() {
-        request(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 10), object : StringObserver(navigationView) {
+        disposable?.dispose()
+        disposable = request(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 10), object : StringObserver(navigationView) {
             override fun onHttpResultOk(data: String?) {
                 navigationView.onGetScenic(GsonUtils.fromDataToList(data, ScenicMDL::class.java))
             }

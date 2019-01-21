@@ -30,7 +30,7 @@ class SplashActivity : BaseLucaActivity() {
                 removeMessages(activity.updateCode)
                 if (!activity.isGoMain) activity.openMainPage()
             } else {
-                activity.tvJump.visibility = View.VISIBLE
+//                activity.tvJump.visibility = View.VISIBLE
                 val delayText = "${activity.getString(R.string.skip)}\u2000" + activity.second + "s"
                 activity.tvJump.text = delayText
                 activity.second--

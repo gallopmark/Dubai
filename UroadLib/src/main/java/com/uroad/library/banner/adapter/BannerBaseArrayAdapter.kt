@@ -12,6 +12,6 @@ abstract class BannerBaseArrayAdapter<T>(context: Context, var data: List<T>) : 
     abstract fun bindHolder(holder: BannerBaseAdapter.RecyclerHolder, t: T, position: Int)
 
     override fun getItemCount(): Int {
-        return if (data.isNullOrEmpty()) 0 else Integer.MAX_VALUE
+        return if (data.isEmpty()) 0 else Integer.MAX_VALUE
     }
 }
