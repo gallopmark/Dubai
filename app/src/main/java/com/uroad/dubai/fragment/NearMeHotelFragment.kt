@@ -6,7 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.DetailsActivity
+import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.HotelListCardAdapter
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
@@ -15,6 +15,7 @@ import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
+import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
@@ -41,12 +42,15 @@ class NearMeHotelFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 val mdl = data[position]
-                openActivity(DetailsActivity::class.java, Bundle().apply {
-                    putString("title",mdl.title)
-                    putString("time",mdl.hours)
-                    putString("imgUrl",mdl.headimg)
-                    putString("content",mdl.content)
-                })
+                val scenicMDL = ScenicMDL()
+                scenicMDL.headimg = mdl.headimg
+                scenicMDL.title = mdl.title
+                scenicMDL.content = mdl.content
+                scenicMDL.address = mdl.address
+                scenicMDL.hours = mdl.hours
+                scenicMDL.phone = mdl.phone
+                DubaiApplication.clickItemScenic = scenicMDL
+                openActivity(ScenicDetailActivity::class.java)
             }
         })
     }

@@ -2,9 +2,11 @@ package com.uroad.dubai.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.RelativeLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.WeatherMDL
+import com.uroad.library.utils.DisplayUtils
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,8 +14,11 @@ import java.util.*
 class WeatherAdapter (private val context: Context, data: MutableList<WeatherMDL.DailyForecastsMDL>)
     : BaseArrayRecyclerAdapter<WeatherMDL.DailyForecastsMDL>(context,data) {
 
-
+    private var itemWith =  DisplayUtils.getWindowWidth(context) / 4
+    private var itemHeight = itemWith*2
+    private var params = RelativeLayout.LayoutParams(itemWith,itemHeight).apply { addRule(RelativeLayout.CENTER_HORIZONTAL) }
     override fun onBindHoder(holder: RecyclerHolder, t: WeatherMDL.DailyForecastsMDL, position: Int) {
+        holder.itemView.layoutParams = params
         t?.let {
             it.Date?.let { it1 ->
                 val date = parseDate(it1)
@@ -24,7 +29,6 @@ class WeatherAdapter (private val context: Context, data: MutableList<WeatherMDL
                 val wd = (it1.Maximum?.Value!! - 32) / 1.8f
                 holder.setText(R.id.tvTemperature,changeDouble(wd).toString())
             }
-
         }
     }
 

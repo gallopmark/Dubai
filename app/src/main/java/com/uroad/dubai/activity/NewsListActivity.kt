@@ -1,6 +1,5 @@
 package com.uroad.dubai.activity
 
-import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.NewsListAdapter
@@ -10,6 +9,8 @@ import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.common.DubaiApplication
+import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
@@ -35,12 +36,21 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
         adapter.setOnItemClickListener(object :BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 var mdl = data[position]
-                openActivity(DetailsActivity::class.java,Bundle().apply {
+                val scenicMDL = ScenicMDL()
+                scenicMDL.headimg = mdl.headimg
+                scenicMDL.title = mdl.title
+                scenicMDL.content = mdl.content
+                scenicMDL.address = mdl.address
+                scenicMDL.hours = mdl.publishtime
+                scenicMDL.phone = mdl.phone
+                DubaiApplication.clickItemScenic = scenicMDL
+                openActivity(ScenicDetailActivity::class.java)
+                /*openActivity(DetailsActivity::class.java,Bundle().apply {
                     putString("title",mdl.title)
                     putString("time",mdl.publishtime)
                     putString("imgUrl",mdl.headimg)
                     putString("content",mdl.content)
-                })
+                })*/
             }
         })
     }

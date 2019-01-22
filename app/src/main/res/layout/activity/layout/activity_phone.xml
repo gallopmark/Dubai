@@ -28,6 +28,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tvCountry"
             android:text="@string/country_choice"
             android:gravity="center_vertical"
             android:drawableEnd="@mipmap/ic_arrow_right_grey"
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tvCountryCode"
             android:text="+971"
             android:textSize="@dimen/font_16"
             android:textColor="@color/gary"

@@ -153,4 +153,10 @@
         <item name="android:taskToBackExitAnimation">@null</item>
     </style>
 
+    <style name="Custom_Ratingbar"  parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_star</item>
+       <!-- <item name="android:minHeight">@dimen/space_30</item>
+        <item name="android:maxHeight">@dimen/space_30</item>-->
+    </style>
+
 </resources>

@@ -1,10 +1,8 @@
 package com.uroad.dubai.fragment
 
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils
 import android.view.View
-import com.google.gson.Gson
-import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.AttrNearFmListAdapter
 import com.uroad.dubai.api.presenter.AttractionNearFMPresenter
@@ -16,7 +14,6 @@ import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.AttractionNearFMMDL
 import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
-import kotlinx.android.synthetic.main.activity_base_refresh.*
 import java.util.*
 
 class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFMPresenter>() , AttractionNearFMView{
@@ -40,16 +37,16 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 val mdl = data[position]
-                if(type.equals("1001004")){
-                    val scenicMDL = ScenicMDL()
-                    scenicMDL.headimg = mdl.headimg
-                    scenicMDL.title = mdl.title
-                    scenicMDL.content = mdl.content
-                    scenicMDL.address = mdl.address
-                    scenicMDL.hours = mdl.time
-                    scenicMDL.phone = mdl.phone
-                    DubaiApplication.clickItemScenic = scenicMDL
-                    openActivity(ScenicDetailActivity::class.java)
+                val scenicMDL = ScenicMDL()
+                scenicMDL.headimg = mdl.headimg
+                scenicMDL.title = mdl.title
+                scenicMDL.content = mdl.content
+                scenicMDL.address = mdl.address
+                scenicMDL.hours = if (TextUtils.isEmpty(mdl.time)) mdl.hours else mdl.time
+                scenicMDL.phone = mdl.phone
+                DubaiApplication.clickItemScenic = scenicMDL
+                openActivity(ScenicDetailActivity::class.java)
+                /*if(type.equals("1001004")){
                     return
                 }
                 openActivity(DetailsActivity::class.java,Bundle().apply {
@@ -57,7 +54,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
                     putString("time",mdl.hours)
                     putString("imgUrl",mdl.headimg)
                     putString("content",mdl.content)
-                })
+                })*/
             }
         })
     }
@@ -65,7 +62,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
 
 
     private fun getMsgList(){
-        var code = when (type) {
+        val code = when (type) {
             "1001002" -> NewsType.HOTEL.code        //酒店
             "1001003" -> NewsType.RESTAURANT.code   //餐厅
             else -> NewsType.ATTRACTION.code        //1001004 景点

@@ -1,15 +1,10 @@
 package com.uroad.dubai.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.library.utils.DisplayUtils
