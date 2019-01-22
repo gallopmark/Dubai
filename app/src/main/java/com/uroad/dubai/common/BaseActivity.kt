@@ -8,8 +8,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.uroad.dubai.R
+import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.library.compat.AppToast
 import com.uroad.library.compat.LoadingDialog
+import com.uroad.library.utils.DeviceUtils
 
 /*需要toast提示时的页面继承改activity*/
 abstract class BaseActivity : BaseLucaActivity() {
@@ -65,6 +67,10 @@ abstract class BaseActivity : BaseLucaActivity() {
         }
     }
 
+    fun getUserId() = UserPreferenceHelper.getUserId(this)
+
+    fun getAndroidID() = DeviceUtils.getAndroidID(this)
+
     override fun onDestroy() {
         mShortToast?.cancel()
         mLongToast?.cancel()
@@ -72,6 +78,6 @@ abstract class BaseActivity : BaseLucaActivity() {
         super.onDestroy()
     }
 
-    open fun drawable(id : Int) = ContextCompat.getDrawable(this@BaseActivity, id)
+    open fun drawable(id: Int) = ContextCompat.getDrawable(this@BaseActivity, id)
 
 }

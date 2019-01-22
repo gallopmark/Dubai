@@ -77,4 +77,5 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-18'
     implementation 'top.zibin:Luban:1.1.8'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.tencent.bugly:crashreport:2.8.6'
 }

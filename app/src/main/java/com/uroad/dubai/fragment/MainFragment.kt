@@ -25,8 +25,12 @@ import kotlinx.android.synthetic.main.home_top_flexhead.*
 class MainFragment : BaseFragment() {
 
     private var statusHeight = 0
+    private var isNeedRefresh = false
 
     companion object {
+        private const val TAG_BANNER = "banner"
+        private const val TAG_NOTICE = "notice"
+        private const val TAG_FAVORITES = "favorites"
         private const val TAG_ROADS = "roads"
         private const val TAG_EVENTS = "events"
         private const val TAG_NEWS = "news"
@@ -42,6 +46,7 @@ class MainFragment : BaseFragment() {
         initMenu()
         initBanner()
         initNotice()
+        initFavorites()
         initNearBy()
     }
 
@@ -83,11 +88,15 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initBanner() {
-        childFragmentManager.beginTransaction().replace(R.id.flBanner, MainBannerFragment()).commitAllowingStateLoss()
+        childFragmentManager.beginTransaction().replace(R.id.flBanner, MainBannerFragment(), TAG_BANNER).commitAllowingStateLoss()
     }
 
     private fun initNotice() {
-        childFragmentManager.beginTransaction().replace(R.id.flNotice,MainNoticeFragment()).commitAllowingStateLoss()
+        childFragmentManager.beginTransaction().replace(R.id.flNotice, MainNoticeFragment(), TAG_NOTICE).commitAllowingStateLoss()
+    }
+
+    private fun initFavorites() {
+        childFragmentManager.beginTransaction().replace(R.id.flFavorites, MainFavoritesFragment(), TAG_FAVORITES).commitAllowingStateLoss()
     }
 
     private fun initNearBy() {
@@ -153,5 +162,28 @@ class MainFragment : BaseFragment() {
             return true
         }
         return false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onRefresh()
+    }
+
+    private fun onRefresh() {
+        if (!isNeedRefresh) return
+        else {
+            refreshFavorites()
+            isNeedRefresh = false
+        }
+    }
+
+    private fun refreshFavorites() {
+        val fragment = childFragmentManager.findFragmentByTag(TAG_FAVORITES)
+        if (fragment != null && fragment is MainFavoritesFragment) fragment.initData()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isNeedRefresh = true
     }
 }

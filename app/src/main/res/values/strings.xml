@@ -191,4 +191,9 @@
     <string name="feed_comments">Comments</string>
     <string name="feed_hint">Leave comments(optional)</string>
 
+    <string name="no_routes_found">No routes found</string>
+    <string name="location_not_granted">user location permission not granted</string>
+    <string name="save_route_success">Successful Subscription Route</string>
+    <string name="distance">Distance</string>
+    <string name="travel_time">Travel time</string>
 </resources>

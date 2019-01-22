@@ -72,7 +72,9 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
     private fun customTextView(): TextView {
         return TextView(context).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.font_14))
+            minLines = 2
             maxLines = 2
+            gravity = Gravity.CENTER or Gravity.START
             ellipsize = TextUtils.TruncateAt.END
             setTextColor(ContextCompat.getColor(context, R.color.grey))
             layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.CENTER }

@@ -6,10 +6,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.uroad.dubai.R
+import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.library.compat.AppToast
 import com.uroad.library.compat.LoadingDialog
+import com.uroad.library.utils.DeviceUtils
 
-abstract class BaseFragment :BaseLucaFragment(){
+abstract class BaseFragment : BaseLucaFragment() {
     private var mShortToast: Toast? = null
     private var mLongToast: Toast? = null
     private var mLoadingDialog: LoadingDialog? = null
@@ -53,6 +55,10 @@ abstract class BaseFragment :BaseLucaFragment(){
         }
         mLoadingDialog = LoadingDialog(context).setMsg(msg).apply { show() }
     }
+
+    fun getUserId() = UserPreferenceHelper.getUserId(context)
+
+    fun getAndroidID() = DeviceUtils.getAndroidID(context)
 
     open fun endLoading() {
         mLoadingDialog?.let {

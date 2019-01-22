@@ -17,6 +17,8 @@ import android.widget.RelativeLayout
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
+import com.mapbox.core.constants.Constants
+import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
@@ -26,8 +28,6 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions
 import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.DirectionsRouteAdapter
@@ -37,13 +37,18 @@ import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.api.presenter.RouteNavigationPresenter
+import com.uroad.dubai.api.presenter.RouteSubscribePresenter
 import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RouteNavigationView
+import com.uroad.dubai.api.view.RouteSubscribeView
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.MultiItem
 import com.uroad.dubai.model.PoiSearchPoiMDL
 import com.uroad.dubai.model.PoiSearchTextMDL
+import com.uroad.dubai.utils.GsonUtils
+import com.uroad.dubai.webService.WebApi
 import com.uroad.dubai.widget.AppCompatNavigationMapRoute
+import com.uroad.library.utils.DeviceUtils
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.activity_routenavigation.*
@@ -55,8 +60,7 @@ import kotlinx.android.synthetic.main.content_routepoisearch.*
  * @create 2018/12/22
  * @describe route navigation
  */
-class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView, PoiSearchView {
-
+class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView, PoiSearchView, RouteSubscribeView {
     private var startPoint: Point? = null
     private var endPoint: Point? = null
     private var poiKey: String? = ""
@@ -77,6 +81,8 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private var isFromUserClick = false
     private var userMarker: Marker? = null
     private var isSimulate = false
+    private var subscribePresenter: RouteSubscribePresenter? = null
+    private var isSubscribe = false
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
@@ -87,7 +93,6 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         initChangePoi()
         initProfileRg()
         initRoutesRv()
-        initSave()
         initBottomView()
     }
 
@@ -207,10 +212,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private fun onSelectCarmenFeature(carmenFeature: CarmenFeature?) {
         if (poiType == 1) {
             startPoint = carmenFeature?.center()
-            tvStartPoint.text = carmenFeature?.placeName()
+            tvStartPoint.text = carmenFeature?.text()
         } else {
             endPoint = carmenFeature?.center()
-            tvEndPoint.text = carmenFeature?.placeName()
+            tvEndPoint.text = carmenFeature?.matchingPlaceName()
         }
         onInitialState()
         startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
@@ -291,11 +296,8 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         recyclerView.layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.HORIZONTAL }
     }
 
-    private fun initSave() {
-        tvSave.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-    }
-
     private fun initBottomView() {
+        tvSave.setOnClickListener { onSaveRoute() }
         ivLocation.setOnClickListener {
             isFromUserClick = true
             openLocation()
@@ -316,7 +318,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     override fun onDismissLocationPermission() {
-        Snackbar.make(mapView, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(mapView, getString(R.string.location_not_granted), Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onExplanationLocationPermission(permissionsToExplain: MutableList<String>?) {
@@ -361,18 +363,18 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
 
     override fun onNavigationRoutes(routes: MutableList<DirectionsRoute>?) {
         if (routes == null || routes.isEmpty()) {
-            showShortToast("No routes found")
+            showShortToast(getString(R.string.no_routes_found))
         } else {
             drawRoutes(routes)
         }
     }
 
     override fun onShowLoading() {
-        if (isRouteNavigation) showLoading()
+        if (isRouteNavigation || isSubscribe) showLoading()
     }
 
     override fun onHideLoading() {
-        if (isRouteNavigation) endLoading()
+        if (isRouteNavigation || isSubscribe) endLoading()
     }
 
     override fun onShowError(msg: String?) {
@@ -447,6 +449,38 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         })
     }
 
+    private fun onSaveRoute() {
+        val route = selectedRoute ?: return
+        isSubscribe = true
+        subscribePresenter = RouteSubscribePresenter(this@RouteNavigationActivity).apply { subscribeRoute(getRouteParams(route)) }
+    }
+
+    private fun getRouteParams(route: DirectionsRoute): HashMap<String, String?> {
+        val userId = getAndroidID()
+        val startPoint = tvStartPoint.text.toString()
+        val endPoint = tvEndPoint.text.toString()
+        var startLngLat = ""
+        this.startPoint?.let { startLngLat = "${it.longitude()},${it.latitude()}" }
+        var endLngLat = ""
+        this.endPoint?.let { endLngLat = "${it.longitude()},${it.latitude()}" }
+        val planCode = profile
+        var lineString: LineString? = null
+        route.geometry()?.let { lineString = LineString.fromPolyline(it, Constants.PRECISION_5) }
+        val coordinates = ArrayList<com.uroad.dubai.model.map.LatLng>()
+        lineString?.let { for (item in it.coordinates()) coordinates.add(com.uroad.dubai.model.map.LatLng(item.latitude() / 10, item.longitude() / 10)) }
+        return WebApi.subscribeRouteParams(userId, startPoint, endPoint, startLngLat, endLngLat, planCode, "", GsonUtils.fromObjectToJson(coordinates))
+    }
+
+    /*subscribe route success*/
+    override fun onSuccess() {
+        showTipsDialog(getString(R.string.save_route_success))
+    }
+
+    /*subscribe route failure*/
+    override fun onFailure(errMsg: String?, errCode: Int?) {
+        showShortToast(errMsg)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && contentSearch.visibility != View.GONE) {
             onInitialState()
@@ -459,6 +493,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         InputMethodUtils.hideSoftInput(this)
         poiPresenter.detachView()
         routePresenter.detachView()
+        subscribePresenter?.detachView()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }

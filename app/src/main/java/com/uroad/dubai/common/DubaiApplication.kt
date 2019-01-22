@@ -3,6 +3,7 @@ package com.uroad.dubai.common
 import android.support.multidex.MultiDexApplication
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.tencent.bugly.crashreport.CrashReport
 import com.uroad.dubai.R
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.ScenicMDL
@@ -27,11 +28,18 @@ class DubaiApplication : MultiDexApplication() {
         instance = this
         Mapbox.getInstance(this, getString(R.string.mapBoxToken))
         initCompressorPath()
+        initBugly()
     }
 
 
     private fun initCompressorPath() {
         COMPRESSOR_PATH = "${cacheDir.absolutePath}${File.separator}compressor"
         File(COMPRESSOR_PATH).apply { if (!exists()) this.mkdirs() }
+    }
+
+    /*init bugly*/
+    private fun initBugly() {
+        if (DubaiConfig.isDebug) return
+        CrashReport.initCrashReport(this, getString(R.string.BuglyAppID), false)
     }
 }

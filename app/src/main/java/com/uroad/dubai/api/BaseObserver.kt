@@ -29,34 +29,34 @@ abstract class BaseObserver<T>(var view: BaseView?) : DisposableObserver<T>() {
         if (e is HttpException) {
             message = try {
                 val errorBody = e.response().errorBody()
-                if (errorBody != null) errorBody.string() else "未知错误"
+                if (errorBody != null) errorBody.string() else "unknown error"
             } catch (e1: Exception) {
                 e1.message
             }
         } else if (e is SocketTimeoutException) {
-            message = "网络连接超时，请检查您的网络状态，稍后重试！"
+            message = "Network connection timeout, please check your network status, try again later!"
         } else if (e is ConnectException) {
-            message = "网络连接异常，请检查您的网络状态，稍后重试！"
+            message = "Network connection is abnormal. Please check your network status and try again later!"
         } else if (e is TimeoutException) {
-            message = "网络连接超时，请检查您的网络状态，稍后重试！"
+            message = "Network connection timeout, please check your network status, try again later!"
         } else if (e is UnknownHostException) {
-           message = "网络连接异常，请检查您的网络状态，稍后重试！"
+           message = "Network connection is abnormal. Please check your network status and try again later!"
         } else if (e is NullPointerException) {
-            message = "空指针异常"
+            message = "Null pointer exception"
         } else if (e is SSLHandshakeException) {
-            message = "证书验证失败"
+            message = "Certificate validation failed"
         } else if (e is ClassCastException) {
-            message = "类型转换错误"
+            message = "Type conversion error"
         } else if (e is JsonParseException
                 || e is JSONException
                 || e is JsonSerializer<*>
                 || e is NotSerializableException
                 || e is java.text.ParseException) {
-            message = "解析错误"
+            message = "Parsing error"
         } else if (e is IllegalStateException) {
-            message = "非法数据异常"
+            message = "Illegal data exception"
         } else {
-            message = "未知错误"
+            message = "unknown error"
         }
         view?.onShowError(message)
         onFailure(message)

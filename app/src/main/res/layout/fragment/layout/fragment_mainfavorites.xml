@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_10"
+        android:text="@string/home_title_favorites"
+        android:textColor="@color/black"
+        android:textSize="@dimen/font_18" />
+
+    <com.uroad.library.widget.banner.BannerView
+        android:id="@+id/bannerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:bannerAnimDuration="1000"
+        app:bannerAnimScroll="true"
+        app:bannerAutoScroll="true"
+        app:bannerPageAlpha="0.6"
+        app:bannerPageMargin="@dimen/minus_5"
+        app:bannerPagePercent="0.95"
+        app:bannerPageScale="1"
+        app:bannerScrollDuration="5000" />
+</LinearLayout>
