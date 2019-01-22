@@ -58,7 +58,18 @@ class MineFragment : BaseFragment() {
             openActivity(SettingActivity::class.java)
         }
 
-        tvContactRTA.setOnClickListener { }
+        tvContactRTA.setOnClickListener {
+            showTipsDialog(getString(R.string.developing))
+        }
+
+        tvShare.setOnClickListener {
+            showTipsDialog(getString(R.string.developing))
+        }
+
+        tvFeedback.setOnClickListener {
+            if (check()) return@setOnClickListener
+            openActivity(FeedbackActivity::class.java)
+        }
 
         ivUserHead.setOnClickListener {
             if (check()) return@setOnClickListener

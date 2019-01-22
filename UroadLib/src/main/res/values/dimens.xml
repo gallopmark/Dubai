@@ -111,6 +111,7 @@
     <dimen name="font_30">30sp</dimen>
     <dimen name="font_40">40sp</dimen>
     <dimen name="font_50">50sp</dimen>
+    <dimen name="font_70">70sp</dimen>
     <dimen name="font_80">80sp</dimen>
-    <dimen name="font_120">120sp</dimen>
+    <dimen name="font_120">100sp</dimen>
 </resources>

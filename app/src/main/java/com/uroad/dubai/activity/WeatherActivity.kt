@@ -56,8 +56,6 @@ class WeatherActivity : BaseActivity() ,WeatherView {
         data.add(mdl)
         data.add(mdl)
         data.add(mdl)
-        data.add(mdl)
-        data.add(mdl)
     }
 
     @SuppressLint("LogNotTimber")
@@ -82,6 +80,7 @@ class WeatherActivity : BaseActivity() ,WeatherView {
             it.Headline?.EffectiveDate?.let {
                 it1 -> val date = parseDate(it1)
                 withTitle(getWeekOfDate(date))
+                btnMore.visibility = View.VISIBLE
             }
         }
     }

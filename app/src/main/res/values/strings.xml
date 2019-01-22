@@ -136,6 +136,7 @@
     <string name="settings_term">Term &amp; Policies</string>
     <string name="settings_search">Search History</string>
     <string name="settings_offline">Offline Map</string>
+    <string name="settings_navigation_address">Navigation Address</string>
     <string name="settings_loading_photos">Loading Photos</string>
     <string name="settings_logout">Log out</string>
 
@@ -185,5 +186,9 @@
 
     <string name="information">Information</string>
     <string name="congestion_distance">Congestion distance</string>
+    <string name="btn_submit">Submit</string>
+    <string name="feed_my_rating">My rating</string>
+    <string name="feed_comments">Comments</string>
+    <string name="feed_hint">Leave comments(optional)</string>
 
 </resources>

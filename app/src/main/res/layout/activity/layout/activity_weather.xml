@@ -1,65 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:RadarWaveView="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-    <TextView
-        android:id="@+id/tvTemperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/space_20"
-        android:gravity="bottom"
-        android:includeFontPadding="false"
-        android:padding="0dp"
-        android:text="--"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_120" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tvTemperature"
-        android:layout_toEndOf="@+id/tvTemperature"
-        android:text="°"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_80" />
-
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTemperature"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/minus_25"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_20" />
-
-    <ImageView
-        android:id="@+id/ivWeather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTime"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/space_20" />
+    android:fillViewport="true">
 
     <RelativeLayout
-        android:layout_marginTop="@dimen/space_50"
-        android:layout_below="@+id/ivWeather"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tvTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/space_20"
+            android:gravity="bottom"
+            android:includeFontPadding="false"
+            android:padding="0dp"
+            android:text="--"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_120" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tvTemperature"
+            android:layout_marginTop="@dimen/minus_10"
+            android:layout_toEndOf="@+id/tvTemperature"
+            android:text="°"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_70" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTemperature"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/minus_20"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_20" />
+
+        <ImageView
+            android:id="@+id/ivWeather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTime"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/space_15" />
+
 
         <FrameLayout
             android:id="@+id/flWaveView"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:layout_below="@+id/ivWeather"
+            android:layout_marginTop="@dimen/space_50">
 
             <com.uroad.dubai.widget.RadarWaveView
                 android:layout_width="match_parent"
@@ -85,34 +86,36 @@
 
         </FrameLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/flWaveView"
             android:layout_marginTop="-1dp"
-            android:background="@drawable/background_gradient" />
+            android:background="@drawable/background_gradient"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ryWeather"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/flWaveView">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ryWeather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_10"
+                android:layout_marginBottom="@dimen/space_20"/>
 
-        </android.support.v7.widget.RecyclerView>
+            <Button
+                android:id="@+id/btnMore"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_20"
+                android:layout_marginRight="@dimen/space_20"
+                android:layout_marginBottom="@dimen/space_20"
+                android:background="@drawable/shape_weather_btn_bg"
+                android:text="More   Details"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_20" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/space_20"
-            android:layout_marginRight="@dimen/space_20"
-            android:layout_marginBottom="@dimen/space_20"
-            android:background="@drawable/shape_weather_btn_bg"
-            android:text="More   Details"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/font_20" />
+        </LinearLayout>
 
     </RelativeLayout>
-
-</RelativeLayout>
+</ScrollView>

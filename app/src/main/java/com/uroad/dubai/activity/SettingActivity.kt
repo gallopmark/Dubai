@@ -32,6 +32,7 @@ class SettingActivity : BaseActivity() {
             // 杀掉进程
             /*android.os.Process.killProcess(android.os.Process.myPid())
             System.exit(0)*/
+            showTipsDialog(getString(R.string.developing))
         }
 
         tvPassword.setOnClickListener {
@@ -49,6 +50,12 @@ class SettingActivity : BaseActivity() {
             openActivity(LoginActivity::class.java)
             finish()
         }
+
+        tvAppTips.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvAbout.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvTerm.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvOffline.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvNavigationAddress.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
 
         swSearchHistory.setOnClickListener {
             UserPreferenceHelper.saveSearchHistoryState(this@SettingActivity,swSearchHistory.isChecked)

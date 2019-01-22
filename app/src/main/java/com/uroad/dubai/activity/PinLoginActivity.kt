@@ -1,8 +1,9 @@
 package com.uroad.dubai.activity
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
@@ -20,15 +21,35 @@ class PinLoginActivity : BaseActivity(){
             finish()
         },color = Color.GRAY)
 
+        initView()
+    }
+
+    private fun initView() {
         btnLogin.setOnClickListener {
             phone = edPhone.text.toString().trim()
             if (phone.isEmpty()) phone = "123"//return@setOnClickListener
 
-            openActivity(VerificationCodeActivity::class.java,Bundle().apply {
-                putBoolean("isCreate",true)
-                putString("phone",phone)
+            openActivity(VerificationCodeActivity::class.java, Bundle().apply {
+                putBoolean("isCreate", true)
+                putString("phone", phone)
             })
         }
+
+        tvCountry.setOnClickListener {
+            val intent = Intent(this@PinLoginActivity, ChoiceCountryActivity::class.java)
+            startActivityForResult(intent, 100)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 100 && data != null){
+            val bundle = data.extras
+            if (bundle != null){
+                tvCountry.text = bundle.getString("name")
+                tvAreText.text = "+${bundle.getString("phone")}"
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
 }
