@@ -61,6 +61,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivMessageColl"
         android:padding="@dimen/space_5"
+        android:visibility="gone"
         android:contentDescription="@string/search"
         android:src="@mipmap/ic_search_white_big" />
 

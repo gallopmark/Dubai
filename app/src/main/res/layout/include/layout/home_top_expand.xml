@@ -22,5 +22,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:scaleType="center"
+        android:visibility="gone"
         android:src="@mipmap/ic_search_white" />
 </RelativeLayout>
