@@ -8,11 +8,14 @@ import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
+import com.uroad.dubai.adapter.TravelCalendarAdapter
 import com.uroad.dubai.adaptervp.TravelBannerAdapter
+import com.uroad.dubai.adapter.ViewHistoryListCardAdapter
 import com.uroad.dubai.api.presenter.AttractionPresenter
 import com.uroad.dubai.api.presenter.BannerPresenter
 import com.uroad.dubai.api.presenter.CalendarPresenter
@@ -20,6 +23,7 @@ import com.uroad.dubai.api.view.AttractionView
 import com.uroad.dubai.api.view.BannerView
 import com.uroad.dubai.api.view.CalendarView
 import com.uroad.dubai.common.BasePresenterFragment
+import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.BannerType
 import com.uroad.dubai.enumeration.NewsType
@@ -27,6 +31,8 @@ import com.uroad.dubai.model.CalendarMDL
 import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.model.ScenicMDL
+import com.uroad.dubai.webService.WebApi
+import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.widget.banner.BaseBannerAdapter
 import kotlinx.android.synthetic.main.fragment_travel.*
@@ -42,16 +48,20 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private val data = ArrayList<ScenicMDL>()
     private val handler = Handler()
     private lateinit var calendarPresenter: CalendarPresenter
+    private lateinit var adapter: ViewHistoryListCardAdapter
     private lateinit var bannerPresenter: BannerPresenter
     private lateinit var bannerData: MutableList<NewsMDL>
     private lateinit var bannerAdapter: TravelBannerAdapter
-    private val favorites = ArrayList<FavoritesMDL>()
+    private lateinit var calendarBanner : TravelCalendarAdapter
+    private val calendarList = ArrayList<FavoritesMDL>()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_travel)
         initAppBar()
         initView()
         initBanner()
+        initRv()
+        initCalendar()
     }
 
     override fun createPresenter(): AttractionPresenter = AttractionPresenter(this)
@@ -69,6 +79,20 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         })
         setTopImage()
     }
+
+    private fun initRv() {
+        recyclerView.isNestedScrollingEnabled = false
+        recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
+        adapter = ViewHistoryListCardAdapter(context, data).apply {
+            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                    openActivity(ScenicDetailActivity::class.java,Bundle().apply { putString("newsId",data[position].newsid) })
+                }
+            })
+        }
+        recyclerView.adapter = adapter
+    }
+
 
     //重新计算图片高度 避免图片压缩
     private fun setTopImage() {
@@ -99,6 +123,11 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         banner.setAdapter(bannerAdapter)
     }
 
+    private fun initCalendar(){
+        calendarBanner = TravelCalendarAdapter(context,calendarList)
+        baCalendar.setAdapter(calendarBanner)
+    }
+
     private fun initView() {
         val bundle = Bundle()
         tvHotels.setOnClickListener {
@@ -124,7 +153,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
 
 
     override fun initData() {
-        //presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
+        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
         bannerPresenter.getBannerNews(BannerType.TRAVEL.CODE)
     }
 
@@ -150,6 +179,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         }
         this.data.clear()
         this.data.addAll(attractions)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onShowError(msg: String?) {
@@ -166,18 +196,29 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     override fun loadCalendarSuccess(list: ArrayList<CalendarMDL>) {
         val mdl = list[0]
         mdl.let {
-            favorites.clear()
+            calendarList.clear()
             it.list?.forEach { it1 ->
                 val fa = FavoritesMDL()
                 fa.calendarMDL = it1
                 it1.titleTimeData = it.weekDataTitle?.let { it2 -> fa.showTime(it2) }
-                favorites.add(fa)
+                calendarList.add(fa)
             }
+            calendarBanner.notifyDataSetChanged()
         }
     }
 
     override fun loadError(e: String) {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        inspectPermissions()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        inspectPermissions()
     }
 
     private fun inspectPermissions() {
