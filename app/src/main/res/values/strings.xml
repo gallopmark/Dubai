@@ -25,6 +25,7 @@
     <string name="home_menu_roads">Roads</string>
     <string name="home_menu_news">News</string>
     <string name="home_menu_more">More</string>
+    <string name="home_menu_more2">More > </string>
     <string name="home_title_favorites">Favorites</string>
     <string name="home_title_near_me">Near me</string>
     <string name="tab_home">@string/home</string>

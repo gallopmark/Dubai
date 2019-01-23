@@ -34,7 +34,7 @@ class ParkingListActivity: BaseRefreshPresenterActivity<ParkingPresenter>(), Par
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.id_menu_search -> {
-
+                showTipsDialog(getString(R.string.developing))
             }
         }
         return super.onOptionsItemSelected(item)

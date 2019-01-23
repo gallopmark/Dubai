@@ -30,7 +30,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
             type = it.getString("type")
         }
         data = ArrayList()
-        adapter = AttrNearFmListAdapter(context,data)
+        adapter = AttrNearFmListAdapter(context,type,data)
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
 
@@ -42,6 +42,8 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
                 scenicMDL.title = mdl.title
                 scenicMDL.content = mdl.content
                 scenicMDL.address = mdl.address
+                scenicMDL.latitude = mdl.latitude
+                scenicMDL.longitude = mdl.longitude
                 scenicMDL.hours = if (TextUtils.isEmpty(mdl.time)) mdl.hours else mdl.time
                 scenicMDL.phone = mdl.phone
                 DubaiApplication.clickItemScenic = scenicMDL

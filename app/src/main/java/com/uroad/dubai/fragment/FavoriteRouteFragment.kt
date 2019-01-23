@@ -43,8 +43,10 @@ class FavoriteRouteFragment  : BasePageRefreshPresenterFragment<FavoriteRouteFMP
 
     private fun getMsgList(){
         onPullToLoadSuccess()
+        data.clear()
         data.add(getMDL(Random().nextInt(4)-1))
         adapter.notifyDataSetChanged()
+        onFinishLoadMoreWithNoMoreData()
     }
 
     override fun createPresenter(): FavoriteRouteFMPresenter? {

@@ -13,8 +13,9 @@ import com.uroad.dubai.model.AttractionNearFMMDL
 import com.uroad.dubai.model.ParkingMDL
 import com.uroad.library.utils.DisplayUtils
 
-class AttrNearFmListAdapter(private val context: Context, data: MutableList<AttractionNearFMMDL>)
+class AttrNearFmListAdapter(private val context: Context,type : String?, data: MutableList<AttractionNearFMMDL>)
       : BaseArrayRecyclerAdapter<AttractionNearFMMDL>(context,data) {
+    private val typePage = type
     private val imageWith = DisplayUtils.getWindowWidth(context) / 3
     private val imageHeight = imageWith * 3 / 4
     private val params = RelativeLayout.LayoutParams(imageWith, imageHeight)
@@ -27,13 +28,29 @@ class AttrNearFmListAdapter(private val context: Context, data: MutableList<Attr
         }else{
             holder.displayImage(R.id.ivPic, "", R.color.color_f7, RoundedCorners(dp4))
         }
-        holder.setText(R.id.tvTitle, t.title)
-        holder.setText(R.id.tvContext, t.content)
-        holder.setText(R.id.tvDistance, t.distance)
-        //holder.setText(R.id.tvNum, t.num)
-        holder.setVisibility(R.id.tvNum,false)
+        setText(holder,t,position)
     }
 
     override fun bindView(viewType: Int): Int = R.layout.item_parking
+
+    private fun setText(holder: RecyclerHolder,t: AttractionNearFMMDL,position: Int){
+        holder.setText(R.id.tvTitle, t.title)
+        holder.setText(R.id.tvContext, "Location  ${t.address}")
+        holder.setText(R.id.tvDistance, "Distance  ${t.distance}")
+        holder.setVisibility(R.id.tvNum,false)
+        when(typePage){
+            "1001002" -> //酒店
+            {
+
+            }
+            "1001003" ->//餐厅
+            {
+
+            }
+            else ->{//1001004 景点
+
+            }
+        }
+    }
 
 }
