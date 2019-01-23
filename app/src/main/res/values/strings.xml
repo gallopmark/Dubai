@@ -167,7 +167,7 @@
 
     <string name="route_home">Home</string>
     <string name="route_work">Work</string>
-    <string name="clear_history">Clear up historical records</string>
+    <string name="clear_history">Clear search history</string>
 
     <string name="groups_title">@string/travel_menu_groups</string>
     <string name="groups_create">Create a group</string>
