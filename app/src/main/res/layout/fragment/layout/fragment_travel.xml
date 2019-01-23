@@ -16,11 +16,18 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <ImageView
-                android:id="@+id/ivTopPic"
+            <com.uroad.library.widget.banner.Banner
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
+                android:layout_height="wrap_content"
+                app:bannerAnimDuration="1000"
+                app:bannerAnimScroll="true"
+                app:bannerAutoScroll="true"
+                app:bannerPageAlpha="0.6"
+                app:bannerPageMargin="0dp"
+                app:bannerPagePercent="1"
+                app:bannerPageScale="1"
+                app:bannerScrollDuration="5000"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7" />
 
@@ -42,7 +49,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:text="@string/travel_content_title"
+                    android:text="@string/tab_travel"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_18" />
             </android.support.v7.widget.Toolbar>
@@ -67,58 +74,52 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:text="@string/mine_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/space_16"
                     android:layout_marginRight="@dimen/space_16"
+                    android:text="@string/mine_calendar"
                     android:textColor="@color/color_66"
                     android:textSize="@dimen/font_20" />
 
                 <View
-                    android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/tvMoreClan"
-                    android:text="@string/home_menu_more2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/space_16"
+                    android:text="@string/home_menu_more2"
                     android:textColor="@color/color_66"
                     android:textSize="@dimen/font_14" />
 
             </LinearLayout>
 
-            <com.uroad.library.banner.GalleryRecyclerView
-                android:id="@+id/bannerFavorites"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:helper="PagerSnapHelper" />
-
             <TextView
-                android:visibility="gone"
-                android:text="@string/travel_title_recommend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_16"
                 android:layout_marginRight="@dimen/space_16"
                 android:layout_marginBottom="@dimen/space_10"
+                android:text="@string/travel_title_recommend"
                 android:textColor="@color/color_66"
-                android:textSize="@dimen/font_20" />
+                android:textSize="@dimen/font_20"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
