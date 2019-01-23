@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Banner无限轮播属性-->
-    <declare-styleable name="BannerView">
+    <declare-styleable name="Banner">
         <attr name="bannerPageMargin" format="dimension" />
         <attr name="bannerPagePercent" format="float" />
         <attr name="bannerPageScale" format="float" />

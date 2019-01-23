@@ -15,12 +15,14 @@ import kotlinx.android.synthetic.main.activity_base_refresh.*
  * @describe
  */
 abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseActivity(), BaseView {
-    open var presenter: P? = null
+    open lateinit var presenter: P
 
     protected abstract fun createPresenter(): P
 
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_base_refresh)
+        presenter = createPresenter()
+        onPresenterSetUp(savedInstanceState)
         val layoutManager = LinearLayoutManager(this).apply { orientation = LinearLayoutManager.VERTICAL }
         recyclerView.layoutManager = layoutManager
         initViewData()
@@ -33,8 +35,6 @@ abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseActivity
                 onPullToLoadMore()
             }
         })
-        presenter = createPresenter()
-        onPresenterSetUp(savedInstanceState)
     }
 
     open fun onPresenterSetUp(savedInstanceState: Bundle?) {

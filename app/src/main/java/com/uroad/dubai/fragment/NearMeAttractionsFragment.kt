@@ -36,7 +36,7 @@ class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), 
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
-        adapter = AttractionListCardAdapter(context, data, 1).apply {
+        adapter = AttractionListCardAdapter(context, data).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                     DubaiApplication.clickItemScenic = data[position]

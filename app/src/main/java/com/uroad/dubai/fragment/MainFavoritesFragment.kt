@@ -2,15 +2,22 @@ package com.uroad.dubai.fragment
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import com.mapbox.api.directions.v5.MapboxDirections
+import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.uroad.dubai.R
 import com.uroad.dubai.adaptervp.MainSubscribeAdapter
 import com.uroad.dubai.api.presenter.SubscribePresenter
+import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.api.view.SubscribeView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.SubscribeMDL
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_mainfavorites.*
 
 /**
@@ -23,8 +30,9 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
     private lateinit var data: MutableList<SubscribeMDL>
     private lateinit var adapter: MainSubscribeAdapter
     private lateinit var handler: Handler
-    private var isAutomatic = false
-    override fun createPresenter(): SubscribePresenter = SubscribePresenter(this)
+    private var isLoadFavorites = false
+    private var callback: OnRequestCallback? = null
+    override fun createPresenter(): SubscribePresenter = SubscribePresenter(context, this)
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainfavorites)
@@ -40,10 +48,11 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
     private fun initial() {
         data = ArrayList()
         adapter = MainSubscribeAdapter(context, data)
-        bannerView.setAdapter(adapter)
+        banner.setAdapter(adapter)
     }
 
     override fun initData() {
+        isLoadFavorites = true
         presenter.getSubscribeData(getAndroidID())
     }
 
@@ -51,13 +60,55 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
         this.data.clear()
         this.data.addAll(data)
         adapter.notifyDataSetChanged()
+        getRoutes()
+        callback?.callback(this.data.isEmpty())
+    }
+
+    private fun getRoutes() {
+        isLoadFavorites = false
+        for (i in 0 until data.size) {
+            val startPoint = data[i].getOriginPoint()
+            val endPoint = data[i].getDestinationPoint()
+            if (startPoint != null && endPoint != null) {
+                requestRoutes(i, presenter.buildDirections(startPoint, endPoint, data[i].getProfile()))
+            }
+        }
+    }
+
+    private fun requestRoutes(position: Int, directions: MapboxDirections) {
+        val disposable = Observable.fromCallable { directions.executeCall() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ response ->
+                    val directionsRoute = response.body()?.routes()?.get(0)
+                    directionsRoute?.let { route ->
+                        data[position].distance = route.distance()
+                        data[position].travelTime = route.duration()
+                        val congestion = route.legs()?.get(0)?.annotation()?.congestion()
+                        data[position].congestion = congestion
+                    }
+                    adapter.notifyDataSetChanged()
+                }, { handler.postDelayed({ requestRoutes(position, directions) }, DubaiApplication.DEFAULT_DELAY_MILLIS) })
+        presenter.addDisposable(disposable)
     }
 
     override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        if (isLoadFavorites) {
+            handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        }
     }
 
     override fun onFailure(errMsg: String?, errCode: Int?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        if (isLoadFavorites) {
+            handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        }
+    }
+
+    interface OnRequestCallback {
+        fun callback(isEmpty: Boolean)
+    }
+
+    fun setOnRequestCallback(callback: OnRequestCallback) {
+        this.callback = callback
     }
 }

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.uroad.library.banner.GalleryRecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.uroad.library.widget.banner.Banner xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/galleryRv"
+    android:id="@+id/banner"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:helper="PagerSnapHelper" />
+    app:bannerAnimDuration="1000"
+    app:bannerAnimScroll="true"
+    app:bannerAutoScroll="true"
+    app:bannerPageAlpha="0.6"
+    app:bannerPageMargin="@dimen/space_15"
+    app:bannerPagePercent="0.95"
+    app:bannerPageScale="1"
+    app:bannerScrollDuration="5000" />

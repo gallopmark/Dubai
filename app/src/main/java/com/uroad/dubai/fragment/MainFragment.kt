@@ -92,11 +92,25 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initNotice() {
-        childFragmentManager.beginTransaction().replace(R.id.flNotice, MainNoticeFragment(), TAG_NOTICE).commitAllowingStateLoss()
+        childFragmentManager.beginTransaction().replace(R.id.flNotice, MainNoticeFragment().apply {
+            setOnRequestCallback(object : MainNoticeFragment.OnRequestCallback {
+                override fun callback(isEmpty: Boolean) {
+                    if (isEmpty) this@MainFragment.flNotice.visibility = View.GONE
+                    else this@MainFragment.flNotice.visibility = View.VISIBLE
+                }
+            })
+        }, TAG_NOTICE).commitAllowingStateLoss()
     }
 
     private fun initFavorites() {
-        childFragmentManager.beginTransaction().replace(R.id.flFavorites, MainFavoritesFragment(), TAG_FAVORITES).commitAllowingStateLoss()
+        childFragmentManager.beginTransaction().replace(R.id.flFavorites, MainFavoritesFragment().apply {
+            setOnRequestCallback(object : MainFavoritesFragment.OnRequestCallback {
+                override fun callback(isEmpty: Boolean) {
+                    if (isEmpty) this@MainFragment.flFavorites.visibility = View.GONE
+                    else this@MainFragment.flFavorites.visibility = View.VISIBLE
+                }
+            })
+        }, TAG_FAVORITES).commitAllowingStateLoss()
     }
 
     private fun initNearBy() {

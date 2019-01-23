@@ -1,93 +1,59 @@
 package com.uroad.dubai.adaptervp
 
 import android.content.Context
-import android.support.v4.view.PagerAdapter
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextUtils
-import android.text.style.AbsoluteSizeSpan
-import android.view.LayoutInflater
-import android.view.MotionEvent
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.uroad.dubai.R
+import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.SubscribeMDL
-import com.uroad.library.widget.banner.BannerBaseAdapter
+import com.uroad.dubai.utils.TimeUtils
+import com.uroad.dubai.utils.Utils
+import com.uroad.library.utils.DisplayUtils
+import com.uroad.library.widget.banner.BaseBannerAdapter
 
-class MainSubscribeAdapter(private val context: Context,
-                           private val data: MutableList<SubscribeMDL>) : PagerAdapter() {
-    private var mDownTime: Long = 0
-    private var mListener: OnPageTouchListener? = null
-    override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object`
+class MainSubscribeAdapter(private val context: Context, data: MutableList<SubscribeMDL>)
+    : BaseBannerAdapter<SubscribeMDL>(context, data) {
 
-    override fun getCount(): Int {
-        return if (data.size == 0) 0 else Integer.MAX_VALUE
-    }
+    override fun bindView(viewType: Int): Int = R.layout.item_subscribe_route
 
-    private fun getItem(position: Int): SubscribeMDL {
-        return if (position >= data.size) data[0] else data[position]
-    }
-
-    override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        var pos = 0
-        if (data.size != 0) {
-            pos = position % data.size
-        }
-        val view: View = LayoutInflater.from(context).inflate(R.layout.item_subscribe_route, container, false)
-        // 处理视图和数据
-        convert(view, getItem(pos), pos)
-        view.isClickable = true
-        // 处理条目的触摸事件
-        view.setOnTouchListener(View.OnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                    mDownTime = System.currentTimeMillis()
-                    mListener?.onPageDown()
-                }
-                MotionEvent.ACTION_UP -> {
-                    val upTime = System.currentTimeMillis()
-                    mListener?.onPageUp()
-                    if (upTime - mDownTime < 500) {
-                        // 500毫秒以内就算单击
-                        mListener?.onPageClick(pos, getItem(pos))
-                    }
-                }
-            }
-            return@OnTouchListener false
-        })
-        container.addView(view)
-        return view
-    }
-
-    private fun convert(convertView: View, data: SubscribeMDL, position: Int) {
-        val tvSubscribeName = convertView.findViewById<TextView>(R.id.tvSubscribeName)
-        val tvRouteArrow = convertView.findViewById<TextView>(R.id.tvRouteArrow)
-        val tvDistance = convertView.findViewById<TextView>(R.id.tvDistance)
-        val tvTravelTime = convertView.findViewById<TextView>(R.id.tvTravelTime)
+    override fun convert(mConvertView: View, item: SubscribeMDL, realPosition: Int) {
+        val tvSubscribeName = mConvertView.findViewById<TextView>(R.id.tvSubscribeName)
+        val tvRouteArrow = mConvertView.findViewById<TextView>(R.id.tvRouteArrow)
+        val tvDistance = mConvertView.findViewById<TextView>(R.id.tvDistance)
+        val tvTravelTime = mConvertView.findViewById<TextView>(R.id.tvTravelTime)
+        val recyclerView = mConvertView.findViewById<RecyclerView>(R.id.recyclerView)
         tvSubscribeName.text = "Route"
-        tvRouteArrow.text = data.getStartEndPoint()
-        tvDistance.text = data.distance
-        tvTravelTime.text = data.travelTime
+        tvRouteArrow.text = item.getStartEndPoint()
+        var distance = ""
+        item.distance?.let { distance = Utils.convertDistance(it.toInt()) }
+        tvDistance.text = distance
+        var travelTime = ""
+        item.travelTime?.let { travelTime = TimeUtils.convertSecond2Min(it.toInt()) }
+        tvTravelTime.text = travelTime
+        recyclerView.isNestedScrollingEnabled = false
+        recyclerView.adapter = RouteColorAdapter(context, item.getRouteColors(context))
+        if (item.getRouteColors(context).size > 0) {
+            recyclerView.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.GONE
+        }
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as View)
     }
 
-    /**
-     * 条目页面的触摸事件
-     */
-    interface OnPageTouchListener {
-        fun onPageClick(position: Int, mdl: SubscribeMDL)
+    private class RouteColorAdapter(context: Context, data: MutableList<Int>)
+        : BaseArrayRecyclerAdapter<Int>(context, data) {
+        private val width = DisplayUtils.getWindowWidth(context) - DisplayUtils.dip2px(context, 16f) * 2
+        private val routeWidth = Math.floor(width.toDouble() / data.size).toInt()
+        override fun bindView(viewType: Int): Int = R.layout.item_routeline
 
-        fun onPageDown()
-
-        fun onPageUp()
-    }
-
-    fun setOnPageTouchListener(listener: OnPageTouchListener) {
-        this.mListener = listener
+        override fun onBindHoder(holder: RecyclerHolder, t: Int, position: Int) {
+            holder.setBackgroundColor(R.id.vRouteLine, t)
+            holder.itemView.layoutParams = holder.itemView.layoutParams.apply { width = routeWidth }
+        }
     }
 }

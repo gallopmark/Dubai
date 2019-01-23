@@ -197,4 +197,5 @@
     <string name="save_route_success">Successful Subscription Route</string>
     <string name="distance">Distance</string>
     <string name="travel_time">Travel time</string>
+    <string name="notices">Notices</string>
 </resources>

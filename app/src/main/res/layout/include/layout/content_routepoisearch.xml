@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
+    android:background="@color/whitetransparent"
     android:clickable="true"
-    android:background="@color/whitetransparent">
+    android:focusable="true">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvSearch"
@@ -150,41 +150,55 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvHistory"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/cvArrow"
-        android:layout_margin="@dimen/space_10"
-        android:visibility="gone"
-        app:cardCornerRadius="@dimen/space_5"
-        app:cardElevation="@dimen/space_4"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="false">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvHistory"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_10"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/space_5"
+            app:cardElevation="@dimen/space_4"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvHistory"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:overScrollMode="never"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-            <TextView
-                android:id="@+id/tvClearHistory"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="@dimen/space_10"
-                android:text="@string/clear_history"
-                android:textColor="@color/appTextColor"
-                android:textSize="@dimen/font_16" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:overScrollMode="never"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+                <TextView
+                    android:id="@+id/tvClearHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/space_10"
+                    android:text="@string/clear_history"
+                    android:textColor="@color/appTextColor"
+                    android:textSize="@dimen/font_16" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/transparent" />
+    </LinearLayout>
+
 </RelativeLayout>

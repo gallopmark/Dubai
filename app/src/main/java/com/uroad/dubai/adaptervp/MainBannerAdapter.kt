@@ -1,29 +1,28 @@
-package com.uroad.dubai.adapter
+package com.uroad.dubai.adaptervp
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
 import com.uroad.dubai.model.ScenicMDL
 import com.uroad.glidev4.GlideV4
-import com.uroad.library.banner.adapter.BannerBaseArrayAdapter
 import com.uroad.library.utils.DisplayUtils
+import com.uroad.library.widget.banner.BaseBannerAdapter
 
-/**
- * @author MFB
- * @create 2018/12/13
- * @describe
- */
 class MainBannerAdapter(private val context: Context, data: MutableList<ScenicMDL>)
-    : BannerBaseArrayAdapter<ScenicMDL>(context, data) {
+    : BaseBannerAdapter<ScenicMDL>(context, data) {
+
     private val itemWidth = DisplayUtils.getWindowWidth(context) - DisplayUtils.dip2px(context, 10f) * 2
     private val itemHeight = itemWidth / 2
+
     override fun bindView(viewType: Int): Int = R.layout.item_main_banner
-    override fun bindHolder(holder: RecyclerHolder, t: ScenicMDL, position: Int) {
-        holder.itemView.layoutParams = holder.itemView.layoutParams.apply {
+
+    override fun convert(mConvertView: View, item: ScenicMDL, realPosition: Int) {
+        val ivPic = obtainView<ImageView>(R.id.ivPic)
+        ivPic.layoutParams = ivPic.layoutParams.apply {
             width = itemWidth
             height = itemHeight
         }
-        val ivPic = holder.obtainView<ImageView>(R.id.ivPic)
-        GlideV4.getInstance().displayImage(context, t.headimg, ivPic)
+        GlideV4.getInstance().displayImage(context, item.headimg, ivPic)
     }
 }

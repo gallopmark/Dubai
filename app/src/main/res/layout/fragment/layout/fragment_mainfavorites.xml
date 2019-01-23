@@ -13,11 +13,10 @@
         android:textColor="@color/black"
         android:textSize="@dimen/font_18" />
 
-    <com.uroad.library.widget.banner.BannerView
-        android:id="@+id/bannerView"
+    <com.uroad.library.widget.banner.Banner
+        android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         app:bannerAnimDuration="1000"
         app:bannerAnimScroll="true"
         app:bannerAutoScroll="true"

@@ -18,25 +18,26 @@
         <ImageView
             android:id="@+id/ivPic"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/space_100"
             android:layout_centerVertical="true"
             android:scaleType="fitXY" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivPic"
+            android:layout_alignBottom="@+id/ivPic"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/space_6"
             android:layout_toEndOf="@+id/ivPic"
-            android:gravity="center|start"
-            android:orientation="vertical">
+            android:gravity="center|start">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:textColor="@color/appTextColor"
                 android:textSize="@dimen/font_14" />
 
@@ -47,6 +48,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginTop="@dimen/space_3"
                 android:ellipsize="end"
+                android:visibility="gone"
                 android:maxLines="2"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/font_13" />
@@ -57,11 +59,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="@dimen/space_3"
+                android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/space_3"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/font_13" />
-        </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

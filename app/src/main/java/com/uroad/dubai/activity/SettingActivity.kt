@@ -5,24 +5,20 @@ import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.local.AppSource
 import com.uroad.dubai.local.UserPreferenceHelper
 import kotlinx.android.synthetic.main.activity_setting.*
 import java.util.*
 
 class SettingActivity : BaseActivity() {
 
-    private var isLogin : Boolean = false
-    private var isShowHistory : Boolean = false
-    private var canLoadingPhoto : Boolean = false
-    private var phone : String = ""
+    private var isLogin: Boolean = false
+    private var phone: String = ""
 
     override fun setUp(savedInstanceState: Bundle?) {
         withTitle(getString(R.string.settings))
         setBaseContentView(R.layout.activity_setting)
-
         isLogin = UserPreferenceHelper.isLogin(this@SettingActivity)
-        isShowHistory = UserPreferenceHelper.isShowSearchHistory(this@SettingActivity)
-        canLoadingPhoto = UserPreferenceHelper.canLoadingPhotos(this@SettingActivity)
         phone = UserPreferenceHelper.getAccount(this@SettingActivity)
         initView()
     }
@@ -40,8 +36,8 @@ class SettingActivity : BaseActivity() {
                 openActivity(LoginActivity::class.java)
                 return@setOnClickListener
             }
-            openActivity(VerifyActivity::class.java,Bundle().apply {
-                putString("phone",phone)
+            openActivity(VerifyActivity::class.java, Bundle().apply {
+                putString("phone", phone)
             })
         }
         btnLogOut.setOnClickListener {
@@ -57,17 +53,11 @@ class SettingActivity : BaseActivity() {
         tvOffline.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvNavigationAddress.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
 
-        swSearchHistory.setOnClickListener {
-            UserPreferenceHelper.saveSearchHistoryState(this@SettingActivity,swSearchHistory.isChecked)
-        }
-
-        swLoadingPhoto.setOnClickListener {
-            UserPreferenceHelper.saveLoadingPhotoState(this@SettingActivity,swLoadingPhoto.isChecked)
-        }
-
+        swSearchHistory.setOnCheckedChangeListener { _, isChecked -> AppSource.setShowSearchHistory(this@SettingActivity, isChecked) }
+        swLoadingPhoto.setOnCheckedChangeListener { _, isChecked -> AppSource.setCanLoadPhoto(this@SettingActivity, isChecked) }
         if (!isLogin) btnLogOut.visibility = View.GONE
-        swSearchHistory.isChecked = isShowHistory
-        swLoadingPhoto.isChecked = canLoadingPhoto
+        swSearchHistory.isChecked = AppSource.isShowSearchHistory(this)
+        swLoadingPhoto.isChecked = AppSource.isCanLoadPhoto(this)
     }
 
     @SuppressLint("NewApi")
@@ -84,7 +74,7 @@ class SettingActivity : BaseActivity() {
                 config.locale = Locale.ENGLISH
                 resources.updateConfiguration(config, dm)
             }
-            "ar" ->{
+            "ar" -> {
                 config.locale = Locale.forLanguageTag("ar")
                 resources.updateConfiguration(config, dm)
             }

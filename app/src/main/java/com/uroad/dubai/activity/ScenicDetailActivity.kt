@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.view.View
 import android.widget.FrameLayout
+import com.mapbox.geojson.Point
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseLucaActivity
 import com.uroad.dubai.common.DubaiApplication
@@ -33,6 +34,15 @@ class ScenicDetailActivity : BaseLucaActivity() {
     private fun initView() {
         ivBack.setOnClickListener { onBackPressed() }
         ivBack2.setOnClickListener { onBackPressed() }
+        llTopLayout.setOnClickListener {
+            DubaiApplication.clickItemScenic?.let { scenic ->
+                val point = Point.fromLngLat(scenic.getLatLng().longitude, scenic.getLatLng().latitude)
+                openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+                    putString("point", point.toJson())
+                    putString("endPointName", scenic.title)
+                })
+            }
+        }
     }
 
     private fun initLayout() {

@@ -139,8 +139,12 @@
         <activity
             android:name=".activity.EventsDetailActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.ChoiceCountryActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.ChoiceCountryActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.NoticeListActivity"
+            android:launchMode="singleTop" />
 
         <!--photopicker-->
         <provider
@@ -163,7 +167,8 @@
             android:name=".photopicker.ui.ImageCropActivity"
             android:launchMode="singleTop" />
 
-        <activity android:name=".activity.FeedbackActivity"
+        <activity
+            android:name=".activity.FeedbackActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>

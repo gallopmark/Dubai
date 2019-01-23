@@ -79,8 +79,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private lateinit var routePresenter: RouteNavigationPresenter
     private var isRouteNavigation = false
     private var isFromUserClick = false
+    private var isFromBundle = false
     private var userMarker: Marker? = null
     private var isSimulate = false
+    private var planCode: Int = 1
     private var subscribePresenter: RouteSubscribePresenter? = null
     private var isSubscribe = false
 
@@ -89,6 +91,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         ivBackIM.setOnClickListener { onBackPressed() }
         routePresenter = RouteNavigationPresenter(this, this)
         initPoiTextView()
+        initBundle()
         initSearch()
         initChangePoi()
         initProfileRg()
@@ -105,12 +108,21 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             poiType = 2
             onShowSearchContent()
         }
+    }
+
+    private fun initBundle() {
         val carmen = intent.extras?.getString("destination")
         carmen?.let {
+            isFromBundle = true
             val feature = CarmenFeature.fromJson(it)
             endPoint = feature.center()
             tvEndPoint.text = feature.placeName()
-            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+        }
+        val point = intent.extras?.getString("point")
+        point?.let {
+            isFromBundle = true
+            endPoint = Point.fromJson(it)
+            tvEndPoint.text = intent.extras?.getString("endPointName")
         }
     }
 
@@ -212,10 +224,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private fun onSelectCarmenFeature(carmenFeature: CarmenFeature?) {
         if (poiType == 1) {
             startPoint = carmenFeature?.center()
-            tvStartPoint.text = carmenFeature?.text()
+            tvStartPoint.text = carmenFeature?.placeName()
         } else {
             endPoint = carmenFeature?.center()
-            tvEndPoint.text = carmenFeature?.matchingPlaceName()
+            tvEndPoint.text = carmenFeature?.placeName()
         }
         onInitialState()
         startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
@@ -264,7 +276,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
 
     private val poiSearchRun = Runnable {
         poiPresenter.cancelCall()
-        poiKey?.let { poiPresenter.doPoiSearch(it) }
+        poiKey?.let {
+            isRouteNavigation = false
+            poiPresenter.doPoiSearch(it)
+        }
     }
 
 
@@ -284,9 +299,18 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private fun initProfileRg() {
         radioGroup.setOnCheckedChangeListener { _, checkId ->
             when (checkId) {
-                R.id.rbDrive -> profile = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
-                R.id.rbBicycle -> profile = DirectionsCriteria.PROFILE_CYCLING
-                R.id.rbWalk -> profile = DirectionsCriteria.PROFILE_WALKING
+                R.id.rbDrive -> {
+                    planCode = 1
+                    profile = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC
+                }
+                R.id.rbBicycle -> {
+                    planCode = 2
+                    profile = DirectionsCriteria.PROFILE_CYCLING
+                }
+                R.id.rbWalk -> {
+                    planCode = 3
+                    profile = DirectionsCriteria.PROFILE_WALKING
+                }
             }
             startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
         }
@@ -335,7 +359,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private fun initMyLocation(location: Location) {
         startPoint = Point.fromLngLat(location.longitude, location.latitude)
         tvStartPoint.text = getString(R.string.route_myLocation)
-        startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+        if (isFromBundle) {
+            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+            isFromBundle = false
+        }
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -463,12 +490,11 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         this.startPoint?.let { startLngLat = "${it.longitude()},${it.latitude()}" }
         var endLngLat = ""
         this.endPoint?.let { endLngLat = "${it.longitude()},${it.latitude()}" }
-        val planCode = profile
         var lineString: LineString? = null
         route.geometry()?.let { lineString = LineString.fromPolyline(it, Constants.PRECISION_5) }
         val coordinates = ArrayList<com.uroad.dubai.model.map.LatLng>()
         lineString?.let { for (item in it.coordinates()) coordinates.add(com.uroad.dubai.model.map.LatLng(item.latitude() / 10, item.longitude() / 10)) }
-        return WebApi.subscribeRouteParams(userId, startPoint, endPoint, startLngLat, endLngLat, planCode, "", GsonUtils.fromObjectToJson(coordinates))
+        return WebApi.subscribeRouteParams(userId, startPoint, endPoint, startLngLat, endLngLat, "$planCode", "", GsonUtils.fromObjectToJson(coordinates))
     }
 
     /*subscribe route success*/

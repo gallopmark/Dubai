@@ -56,6 +56,7 @@ class PoiSearchSource : DataSource() {
         }
 
         fun getHistoryList(context: Context): MutableList<MultiItem> {
+            if (!AppSource.isShowSearchHistory(context)) return ArrayList()
             val spHistory = getSharedPreferences(context).getString(POI_KEY, "") ?: ""
             val list = ArrayList<MultiItem>()
             if (!TextUtils.isEmpty(spHistory)) {

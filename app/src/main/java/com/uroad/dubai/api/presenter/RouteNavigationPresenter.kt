@@ -21,9 +21,9 @@ class RouteNavigationPresenter(private val context: Context,
 
     private var directions: MapboxDirections? = null
 
-    fun getRoutes(origin: Point, destination: Point, profile: String) {
+    fun getRoutes(origin: Point, destination: Point, profile: String): MapboxDirections {
         naviView.onShowLoading()
-        directions = buildDirections(origin, destination, profile).apply {
+        val directions = buildDirections(origin, destination, profile).apply {
             enqueueCall(object : Callback<DirectionsResponse> {
                 override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
                     naviView.onHideLoading()
@@ -36,6 +36,8 @@ class RouteNavigationPresenter(private val context: Context,
                 }
             })
         }
+        this.directions = directions
+        return directions
     }
 
     private fun buildDirections(origin: Point, destination: Point, profile: String): MapboxDirections {

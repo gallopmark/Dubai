@@ -13,21 +13,17 @@ import android.view.View
 import android.widget.ImageView
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
-import com.uroad.dubai.adapter.AttractionListCardAdapter
 import com.uroad.dubai.adapter.FavoritesAdapter
 import com.uroad.dubai.api.presenter.AttractionPresenter
 import com.uroad.dubai.api.presenter.CalendarPresenter
 import com.uroad.dubai.api.view.AttractionView
 import com.uroad.dubai.api.view.CalendarView
 import com.uroad.dubai.common.BasePresenterFragment
-import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.CalendarMDL
 import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.dubai.model.ScenicMDL
-import com.uroad.dubai.webService.WebApi
-import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.BitmapUtils
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_travel.*
@@ -41,7 +37,6 @@ import kotlinx.android.synthetic.main.travel_content_menu.*
 class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionView, CalendarView {
 
     private val data = ArrayList<ScenicMDL>()
-    private lateinit var adapter: AttractionListCardAdapter
     private val handler = Handler()
     private lateinit var calendarPresenter: CalendarPresenter
     private val favorites = ArrayList<FavoritesMDL>()
@@ -116,21 +111,6 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         inspectPermissions()
     }
 
-    private fun initRv() {
-        recyclerView.isNestedScrollingEnabled = false
-        recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
-        adapter = AttractionListCardAdapter(context, data, 2).apply {
-            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    if (position in 0 until data.size) {
-                        DubaiApplication.clickItemScenic = data[position]
-                        openActivity(ScenicDetailActivity::class.java)
-                    }
-                }
-            })
-        }
-        recyclerView.adapter = adapter
-    }
 
     override fun initData() {
         //presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
@@ -148,7 +128,6 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         }
         this.data.clear()
         this.data.addAll(attractions)
-        adapter.notifyDataSetChanged()
     }
 
     override fun onShowError(msg: String?) {

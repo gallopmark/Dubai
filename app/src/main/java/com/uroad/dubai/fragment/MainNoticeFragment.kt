@@ -8,20 +8,15 @@ import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import com.uroad.dubai.R
-import com.uroad.dubai.api.presenter.NewsPresenter
+import com.uroad.dubai.activity.NoticeListActivity
 import com.uroad.dubai.api.presenter.NoticePresenter
-import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.api.view.NoticeView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.DubaiApplication
-import com.uroad.dubai.enumeration.NewsType
-import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.model.NoticeMDL
-import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.fragment_mainnotice.*
 import java.lang.ref.WeakReference
 
@@ -32,6 +27,7 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
     private var data: MutableList<NoticeMDL> = ArrayList()
     private var mPosition: Int = 0
     private lateinit var handler: MHandler
+    private var callback: OnRequestCallback? = null
 
     companion object {
         private const val CODE_MESSAGE = 100
@@ -66,7 +62,7 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
 
     private fun initSwitcher() {
         textSwitcher.setFactory { return@setFactory customTextView() }
-        textSwitcher.setOnClickListener { }
+        textSwitcher.setOnClickListener { openActivity(NoticeListActivity::class.java) }
     }
 
     private fun customTextView(): TextView {
@@ -88,10 +84,15 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
     override fun getNoticeList(data: MutableList<NoticeMDL>) {
         this.data.clear()
         this.data.addAll(data)
-        if (!data.isEmpty()) {
-            textSwitcher.setText(data[0].content)
+        if (!this.data.isEmpty()) {
+            textSwitcher.setText(this.data[0].content)
             handler.sendEmptyMessageDelayed(CODE_MESSAGE, 5000)
         }
+        callback?.callback(this.data.isEmpty())
+    }
+
+    override fun onShowError(msg: String?) {
+        handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 
     override fun onFailure(errorMsg: String?, errorCode: Int?) {
@@ -101,5 +102,13 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
     override fun onDestroyView() {
         handler.removeCallbacksAndMessages(null)
         super.onDestroyView()
+    }
+
+    interface OnRequestCallback {
+        fun callback(isEmpty: Boolean)
+    }
+
+    fun setOnRequestCallback(callback: OnRequestCallback) {
+        this.callback = callback
     }
 }
