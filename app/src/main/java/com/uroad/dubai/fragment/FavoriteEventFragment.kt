@@ -47,9 +47,14 @@ class FavoriteEventFragment  : BasePageRefreshPresenterFragment<FavoriteEventFMP
 
     private fun getMsgList(){
         onPullToLoadSuccess()
+        data.clear()
         val mdl = getMDL(Random().nextInt(5)-1)
         data.add(mdl)
+        data.add(getMDL(0))
+        data.add(getMDL(1))
+        data.add(getMDL(2))
         adapter.notifyDataSetChanged()
+        onFinishLoadMoreWithNoMoreData()
     }
 
     override fun createPresenter(): FavoriteEventFMPresenter? = FavoriteEventFMPresenter(this)

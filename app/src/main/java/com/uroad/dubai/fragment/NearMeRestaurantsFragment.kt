@@ -48,6 +48,8 @@ class NearMeRestaurantsFragment : BasePresenterFragment<NewsPresenter>(), NewsVi
                 scenicMDL.content = mdl.content
                 scenicMDL.address = mdl.address
                 scenicMDL.hours = mdl.hours
+                scenicMDL.latitude = mdl.latitude
+                scenicMDL.longitude = mdl.longitude
                 scenicMDL.phone = mdl.phone
                 DubaiApplication.clickItemScenic = scenicMDL
                 openActivity(ScenicDetailActivity::class.java)

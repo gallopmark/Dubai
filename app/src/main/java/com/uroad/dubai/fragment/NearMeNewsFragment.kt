@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.NewsListCardAdapter
 import com.uroad.dubai.api.presenter.NewsPresenter
@@ -41,7 +42,7 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 val mdl = data[position]
-                val scenicMDL = ScenicMDL()
+                /*val scenicMDL = ScenicMDL()
                 scenicMDL.headimg = mdl.headimg
                 scenicMDL.title = mdl.title
                 scenicMDL.content = mdl.content
@@ -49,7 +50,13 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
                 scenicMDL.hours = mdl.publishtime
                 scenicMDL.phone = mdl.phone
                 DubaiApplication.clickItemScenic = scenicMDL
-                openActivity(ScenicDetailActivity::class.java)
+                openActivity(ScenicDetailActivity::class.java)*/
+                openActivity(DetailsActivity::class.java, Bundle().apply {
+                    putString("title",mdl.title)
+                    putString("time",mdl.publishtime)
+                    putString("imgUrl",mdl.headimg)
+                    putString("content",mdl.content)
+                })
             }
         })
     }

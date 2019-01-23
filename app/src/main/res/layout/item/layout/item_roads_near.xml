@@ -6,73 +6,125 @@
     android:background="@color/white"
     android:padding="@dimen/space_10">
 
-    <ImageView
-        android:id="@+id/ivRoadsType"
-        android:layout_width="@dimen/space_40"
-        android:layout_height="@dimen/space_50"
-        android:layout_marginLeft="@dimen/space_10"
-        android:src="@mipmap/icon_enent_type" />
-
-    <TextView
-        android:id="@+id/tvRoadsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/space_10"
-        android:layout_marginTop="@dimen/space_5"
-        android:layout_marginRight="@dimen/space_10"
-        android:layout_toEndOf="@+id/ivRoadsType"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="Al Khail Road; Dubai-Hatta Highway"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_14" />
-
-    <TextView
-        android:id="@+id/tvRoadsDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvRoadsTitle"
-        android:layout_alignStart="@+id/tvRoadsTitle"
-        android:layout_marginTop="@dimen/space_5"
-        android:text="67.4km"
-        android:textColor="@color/gary"
-        android:textSize="@dimen/font_12" />
-
-    <TextView
-        android:id="@+id/tvConstruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivRoadsType"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/space_10"
-        android:drawableStart="@mipmap/ic_event_construction"
-        android:drawablePadding="@dimen/space_5"
-        android:gravity="center"
-        android:text="1"
-        android:textSize="@dimen/font_14" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:id="@+id/llView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvConstruction"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/space_10"
-        android:layout_marginTop="@dimen/space_10"
-        android:layout_marginRight="@dimen/space_10"
-        android:orientation="horizontal"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="@dimen/space_40"
+                android:layout_height="@dimen/space_50"
+                android:layout_gravity="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/space_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/color_66"
+                    android:textSize="@dimen/font_15" />
+
+                <TextView
+                    android:id="@+id/tvContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/gary"
+                    android:textSize="@dimen/font_12" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_10"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvEventInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="@color/gary"
+                            android:textSize="@dimen/font_12" />
+
+                        <TextView
+                            android:id="@+id/tvConstruction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_10"
+                            android:drawableStart="@mipmap/ic_event_construction"
+                            android:drawablePadding="@dimen/space_5"
+                            android:gravity="center"
+                            android:textSize="@dimen/font_16" />
+
+                        <TextView
+                            android:id="@+id/tvAccident"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_10"
+                            android:drawableStart="@mipmap/ic_event_accident"
+                            android:drawablePadding="@dimen/space_5"
+                            android:gravity="center"
+                            android:textSize="@dimen/font_16" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_corners_colorb9_5dp"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/space_8"
+                        android:paddingTop="@dimen/space_2"
+                        android:paddingEnd="@dimen/space_8"
+                        android:paddingBottom="@dimen/space_2"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_12" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:orientation="horizontal"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+    </LinearLayout>
+
 
     <View
         android:id="@+id/vDivider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_1"
-        android:layout_below="@+id/recyclerView"
-        android:layout_marginLeft="@dimen/space_10"
+        android:layout_below="@+id/llView"
         android:layout_marginTop="@dimen/space_20"
-        android:layout_marginRight="@dimen/space_10"
         android:layout_marginBottom="@dimen/space_5"
         android:background="@color/itemDivider" />
+
 
 </RelativeLayout>

@@ -69,6 +69,10 @@ class AttractionsListActivity : BaseActivity() {
                 mViewPager.currentItem = 1
         }
 
+        ivSearchAttr.setOnClickListener {
+            showTipsDialog(getString(R.string.developing))
+        }
+
         onPagerChange(0)
     }
 
