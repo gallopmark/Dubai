@@ -2,6 +2,7 @@ package com.uroad.dubai.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.RelativeLayout
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -31,24 +32,24 @@ class AttrNearFmListAdapter(private val context: Context,type : String?, data: M
         setText(holder,t,position)
     }
 
-    override fun bindView(viewType: Int): Int = R.layout.item_parking
+    override fun bindView(viewType: Int): Int = R.layout.item_attraction
 
     private fun setText(holder: RecyclerHolder,t: AttractionNearFMMDL,position: Int){
         holder.setText(R.id.tvTitle, t.title)
-        holder.setText(R.id.tvContext, "Location  ${t.address}")
-        holder.setText(R.id.tvDistance, "Distance  ${t.distance}")
-        holder.setVisibility(R.id.tvNum,false)
         when(typePage){
             "1001002" -> //酒店
             {
-
+                holder.setText(R.id.tvNum, t.hours)
             }
             "1001003" ->//餐厅
             {
-
+                holder.setVisibility(R.id.tvContext,false)
+                holder.setText(R.id.tvDistance, t.hours)
             }
             else ->{//1001004 景点
-
+                //holder.setText(R.id.tvContext, "Location  ${t.address}")
+                holder.setText(R.id.tvNum, "Distance  ${t.commentstar?:"0"}km")
+                //holder.setVisibility(R.id.tvNum,false)
             }
         }
     }
