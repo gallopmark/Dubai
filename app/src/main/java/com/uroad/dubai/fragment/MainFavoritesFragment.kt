@@ -2,21 +2,21 @@ package com.uroad.dubai.fragment
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import com.mapbox.api.directions.v5.MapboxDirections
-import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.RouteNavigationActivity
 import com.uroad.dubai.adaptervp.MainSubscribeAdapter
 import com.uroad.dubai.api.presenter.SubscribePresenter
-import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.api.view.SubscribeView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.SubscribeMDL
+import com.uroad.library.widget.banner.BaseBannerAdapter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_mainfavorites.*
 
@@ -32,6 +32,7 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
     private lateinit var handler: Handler
     private var isLoadFavorites = false
     private var callback: OnRequestCallback? = null
+
     override fun createPresenter(): SubscribePresenter = SubscribePresenter(context, this)
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +48,19 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
 
     private fun initial() {
         data = ArrayList()
-        adapter = MainSubscribeAdapter(context, data)
+        adapter = MainSubscribeAdapter(context, data).apply {
+            setOnItemClickListener(object : BaseBannerAdapter.OnItemClickListener<SubscribeMDL> {
+                override fun onItemClick(t: SubscribeMDL, position: Int) {
+                    val point = t.getDestinationPoint()
+                    point?.let {
+                        openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+                            putString("point", it.toJson())
+                            putString("endPointName", t.endpoint)
+                        })
+                    }
+                }
+            })
+        }
         banner.setAdapter(adapter)
     }
 
@@ -60,7 +73,7 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
         this.data.clear()
         this.data.addAll(data)
         adapter.notifyDataSetChanged()
-        getRoutes()
+//        getRoutes()
         callback?.callback(this.data.isEmpty())
     }
 
@@ -88,7 +101,10 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
                         data[position].congestion = congestion
                     }
                     adapter.notifyDataSetChanged()
-                }, { handler.postDelayed({ requestRoutes(position, directions) }, DubaiApplication.DEFAULT_DELAY_MILLIS) })
+                }, {
+                    directions.cancelCall()
+                    handler.postDelayed({ requestRoutes(position, directions) }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+                })
         presenter.addDisposable(disposable)
     }
 

@@ -45,8 +45,6 @@ class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView 
                     } else if (TextUtils.equals(t.newstype, NewsType.NEWS.code)) {
                         openActivity(NewsDetailsActivity::class.java, Bundle().apply { putString("newsId", t.newsid) })
                     }
-//                    DubaiApplication.clickItemScenic = t
-//                    openActivity(ScenicDetailActivity::class.java)
                 }
             })
         }

@@ -228,7 +228,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                             Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(context,
                             Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-                calendarPresenter.getCalendar(context, true)
+                calendarPresenter.getCalendar(context)
             }
         }
     }

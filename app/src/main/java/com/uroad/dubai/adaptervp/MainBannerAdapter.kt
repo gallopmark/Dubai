@@ -6,6 +6,7 @@ import android.widget.ImageView
 import com.uroad.dubai.R
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.glidev4.GlideV4
+import com.uroad.glidev4.listener.ImageSize
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.widget.banner.BaseBannerAdapter
 

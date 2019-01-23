@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_scenicdetail.*
 class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsDetailView {
 
     private var newsId: String? = null
+    private var newsMDL: NewsMDL? = null
     override fun requestWindow() {
         requestWindowFullScreen()
     }
@@ -40,7 +41,7 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
         ivBack.setOnClickListener { onBackPressed() }
         ivBack2.setOnClickListener { onBackPressed() }
         llTopLayout.setOnClickListener {
-            DubaiApplication.clickItemScenic?.let { scenic ->
+            newsMDL?.let { scenic ->
                 val point = Point.fromLngLat(scenic.getLatLng().longitude, scenic.getLatLng().latitude)
                 openActivity(RouteNavigationActivity::class.java, Bundle().apply {
                     putString("point", point.toJson())
@@ -86,6 +87,7 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
     }
 
     private fun updateUI(mdl: NewsMDL) {
+        this.newsMDL = mdl
         GlideV4.getInstance().displayImage(this, mdl.headimg, ivTopPic)
         tvSubTitle.text = mdl.title
         tvAddress.text = mdl.address
