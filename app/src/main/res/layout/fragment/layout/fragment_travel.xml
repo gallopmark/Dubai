@@ -103,23 +103,37 @@
 
             </LinearLayout>
 
+            <com.uroad.library.widget.banner.Banner
+                android:id="@+id/baCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:bannerAnimDuration="1000"
+                app:bannerAnimScroll="true"
+                app:bannerAutoScroll="true"
+                app:bannerPageAlpha="0.6"
+                app:bannerPageMargin="@dimen/minus_5"
+                app:bannerPagePercent="0.95"
+                app:bannerPageScale="1"
+                app:bannerScrollDuration="5000"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
+
             <TextView
+                android:text="@string/view_histroy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_16"
                 android:layout_marginRight="@dimen/space_16"
                 android:layout_marginBottom="@dimen/space_10"
-                android:text="@string/travel_title_recommend"
+                android:layout_marginTop="@dimen/space_10"
                 android:textColor="@color/color_66"
-                android:textSize="@dimen/font_20"
-                android:visibility="gone" />
+                android:textSize="@dimen/font_20" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

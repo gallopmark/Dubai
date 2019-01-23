@@ -35,20 +35,8 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
         adapter.setOnItemClickListener(object :BaseRecyclerAdapter.OnItemClickListener{
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 var mdl = data[position]
-                /*val scenicMDL = ScenicMDL()
-                scenicMDL.headimg = mdl.headimg
-                scenicMDL.title = mdl.title
-                scenicMDL.content = mdl.content
-                scenicMDL.address = mdl.address
-                scenicMDL.hours = mdl.publishtime
-                scenicMDL.phone = mdl.phone
-                DubaiApplication.clickItemScenic = scenicMDL
-                openActivity(ScenicDetailActivity::class.java)*/
                 openActivity(NewsDetailsActivity::class.java, Bundle().apply {
-                    putString("title",mdl.title)
-                    putString("time",mdl.publishtime)
-                    putString("imgUrl",mdl.headimg)
-                    putString("content",mdl.content)
+                    putString("newsId",mdl.newsid)
                 })
             }
         })

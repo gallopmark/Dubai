@@ -198,4 +198,5 @@
     <string name="distance">Distance</string>
     <string name="travel_time">Travel time</string>
     <string name="notices">Notices</string>
+    <string name="view_histroy">View histroy</string>
 </resources>

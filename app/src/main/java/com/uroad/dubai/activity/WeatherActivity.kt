@@ -56,6 +56,10 @@ class WeatherActivity : BaseActivity() ,WeatherView {
         data.add(mdl)
         data.add(mdl)
         data.add(mdl)
+
+        btnMore.setOnClickListener {
+            showTipsDialog(getString(R.string.developing))
+        }
     }
 
     @SuppressLint("LogNotTimber")
