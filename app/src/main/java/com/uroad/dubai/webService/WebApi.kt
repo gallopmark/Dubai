@@ -13,6 +13,10 @@ class WebApi {
             put("size", size.toString())
         }
 
+        /*新闻详情*/
+        const val GET_NEWS_DETAIL = "getNewsDetails"
+
+        fun newsDetailParams(newsId: String?) = getBaseParams().apply { put("newsid", newsId) }
 
         const val GET_ROADS_LIST = "getRoadList"
 
@@ -45,5 +49,10 @@ class WebApi {
 
         /*获取订阅数据*/
         const val GET_SUBSCRIBE_DATA = "getSubscribeData"
+
+        /*轮播图新闻*/
+        const val BANNER_NEWS = "getBannerNews"
+
+        fun bannerNewsParams(bannertype: String?) = getBaseParams().apply { put("bannertype", bannertype) }
     }
 }

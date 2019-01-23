@@ -88,7 +88,7 @@
             android:name=".activity.WeatherActivity"
             android:launchMode="singleTop" />
         <activity
-            android:name=".activity.DetailsActivity"
+            android:name=".activity.NewsDetailsActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.ScenicDetailActivity"

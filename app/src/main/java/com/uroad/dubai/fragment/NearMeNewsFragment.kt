@@ -6,8 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.DetailsActivity
-import com.uroad.dubai.activity.ScenicDetailActivity
+import com.uroad.dubai.activity.NewsDetailsActivity
 import com.uroad.dubai.adapter.NewsListCardAdapter
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
@@ -16,7 +15,6 @@ import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
-import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
@@ -51,7 +49,7 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
                 scenicMDL.phone = mdl.phone
                 DubaiApplication.clickItemScenic = scenicMDL
                 openActivity(ScenicDetailActivity::class.java)*/
-                openActivity(DetailsActivity::class.java, Bundle().apply {
+                openActivity(NewsDetailsActivity::class.java, Bundle().apply {
                     putString("title",mdl.title)
                     putString("time",mdl.publishtime)
                     putString("imgUrl",mdl.headimg)

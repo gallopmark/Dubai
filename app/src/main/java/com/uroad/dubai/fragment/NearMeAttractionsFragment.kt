@@ -39,8 +39,7 @@ class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), 
         adapter = AttractionListCardAdapter(context, data).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    DubaiApplication.clickItemScenic = data[position]
-                    openActivity(ScenicDetailActivity::class.java)
+                    openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", data[position].newsid) })
                 }
             })
         }

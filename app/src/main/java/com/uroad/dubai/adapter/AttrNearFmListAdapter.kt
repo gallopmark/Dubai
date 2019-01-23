@@ -1,17 +1,12 @@
 package com.uroad.dubai.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.os.Bundle
 import android.widget.RelativeLayout
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.uroad.dubai.R
-import com.uroad.dubai.activity.DetailsActivity
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.AttractionNearFMMDL
-import com.uroad.dubai.model.ParkingMDL
 import com.uroad.library.utils.DisplayUtils
 
 class AttrNearFmListAdapter(private val context: Context,type : String?, data: MutableList<AttractionNearFMMDL>)

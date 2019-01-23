@@ -7,9 +7,11 @@ import android.view.View
 import android.widget.FrameLayout
 import com.mapbox.geojson.Point
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseLucaActivity
+import com.uroad.dubai.api.presenter.NewsDetailPresenter
+import com.uroad.dubai.api.view.NewsDetailView
+import com.uroad.dubai.common.BasePresenterActivity
 import com.uroad.dubai.common.DubaiApplication
-import com.uroad.dubai.model.ScenicMDL
+import com.uroad.dubai.model.NewsMDL
 import com.uroad.glidev4.GlideV4
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_scenicdetail.*
@@ -19,14 +21,17 @@ import kotlinx.android.synthetic.main.activity_scenicdetail.*
  * @create 2019/1/3
  * @describe
  */
-class ScenicDetailActivity : BaseLucaActivity() {
+class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsDetailView {
 
+    private var newsId: String? = null
     override fun requestWindow() {
         requestWindowFullScreen()
     }
 
+    override fun createPresenter(): NewsDetailPresenter = NewsDetailPresenter(this)
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentViewWithoutTitle(R.layout.activity_scenicdetail, true)
+        newsId = intent.extras?.getString("newsId")
         initView()
         initLayout()
     }
@@ -63,11 +68,24 @@ class ScenicDetailActivity : BaseLucaActivity() {
     }
 
     override fun initData() {
-        val mdl = DubaiApplication.clickItemScenic
-        if (mdl != null) updateUI(mdl)
+        onPageLoading()
+        presenter.getNewsDetail(newsId)
     }
 
-    private fun updateUI(mdl: ScenicMDL) {
+    override fun onGetNews(newsMDL: NewsMDL) {
+        onPageResponse()
+        updateUI(newsMDL)
+    }
+
+    override fun onParseError() {
+        showShortToast("Parsing error")
+    }
+
+    override fun onFailure(errorMsg: String?, errorCode: Int?) {
+        onPageError()
+    }
+
+    private fun updateUI(mdl: NewsMDL) {
         GlideV4.getInstance().displayImage(this, mdl.headimg, ivTopPic)
         tvSubTitle.text = mdl.title
         tvAddress.text = mdl.address

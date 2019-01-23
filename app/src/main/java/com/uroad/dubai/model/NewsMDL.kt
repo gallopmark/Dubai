@@ -18,15 +18,16 @@ open class NewsMDL {
     var website: String? = null
     var hours: String? = null
     var commentstar: String? = null
+    var newstype: String? = null
 
     fun getTime(): String {
         if (TextUtils.isEmpty(publishtime)) return ""
-        try {
+        return try {
             val format = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
             val time = format.parse(publishtime).time
-            return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(time)
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(time)
         } catch (e: Exception) {
-            return ""
+            ""
         }
     }
 }

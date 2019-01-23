@@ -10,8 +10,6 @@ import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.common.DubaiApplication
-import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_base_refresh.*
 
@@ -46,7 +44,7 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
                 scenicMDL.phone = mdl.phone
                 DubaiApplication.clickItemScenic = scenicMDL
                 openActivity(ScenicDetailActivity::class.java)*/
-                openActivity(DetailsActivity::class.java, Bundle().apply {
+                openActivity(NewsDetailsActivity::class.java, Bundle().apply {
                     putString("title",mdl.title)
                     putString("time",mdl.publishtime)
                     putString("imgUrl",mdl.headimg)
