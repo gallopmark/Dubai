@@ -50,10 +50,8 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
                 DubaiApplication.clickItemScenic = scenicMDL
                 openActivity(ScenicDetailActivity::class.java)*/
                 openActivity(NewsDetailsActivity::class.java, Bundle().apply {
-                    putString("title",mdl.title)
-                    putString("time",mdl.publishtime)
-                    putString("imgUrl",mdl.headimg)
-                    putString("content",mdl.content)
+                    putString("newsId",mdl.newsid)
+                    putString("title",getString(R.string.home_menu_news))
                 })
             }
         })

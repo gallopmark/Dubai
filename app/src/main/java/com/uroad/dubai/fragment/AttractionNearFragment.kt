@@ -27,7 +27,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
 
     override fun initViewData(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
-            type = it.getString("type")
+            type = it.getString("userstatus")
         }
         data = ArrayList()
         adapter = AttrNearFmListAdapter(context, type, data)
@@ -37,7 +37,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", data[position].newsid) })
-                /*if(type.equals("1001004")){
+                /*if(userstatus.equals("1001004")){
                     return
                 }
                 openActivity(NewsDetailsActivity::class.java,Bundle().apply {

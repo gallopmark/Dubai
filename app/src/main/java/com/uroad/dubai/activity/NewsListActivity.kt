@@ -37,6 +37,7 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
                 var mdl = data[position]
                 openActivity(NewsDetailsActivity::class.java, Bundle().apply {
                     putString("newsId",mdl.newsid)
+                    putString("title",getString(R.string.home_menu_news))
                 })
             }
         })

@@ -73,12 +73,12 @@ public class UserDAL {
     private UserMDL convert(Cursor cursor){
         UserMDL mdl = new UserMDL();
         try{
-            mdl.setUserid(cursor.getString(0));
+            mdl.setUseruuid(cursor.getString(0));
             mdl.setName(cursor.getString(1));
             mdl.setNickname(cursor.getString(2));
             mdl.setSex(cursor.getString(3));
-            mdl.setAvatar(cursor.getString(4));
-            mdl.setType(cursor.getString(5));
+            mdl.setHeadimg(cursor.getString(4));
+            mdl.setUserstatus(cursor.getString(5));
             mdl.setAge(cursor.getString(6));
         }catch (Exception e){ }
         return mdl;

@@ -3,7 +3,7 @@ package com.uroad.dubai.webService
 class WebApi {
     companion object {
         fun getBaseParams() = HashMap<String, String?>()
-        fun simpleParams(userid: String?) = getBaseParams().apply { put("userid", userid) }
+        fun simpleParams(userid: String?) = getBaseParams().apply { put("useruuid", userid) }
         const val GET_NEWS_LIST = "getNewsList"
 
         fun getNewsListParams(newstype: String?, keyword: String?, index: Int, size: Int) = getBaseParams().apply {
@@ -37,7 +37,7 @@ class WebApi {
         fun subscribeRouteParams(userid: String?, startpoint: String?, endpoint: String?,
                                  startlatitudeandlongitude: String?, endlatitudeandlongitude: String?,
                                  plancode: String?, routeid: String?, coordinates: String?) = getBaseParams().apply {
-            put("userid", userid)
+            put("useruuid", userid)
             put("startpoint", startpoint)
             put("endpoint", endpoint)
             put("startlatitudeandlongitude", startlatitudeandlongitude)
@@ -54,5 +54,12 @@ class WebApi {
         const val BANNER_NEWS = "getBannerNews"
 
         fun bannerNewsParams(bannertype: String?) = getBaseParams().apply { put("bannertype", bannertype) }
+
+
+        const val USER_LOGIN = "login"
+        fun login(logintype : String,phone : String) = getBaseParams().apply {
+            put("logintype",logintype)
+            put("phone",phone)
+        }
     }
 }

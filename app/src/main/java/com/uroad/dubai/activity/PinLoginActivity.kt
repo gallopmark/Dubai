@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.api.presenter.LoginPresenter
+import com.uroad.dubai.api.view.LoginView
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.model.UserMDL
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_pin_login.*
 
@@ -51,5 +54,4 @@ class PinLoginActivity : BaseActivity(){
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
 }

@@ -19,6 +19,6 @@ class CalendarListContentAdapter(private val context: Context, data: MutableList
     override fun bindView(viewType: Int): Int = R.layout.item_calendar_content
 
     private fun getStr(dtstart: String?, dtend: String?):String{
-        return "${dtstart?.substring(10,dtstart.length-3)}  -  ${dtend?.substring(10,dtend.length-3)}"
+        return "${dtstart?.substring(10,dtstart.length-3)}  -  ${dtend?.substring(10,dtend.length-3)}".trim()
     }
 }

@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.api.presenter.LoginPresenter
+import com.uroad.dubai.api.view.LoginView
 import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.widget.NumberEditText
 import com.uroad.dubai.local.UserPreferenceHelper
+import com.uroad.dubai.model.UserMDL
 import io.reactivex.Observable
 import io.reactivex.Observer
 import kotlinx.android.synthetic.main.activity_verify_code.*
@@ -16,7 +19,7 @@ import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
 
-class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishListener {
+class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInputFinishListener {
 
     var phone : String? = ""
     var d : Disposable? = null
@@ -24,6 +27,7 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
     var hasContent : Boolean = false
     var millis : Int = 60
     var isCreateNewAccount : Boolean = false
+    private lateinit var presenter : LoginPresenter
 
     @SuppressLint("LogNotTimber")
     override fun setUp(savedInstanceState: Bundle?) {
@@ -49,6 +53,8 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
     }
 
     private fun init() {
+        presenter = LoginPresenter(this@VerificationCodeActivity)
+
         intent.extras?.let {
             isCreateNewAccount = it.getBoolean("isCreate", false)
             phone = it.getString("phone")
@@ -56,7 +62,11 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
         }
 
         edVerify.setOnInputFinish(this@VerificationCodeActivity)
-        if (isCreateNewAccount) btnVerify.visibility = View.GONE
+        if (isCreateNewAccount) {
+            btnVerify.visibility = View.GONE
+            //presenter.login()
+        }
+
         btnVerify.setOnClickListener {
             if (hasContent && edVerify.condition()){
                 openActivity(CreatePasswordActivity::class.java)
@@ -90,5 +100,21 @@ class VerificationCodeActivity : BaseActivity() , NumberEditText.OnInputFinishLi
     override fun onDestroy() {
         super.onDestroy()
         d?.dispose()
+    }
+
+    override fun loginSuccess(user: UserMDL?) {
+    }
+
+    override fun loginError(e: String) {
+    }
+
+    override fun onShowLoading() {
+    }
+
+    override fun onHideLoading() {
+    }
+
+    override fun onShowError(msg: String?) {
+
     }
 }

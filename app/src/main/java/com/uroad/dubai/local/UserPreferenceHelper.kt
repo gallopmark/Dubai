@@ -11,7 +11,7 @@ class UserPreferenceHelper {
     companion object {
         //历史版本Prefs_user、Prefs_user_v2
         private const val PREFS_USER = "userInfo_v2"
-        const val USER_ID = "userid"
+        const val USER_ID = "useruuid"
         const val USER_UUID = "useruuid"
         const val PUSH_ID = "pushid"
         const val REAL_NAME = "realname"
@@ -38,7 +38,7 @@ class UserPreferenceHelper {
 
         fun save(context: Context, userMDL: UserMDL) {
             from(context).edit().apply {
-                putString(USER_ID, userMDL.userid)
+                putString(USER_ID, userMDL.useruuid)
                 putString(REAL_NAME, userMDL.name)
                 putString(SEX, userMDL.sex)
             }.apply()

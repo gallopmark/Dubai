@@ -15,9 +15,9 @@ class NewsDetailsActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsDe
 
     override fun createPresenter(): NewsDetailPresenter = NewsDetailPresenter(this)
     override fun setUp(savedInstanceState: Bundle?) {
-        withTitle(getString(R.string.details))
         setBaseContentView(R.layout.activity_details)
         newsId = intent.extras?.getString("newsId")
+        withTitle(intent.extras?.getString("title")?:getString(R.string.details))
     }
 
     override fun initData() {

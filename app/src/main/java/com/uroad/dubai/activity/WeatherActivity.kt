@@ -72,11 +72,13 @@ class WeatherActivity : BaseActivity() ,WeatherView {
 
                 val temperature = it.DailyForecasts?.get(0)?.Temperature
                 val phrase = it.DailyForecasts?.get(0)?.Day?.IconPhrase
+                val weatherType = it.DailyForecasts?.get(0)?.Day?.Icon
                 val maximum = temperature?.Maximum
                 //val minimum = temperature?.Minimum
                 val wd = ((maximum?.Value!! /*+ minimum?.Value!!*/ -32)/1.8f )
                 tvTemperature.text = changeDouble(wd).toString()
                 tvTime.text = phrase
+
                 ivWeather.setImageDrawable(drawable(R.mipmap.icon_cloudy))
 
             }

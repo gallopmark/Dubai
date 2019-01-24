@@ -97,8 +97,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/space_16"
-                    android:text="@string/home_menu_more2"
-                    android:textColor="@color/color_66"
+                    android:text="@string/home_menu_more"
+                    android:drawableEnd="@mipmap/ic_arrow_right_grey"
+                    android:drawablePadding="@dimen/space_5"
+                    android:textColor="@color/layoutLoading"
                     android:textSize="@dimen/font_14" />
 
             </LinearLayout>
@@ -108,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:bannerAnimDuration="1000"
-                app:bannerAnimScroll="true"
-                app:bannerAutoScroll="true"
+                app:bannerAnimScroll="false"
+                app:bannerAutoScroll="false"
                 app:bannerPageAlpha="0.6"
                 app:bannerPageMargin="@dimen/minus_5"
                 app:bannerPagePercent="0.95"
