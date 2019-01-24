@@ -8,7 +8,7 @@
     app:bannerAnimScroll="true"
     app:bannerAutoScroll="true"
     app:bannerPageAlpha="0.6"
-    app:bannerPageMargin="@dimen/space_15"
-    app:bannerPagePercent="0.95"
+    app:bannerPageMargin="@dimen/space_10"
+    app:bannerPagePercent="0.9"
     app:bannerPageScale="1"
     app:bannerScrollDuration="5000" />

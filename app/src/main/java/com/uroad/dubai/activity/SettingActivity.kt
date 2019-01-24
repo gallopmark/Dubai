@@ -51,7 +51,7 @@ class SettingActivity : BaseActivity() {
         tvAbout.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvTerm.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvOffline.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        tvNavigationAddress.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvNavigationAddress.setOnClickListener { openActivity(NavigationAddressActivity::class.java) }
 
         swSearchHistory.setOnCheckedChangeListener { _, isChecked -> AppSource.setShowSearchHistory(this@SettingActivity, isChecked) }
         swLoadingPhoto.setOnCheckedChangeListener { _, isChecked -> AppSource.setCanLoadPhoto(this@SettingActivity, isChecked) }

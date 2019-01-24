@@ -34,10 +34,10 @@ class WebApi {
         /*订阅路线*/
         const val SUBSCRIBE_ROUTE = "subscribeRoute"
 
-        fun subscribeRouteParams(userid: String?, startpoint: String?, endpoint: String?,
+        fun subscribeRouteParams(useruuid: String?, startpoint: String?, endpoint: String?,
                                  startlatitudeandlongitude: String?, endlatitudeandlongitude: String?,
                                  plancode: String?, routeid: String?, coordinates: String?) = getBaseParams().apply {
-            put("useruuid", userid)
+            put("useruuid", useruuid)
             put("startpoint", startpoint)
             put("endpoint", endpoint)
             put("startlatitudeandlongitude", startlatitudeandlongitude)
@@ -47,6 +47,15 @@ class WebApi {
             put("coordinates", coordinates)
         }
 
+        /*取消订阅*/
+        const val UNSUBSCRIBE_ROUTE = "unsubscribe"
+
+        fun unSubscribeRouteParams(useruuid: String?, routeId: String?, type: String?) = getBaseParams().apply {
+            put("useruuid", useruuid)
+            put("dataid", routeId)
+            put("type", type)
+        }
+
         /*获取订阅数据*/
         const val GET_SUBSCRIBE_DATA = "getSubscribeData"
 
@@ -54,6 +63,31 @@ class WebApi {
         const val BANNER_NEWS = "getBannerNews"
 
         fun bannerNewsParams(bannertype: String?) = getBaseParams().apply { put("bannertype", bannertype) }
+
+        /*设置个人地址*/
+        const val SETUP_USER_ADDRESS = "setUpUserAddress"
+
+        fun setUpUserAddressParams(addressid: String?, useruuid: String?, address: String?
+                                   , lnglat: String?, addresstype: String?) = getBaseParams().apply {
+            put("addressid", addressid)
+            put("useruuid", useruuid)
+            put("address", address)
+            put("lnglat", lnglat)
+            put("addresstype", addresstype)
+        }
+
+        /*获取地址*/
+        const val GET_USER_ADDRESS = "getUserAddress"
+
+        fun getUserAddressParams(useruuid: String?, size: String?) = getBaseParams().apply {
+            put("useruuid", useruuid)
+            put("size", size.toString())
+        }
+
+        /*删除地址*/
+        const val DELETE_USER_ADDRESS = "deleteUserAddress"
+
+        fun deleteUserAddressParams(addressid: String?) = getBaseParams().apply { put("addressid", addressid) }
 
 
         const val USER_LOGIN = "login"
