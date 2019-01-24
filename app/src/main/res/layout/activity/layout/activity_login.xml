@@ -47,6 +47,7 @@
         android:inputType="textPassword"
         android:layout_toLeftOf="@+id/ivInvisible"
         android:maxEms="20"
+        android:imeOptions="actionDone"
         android:maxLines="1"
         android:hint="@string/login_password"
         android:drawablePadding="@dimen/space_10"

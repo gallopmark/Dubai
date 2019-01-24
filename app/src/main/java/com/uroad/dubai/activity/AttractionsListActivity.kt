@@ -31,7 +31,7 @@ class AttractionsListActivity : BaseActivity() {
         setBaseContentView(R.layout.activity_attraction)
         val bundle = intent.extras
         bundle?.let {
-            type = it.getString("type")
+            type = it.getString("userstatus")
         }
         when (type) {
             NewsType.HOTEL.code -> withTitle(getString(R.string.travel_menu_hotels))      //酒店
@@ -79,7 +79,7 @@ class AttractionsListActivity : BaseActivity() {
     private fun getFragment() : AttractionNearFragment{
         val nearFragment = AttractionNearFragment()
         val bundle = Bundle()
-        bundle.putString("type",type)
+        bundle.putString("userstatus",type)
         //nearFragment.arguments?.putBundle("bundle",bundle)
         nearFragment.arguments = bundle
         return nearFragment

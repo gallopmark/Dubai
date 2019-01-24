@@ -16,6 +16,7 @@ import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.TravelCalendarAdapter
 import com.uroad.dubai.adaptervp.TravelBannerAdapter
 import com.uroad.dubai.adapter.ViewHistoryListCardAdapter
+import com.uroad.dubai.adapter.ViewHistoryRoadsListCardAdapter
 import com.uroad.dubai.api.presenter.AttractionPresenter
 import com.uroad.dubai.api.presenter.BannerPresenter
 import com.uroad.dubai.api.presenter.CalendarPresenter
@@ -49,11 +50,12 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private val handler = Handler()
     private lateinit var calendarPresenter: CalendarPresenter
     private lateinit var adapter: ViewHistoryListCardAdapter
+    private lateinit var adapterRoads: ViewHistoryRoadsListCardAdapter
     private lateinit var bannerPresenter: BannerPresenter
     private lateinit var bannerData: MutableList<NewsMDL>
     private lateinit var bannerAdapter: TravelBannerAdapter
     private lateinit var calendarBanner : TravelCalendarAdapter
-    private val calendarList = ArrayList<FavoritesMDL>()
+    private val calendarList = ArrayList<CalendarMDL>()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_travel)
@@ -83,6 +85,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
+        adapterRoads = ViewHistoryRoadsListCardAdapter(context,data)
         adapter = ViewHistoryListCardAdapter(context, data).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
@@ -90,7 +93,8 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                 }
             })
         }
-        recyclerView.adapter = adapter
+        //recyclerView.adapter = adapter
+        recyclerView.adapter = adapterRoads
     }
 
 
@@ -115,7 +119,10 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                             TextUtils.equals(t.newstype, NewsType.ATTRACTION.code)) {
                         openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", t.newsid) })
                     } else if (TextUtils.equals(t.newstype, NewsType.NEWS.code)) {
-                        openActivity(NewsDetailsActivity::class.java, Bundle().apply { putString("newsId", t.newsid) })
+                        openActivity(NewsDetailsActivity::class.java, Bundle().apply {
+                            putString("newsId", t.newsid)
+                            putString("title",getString(R.string.home_menu_news))
+                        })
                     }
                 }
             })
@@ -131,15 +138,15 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private fun initView() {
         val bundle = Bundle()
         tvHotels.setOnClickListener {
-            bundle.putString("type", NewsType.HOTEL.code)
+            bundle.putString("userstatus", NewsType.HOTEL.code)
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvRestaurants.setOnClickListener {
-            bundle.putString("type", NewsType.RESTAURANT.code)
+            bundle.putString("userstatus", NewsType.RESTAURANT.code)
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvAttractions.setOnClickListener {
-            bundle.putString("type", NewsType.ATTRACTION.code)
+            bundle.putString("userstatus", NewsType.ATTRACTION.code)
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
@@ -180,6 +187,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         this.data.clear()
         this.data.addAll(attractions)
         adapter.notifyDataSetChanged()
+        adapterRoads.notifyDataSetChanged()
     }
 
     override fun onShowError(msg: String?) {
@@ -194,17 +202,20 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     }
 
     override fun loadCalendarSuccess(list: ArrayList<CalendarMDL>) {
-        val mdl = list[0]
-        mdl.let {
-            calendarList.clear()
-            it.list?.forEach { it1 ->
-                val fa = FavoritesMDL()
-                fa.calendarMDL = it1
-                it1.titleTimeData = it.weekDataTitle?.let { it2 -> fa.showTime(it2) }
-                calendarList.add(fa)
+        when {
+            list.size <= 3 -> {
+                calendarList.clear()
+                calendarList.addAll(list)
             }
-            calendarBanner.notifyDataSetChanged()
+            list.size>3 -> {
+                calendarList.clear()
+                calendarList.add(list[0])
+                calendarList.add(list[1])
+                calendarList.add(list[2])
+            }
+            else -> {}
         }
+        calendarBanner.notifyDataSetChanged()
     }
 
     override fun loadError(e: String) {

@@ -43,7 +43,10 @@ class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView 
                             TextUtils.equals(t.newstype, NewsType.ATTRACTION.code)) {
                         openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", t.newsid) })
                     } else if (TextUtils.equals(t.newstype, NewsType.NEWS.code)) {
-                        openActivity(NewsDetailsActivity::class.java, Bundle().apply { putString("newsId", t.newsid) })
+                        openActivity(NewsDetailsActivity::class.java, Bundle().apply {
+                            putString("newsId", t.newsid)
+                            putString("title",getString(R.string.home_menu_news))
+                        })
                     }
                 }
             })

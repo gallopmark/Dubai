@@ -25,9 +25,10 @@ class MessagesListAdapter(context: Context, data: MutableList<MessagesMDL>)
         }
 
         when (t.type) {
-            "0" -> imageView.setImageResource(R.mipmap.icon_msg_accident)
-            "1" -> imageView.setImageResource(R.mipmap.icon_msg_news)
-            else -> imageView.setImageResource(R.mipmap.icon_msg_setting)
+            "100" -> imageView.setImageResource(R.mipmap.icon_msg_accident)
+            "111" -> imageView.setImageResource(R.mipmap.icon_msg_news)
+            "211" -> imageView.setImageResource(R.mipmap.icon_msg_setting)
+            else -> imageView.setImageResource(R.mipmap.ic_new_message)
         }
 
     }

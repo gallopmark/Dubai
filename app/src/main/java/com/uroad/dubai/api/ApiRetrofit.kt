@@ -20,7 +20,7 @@ object ApiRetrofit {
             .readTimeout(10, TimeUnit.SECONDS)
             .addInterceptor {
                 val request = it.request().newBuilder()
-                        .addHeader("x-app-type", "Android")
+                        .addHeader("x-app-userstatus", "Android")
                         .addHeader("x-user-uuid", DubaiApplication.getUserId())
                         .addHeader("x-app-version", PackageInfoUtils.getVersionName(DubaiApplication.instance))
                         .addHeader("x-device-uuid", DeviceUtils.getAndroidID(DubaiApplication.instance))

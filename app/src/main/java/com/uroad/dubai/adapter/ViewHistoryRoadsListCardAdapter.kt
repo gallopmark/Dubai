@@ -4,30 +4,25 @@ import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.ScenicMDL
 import com.uroad.library.utils.DisplayUtils
 
 
-class ViewHistoryListCardAdapter(context: Context, data: MutableList<ScenicMDL>)
+class ViewHistoryRoadsListCardAdapter(context: Context, data: MutableList<ScenicMDL>)
     : BaseArrayRecyclerAdapter<ScenicMDL>(context, data) {
 
     private val dp4 = DisplayUtils.dip2px(context, 4f)
     private val color66 = ContextCompat.getColor(context, R.color.color_66)
 
-    override fun bindView(viewType: Int): Int = R.layout.item_viewhistorylist_card
+    override fun bindView(viewType: Int): Int = R.layout.item_viewhistorylist_roads_card
 
     override fun onBindHoder(holder: RecyclerHolder, t: ScenicMDL, position: Int) {
-        holder.displayImage(R.id.ivPic, t.headimg, R.color.color_f7, RoundedCorners(dp4))
-        holder.setText(R.id.tvTitle, t.title)
-        //holder.setText(R.id.tvLocation, getLocation(t.address))
-        holder.setText(R.id.tvHours, t.content)
-        holder.setText(R.id.tvLocation, t.address)
-        holder.setText(R.id.tvDistance, "${t.commentstar}km")
+        holder.setText(R.id.tvTitleTime,"Staturday,Dec.22")
+        holder.setText(R.id.tvStartRoads,"Dubai International Airport")
+        holder.setText(R.id.tvEndRoads,"Holiday Inn Express Dubai Airport")
+        holder.setText(R.id.tvTime,"5mind")
     }
 
     private fun getLocation(address: String?): SpannableString {

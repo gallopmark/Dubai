@@ -95,23 +95,23 @@
 //        }
 //    }
 //
-//    private inner class InputWatcher(private val type: Int) : TextWatcher {
+//    private inner class InputWatcher(private val userstatus: Int) : TextWatcher {
 //        override fun afterTextChanged(editable: Editable?) {
 //
 //        }
 //
 //        override fun onTextChanged(cs: CharSequence, p1: Int, p2: Int, p3: Int) {
 //            val content = cs.toString()
-//            if (TextUtils.isEmpty(content)) resetWhenTextEmpty(type)
-//            else handleWhenInput(type, content)
+//            if (TextUtils.isEmpty(content)) resetWhenTextEmpty(userstatus)
+//            else handleWhenInput(userstatus, content)
 //        }
 //
 //        override fun beforeTextChanged(cs: CharSequence?, p1: Int, p2: Int, p3: Int) {
 //        }
 //    }
 //
-//    private fun resetWhenTextEmpty(type: Int) {
-//        when (type) {
+//    private fun resetWhenTextEmpty(userstatus: Int) {
+//        when (userstatus) {
 //            1 -> {
 //                startPoint = null
 //                handler.removeCallbacks(startPoiRunnable)
@@ -123,8 +123,8 @@
 //        }
 //    }
 //
-//    private fun handleWhenInput(type: Int, content: String?) {
-//        when (type) {
+//    private fun handleWhenInput(userstatus: Int, content: String?) {
+//        when (userstatus) {
 //            1 -> {
 //                when {
 //                    isFirstSetText -> isFirstSetText = false
@@ -279,11 +279,11 @@
 //    }
 //
 //    /*Asynchronous search Poi*/
-//    private fun enqueueCall(content: String, type: Int) {
+//    private fun enqueueCall(content: String, userstatus: Int) {
 //        isRouteNavigation = false
-//        inputType = type
+//        inputType = userstatus
 //        val client = routePresenter.doPoiSearch(content)
-//        if (type == 1) {
+//        if (userstatus == 1) {
 //            startGeoClient = client
 //        } else {
 //            endGeoClient = client

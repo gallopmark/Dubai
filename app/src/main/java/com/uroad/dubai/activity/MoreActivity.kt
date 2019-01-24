@@ -20,15 +20,15 @@ class MoreActivity : BaseActivity() {
     private fun initView() {
         val bundle = Bundle()
         tvHotels.setOnClickListener {
-            bundle.putString("type", "1001002")
+            bundle.putString("userstatus", "1001002")
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvRestaurants.setOnClickListener {
-            bundle.putString("type", "1001003")
+            bundle.putString("userstatus", "1001003")
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvAttractions.setOnClickListener {
-            bundle.putString("type", "1001004")
+            bundle.putString("userstatus", "1001004")
             openActivity(AttractionsListActivity::class.java, bundle)
         }
 

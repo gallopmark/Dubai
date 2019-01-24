@@ -30,12 +30,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="@dimen/space_16"
-            android:paddingTop="@dimen/space_10"
-            android:paddingRight="@dimen/space_16"
-            android:paddingBottom="@dimen/space_10">
+            android:paddingRight="@dimen/space_16">
 
             <TextView
                 android:id="@+id/tvTitleTime"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="On November 19, Monday"
@@ -43,27 +42,18 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_5">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tvAM"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_5"
-                    android:text="9 a.m."
-                    android:textSize="@dimen/font_10" />
 
                 <RelativeLayout
                     android:id="@+id/llPoint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/tvAMContent"
                     android:layout_alignBottom="@+id/tvPM"
+                    android:layout_marginTop="@dimen/space_5"
                     android:layout_marginLeft="@dimen/space_5"
                     android:layout_marginRight="@dimen/space_5"
-                    android:layout_marginBottom="@dimen/space_3"
-                    android:layout_toRightOf="@+id/tvAM"
+                    android:layout_marginBottom="@dimen/space_5"
                     android:orientation="vertical">
 
                     <View
@@ -96,29 +86,58 @@
 
                 </RelativeLayout>
 
+
+
+                <TextView
+                    android:id="@+id/tvAM"
+                    android:layout_width="wrap_content"
+                    android:layout_toEndOf="@+id/llPoint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_5"
+                    android:text="9 a.m."
+                    android:textSize="@dimen/font_12" />
+
                 <TextView
                     android:id="@+id/tvAMContent"
+                    android:layout_below="@+id/tvAM"
                     android:layout_width="wrap_content"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_alignStart="@+id/tvAM"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/llPoint"
                     android:text="Go to visit Burj Khalifa Tower with Janet and Lucy."
                     android:textSize="@dimen/font_16" />
 
+                <View
+                    android:id="@+id/vDivider"
+                    android:layout_toEndOf="@+id/llPoint"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/tvAMContent"
+                    android:layout_height="@dimen/space_1"
+                    android:layout_marginTop="@dimen/space_10"
+                    android:layout_marginBottom="@dimen/space_10"
+                    android:layout_alignStart="@+id/tvAM"
+                    android:background="@color/itemDivider" />
+
                 <TextView
                     android:id="@+id/tvPM"
                     android:layout_width="wrap_content"
+                    android:layout_toEndOf="@+id/llPoint"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvAMContent"
-                    android:layout_marginTop="@dimen/space_10"
+                    android:layout_below="@+id/vDivider"
                     android:text="5 p.m."
-                    android:textSize="@dimen/font_10" />
+                    android:layout_alignStart="@+id/tvAM"
+                    android:textSize="@dimen/font_12" />
 
                 <TextView
                     android:id="@+id/tvPMContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvAMContent"
-                    android:layout_marginTop="@dimen/space_5"
+                    android:layout_below="@+id/tvPM"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_alignStart="@+id/tvAM"
                     android:layout_toRightOf="@+id/llPoint"
                     android:text="Have lunch and go shopping."
                     android:textSize="@dimen/font_16" />

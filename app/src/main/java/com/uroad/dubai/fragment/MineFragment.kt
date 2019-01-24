@@ -36,7 +36,6 @@ class MineFragment : BaseFragment() {
 
     private var isLogin : Boolean = false
 
-    @SuppressLint("NewApi")
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mine)
         initTopLayout()

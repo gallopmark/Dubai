@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitleTime"
+        android:drawableLeft="@mipmap/ic_travel_time"
+        android:drawablePadding="@dimen/space_10"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/font_20"
+        android:textColor="@color/black"
+        android:text=""
+        android:layout_marginBottom="@dimen/space_10"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/space_10"
+        app:cardElevation="@dimen/space_3"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false"
+        android:layout_marginBottom="@dimen/space_10"
+        app:contentPadding="@dimen/space_10">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/llStart"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/vPointStart"
+                    android:layout_width="@dimen/space_6"
+                    android:layout_height="@dimen/space_6"
+                    android:layout_marginLeft="@dimen/space_5"
+                    android:layout_marginRight="@dimen/space_5"
+                    android:background="@drawable/bg_point_red_10dp" />
+
+                <TextView
+                    android:textSize="@dimen/font_14"
+                    android:textColor="@color/gary"
+                    android:text="@string/view_histroy_start"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_toEndOf="@+id/vPointStart"
+                    android:layout_width="@dimen/space_40"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvStartRoads"
+                    android:textSize="@dimen/font_14"
+                    android:textColor="@color/blacktransparent"
+                    android:text=""
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_toEndOf="@+id/vPointStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEnd"
+                android:layout_below="@+id/llStart"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/space_15"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/vPointEnd"
+                    android:layout_width="@dimen/space_6"
+                    android:layout_height="@dimen/space_6"
+                    android:layout_marginLeft="@dimen/space_5"
+                    android:layout_marginRight="@dimen/space_5"
+                    android:background="@drawable/bg_point_blue_10dp" />
+
+
+                <TextView
+                    android:textSize="@dimen/font_14"
+                    android:textColor="@color/gary"
+                    android:text="@string/view_histroy_end"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_toEndOf="@+id/vPointStart"
+                    android:layout_width="@dimen/space_40"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvEndRoads"
+                    android:textSize="@dimen/font_14"
+                    android:textColor="@color/blacktransparent"
+                    android:text=""
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_toEndOf="@+id/vPointStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/vDivider"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/llEnd"
+                android:layout_height="@dimen/space_1"
+                android:layout_marginTop="@dimen/space_15"
+                android:layout_marginLeft="@dimen/space_25"
+                android:layout_marginBottom="@dimen/space_10"
+                android:background="@color/itemDivider" />
+
+
+            <LinearLayout
+                android:layout_below="@+id/vDivider"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:visibility="invisible"
+                    android:layout_width="@dimen/space_6"
+                    android:layout_height="@dimen/space_6"
+                    android:layout_marginLeft="@dimen/space_5"
+                    android:layout_marginRight="@dimen/space_5"
+                    android:background="@drawable/bg_point_blue_10dp" />
+
+
+                <TextView
+                    android:textSize="@dimen/font_14"
+                    android:textColor="@color/gary"
+                    android:text="@string/view_histroy_time"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_toEndOf="@+id/vPointStart"
+                    android:layout_width="@dimen/space_40"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:textSize="@dimen/font_14"
+                    android:textColor="@color/blacktransparent"
+                    android:text=""
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/space_10"
+                    android:layout_toEndOf="@+id/vPointStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

@@ -14,6 +14,7 @@ import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.glidev4.GlideV4
 import com.uroad.library.utils.DisplayUtils
+import com.uroad.library.utils.PhoneUtils
 import kotlinx.android.synthetic.main.activity_scenicdetail.*
 
 /**
@@ -95,6 +96,9 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
         tvHours.text = mdl.hours
         tvTel.text = mdl.phone
         tvTitle.text = mdl.title
+        tvTel.setOnClickListener {
+            PhoneUtils.call(this@ScenicDetailActivity,mdl.phone?:"")
+        }
     }
 
     override fun onDestroy() {
