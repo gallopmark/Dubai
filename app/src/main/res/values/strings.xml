@@ -205,7 +205,6 @@
     <string name="set_home_address">Set home address</string>
     <string name="set_work_address">Set work address</string>
     <string name="view_histroy">View Travel Histroy</string>
-    <string name="view_histroy">View TravelTips Histroy</string>
     <string name="view_histroy_start">Start:</string>
     <string name="view_histroy_end">End:</string>
     <string name="view_histroy_time">Time:</string>
