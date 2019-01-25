@@ -118,7 +118,7 @@ class MainFragment : BaseFragment() {
         val tabs = ArrayList<String>().apply {
             add(context.getString(R.string.nearMe_roads))
             add(context.getString(R.string.nearMe_events))
-            add(context.getString(R.string.nearMe_news))
+//            add(context.getString(R.string.nearMe_news))
             add(context.getString(R.string.nearMe_hotel))
             add(context.getString(R.string.nearMe_restaurants))
             add(context.getString(R.string.nearMe_attractions))
@@ -141,7 +141,7 @@ class MainFragment : BaseFragment() {
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.flNearMeRoads, NearMeRoadsFragment(), TAG_ROADS)
         transaction.replace(R.id.flNearMeEvents, NearMeEventsFragment(), TAG_EVENTS)
-        transaction.replace(R.id.flNearMeNews, NearMeNewsFragment(), TAG_NEWS)
+//        transaction.replace(R.id.flNearMeNews, NearMeNewsFragment(), TAG_NEWS)
         transaction.replace(R.id.flNearMeHotel, NearMeHotelFragment(), TAG_HOTEL)
         transaction.replace(R.id.flNearMeRestaurants, NearMeRestaurantsFragment(), TAG_RESTAURANTS)
         transaction.replace(R.id.flNearMeAttractions, NearMeAttractionsFragment(), TAG_ATTRACTIONS)
@@ -154,10 +154,10 @@ class MainFragment : BaseFragment() {
         when (tab) {
             0 -> flNearMeRoads.visibility = View.VISIBLE
             1 -> flNearMeEvents.visibility = View.VISIBLE
-            2 -> flNearMeNews.visibility = View.VISIBLE
-            3 -> flNearMeHotel.visibility = View.VISIBLE
-            4 -> flNearMeRestaurants.visibility = View.VISIBLE
-            5 -> flNearMeAttractions.visibility = View.VISIBLE
+//            2 -> flNearMeNews.visibility = View.VISIBLE
+            2 -> flNearMeHotel.visibility = View.VISIBLE
+            3 -> flNearMeRestaurants.visibility = View.VISIBLE
+            4 -> flNearMeAttractions.visibility = View.VISIBLE
         }
     }
 

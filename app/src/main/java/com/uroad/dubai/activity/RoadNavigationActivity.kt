@@ -26,6 +26,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
+import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.Icon
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
@@ -36,9 +37,12 @@ import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
 import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.api.presenter.RoadNavigationPresenter
+import com.uroad.dubai.api.presenter.UserAddressPresenter
 import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RoadNavigationView
+import com.uroad.dubai.api.view.UserAddressView
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.enumeration.AddressType
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
@@ -51,7 +55,7 @@ import kotlinx.android.synthetic.main.content_routepoisearch.*
  * @create 2018/12/18
  * @describe Road navigation
  */
-class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, PoiSearchView {
+class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, PoiSearchView, UserAddressView {
     private var statusHeight = 0
     private var isMapAsync = false
     private var fillExtrusionLayer: FillExtrusionLayer? = null
@@ -66,6 +70,8 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     private lateinit var poiAdapter: PoiSearchAdapter
     private val historyData = ArrayList<MultiItem>()
     private lateinit var historyAdapter: PoiSearchHistoryAdapter
+    private lateinit var userAddressPresenter: UserAddressPresenter
+    private var userAddressType: Int = 1
 
     companion object {
         private const val TYPE_DEFAULT = "default"
@@ -113,11 +119,18 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
 
     private fun initSearch() {
         poiPresenter = PoiSearchPresenter(this, this)
+        userAddressPresenter = UserAddressPresenter(this)
         handler = Handler()
         ivBack.setOnClickListener { onInitialState() }
         cvSearch.layoutParams = (cvSearch.layoutParams as RelativeLayout.LayoutParams).apply { this.topMargin = topMargin + statusHeight }
-        llHome.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        llWork.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        llHome.setOnClickListener {
+            userAddressType = 1
+            userAddressPresenter.getUserAddress(getTestUserId())
+        }
+        llWork.setOnClickListener {
+            userAddressType = 2
+            userAddressPresenter.getUserAddress(getTestUserId())
+        }
         initEtSearch()
         initRvPoi()
         initHistory()
@@ -308,7 +321,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         layerOption.layoutParams = params
     }
 
-    private fun onScenic(){
+    private fun onScenic() {
         removePointFromMap(MapDataType.SCENIC.CODE)
         presenter.getScenic()
         clearChecks()
@@ -566,6 +579,48 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         return MarkerOptions().setIcon(icon).setPosition(latLng)
     }
 
+    override fun onSuccess(data: String?, funType: Int) {
+    }
+
+    override fun onGetUserAddress(data: MutableList<UserAddressMDL>) {
+        if (data.isEmpty()) {
+            if (userAddressType == 1) {
+                openActivity(NavigationAddressActivity::class.java)
+            } else {
+                openActivity(NavigationAddressActivity::class.java)
+            }
+        } else {
+            var homeItem: UserAddressMDL? = null
+            var workItem: UserAddressMDL? = null
+            for (item in data) {
+                if (TextUtils.equals(item.addresstype, AddressType.HOME.CODE) && userAddressType == 1) {
+                    homeItem = item
+                    break
+                } else if (TextUtils.equals(item.addresstype, AddressType.WORK.CODE) && userAddressType == 2) {
+                    workItem = item
+                    break
+                }
+            }
+            if (userAddressType == 1 && homeItem != null) {
+                homeItem.getLatLng()?.let { onNavigationRoute(Point.fromLngLat(it.longitude, it.latitude), homeItem.address) }
+            } else if(userAddressType == 2 && workItem!=null){
+                workItem.getLatLng()?.let { onNavigationRoute(Point.fromLngLat(it.longitude, it.latitude), workItem.address) }
+            } else {
+                openActivity(NavigationAddressActivity::class.java)
+            }
+        }
+    }
+
+    private fun onNavigationRoute(point: Point, endPointName: String?) {
+        openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+            putString("point", point.toJson())
+            putString("endPointName", endPointName)
+        })
+    }
+
+    override fun onFailure(errMsg: String?, errCode: Int?) {
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && contentSearch.visibility != View.GONE) {
             onInitialState()
@@ -577,6 +632,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     override fun onDestroy() {
         presenter.detachView()
         poiPresenter.detachView()
+        userAddressPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }

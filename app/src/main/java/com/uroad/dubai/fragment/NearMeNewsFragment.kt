@@ -37,22 +37,10 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
         adapter = NewsListCardAdapter(context, data)
         recyclerView.adapter = adapter
-        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                val mdl = data[position]
-                /*val scenicMDL = ScenicMDL()
-                scenicMDL.headimg = mdl.headimg
-                scenicMDL.title = mdl.title
-                scenicMDL.content = mdl.content
-                scenicMDL.address = mdl.address
-                scenicMDL.hours = mdl.publishtime
-                scenicMDL.phone = mdl.phone
-                DubaiApplication.clickItemScenic = scenicMDL
-                openActivity(ScenicDetailActivity::class.java)*/
-                openActivity(NewsDetailsActivity::class.java, Bundle().apply {
-                    putString("newsId",mdl.newsid)
-                    putString("title",getString(R.string.home_menu_news))
-                })
+                if (position !in 0 until data.size) return
+                openActivity(NewsDetailsActivity::class.java, Bundle().apply { putString("newsId", data[position].newsid) })
             }
         })
     }

@@ -38,5 +38,6 @@ class MoreActivity : BaseActivity() {
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
         tvGroups.setOnClickListener { openActivity(GroupsSetupActivity::class.java) }
         tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
+        tvReport.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
     }
 }

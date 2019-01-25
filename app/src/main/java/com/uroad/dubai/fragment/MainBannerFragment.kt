@@ -48,8 +48,6 @@ class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView 
                             putString("title",getString(R.string.home_menu_news))
                         })
                     }
-//                    DubaiApplication.clickItemScenic = t
-//                    openActivity(ScenicDetailActivity::class.java)
                 }
             })
         }

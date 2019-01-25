@@ -3,4 +3,4 @@
     android:id="@+id/vRouteLine"
     android:layout_width="match_parent"
     android:background="@color/transparent"
-    android:layout_height="@dimen/space_4" />
+    android:layout_height="@dimen/space_8" />

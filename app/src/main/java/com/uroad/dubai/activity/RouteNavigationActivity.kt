@@ -38,17 +38,21 @@ import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.api.presenter.RouteNavigationPresenter
 import com.uroad.dubai.api.presenter.RouteSubscribePresenter
+import com.uroad.dubai.api.presenter.UserAddressPresenter
 import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.api.view.RouteSubscribeView
+import com.uroad.dubai.api.view.UserAddressView
+import com.uroad.dubai.enumeration.AddressType
+import com.uroad.dubai.enumeration.SubscribeType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.MultiItem
 import com.uroad.dubai.model.PoiSearchPoiMDL
 import com.uroad.dubai.model.PoiSearchTextMDL
+import com.uroad.dubai.model.UserAddressMDL
 import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.webService.WebApi
 import com.uroad.dubai.widget.AppCompatNavigationMapRoute
-import com.uroad.library.utils.DeviceUtils
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.activity_routenavigation.*
@@ -60,7 +64,7 @@ import kotlinx.android.synthetic.main.content_routepoisearch.*
  * @create 2018/12/22
  * @describe route navigation
  */
-class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView, PoiSearchView, RouteSubscribeView {
+class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView, PoiSearchView, RouteSubscribeView, UserAddressView {
     private var startPoint: Point? = null
     private var endPoint: Point? = null
     private var poiKey: String? = ""
@@ -83,13 +87,18 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private var userMarker: Marker? = null
     private var isSimulate = false
     private var planCode: Int = 1
-    private var subscribePresenter: RouteSubscribePresenter? = null
+    private lateinit var subscribePresenter: RouteSubscribePresenter
     private var isSubscribe = false
+    private var routeId: String? = null
+    private var isFromHome = false
+    private lateinit var userAddressPresenter: UserAddressPresenter
+    private var userAddressType: Int = 1
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
         ivBackIM.setOnClickListener { onBackPressed() }
         routePresenter = RouteNavigationPresenter(this, this)
+        subscribePresenter = RouteSubscribePresenter(this)
         initPoiTextView()
         initBundle()
         initSearch()
@@ -111,28 +120,71 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     private fun initBundle() {
-        val carmen = intent.extras?.getString("destination")
-        carmen?.let {
-            isFromBundle = true
-            val feature = CarmenFeature.fromJson(it)
-            endPoint = feature.center()
-            tvEndPoint.text = feature.placeName()
+        intent.extras?.let { extras ->
+            val carmen = extras.getString("destination")
+            carmen?.let {
+                isFromBundle = true
+                val feature = CarmenFeature.fromJson(it)
+                endPoint = feature.center()
+                tvEndPoint.text = feature.placeName()
+            }
+            isFromHome = extras.getBoolean("fromHome", false)
+            if (isFromHome) {
+                val routeId = extras.getString("routeId")
+                if (!TextUtils.isEmpty(routeId)) {
+                    initRoute(routeId)
+                }
+                val profile = extras.getString("profile")
+                if (!TextUtils.isEmpty(profile)) {
+                    initProfile(profile)
+                }
+            }
+            val point = extras.getString("point")
+            point?.let {
+                isFromBundle = true
+                endPoint = Point.fromJson(it)
+                tvEndPoint.text = extras.getString("endPointName")
+            }
         }
-        val point = intent.extras?.getString("point")
-        point?.let {
-            isFromBundle = true
-            endPoint = Point.fromJson(it)
-            tvEndPoint.text = intent.extras?.getString("endPointName")
+    }
+
+    private fun initRoute(routeId: String) {
+        this.routeId = routeId
+        ivSave.setImageResource(R.mipmap.ic_collect_save)
+    }
+
+    private fun initProfile(profile: String) {
+        this.profile = profile
+        when (profile) {
+            DirectionsCriteria.PROFILE_DRIVING_TRAFFIC -> {
+                radioGroup.check(R.id.rbDrive)
+            }
+            DirectionsCriteria.PROFILE_CYCLING -> {
+                radioGroup.check(R.id.rbBicycle)
+            }
+            DirectionsCriteria.PROFILE_WALKING -> {
+                radioGroup.check(R.id.rbWalk)
+            }
+            else -> {
+                radioGroup.check(R.id.rbDrive)
+            }
         }
     }
 
     private fun initSearch() {
         poiPresenter = PoiSearchPresenter(this, this)
+        userAddressPresenter = UserAddressPresenter(this)
         contentSearch.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         ivBack.setOnClickListener { onInitialState() }
         cvSearch.layoutParams = (cvSearch.layoutParams as RelativeLayout.LayoutParams)
-        llHome.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        llWork.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        llHome.setOnClickListener {
+            userAddressType = 1
+            userAddressPresenter.getUserAddress(getAndroidID())
+        }
+        llWork.setOnClickListener {
+            userAddressType = 2
+            userAddressPresenter.getUserAddress(getAndroidID())
+        }
         initEtSearch()
         initRvPoi()
         initHistory()
@@ -321,7 +373,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     private fun initBottomView() {
-        tvSave.setOnClickListener { onSaveRoute() }
+        ivSave.setOnClickListener { onSaveRoute() }
         ivLocation.setOnClickListener {
             isFromUserClick = true
             openLocation()
@@ -413,6 +465,11 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         llBottom.visibility = View.GONE
         isRouteNavigation = true
         routePresenter.getRoutes(origin, destination, profile)
+        if (isFromHome) {
+            isFromHome = false
+        } else {
+            clearSave()
+        }
     }
 
     private fun drawRoutes(routes: List<DirectionsRoute>) {
@@ -477,9 +534,13 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     private fun onSaveRoute() {
-        val route = selectedRoute ?: return
         isSubscribe = true
-        subscribePresenter = RouteSubscribePresenter(this@RouteNavigationActivity).apply { subscribeRoute(getRouteParams(route)) }
+        if (!TextUtils.isEmpty(routeId)) {
+            subscribePresenter.unSubscribeRoute(getAndroidID(), routeId, SubscribeType.ROUTE.CODE)
+        } else {
+            val route = selectedRoute ?: return
+            subscribePresenter.subscribeRoute(getRouteParams(route))
+        }
     }
 
     private fun getRouteParams(route: DirectionsRoute): HashMap<String, String?> {
@@ -498,13 +559,60 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     /*subscribe route success*/
-    override fun onSuccess() {
-        showTipsDialog(getString(R.string.save_route_success))
+    override fun onSuccess(data: String?, isSubscribe: Boolean) {
+        if (isSubscribe) {
+            data?.let { initRoute(it) }
+            showTipsDialog(getString(R.string.save_route_success))
+        } else {
+            showTipsDialog(data)
+            clearSave()
+        }
     }
 
     /*subscribe route failure*/
     override fun onFailure(errMsg: String?, errCode: Int?) {
         showShortToast(errMsg)
+    }
+
+    override fun onSuccess(data: String?, funType: Int) {
+    }
+
+    override fun onGetUserAddress(data: MutableList<UserAddressMDL>) {
+        if (data.isEmpty()) {
+            if (userAddressType == 1) {
+                openActivity(NavigationAddressActivity::class.java, Bundle().apply { putString("type", AddressType.HOME.CODE) })
+            } else {
+                openActivity(NavigationAddressActivity::class.java, Bundle().apply { putString("type", AddressType.WORK.CODE) })
+            }
+        } else {
+            var point: Point? = null
+            var address: String? = null
+            if (userAddressType == 1) {
+                for (item in data) {
+                    if (TextUtils.equals(item.addresstype, "1")) {
+                        item.getLatLng()?.let { point = Point.fromLngLat(it.longitude, it.latitude) }
+                        address = item.address
+                        break
+                    }
+                }
+            } else {
+                for (item in data) {
+                    if (TextUtils.equals(item.addresstype, "2")) {
+                        item.getLatLng()?.let { point = Point.fromLngLat(it.longitude, it.latitude) }
+                        address = item.address
+                        break
+                    }
+                }
+            }
+            point?.let { if (poiType == 1) startPoint = it else endPoint = it }
+            if (!TextUtils.isEmpty(address)) tvEndPoint.text = address
+            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+        }
+    }
+
+    private fun clearSave() {
+        routeId = null
+        ivSave.setImageResource(R.mipmap.ic_collect_default)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -519,7 +627,8 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         InputMethodUtils.hideSoftInput(this)
         poiPresenter.detachView()
         routePresenter.detachView()
-        subscribePresenter?.detachView()
+        subscribePresenter.detachView()
+        userAddressPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }

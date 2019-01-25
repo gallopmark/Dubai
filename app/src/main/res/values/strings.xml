@@ -199,6 +199,12 @@
     <string name="distance">Distance</string>
     <string name="travel_time">Travel time</string>
     <string name="notices">Notices</string>
+
+    <string name="setup_success">Set up successfully</string>
+    <string name="navigation_address">Navigation Address</string>
+    <string name="set_home_address">Set home address</string>
+    <string name="set_work_address">Set work address</string>
+    <string name="view_histroy">View Travel Histroy</string>
     <string name="view_histroy">View TravelTips Histroy</string>
     <string name="view_histroy_start">Start:</string>
     <string name="view_histroy_end">End:</string>

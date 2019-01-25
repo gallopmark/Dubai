@@ -178,7 +178,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -199,18 +199,12 @@
                 android:layout_margin="@dimen/space_10"
                 android:orientation="horizontal">
 
-                <com.uroad.dubai.widget.DrawableCenterTextView
-                    android:id="@+id/tvSave"
+                <ImageView
+                    android:id="@+id/ivSave"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:background="@mipmap/ic_collect_buttonbg"
-                    android:drawableStart="@mipmap/ic_collect"
-                    android:drawablePadding="@dimen/space_5"
-                    android:gravity="center|start"
-                    android:text="@string/route_save"
-                    android:textColor="@color/theme_red"
-                    android:textSize="@dimen/font_16" />
+                    android:src="@mipmap/ic_collect_default" />
 
                 <com.uroad.dubai.widget.DrawableCenterTextView
                     android:id="@+id/tvNavigation"

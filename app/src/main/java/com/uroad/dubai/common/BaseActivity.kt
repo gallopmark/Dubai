@@ -69,6 +69,8 @@ abstract class BaseActivity : BaseLucaActivity() {
 
     fun getUserId() = UserPreferenceHelper.getUserId(this)
 
+    fun getTestUserId() = "201901227175316"
+
     fun getAndroidID() = DeviceUtils.getAndroidID(this)
 
     override fun onDestroy() {

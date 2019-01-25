@@ -2,23 +2,26 @@ package com.uroad.dubai.fragment
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import android.os.Message
 import android.view.View
 import android.widget.FrameLayout
 import com.mapbox.api.directions.v5.MapboxDirections
+import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.RouteNavigationActivity
 import com.uroad.dubai.adaptervp.MainSubscribeAdapter
 import com.uroad.dubai.api.presenter.SubscribePresenter
-import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.api.view.SubscribeView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.SubscribeMDL
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.uroad.library.widget.banner.BaseBannerAdapter
 import kotlinx.android.synthetic.main.fragment_mainfavorites.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.ref.WeakReference
 
 /**
  * @author MFB
@@ -29,16 +32,46 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
 
     private lateinit var data: MutableList<SubscribeMDL>
     private lateinit var adapter: MainSubscribeAdapter
-    private lateinit var handler: Handler
-    private var isLoadFavorites = false
+    private lateinit var handler: MHandler
     private var callback: OnRequestCallback? = null
+
+    companion object {
+        private const val CODE_RETRY = 100
+        private const val CODE_ROUTE = 101
+        private const val CODE_ROUTE_RETRY = 102
+    }
+
+    private class MHandler(fragment: MainFavoritesFragment) : Handler() {
+        private val weakReference = WeakReference<MainFavoritesFragment>(fragment)
+
+        override fun handleMessage(msg: Message) {
+            val fragment = weakReference.get() ?: return
+            when (msg.what) {
+                CODE_RETRY -> fragment.initData()
+                CODE_ROUTE -> {
+                    val position = msg.arg1
+                    val route = msg.obj as DirectionsRoute
+                    fragment.data[position].distance = route.distance()
+                    fragment.data[position].travelTime = route.duration()
+                    val congestion = route.legs()?.get(0)?.annotation()?.congestion()
+                    fragment.data[position].congestion = congestion
+                    fragment.adapter.notifyDataSetChanged()
+                }
+                CODE_ROUTE_RETRY -> {
+                    val position = msg.arg1
+                    fragment.enqueueRoute(position)
+                }
+            }
+        }
+    }
+
     override fun createPresenter(): SubscribePresenter = SubscribePresenter(context, this)
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainfavorites)
         initViewParams()
         initial()
-        handler = Handler()
+        handler = MHandler(this)
     }
 
     private fun initViewParams() {
@@ -47,12 +80,26 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
 
     private fun initial() {
         data = ArrayList()
-        adapter = MainSubscribeAdapter(context, data)
+        adapter = MainSubscribeAdapter(context, data).apply {
+            setOnItemClickListener(object : BaseBannerAdapter.OnItemClickListener<SubscribeMDL> {
+                override fun onItemClick(t: SubscribeMDL, position: Int) {
+                    val point = t.getDestinationPoint()
+                    point?.let {
+                        openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+                            putBoolean("fromHome", true)
+                            putString("routeId", t.routeid)
+                            putString("profile", t.getProfile())
+                            putString("point", it.toJson())
+                            putString("endPointName", t.endpoint)
+                        })
+                    }
+                }
+            })
+        }
         banner.setAdapter(adapter)
     }
 
     override fun initData() {
-        isLoadFavorites = true
         presenter.getSubscribeData(getAndroidID())
     }
 
@@ -65,43 +112,52 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
     }
 
     private fun getRoutes() {
-        isLoadFavorites = false
         for (i in 0 until data.size) {
-            val startPoint = data[i].getOriginPoint()
-            val endPoint = data[i].getDestinationPoint()
-            if (startPoint != null && endPoint != null) {
-                requestRoutes(i, presenter.buildDirections(startPoint, endPoint, data[i].getProfile()))
-            }
+            handler.postDelayed({ enqueueRoute(i) }, i * 100L)
+        }
+    }
+
+    private fun enqueueRoute(position: Int) {
+        if (position !in 0 until data.size) return
+        val startPoint = data[position].getOriginPoint()
+        val endPoint = data[position].getDestinationPoint()
+        if (startPoint != null && endPoint != null) {
+            requestRoutes(position, presenter.buildDirections(startPoint, endPoint, data[position].getProfile()))
         }
     }
 
     private fun requestRoutes(position: Int, directions: MapboxDirections) {
-        val disposable = Observable.fromCallable { directions.executeCall() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    val directionsRoute = response.body()?.routes()?.get(0)
-                    directionsRoute?.let { route ->
-                        data[position].distance = route.distance()
-                        data[position].travelTime = route.duration()
-                        val congestion = route.legs()?.get(0)?.annotation()?.congestion()
-                        data[position].congestion = congestion
+        directions.cloneCall().enqueue(object : Callback<DirectionsResponse> {
+            override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
+                activity ?: return
+                val directionsRoute = response.body()?.routes()?.get(0)
+                directionsRoute?.let { route ->
+                    val msg = Message().apply {
+                        what = CODE_ROUTE
+                        arg1 = position
+                        obj = route
                     }
-                    adapter.notifyDataSetChanged()
-                }, { handler.postDelayed({ requestRoutes(position, directions) }, DubaiApplication.DEFAULT_DELAY_MILLIS) })
-        presenter.addDisposable(disposable)
+                    handler.sendMessage(msg)
+                }
+            }
+
+            override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
+                activity ?: return
+                val msg = Message().apply {
+                    what = CODE_ROUTE_RETRY
+                    arg1 = position
+                }
+                handler.sendMessage(msg)
+            }
+        })
     }
 
     override fun onShowError(msg: String?) {
-        if (isLoadFavorites) {
-            handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-        }
+        handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 
     override fun onFailure(errMsg: String?, errCode: Int?) {
-        if (isLoadFavorites) {
-            handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-        }
+        handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 
     interface OnRequestCallback {
@@ -110,5 +166,10 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
 
     fun setOnRequestCallback(callback: OnRequestCallback) {
         this.callback = callback
+    }
+
+    override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroyView()
     }
 }

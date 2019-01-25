@@ -1,6 +1,7 @@
 package com.uroad.dubai.adaptervp
 
 import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,10 @@ import com.uroad.library.widget.banner.BaseBannerAdapter
 
 class MainSubscribeAdapter(private val context: Context, data: MutableList<SubscribeMDL>)
     : BaseBannerAdapter<SubscribeMDL>(context, data) {
+
+    override fun getCount(): Int {
+        return if (data.size > 1) Integer.MAX_VALUE else data.size
+    }
 
     override fun bindView(viewType: Int): Int = R.layout.item_subscribe_route
 
@@ -32,6 +37,7 @@ class MainSubscribeAdapter(private val context: Context, data: MutableList<Subsc
         var travelTime = ""
         item.travelTime?.let { travelTime = TimeUtils.convertSecond2Min(it.toInt()) }
         tvTravelTime.text = travelTime
+        recyclerView.layoutManager = getLayoutManager()
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = RouteColorAdapter(context, item.getRouteColors(context))
         if (item.getRouteColors(context).size > 0) {
@@ -39,6 +45,16 @@ class MainSubscribeAdapter(private val context: Context, data: MutableList<Subsc
         } else {
             recyclerView.visibility = View.GONE
         }
+    }
+
+    private fun getLayoutManager(): LinearLayoutManager {
+        val layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollHorizontally(): Boolean {
+                return false
+            }
+        }
+        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        return layoutManager
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
