@@ -9,6 +9,7 @@ class UserMDL{
     var password : String? = null
     var sex : String? = null
     var headimg : String? = null
+    var verificationcode : String? = null
     var userstatus : String? = null
     var age : String? = null
 

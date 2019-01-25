@@ -155,6 +155,7 @@
     <string name="resend_in">Resend in</string>
 
     <string name="login">Log in</string>
+    <string name="logout_tips">Are you sure you want to logout？</string>
     <string name="singup">Sing up</string>
     <string name="login_account_hint">Mobile phone number</string>
     <string name="login_password">Password</string>
