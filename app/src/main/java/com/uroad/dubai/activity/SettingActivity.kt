@@ -7,6 +7,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.local.AppSource
 import com.uroad.dubai.local.UserPreferenceHelper
+import com.uroad.library.compat.AppDialog
 import kotlinx.android.synthetic.main.activity_setting.*
 import java.util.*
 
@@ -41,10 +42,20 @@ class SettingActivity : BaseActivity() {
             })
         }
         btnLogOut.setOnClickListener {
-            UserPreferenceHelper.logOut(this@SettingActivity)
-            //UserPreferenceHelper.clear(this@SettingActivity)
-            openActivity(LoginActivity::class.java)
-            finish()
+            showDialog(getString(R.string.tips),getString(R.string.logout_tips),object : DialogViewClickListener{
+                override fun onCancel(v: View, dialog: AppDialog) {
+                    dialog.dismiss()
+                }
+
+                override fun onConfirm(v: View, dialog: AppDialog) {
+                    dialog.dismiss()
+                    UserPreferenceHelper.logOut(this@SettingActivity)
+                    //UserPreferenceHelper.clear(this@SettingActivity)
+                    openActivity(LoginActivity::class.java)
+                    finish()
+                }
+
+            })
         }
 
         tvAppTips.setOnClickListener { showTipsDialog(getString(R.string.developing)) }

@@ -2,19 +2,15 @@ package com.uroad.dubai.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
-import android.text.style.BackgroundColorSpan
-import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
 import android.view.View
 import com.uroad.dubai.R
@@ -23,7 +19,6 @@ import com.uroad.dubai.common.BaseFragment
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.photopicker.utils.ImagePicker
-import com.uroad.glidev4.GlideApp
 import com.uroad.glidev4.GlideV4
 import kotlinx.android.synthetic.main.fragment_mine.*
 
@@ -69,6 +64,10 @@ class MineFragment : BaseFragment() {
             if (check()) return@setOnClickListener
             openActivity(FeedbackActivity::class.java)
         }
+
+        tvAppTips.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvAbout.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvTerm.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
 
         ivUserHead.setOnClickListener {
             if (check()) return@setOnClickListener

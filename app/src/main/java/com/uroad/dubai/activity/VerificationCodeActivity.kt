@@ -11,6 +11,9 @@ import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.widget.NumberEditText
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.UserMDL
+import com.uroad.dubai.utils.PackageInfoUtils
+import com.uroad.dubai.webService.WebApi
+import com.uroad.library.utils.DeviceUtils
 import io.reactivex.Observable
 import io.reactivex.Observer
 import kotlinx.android.synthetic.main.activity_verify_code.*
@@ -21,9 +24,10 @@ import java.util.concurrent.TimeUnit
 
 class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInputFinishListener {
 
-    var phone : String? = ""
+    var phone : String  = ""
     var d : Disposable? = null
     var code : String? = ""
+    var verificationcode : String = ""
     var hasContent : Boolean = false
     var millis : Int = 60
     var isCreateNewAccount : Boolean = false
@@ -37,14 +41,19 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
     }
 
     override fun onInputFinish(text: String) {
-        if (TextUtils.equals(text,"123456") && isCreateNewAccount){
-            UserPreferenceHelper.saveAccount(this@VerificationCodeActivity, this.phone!!)
-            UserPreferenceHelper.login(this@VerificationCodeActivity)
-            openActivity(MainActivity::class.java)
-            finish()
+        if (TextUtils.equals(text,verificationcode) && isCreateNewAccount){
+            presenter.login(WebApi.USER_LOGIN,
+                    WebApi.login("1", this.phone,verificationcode,
+                            PackageInfoUtils.getVersionName(this@VerificationCodeActivity),
+                            DeviceUtils.getAndroidID(this@VerificationCodeActivity),
+                            DeviceUtils.getManufacturer(),
+                            DeviceUtils.getModel(),
+                            "${DeviceUtils.getSDKVersion()}"))
+        } else if(!TextUtils.equals(text,verificationcode) && isCreateNewAccount){
+            showShortToast("Verification code error")
+        } else{
+            hasContent = TextUtils.equals(text,verificationcode)
         }
-        else
-            hasContent = TextUtils.equals(text,"123456")
 
         if (btnVerify.visibility == View.VISIBLE && !btnVerify.isEnabled){
             btnVerify.isEnabled = true
@@ -64,7 +73,7 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
         edVerify.setOnInputFinish(this@VerificationCodeActivity)
         if (isCreateNewAccount) {
             btnVerify.visibility = View.GONE
-            //presenter.login()
+            presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone?:""))
         }
 
         btnVerify.setOnClickListener {
@@ -89,8 +98,10 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
                     override fun onError(e: Throwable) {}
 
                     override fun onNext(t: Long) {
-                        if (millis<0)
+                        if (millis<0){
+                            presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone?:""))
                             millis = 60
+                        }
                         tvRemainingTime.text = "${millis}s"
                         millis--
                     }
@@ -103,9 +114,22 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
     }
 
     override fun loginSuccess(user: UserMDL?) {
+        user?.let {
+            UserPreferenceHelper.save(this@VerificationCodeActivity,it)
+        }
+        UserPreferenceHelper.saveAccount(this@VerificationCodeActivity, this.phone)
+        UserPreferenceHelper.login(this@VerificationCodeActivity)
+        openActivity(MainActivity::class.java)
+        finish()
     }
 
+    override fun getVerificationCode(code: String) {
+        this@VerificationCodeActivity.verificationcode =  code
+    }
+
+
     override fun loginError(e: String) {
+        showLongToast(e)
     }
 
     override fun onShowLoading() {
@@ -115,6 +139,6 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
     }
 
     override fun onShowError(msg: String?) {
-
+        showLongToast(msg)
     }
 }
