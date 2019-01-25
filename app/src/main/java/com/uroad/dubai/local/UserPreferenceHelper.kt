@@ -41,6 +41,8 @@ class UserPreferenceHelper {
                 putString(USER_ID, userMDL.useruuid)
                 putString(REAL_NAME, userMDL.name)
                 putString(SEX, userMDL.sex)
+                putString(PHONE,userMDL.mobile)
+                putString(STATUS,userMDL.userstatus)
             }.apply()
         }
 
