@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -564,7 +565,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             data?.let { initRoute(it) }
             showTipsDialog(getString(R.string.save_route_success))
         } else {
-            showTipsDialog(data)
+            showTipsDialog(getString(R.string.remove_route_success))
             clearSave()
         }
     }

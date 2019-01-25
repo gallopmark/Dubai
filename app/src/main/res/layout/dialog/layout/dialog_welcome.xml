@@ -32,6 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_12"
+        android:layout_marginBottom="@dimen/space_12"
         android:maxHeight="@dimen/space_200"
         android:scrollbars="vertical"
         android:textColor="@color/gary"

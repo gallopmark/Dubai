@@ -4,6 +4,7 @@ import android.content.Context
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
+import com.mapbox.geojson.Point
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
@@ -50,8 +51,33 @@ open class PoiSearchPresenter(private val context: Context,
                 .query(content).build()
     }
 
+    fun doPoiSearch(point: Point, callback: PointSearchCallback): MapboxGeocoding {
+        return buildClient(point).apply {
+            enqueueCall(object : Callback<GeocodingResponse> {
+                override fun onResponse(call: Call<GeocodingResponse>, response: Response<GeocodingResponse>) {
+                    response.body()?.features()?.let { callback.onPointResult(it) }
+                }
+
+                override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
+
+                }
+            })
+        }
+    }
+
+    private fun buildClient(point: Point): MapboxGeocoding {
+        return MapboxGeocoding.builder()
+                .accessToken(context.getString(R.string.mapBoxToken))
+                .query(point)
+                .build()
+    }
+
     fun cancelCall() {
         geoClient?.cancelCall()
+    }
+
+    interface PointSearchCallback {
+        fun onPointResult(features: MutableList<CarmenFeature>)
     }
 
     override fun detachView() {

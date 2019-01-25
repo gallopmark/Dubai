@@ -17,12 +17,8 @@ import com.uroad.dubai.R
  */
 class WelcomeDialog(private val mContext: Context)
     : Dialog(mContext, R.style.AppDialog) {
-    private val title = "Welcome to Dubai!"
-    private val message = "Thank you for using RTA Smart. This app allows you to:\n" +
-            "-  Plan your routes and view travel times for various means of transportation\n" +
-            "-  View information on the attractions near you, and across the city\n" +
-            "-  View available parking lots near you\n" +
-            "-  Synchronise daily sightseeing itineraries with your calendar"
+    private val title = mContext.getString(R.string.welcome_title)
+    private val message = mContext.getString(R.string.welcome_message)
 
     override fun show() {
         super.show()

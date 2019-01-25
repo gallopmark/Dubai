@@ -1,12 +1,16 @@
 package com.uroad.dubai.common
 
 import android.support.multidex.MultiDexApplication
+import android.util.Log
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.tencent.bugly.crashreport.CrashReport
 import com.uroad.dubai.R
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.ScenicMDL
+import com.uroad.dubai.service.MessageTopic
 import java.io.File
 
 class DubaiApplication : MultiDexApplication() {
@@ -26,11 +30,29 @@ class DubaiApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        Mapbox.getInstance(this, getString(R.string.mapBoxToken))
+        initMapbox()
+        initFirebase()
         initCompressorPath()
         initBugly()
     }
 
+    private fun initMapbox() {
+        Mapbox.getInstance(this, getString(R.string.mapBoxToken))
+    }
+
+    private fun initFirebase() {
+        FirebaseApp.initializeApp(this)
+        FirebaseMessaging.getInstance().subscribeToTopic("${MessageTopic.EVENT.CODE}${getUserId()}")
+        FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.NEWS.CODE).addOnCompleteListener {
+            if(it.isSuccessful){
+                Log.e("firebase","successful")
+            } else {
+                Log.e("firebase","failure")
+            }
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.NOTICE.CODE)
+        FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.SYSTEM.CODE)
+    }
 
     private fun initCompressorPath() {
         COMPRESSOR_PATH = "${cacheDir.absolutePath}${File.separator}compressor"

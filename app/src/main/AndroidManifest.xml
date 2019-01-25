@@ -151,6 +151,10 @@
         <activity
             android:name=".activity.SettingAddressActivity"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.FeedbackActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <!--photopicker-->
         <provider
@@ -173,10 +177,12 @@
             android:name=".photopicker.ui.ImageCropActivity"
             android:launchMode="singleTop" />
 
-        <activity
-            android:name=".activity.FeedbackActivity"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--firebase service-->
+        <service android:name=".service.MessagePushService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

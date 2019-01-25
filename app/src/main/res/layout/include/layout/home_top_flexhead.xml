@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/space_15"
-    android:paddingBottom="@dimen/space_15"
+    android:padding="@dimen/space_14"
     android:orientation="horizontal">
 
     <TextView

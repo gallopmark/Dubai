@@ -21,6 +21,16 @@
     <string name="exit">Exit</string>
     <string name="ok">OK</string>
 
+    <string name="welcome_title">Welcome to Dubai!</string>
+    <string name="welcome_message">Thank you for using RTA Smart. This app allows you to:\n
+-  Plan your routes and view travel times for various means of transportation.\n
+-  View Information of attractions near you and across the city.\n
+-  View available parking lots near you.\n
+-  Synchronise your travel itineraries with your calendar.\n
+-  Be automatically notified of city events, route changes, and recommendations based on your preferences.\n
+-  Save your detailed travel history, including visited stores and venues.\n
+-  Share your location with a group of people.\n
+-  And many more!  We hope you will enjoy your stay in Dubai!</string>
     <string name="home_menu_navigation">Navigation</string>
     <string name="home_menu_roads">Roads</string>
     <string name="home_menu_news">News</string>
@@ -85,8 +95,8 @@
     <string name="end_time">End time</string>
 
     <string name="route_myLocation">My location</string>
-    <string name="route_startPointHint">Please enter the starting point</string>
-    <string name="route_endPointHint">Please enter the end point</string>
+    <string name="route_startPointHint">Please add a start point</string>
+    <string name="route_endPointHint">Please add an end point</string>
     <string name="route_drive">Drive</string>
     <string name="route_bicycle">Bicycle</string>
     <string name="route_walk">Walk</string>
@@ -195,7 +205,8 @@
 
     <string name="no_routes_found">No routes found</string>
     <string name="location_not_granted">user location permission not granted</string>
-    <string name="save_route_success">Successful Subscription Route</string>
+    <string name="save_route_success">Route saved as favorite</string>
+    <string name="remove_route_success">Route removed from favorites</string>
     <string name="distance">Distance</string>
     <string name="travel_time">Travel time</string>
     <string name="notices">Notices</string>

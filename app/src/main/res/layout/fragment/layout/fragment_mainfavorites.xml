@@ -8,10 +8,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/space_10"
+        android:layout_marginStart="@dimen/space_10"
+        android:layout_marginEnd="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_16"
         android:text="@string/home_title_favorites"
-        android:textColor="@color/black"
-        android:textSize="@dimen/font_18" />
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/font_20"
+        android:textStyle="bold" />
 
     <com.uroad.library.widget.banner.Banner
         android:id="@+id/banner"

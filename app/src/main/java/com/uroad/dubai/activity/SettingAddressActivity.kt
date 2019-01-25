@@ -6,11 +6,12 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.RelativeLayout
+import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
+import com.mapbox.geojson.Point
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.api.presenter.PoiSearchPresenter
@@ -21,15 +22,13 @@ import com.uroad.dubai.common.BaseMapBoxLocationActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.enumeration.AddressType
 import com.uroad.dubai.model.UserAddressMDL
-import com.uroad.dubai.utils.Utils
 import com.uroad.library.utils.DisplayUtils
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_settingaddress.*
 import java.util.*
 
+/**
+ * setting home or work address
+ */
 class SettingAddressActivity : BaseMapBoxLocationActivity(), PoiSearchView, UserAddressView {
 
     private val handler = Handler()
@@ -41,6 +40,9 @@ class SettingAddressActivity : BaseMapBoxLocationActivity(), PoiSearchView, User
     private var type = AddressType.HOME.CODE
     private lateinit var presenter: UserAddressPresenter
     private var isSetUp = false
+    private var mAddressClient: MapboxGeocoding? = null
+    private var myLocationAddress: String? = null
+    private var needSetUp = false
 
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentViewWithoutTitle(R.layout.activity_settingaddress, true)
@@ -144,16 +146,9 @@ class SettingAddressActivity : BaseMapBoxLocationActivity(), PoiSearchView, User
     override fun afterLocation(location: Location) {
         myLocation = location
         addFirst()
+        needSetUp = false
+        doAddressSearch(location.longitude, location.latitude)
         poiAdapter.notifyDataSetChanged()
-    }
-
-    override fun onPoiResult(features: MutableList<CarmenFeature>) {
-        if (features.size > 0) {
-            addFirst()
-            this.data.addAll(features)
-            poiAdapter.notifyDataSetChanged()
-            rvPoi.visibility = View.VISIBLE
-        }
     }
 
     private fun addFirst() {
@@ -168,10 +163,35 @@ class SettingAddressActivity : BaseMapBoxLocationActivity(), PoiSearchView, User
         }
     }
 
+    private fun doAddressSearch(longitude: Double, latitude: Double) {
+        mAddressClient = poiPresenter.doPoiSearch(Point.fromLngLat(longitude, latitude), object : PoiSearchPresenter.PointSearchCallback {
+            override fun onPointResult(features: MutableList<CarmenFeature>) {
+                if (features.size > 0) {
+                    myLocationAddress = features[0].placeName()
+                    if (needSetUp) {
+                        setUpUserAddress(myLocationAddress, longitude, latitude)
+                    }
+                }
+            }
+        })
+    }
+
+    override fun onPoiResult(features: MutableList<CarmenFeature>) {
+        if (features.size > 0) {
+            addFirst()
+            this.data.addAll(features)
+            poiAdapter.notifyDataSetChanged()
+            rvPoi.visibility = View.VISIBLE
+        }
+    }
+
     private fun convertAddress(latitude: Double, longitude: Double) {
-        addDisposable(Observable.fromCallable { Utils.convertAddress(this@SettingAddressActivity, latitude, longitude) }
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ setUpUserAddress(it, longitude, latitude) }, {}))
+        if (TextUtils.isEmpty(myLocationAddress)) {
+            needSetUp = true
+            doAddressSearch(longitude, latitude)
+        } else {
+            setUpUserAddress(myLocationAddress, longitude, latitude)
+        }
     }
 
     private fun setUpUserAddress(address: String?, longitude: Double, latitude: Double) {
@@ -205,6 +225,7 @@ class SettingAddressActivity : BaseMapBoxLocationActivity(), PoiSearchView, User
     }
 
     override fun onDestroy() {
+        mAddressClient?.cancelCall()
         poiPresenter.detachView()
         presenter.detachView()
         super.onDestroy()

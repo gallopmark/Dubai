@@ -14,7 +14,8 @@ import android.widget.TextView
  * @create 2019/1/23
  * @describe  ViewPager基类适配器，需要传入Item视图和数据
  */
-abstract class BaseBannerAdapter<T>(private val context: Context, var data: MutableList<T>) : PagerAdapter() {
+abstract class BaseBannerAdapter<T>(private val context: Context,
+                                    private var data: MutableList<T>) : PagerAdapter() {
     private lateinit var convertView: View
     private var mDownTime: Long = 0
     private var onItemClickListener: OnItemClickListener<T>? = null

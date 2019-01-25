@@ -14,8 +14,13 @@ import com.uroad.dubai.utils.Utils
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.widget.banner.BaseBannerAdapter
 
-class MainSubscribeAdapter(private val context: Context, data: MutableList<SubscribeMDL>)
+class MainSubscribeAdapter(private val context: Context,
+                           private val data: MutableList<SubscribeMDL>)
     : BaseBannerAdapter<SubscribeMDL>(context, data) {
+
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
+    }
 
     override fun getCount(): Int {
         return if (data.size > 1) Integer.MAX_VALUE else data.size
