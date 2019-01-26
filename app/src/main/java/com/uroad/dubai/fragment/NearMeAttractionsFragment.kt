@@ -51,9 +51,22 @@ class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), 
     }
 
     override fun onGetAttraction(attractions: MutableList<ScenicMDL>) {
+        addDistance(attractions)
         this.data.clear()
         this.data.addAll(attractions)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun addDistance(list: MutableList<ScenicMDL>) {
+        val array = arrayOf("1.2km", "1.7km", "2.1km", "5.6km")
+        for (i in 0 until list.size) {
+            if (i < array.size) {
+                list[i].distance = array[i]
+            } else {
+                val pos = i % array.size
+                list[i].distance = array[pos]
+            }
+        }
     }
 
     override fun onShowError(msg: String?) {

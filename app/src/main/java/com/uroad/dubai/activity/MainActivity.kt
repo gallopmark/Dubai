@@ -1,23 +1,31 @@
 package com.uroad.dubai.activity
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.FragmentTransaction
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.pm.PackageInfoCompat
+import android.text.TextUtils
+import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.api.presenter.AppVersionPresenter
+import com.uroad.dubai.common.BasePresenterActivity
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.WelcomeDialog
 import com.uroad.dubai.fragment.MainFragment
 import com.uroad.dubai.fragment.MineFragment
 import com.uroad.dubai.fragment.TravelFragment
 import com.uroad.dubai.local.AppSource
+import com.uroad.dubai.model.VersionMDL
+import com.uroad.dubai.service.VersionUpdateService
+import com.uroad.dubai.utils.PackageInfoUtils
+import com.uroad.library.compat.AppDialog
+import com.uroad.library.utils.VersionUtils
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity() {
+class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPresenter.AppVersionView {
+
+    override fun createPresenter(): AppVersionPresenter = AppVersionPresenter(this)
 
     companion object {
         private const val TAB_HOME = "home"
@@ -25,8 +33,7 @@ class MainActivity : BaseActivity() {
         private const val TAB_MINE = "mine"
     }
 
-    val arrayOf = arrayOf(Manifest.permission.READ_CALENDAR,
-            Manifest.permission.WRITE_CALENDAR)
+    private val handler = Handler()
 
     override fun setUp(savedInstanceState: Bundle?) {
         requestWindowFullScreen()
@@ -36,7 +43,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initTab() {
-        requestPermissions()
         radioGroup.setOnCheckedChangeListener { _, checkId ->
             when (checkId) {
                 R.id.rbHome -> setCurrentTab(1)
@@ -90,17 +96,40 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun requestPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    override fun initData() {
+        presenter.checkVersion()
+    }
 
-            if (ContextCompat.checkSelfPermission(this@MainActivity,
-                            arrayOf[0]) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this@MainActivity,
-                            arrayOf[1]) == PackageManager.PERMISSION_GRANTED) {
+    override fun getVersion(mdl: VersionMDL?) {
+        mdl?.let { checkOrUpdate(it) }
+    }
 
-            } else {
-                requestPermissions(arrayOf, 2000)
-            }
+    private fun checkOrUpdate(mdl: VersionMDL) {
+        var version = ""
+        mdl.version?.let { version = it }
+        if (VersionUtils.isNeedUpdate(version, PackageInfoUtils.getVersionName(this))) {
+            showDialog(getString(R.string.dialog_default_title), mdl.versioncontent,
+                    getString(R.string.version_update_cancel),
+                    getString(R.string.version_update_confirm),
+                    object : DialogViewClickListener {
+                        override fun onConfirm(v: View, dialog: AppDialog) {
+                            dialog.dismiss()
+                            startUpdate(mdl.url)
+                        }
+
+                        override fun onCancel(v: View, dialog: AppDialog) {
+                            dialog.dismiss()
+                        }
+                    })
         }
+    }
+
+    private fun startUpdate(url: String?) {
+        if (TextUtils.isEmpty(url)) showShortToast(getString(R.string.version_update_error_url))
+        else { startService(Intent(this@MainActivity, VersionUpdateService::class.java).apply { putExtra("downloadUrl", url) }) }
+    }
+
+    override fun onShowError(msg: String?) {
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 }

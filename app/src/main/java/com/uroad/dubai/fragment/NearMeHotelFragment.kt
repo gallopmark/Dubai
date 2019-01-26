@@ -39,7 +39,7 @@ class NearMeHotelFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
         adapter = HotelListCardAdapter(context, data)
         recyclerView.adapter = adapter
-        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", data[position].newsid) })
             }
@@ -51,9 +51,22 @@ class NearMeHotelFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {
+        addDistance(news)
         this.data.clear()
         this.data.addAll(news)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun addDistance(list: MutableList<NewsMDL>) {
+        val array = arrayOf("1.2km", "1.7km", "2.1km", "5.6km")
+        for (i in 0 until list.size) {
+            if (i < array.size) {
+                list[i].distance = array[i]
+            } else {
+                val pos = i % array.size
+                list[i].distance = array[pos]
+            }
+        }
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {

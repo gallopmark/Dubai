@@ -4,6 +4,9 @@ class WebApi {
     companion object {
         fun getBaseParams() = HashMap<String, String?>()
         fun simpleParams(userid: String?) = getBaseParams().apply { put("useruuid", userid) }
+        const val STARTUP_IMAGE = "getStartUpImage"
+
+        const val APP_VERSION = "getVersion"
         const val GET_NEWS_LIST = "getNewsList"
 
         fun getNewsListParams(newstype: String?, keyword: String?, index: Int, size: Int) = getBaseParams().apply {
@@ -91,21 +94,31 @@ class WebApi {
 
 
         const val USER_LOGIN = "login"
-        fun login(logintype : String,phone : String,password : String,appversion : String,
-                  deviceid : String,devicename : String,devicetype : String,devicesysversion : String) = getBaseParams().apply {
-            put("logintype",logintype)
-            put("phone",phone)
-            put("password",password)
-            put("appversion",appversion)
-            put("deviceid",deviceid)
-            put("devicename",devicename)
-            put("devicetype",devicetype)
-            put("devicesysversion",devicesysversion)
+        fun login(logintype: String, phone: String, password: String, appversion: String,
+                  deviceid: String, devicename: String, devicetype: String, devicesysversion: String) = getBaseParams().apply {
+            put("logintype", logintype)
+            put("phone", phone)
+            put("password", password)
+            put("appversion", appversion)
+            put("deviceid", deviceid)
+            put("devicename", devicename)
+            put("devicetype", devicetype)
+            put("devicesysversion", devicesysversion)
         }
 
         const val SEND_VERIFICATION_CODE = "sendVerificationCode"
-        fun sendVerificationCode(phone : String) = getBaseParams().apply {
-            put("phone",phone)
+        fun sendVerificationCode(phone: String) = getBaseParams().apply {
+            put("phone", phone)
+        }
+
+        /*地图插点*/
+        const val MAP_POINT = "mapPoints"
+
+        fun mapPointParams(type: String?, useruuid: String?, longitude: Double, latitude: Double) = getBaseParams().apply {
+            put("type", type)
+            put("useruuid", useruuid)
+            put("longitude", "$longitude")
+            put("latitude", "$latitude")
         }
     }
 }

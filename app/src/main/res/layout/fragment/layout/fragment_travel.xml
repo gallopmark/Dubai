@@ -7,19 +7,23 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/space_250">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:contentScrim="@drawable/bg_main_top_bg"
+            app:expandedTitleGravity="center|bottom"
+            app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
+            app:collapsedTitleGravity="center"
+            app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
             <com.uroad.library.widget.banner.Banner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:bannerAnimDuration="1000"
                 app:bannerAnimScroll="true"
                 app:bannerAutoScroll="true"
@@ -38,21 +42,8 @@
                 android:minHeight="@dimen/toolbar_size"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
-                app:layout_collapseMode="pin">
-
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/space_50"
-                    android:layout_marginEnd="@dimen/space_50"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/tab_travel"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/font_18" />
-            </android.support.v7.widget.Toolbar>
+                app:title="@string/dubai_fountains"
+                app:layout_collapseMode="pin"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

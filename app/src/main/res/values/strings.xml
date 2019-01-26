@@ -40,6 +40,7 @@
     <string name="home_title_near_me">Near me</string>
     <string name="tab_home">@string/home</string>
     <string name="tab_travel">Travel</string>
+    <string name="dubai_fountains">Dubai Fountains</string>
     <string name="tab_me">Me</string>
 
     <string name="travel_content_title">Best Fast Food In Dubai</string>
@@ -219,4 +220,12 @@
     <string name="view_histroy_start">Start:</string>
     <string name="view_histroy_end">End:</string>
     <string name="view_histroy_time">Time:</string>
+
+    <string name="version_waiting_update">Waiting for update</string>
+    <string name="version_update_notification_content">%1$s\u3000Already downloaded：%2$s</string>
+    <string name="version_update_pause">Download has been suspended, click Continue!</string>
+    <string name="version_update_error">Download failed, please click Retry!</string>
+    <string name="version_update_confirm">Update now</string>
+    <string name="version_update_cancel">Use again</string>
+    <string name="version_update_error_url">Download link error!</string>
 </resources>

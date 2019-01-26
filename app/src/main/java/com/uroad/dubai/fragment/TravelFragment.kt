@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -29,7 +28,6 @@ import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.BannerType
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.CalendarMDL
-import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
@@ -54,7 +52,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private lateinit var bannerPresenter: BannerPresenter
     private lateinit var bannerData: MutableList<NewsMDL>
     private lateinit var bannerAdapter: TravelBannerAdapter
-    private lateinit var calendarBanner : TravelCalendarAdapter
+    private lateinit var calendarBanner: TravelCalendarAdapter
     private val calendarList = ArrayList<CalendarMDL>()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
@@ -70,42 +68,27 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private fun initAppBar() {
         val statusHeight = DisplayUtils.getStatusHeight(context)
         toolbar.layoutParams = (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).apply { topMargin = statusHeight }
-        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val offset = Math.abs(verticalOffset)
-            val total = appBarLayout.totalScrollRange
-            if (offset <= total / 2) {
-                toolbar.visibility = View.GONE
-            } else {
-                toolbar.visibility = View.VISIBLE
-            }
-        })
-        setTopImage()
+        val width = DisplayUtils.getWindowWidth(context)
+        val height = (width * 0.67).toInt()
+        appBarLayout.layoutParams = appBarLayout.layoutParams.apply {
+            this.width = width
+            this.height = height
+        }
     }
 
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
-        adapterRoads = ViewHistoryRoadsListCardAdapter(context,data)
+        adapterRoads = ViewHistoryRoadsListCardAdapter(context, data)
         adapter = ViewHistoryListCardAdapter(context, data).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                    openActivity(ScenicDetailActivity::class.java,Bundle().apply { putString("newsId",data[position].newsid) })
+                    openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", data[position].newsid) })
                 }
             })
         }
         //recyclerView.adapter = adapter
         recyclerView.adapter = adapterRoads
-    }
-
-
-    //重新计算图片高度 避免图片压缩
-    private fun setTopImage() {
-        val width = DisplayUtils.getWindowWidth(context)
-        val height = (width * 0.67).toInt()
-        banner.layoutParams = banner.layoutParams.apply {
-            this.width = width
-            this.height = height
-        }
     }
 
     private fun initBanner() {
@@ -121,7 +104,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                     } else if (TextUtils.equals(t.newstype, NewsType.NEWS.code)) {
                         openActivity(NewsDetailsActivity::class.java, Bundle().apply {
                             putString("newsId", t.newsid)
-                            putString("title",getString(R.string.home_menu_news))
+                            putString("title", getString(R.string.home_menu_news))
                         })
                     }
                 }
@@ -130,8 +113,8 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         banner.setAdapter(bannerAdapter)
     }
 
-    private fun initCalendar(){
-        calendarBanner = TravelCalendarAdapter(context,calendarList)
+    private fun initCalendar() {
+        calendarBanner = TravelCalendarAdapter(context, calendarList)
         baCalendar.setAdapter(calendarBanner)
     }
 
@@ -207,13 +190,14 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                 calendarList.clear()
                 calendarList.addAll(list)
             }
-            list.size>3 -> {
+            list.size > 3 -> {
                 calendarList.clear()
                 calendarList.add(list[0])
                 calendarList.add(list[1])
                 calendarList.add(list[2])
             }
-            else -> {}
+            else -> {
+            }
         }
         calendarBanner.notifyDataSetChanged()
     }
@@ -240,8 +224,27 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                     ContextCompat.checkSelfPermission(context,
                             Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
                 calendarPresenter.getCalendar(context)
+            } else {
+                requestPermissions(arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR), 1)
             }
+        } else {
+            calendarPresenter.getCalendar(context)
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1 && grantResults.isNotEmpty()) {
+            var hasPermission = true
+            for (result in grantResults) {
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    hasPermission = false
+                    break
+                }
+            }
+            if(hasPermission){
+                calendarPresenter.getCalendar(context)
+            }
+        }
+    }
 }

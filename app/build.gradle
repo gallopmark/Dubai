@@ -82,4 +82,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
+    /*filedownloader*/
+    implementation 'com.liulishuo.filedownloader:library:1.7.5'
 }

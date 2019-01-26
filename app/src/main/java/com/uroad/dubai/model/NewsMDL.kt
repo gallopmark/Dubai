@@ -20,6 +20,7 @@ open class NewsMDL {
     var hours: String? = null
     var commentstar: String? = null
     var newstype: String? = null
+    var distance: String? = null
 
     fun getLatLng(): LatLng {
         var latitude = 0.0

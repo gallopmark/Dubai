@@ -9,14 +9,20 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.adaptervp.GuideAdapter
+import com.uroad.dubai.api.presenter.SplashPresenter
 import com.uroad.dubai.common.BaseLucaActivity
 import com.uroad.dubai.local.AppSource
+import com.uroad.dubai.model.StartupMDL
+import com.uroad.glidev4.GlideV4
+import com.uroad.glidev4.listener.IImageLoaderListener
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_splash.*
+import java.lang.Exception
 import java.lang.ref.WeakReference
 
-class SplashActivity : BaseLucaActivity() {
+class SplashActivity : BaseLucaActivity(), SplashPresenter.SplashView {
 
+    private var presenter: SplashPresenter? = null
     private var handler: MHandler? = null
     private var isGoMain = false
     private var second = 5
@@ -30,7 +36,7 @@ class SplashActivity : BaseLucaActivity() {
                 removeMessages(activity.updateCode)
                 if (!activity.isGoMain) activity.openMainPage()
             } else {
-//                activity.tvJump.visibility = View.VISIBLE
+                activity.tvJump.visibility = View.VISIBLE
                 val delayText = "${activity.getString(R.string.skip)}\u2000" + activity.second + "s"
                 activity.tvJump.text = delayText
                 activity.second--
@@ -40,7 +46,7 @@ class SplashActivity : BaseLucaActivity() {
     }
 
     override fun setUp(savedInstanceState: Bundle?) {
-        setBaseContentViewWithoutTitle(R.layout.activity_splash)
+        setBaseContentViewWithoutTitle(R.layout.activity_splash, true)
         if (AppSource.isGuide(this)) {
             onSplash()
         } else {
@@ -50,7 +56,8 @@ class SplashActivity : BaseLucaActivity() {
     }
 
     private fun onSplash() {
-        handler = MHandler(this).apply { sendEmptyMessage(updateCode) }
+        presenter = SplashPresenter(this).apply { getStartupImage() }
+        handler = MHandler(this).apply { postDelayed(runMainTask, 5000L) }
         flSplash.visibility = View.VISIBLE
         ivSplash.setImageResource(R.mipmap.ic_splash_bg)
         tvJump.setOnClickListener {
@@ -58,6 +65,8 @@ class SplashActivity : BaseLucaActivity() {
             if (!isGoMain) openMainPage()
         }
     }
+
+    private val runMainTask = Runnable { openMainPage() }
 
     private fun onGuide() {
         flGuide.visibility = View.VISIBLE
@@ -99,7 +108,46 @@ class SplashActivity : BaseLucaActivity() {
         finish()
     }
 
+    override fun onSplashResponse(mdl: StartupMDL?) {
+        mdl?.let {
+            removeTask()
+            displayImage(it)
+        }
+    }
+
+    private fun removeTask() {
+        handler?.removeCallbacks(runMainTask)
+    }
+
+    private fun displayImage(mdl: StartupMDL) {
+        handler?.postDelayed(runMainTask, 5000L)
+        GlideV4.getInstance().displayImage(this, mdl.startupimage, ivSplash, object : IImageLoaderListener {
+            override fun onLoadingComplete(url: String?, target: ImageView?) {
+                removeTask()
+                this@SplashActivity.second = mdl.displaytime ?: 3
+                handler?.sendEmptyMessage(updateCode)
+            }
+
+            override fun onLoadingFailed(url: String?, target: ImageView?, exception: Exception?) {
+
+            }
+        })
+    }
+
+    override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+    }
+
+    override fun onShowLoading() {
+    }
+
+    override fun onHideLoading() {
+    }
+
+    override fun onShowError(msg: String?) {
+    }
+
     override fun onDestroy() {
+        presenter?.detachView()
         handler?.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
