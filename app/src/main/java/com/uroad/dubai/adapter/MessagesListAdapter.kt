@@ -16,15 +16,20 @@ class MessagesListAdapter(context: Context, data: MutableList<MessagesMDL>)
         val imageView = holder.obtainView<ImageView>(R.id.ivMsgType)
         val isNewMsg = holder.obtainView<TextView>(R.id.tvNewMsg)
 
-        holder.setText(R.id.tvMsgTitle, t.title)
-        holder.setText(R.id.tvMsgTime, t.time)
+        holder.setText(R.id.tvMsgTitle, t.content)
+        holder.setText(R.id.tvMsgTime, t.created)
 
-        when (t.isnew) {
-            true -> isNewMsg.visibility = View.VISIBLE
+        when (t.readstatus) {
+            "0" -> isNewMsg.visibility = View.VISIBLE
             else -> isNewMsg.visibility = View.GONE
         }
 
-        when (t.type) {
+        /**
+        1009001 event
+        1009002 news
+        1009003 notice
+        1009004 system*/
+        when (t.pushtype) {
             "100" -> imageView.setImageResource(R.mipmap.icon_msg_accident)
             "111" -> imageView.setImageResource(R.mipmap.icon_msg_news)
             "211" -> imageView.setImageResource(R.mipmap.icon_msg_setting)

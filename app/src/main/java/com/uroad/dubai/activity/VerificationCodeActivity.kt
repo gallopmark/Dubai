@@ -24,13 +24,13 @@ import java.util.concurrent.TimeUnit
 
 class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInputFinishListener {
 
-    var phone : String  = ""
-    var d : Disposable? = null
-    var code : String? = ""
-    var verificationcode : String = ""
-    var hasContent : Boolean = false
-    var millis : Int = 60
-    var isCreateNewAccount : Boolean = false
+    private var phone : String  = ""
+    private var d : Disposable? = null
+    private var verificationcode : String = ""
+    private var hasContent : Boolean = false
+    private var millis : Int = 60
+    private var isCreateNewAccount : Boolean = false
+    private var isForgotPassword : Boolean = false
     private lateinit var presenter : LoginPresenter
 
     @SuppressLint("LogNotTimber")
@@ -47,7 +47,7 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
                             PackageInfoUtils.getVersionName(this@VerificationCodeActivity),
                             DeviceUtils.getAndroidID(this@VerificationCodeActivity),
                             DeviceUtils.getManufacturer(),
-                            DeviceUtils.getModel(),
+                            "Android",
                             "${DeviceUtils.getSDKVersion()}"))
         } else if(!TextUtils.equals(text,verificationcode) && isCreateNewAccount){
             showShortToast("Verification code error")
@@ -66,20 +66,27 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
         intent.extras?.let {
             isCreateNewAccount = it.getBoolean("isCreate", false)
-            phone = it.getString("phone")
+            isForgotPassword = it.getBoolean("forgot", false)
+            phone = it.getString("phone","")
             tvSendPhone.text = "+971 $phone"
         }
 
         edVerify.setOnInputFinish(this@VerificationCodeActivity)
         if (isCreateNewAccount) {
             btnVerify.visibility = View.GONE
-            presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone?:""))
         }
+        presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone))
 
         btnVerify.setOnClickListener {
             if (hasContent && edVerify.condition()){
-                openActivity(CreatePasswordActivity::class.java)
+                openActivity(CreatePasswordActivity::class.java,Bundle().apply {
+                    putString("phone",phone)
+                    putString("code",verificationcode)
+                    putBoolean("forgot",isForgotPassword)
+                })
                 finish()
+            }else{
+                showShortToast("Verification code error")
             }
         }
         btnVerify.isEnabled = false

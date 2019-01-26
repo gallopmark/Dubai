@@ -12,7 +12,7 @@ import com.uroad.library.utils.DisplayUtils
 class AttrNearFmListAdapter(private val context: Context,type : String?, data: MutableList<AttractionNearFMMDL>)
       : BaseArrayRecyclerAdapter<AttractionNearFMMDL>(context,data) {
     private val typePage = type
-    private val imageWith = DisplayUtils.getWindowWidth(context) / 3
+    private val imageWith = DisplayUtils.getWindowWidth(context) * 2/ 5
     private val imageHeight = imageWith * 3 / 4
     private val params = RelativeLayout.LayoutParams(imageWith, imageHeight)
     private val dp4 = DisplayUtils.dip2px(context, 4f)
@@ -31,22 +31,23 @@ class AttrNearFmListAdapter(private val context: Context,type : String?, data: M
 
     private fun setText(holder: RecyclerHolder,t: AttractionNearFMMDL,position: Int){
         holder.setText(R.id.tvTitle, t.title)
-        when(typePage){
+        holder.setText(R.id.tvContext, "Location  ${t.address}")
+        holder.setText(R.id.tvDistance, t.hours)
+        holder.setText(R.id.tvNum, "Distance  ${t.commentstar?:"0"}km")
+        /*when(typePage){
             "1001002" -> //酒店
             {
                 holder.setText(R.id.tvNum, t.hours)
             }
             "1001003" ->//餐厅
             {
-                holder.setVisibility(R.id.tvContext,false)
                 holder.setText(R.id.tvDistance, t.hours)
             }
             else ->{//1001004 景点
-                //holder.setText(R.id.tvContext, "Location  ${t.address}")
+                holder.setText(R.id.tvContext, "Location  ${t.address}")
                 holder.setText(R.id.tvNum, "Distance  ${t.commentstar?:"0"}km")
-                //holder.setVisibility(R.id.tvNum,false)
             }
-        }
+        }*/
     }
 
 }

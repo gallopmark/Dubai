@@ -55,7 +55,7 @@ class LoginActivity : BaseActivity() , LoginView {
 
         tvForgot.setOnClickListener {
             openActivity(PhoneActivity::class.java, Bundle().apply {
-                putBoolean("isCreate", true)
+                putBoolean("forgot", true)
             })
         }
 
@@ -90,7 +90,7 @@ class LoginActivity : BaseActivity() , LoginView {
                             PackageInfoUtils.getVersionName(this@LoginActivity),
                             DeviceUtils.getAndroidID(this@LoginActivity),
                             DeviceUtils.getManufacturer(),
-                            DeviceUtils.getModel(),
+                            "Android",
                             "${DeviceUtils.getSDKVersion()}"))
 
         }

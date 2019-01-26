@@ -11,6 +11,7 @@ class PhoneActivity : BaseActivity() {
 
     var phone : String = ""
     var isCreate : Boolean = false
+    var forgot : Boolean = false
 
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_phone,true)
@@ -21,6 +22,7 @@ class PhoneActivity : BaseActivity() {
     private fun initView() {
         intent.extras?.let { it ->
             isCreate = it.getBoolean("isCreate", false)
+            forgot = it.getBoolean("forgot", false)
         }
         btnNext.setOnClickListener {
             phone = edPhone.text.toString().trim()
@@ -28,14 +30,16 @@ class PhoneActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            if (isCreate)
+            if (isCreate || forgot)
                 openActivity(VerificationCodeActivity::class.java, Bundle().apply {
                     putBoolean("isCreate", isCreate)
+                    putBoolean("forgot", forgot)
                     putString("phone", phone)
                 })
             else
                 openActivity(VerifyActivity::class.java, Bundle().apply {
                     putString("phone", phone)
+                    //putBoolean("forgot",forgot)
                 })
             finish()
         }

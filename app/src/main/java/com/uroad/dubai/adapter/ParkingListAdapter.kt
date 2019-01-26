@@ -11,7 +11,7 @@ import com.uroad.library.utils.DisplayUtils
 
 class ParkingListAdapter(context: Context, data: MutableList<ParkingMDL>)
       : BaseArrayRecyclerAdapter<ParkingMDL>(context,data) {
-    private val imageWith = DisplayUtils.getWindowWidth(context) / 3
+    private val imageWith = DisplayUtils.getWindowWidth(context) * 2/ 5
     private val imageHeight = imageWith * 3 / 4
     private val params = RelativeLayout.LayoutParams(imageWith, imageHeight)
     private val dp4 = DisplayUtils.dip2px(context, 4f)

@@ -120,5 +120,28 @@ class WebApi {
             put("longitude", "$longitude")
             put("latitude", "$latitude")
         }
+
+        const val FORGOT_PASSWORD = "forgotPassword"
+        fun forgotPassword(phone : String,verificationcode : String,password : String) = getBaseParams().apply {
+            put("phone",phone)
+            put("verificationcode",verificationcode)
+            put("password",password)
+        }
+
+        const val SAVEFEEDBACK = "saveFeedBack"
+        fun saveFeedBack(useruuid : String,nickname : String,rating : String,feedbackcontent : String,phone : String) = getBaseParams().apply {
+            put("useruuid",useruuid)
+            put("nickname",nickname)
+            put("rating",rating)
+            put("feedbackcontent",feedbackcontent)
+            put("phone",phone)
+        }
+
+        const val MESSAGECENTER = "messageCenter"
+        fun messageCenter(useruuid : String,index : Int,size : Int) = getBaseParams().apply {
+            put("useruuid",useruuid)
+            put("index","$index")
+            put("size","$size")
+        }
     }
 }
