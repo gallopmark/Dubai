@@ -32,4 +32,17 @@ class LoginPresenter(val loginView: LoginView) : BasePresenter<LoginView>(loginV
             }
         })
     }
+
+    fun forgotPassword(method: String?, params: HashMap<String, String?>){
+        request(method, params, object : StringObserver(loginView) {
+            override fun onHttpResultOk(data: String?) {
+                val verificationcode = JSONObject(data).getString("data")
+                loginView.loginError(verificationcode)
+            }
+
+            override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+                loginView.loginError(errorMsg.toString())
+            }
+        })
+    }
 }

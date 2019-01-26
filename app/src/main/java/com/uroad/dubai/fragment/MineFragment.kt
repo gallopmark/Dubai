@@ -73,7 +73,7 @@ class MineFragment : BaseFragment() {
             if (check()) return@setOnClickListener
             /*ImagePicker.with(this@MineFragment)
                     .isCompress(true)
-                    .requestCode(123)
+                    .requestCode(123)PersonalInformationActivity
                     .start()*/
         }
         if (isLogin){
@@ -102,7 +102,7 @@ class MineFragment : BaseFragment() {
         isLogin = UserPreferenceHelper.isLogin(context)
         if (isLogin){
             ivUserHead.setImageResource(R.mipmap.ic_user_default)
-            upDataUserName("Emma",isLogin)
+            upDataUserName(UserPreferenceHelper.getUserName(context)?:"Emma",isLogin)
         }else{
             ivUserHead.setImageResource(R.mipmap.icon_user_head_gray)
             upDataUserName("Me",isLogin)

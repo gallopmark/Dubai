@@ -31,6 +31,7 @@ class UserPreferenceHelper {
         const val USER_ACCOUNT = "account"
         const val SHOW_SEARCH_HISTORY = "SHOW_SEARCH_HISTORY"
         const val LOADING_PHOTOS = "LOADING_PHOTOS"
+        const val USER_NICKNAME = "nickname"
 
         private fun from(context: Context): SharedPreferences {
             return context.getSharedPreferences(PREFS_USER, Context.MODE_PRIVATE)
@@ -39,7 +40,9 @@ class UserPreferenceHelper {
         fun save(context: Context, userMDL: UserMDL) {
             from(context).edit().apply {
                 putString(USER_ID, userMDL.useruuid)
+                putString(USER_UUID, userMDL.useruuid)
                 putString(REAL_NAME, userMDL.name)
+                putString(USER_NICKNAME, userMDL.nickname)
                 putString(SEX, userMDL.sex)
                 putString(PHONE,userMDL.mobile)
                 putString(STATUS,userMDL.userstatus)
@@ -51,6 +54,7 @@ class UserPreferenceHelper {
         }
 
         fun getUserUUID(context: Context): String? = from(context).getString(USER_UUID, "")
+        fun getUserNickName(context: Context): String? = from(context).getString(USER_NICKNAME,"")
         fun getPushID(context: Context): String? = from(context).getString(PUSH_ID, "")
         fun saveRealName(context: Context, realName: String) {
             from(context).edit().putString(REAL_NAME, realName).apply()

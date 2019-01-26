@@ -7,7 +7,7 @@ import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.api.view.MessagesView
 
 class MessagesPresenter(val messagesView: MessagesView) : BasePresenter<MessagesView>(messagesView) {
-    fun getNewsList(method: String?, params: HashMap<String, String?>) {
+    fun messageCenter(method: String?, params: HashMap<String, String?>) {
         request(method, params, object : StringObserver(messagesView) {
             override fun onHttpResultOk(data: String?) {
                 messagesView.onGetNewList(GsonUtils.fromDataToList(data, MessagesMDL::class.java))

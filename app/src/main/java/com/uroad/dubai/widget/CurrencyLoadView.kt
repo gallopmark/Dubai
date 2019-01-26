@@ -119,6 +119,7 @@ class CurrencyLoadView : FrameLayout {
         addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
             leftMargin = mContext.resources.getDimensionPixelOffset(R.dimen.space_30)
             rightMargin = mContext.resources.getDimensionPixelOffset(R.dimen.space_30)
+            gravity = Gravity.CENTER
         })
         clearViews()
         addView(view)
