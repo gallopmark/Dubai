@@ -134,8 +134,8 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
     private fun initNavigationOptions() {
         contentOptions.setOnClickListener { hideNavigationOptions() }
         cbParking.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) presenter.getMapPointByType(MapDataType.PARKING.CODE)
-            else removePointFromMap(MapDataType.PARKING.CODE)
+//            if (isChecked) presenter.getMapPointByType(MapDataType.PARKING.CODE)
+//            else removePointFromMap(MapDataType.PARKING.CODE)
         }
         cbGasStation.setOnCheckedChangeListener { _, isChecked ->
             showTipsDialog(getString(R.string.developing))

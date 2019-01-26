@@ -31,7 +31,8 @@ import io.reactivex.disposables.Disposable
 class RoadNavigationPresenter(private val activity: BaseActivity,
                               private val navigationView: RoadNavigationView)
     : BasePresenter<RoadNavigationView>(navigationView) {
-    private var disposable: Disposable? = null
+    private val useruuid = activity.getTestUserId()
+
     private val latitudeArray = doubleArrayOf(24.29045862222854, 25.71109733694287, 25.50251457879257,
             25.260430807520947, 24.98663128116354, 24.861623304922887, 24.583673073761176, 24.65789600887483,
             25.035503774803118, 25.012879832914024, 24.604357106770124, 24.628219646337257, 25.235800209105093,
@@ -60,8 +61,8 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
     }
 
     fun getScenic() {
-        disposable?.dispose()
-        disposable = request(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 10), object : StringObserver(navigationView) {
+//        disposable?.dispose()
+        request(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 10), object : StringObserver(navigationView) {
             override fun onHttpResultOk(data: String?) {
                 navigationView.onGetScenic(GsonUtils.fromDataToList(data, ScenicMDL::class.java))
             }
@@ -72,19 +73,45 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
         })
     }
 
-    fun getMapPointByType(code: String) {
+    fun getMapPointByType(code: String, longitude: Double, latitude: Double) {
         when (code) {
-            MapDataType.ACCIDENT.CODE, MapDataType.CONSTRUCTION.CODE -> navigationView.onGetMapPoi(code, ArrayList<MapPointItem>().apply {
-                addAll(getAccident())
-                addAll(getConstruction())
-            })
+            MapDataType.EVENT.CODE -> getPoints(code, longitude, latitude)
             MapDataType.PARKING.CODE -> navigationView.onGetMapPoi(code, getParking())
-            MapDataType.CCTV.CODE -> navigationView.onGetMapPoi(code, getCCTV())
-            MapDataType.DMS.CODE -> navigationView.onGetMapPoi(code, getDMS())
+            MapDataType.CCTV.CODE -> getPoints(code, longitude, latitude)
+            MapDataType.DMS.CODE -> getPoints(code, longitude, latitude)
             MapDataType.POLICE.CODE -> navigationView.onGetMapPoi(code, getPolice())
             MapDataType.WEATHER.CODE -> navigationView.onGetMapPoi(code, getWeather())
             MapDataType.RWIS.CODE -> navigationView.onGetMapPoi(code, getRWIS())
             MapDataType.BUS_STOP.CODE -> navigationView.onGetMapPoi(code, getBusStop())
+        }
+    }
+
+    private fun getPoints(CODE: String, longitude: Double, latitude: Double) {
+        request(WebApi.MAP_POINT, WebApi.mapPointParams(CODE, useruuid, longitude, latitude), object : StringObserver(navigationView) {
+            override fun onHttpResultOk(data: String?) {
+                dealWithDataByType(CODE, data)
+            }
+
+            override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+                navigationView.onHttpResultError(errorMsg, errorCode)
+            }
+        })
+    }
+
+    private fun dealWithDataByType(CODE: String, data: String?) {
+        when (CODE) {
+            MapDataType.EVENT.CODE -> {
+                val list = GsonUtils.fromDataToList(data, EventsMDL::class.java)
+                navigationView.onGetMapPoi(CODE, ArrayList<MapPointItem>().apply { addAll(list) })
+            }
+            MapDataType.CCTV.CODE ->{
+                val list = GsonUtils.fromDataToList(data, CCTVSnapMDL::class.java)
+                navigationView.onGetMapPoi(CODE, ArrayList<MapPointItem>().apply { addAll(list) })
+            }
+            MapDataType.DMS.CODE->{
+                val list = GsonUtils.fromDataToList(data, DMSysMDL::class.java)
+                navigationView.onGetMapPoi(CODE, ArrayList<MapPointItem>().apply { addAll(list) })
+            }
         }
     }
 

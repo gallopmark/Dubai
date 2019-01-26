@@ -10,10 +10,13 @@
         android:layout_height="@dimen/space_250">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="@drawable/bg_main_top_bg"
-            app:expandedTitleGravity="center|bottom"
+            app:expandedTitleGravity="start|bottom"
+            app:expandedTitleMarginBottom="@dimen/space_15"
+            app:expandedTitleMarginStart="@dimen/space_15"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:collapsedTitleGravity="center"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
@@ -42,7 +45,6 @@
                 android:minHeight="@dimen/toolbar_size"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
-                app:title="@string/dubai_fountains"
                 app:layout_collapseMode="pin"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

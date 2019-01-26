@@ -79,8 +79,8 @@
         android:layout_height="@dimen/space_45"
         android:layout_marginTop="@dimen/space_10"
         android:layout_marginEnd="@dimen/space_10"
-        android:src="@mipmap/ic_tourist_layer"
         android:background="?attr/actionBarItemBackground"
+        android:src="@mipmap/ic_tourist_layer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cbTrafficLayer" />
 
@@ -132,11 +132,11 @@
         android:layout_width="@dimen/space_45"
         android:layout_height="@dimen/space_45"
         android:layout_marginStart="@dimen/space_10"
-        android:layout_marginBottom="@dimen/space_60"
         android:background="@drawable/bg_corners_white_5dp"
         android:scaleType="center"
         android:src="@mipmap/ic_location_grey"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/vBottom"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -144,11 +144,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space_10"
-        android:layout_marginBottom="@dimen/space_60"
         android:scaleType="center"
         android:src="@mipmap/ic_route_navipage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/vBottom" />
+
+    <View
+        android:id="@+id/vBottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_60"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         android:id="@+id/contentSearch"

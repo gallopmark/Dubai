@@ -48,6 +48,7 @@ import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
 import com.uroad.library.utils.InputMethodUtils
 import kotlinx.android.synthetic.main.content_routepoisearch.*
+import java.lang.Exception
 
 
 /**
@@ -72,6 +73,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     private lateinit var historyAdapter: PoiSearchHistoryAdapter
     private lateinit var userAddressPresenter: UserAddressPresenter
     private var userAddressType: Int = 1
+
+    private var mUserLocation: Location? = null
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
 
     companion object {
         private const val TYPE_DEFAULT = "default"
@@ -113,7 +118,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         ivReportLayer.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
-        ivLocation.setOnClickListener { openLocation() }
+        ivLocation.setOnClickListener { mUserLocation?.let { moveToUserLocation(it) } }
         ivRouteArrow.setOnClickListener { openActivity(RouteNavigationActivity::class.java) }
     }
 
@@ -434,8 +439,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
             markerObjMap[marker.id]?.let { `object` -> presenter.onMarkerClick(marker, `object`) }
             return@setOnMarkerClickListener true
         }
-        setCheckLayer()
-//        enableLocationComponent()
+        openLocation()
     }
 
     override fun onDismissLocationPermission() {
@@ -447,7 +451,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     override fun afterLocation(location: Location) {
-        moveToUserLocation(location)
+        mUserLocation = location
+        longitude = location.longitude
+        latitude = location.latitude
+        getMapPoints()
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -462,6 +469,14 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
                 .target(LatLng(location.latitude, location.longitude))
                 .zoom(zoom).build()
         mapBoxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+    }
+
+    override fun onLocationFailure(exception: Exception) {
+        getMapPoints()
+    }
+
+    private fun getMapPoints() {
+        setCheckLayer()
     }
 
     private fun initMenu() {
@@ -489,14 +504,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
 
     private fun onMenuCheckChanged(isChecked: Boolean, code: String) {
         if (isChecked) {
-            showMapPointByType(code)
+            getMapPointByType(code)
         } else {
             removePointFromMap(code)
         }
-    }
-
-    private fun showMapPointByType(code: String) {
-        presenter.getMapPointByType(code)
     }
 
     private fun removePointFromMap(code: String) {
@@ -524,6 +535,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         cbWeather.isChecked = false
         cbRWIS.isChecked = false
         cbBusStop.isChecked = false
+    }
+
+    private fun getMapPointByType(type: String) {
+        presenter.getMapPointByType(type, longitude, latitude)
     }
 
     override fun onShowLoading() {
@@ -603,7 +618,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
             }
             if (userAddressType == 1 && homeItem != null) {
                 homeItem.getLatLng()?.let { onNavigationRoute(Point.fromLngLat(it.longitude, it.latitude), homeItem.address) }
-            } else if(userAddressType == 2 && workItem!=null){
+            } else if (userAddressType == 2 && workItem != null) {
                 workItem.getLatLng()?.let { onNavigationRoute(Point.fromLngLat(it.longitude, it.latitude), workItem.address) }
             } else {
                 openActivity(NavigationAddressActivity::class.java)

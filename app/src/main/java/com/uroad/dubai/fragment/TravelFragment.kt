@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
@@ -69,7 +70,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         val statusHeight = DisplayUtils.getStatusHeight(context)
         toolbar.layoutParams = (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).apply { topMargin = statusHeight }
         val width = DisplayUtils.getWindowWidth(context)
-        val height = (width * 0.67).toInt()
+        val height = (width * 0.6).toInt()
         appBarLayout.layoutParams = appBarLayout.layoutParams.apply {
             this.width = width
             this.height = height
@@ -110,6 +111,18 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                 }
             })
         }
+        banner.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {
+            }
+
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                val realPosition = position % bannerData.size
+                collapsingLayout.title = bannerData[realPosition].title
+            }
+        })
         banner.setAdapter(bannerAdapter)
     }
 
@@ -151,6 +164,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         bannerData.clear()
         bannerData.addAll(data)
         bannerAdapter.notifyDataSetChanged()
+        if (bannerData.size > 0) collapsingLayout.title = bannerData[0].title
     }
 
     override fun onFailure(errorMsg: String?, errorCode: Int?) {
@@ -242,7 +256,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                     break
                 }
             }
-            if(hasPermission){
+            if (hasPermission) {
                 calendarPresenter.getCalendar(context)
             }
         }

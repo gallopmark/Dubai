@@ -21,6 +21,7 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
             permissionsManager = PermissionsManager(this).apply { requestLocationPermissions(this@BaseMapBoxLocationActivity) }
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionsManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -65,11 +66,14 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
     }
 
     override fun onFailure(exception: Exception) {
+        onLocationFailure(exception)
     }
 
     open fun afterLocation(location: Location) {
 
     }
+
+    open fun onLocationFailure(exception: Exception) {}
 
     @SuppressLint("MissingPermission")
     override fun onStart() {
