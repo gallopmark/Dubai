@@ -2,14 +2,23 @@ package com.uroad.dubai.fragment
 
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.view.View
-import com.uroad.dubai.R
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.CycleInterpolator
+import android.view.animation.TranslateAnimation
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.NearMeTabAdapter
+import com.uroad.dubai.api.presenter.MessagesPresenter
+import com.uroad.dubai.api.view.MessagesView
 import com.uroad.dubai.common.BaseMapBoxLocationFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.local.UserPreferenceHelper
+import com.uroad.dubai.model.MessagesMDL
+import com.uroad.dubai.webService.WebApi
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.content_mainnearby.*
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -18,13 +27,18 @@ import kotlinx.android.synthetic.main.home_top_collapse.*
 import kotlinx.android.synthetic.main.home_top_expand.*
 import kotlinx.android.synthetic.main.home_top_flexhead.*
 import java.lang.Exception
+import android.view.animation.AnimationSet
+import android.view.animation.RotateAnimation
+import android.view.animation.ScaleAnimation
+
+
 
 /**
  * @author MFB
  * @create 2018/12/12
  * @describe 首页
  */
-class MainFragment : BaseMapBoxLocationFragment() {
+class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     private var statusHeight = 0
     private var isNeedRefresh = false
@@ -32,6 +46,8 @@ class MainFragment : BaseMapBoxLocationFragment() {
     private var currentTab = 0
     private var isFirstCommit = true
     private var updateCount = 0
+    private lateinit var presenter: MessagesPresenter
+    private lateinit var handler: Handler
 
     companion object {
         private const val TAG_BANNER = "banner"
@@ -46,7 +62,7 @@ class MainFragment : BaseMapBoxLocationFragment() {
     }
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
-        setContentView(R.layout.fragment_main)
+        setContentView(com.uroad.dubai.R.layout.fragment_main)
         statusHeight = DisplayUtils.getStatusHeight(context)
         initLayout()
         initMenu()
@@ -54,6 +70,8 @@ class MainFragment : BaseMapBoxLocationFragment() {
         initNotice()
         initFavorites()
         initNearBy()
+        presenter = MessagesPresenter(this)
+        handler = Handler()
     }
 
     private fun initLayout() {
@@ -82,8 +100,8 @@ class MainFragment : BaseMapBoxLocationFragment() {
             if (check()) return@setOnClickListener
             openActivity(MessagesListActivity::class.java)
         }
-        ivSearch.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        ivSearchColl.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        ivSearch.setOnClickListener { showTipsDialog(getString(com.uroad.dubai.R.string.developing)) }
+        ivSearchColl.setOnClickListener { showTipsDialog(getString(com.uroad.dubai.R.string.developing)) }
         tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         ivNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         tvHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
@@ -95,7 +113,7 @@ class MainFragment : BaseMapBoxLocationFragment() {
     }
 
     private fun initBanner() {
-        childFragmentManager.beginTransaction().replace(R.id.flBanner, MainBannerFragment().apply {
+        childFragmentManager.beginTransaction().replace(com.uroad.dubai.R.id.flBanner, MainBannerFragment().apply {
             setRequestCallback(object : FragmentRequestCallback {
                 override fun onRequestFinish() {
                     onFinishRefresh()
@@ -105,7 +123,7 @@ class MainFragment : BaseMapBoxLocationFragment() {
     }
 
     private fun initNotice() {
-        childFragmentManager.beginTransaction().replace(R.id.flNotice, MainNoticeFragment().apply {
+        childFragmentManager.beginTransaction().replace(com.uroad.dubai.R.id.flNotice, MainNoticeFragment().apply {
             setOnRequestCallback(object : MainNoticeFragment.OnRequestCallback {
                 override fun callback(isEmpty: Boolean) {
                     if (isEmpty) this@MainFragment.flNotice.visibility = View.GONE
@@ -121,7 +139,7 @@ class MainFragment : BaseMapBoxLocationFragment() {
     }
 
     private fun initFavorites() {
-        childFragmentManager.beginTransaction().replace(R.id.flFavorites, MainFavoritesFragment().apply {
+        childFragmentManager.beginTransaction().replace(com.uroad.dubai.R.id.flFavorites, MainFavoritesFragment().apply {
             setOnRequestCallback(object : MainFavoritesFragment.OnRequestCallback {
                 override fun callback(isEmpty: Boolean) {
                     if (isEmpty) this@MainFragment.flFavorites.visibility = View.GONE
@@ -139,12 +157,12 @@ class MainFragment : BaseMapBoxLocationFragment() {
     private fun initNearBy() {
         rvNearByTab.isNestedScrollingEnabled = false
         val tabs = ArrayList<String>().apply {
-            add(context.getString(R.string.nearMe_roads))
-            add(context.getString(R.string.nearMe_events))
+            add(context.getString(com.uroad.dubai.R.string.nearMe_roads))
+            add(context.getString(com.uroad.dubai.R.string.nearMe_events))
 //            add(context.getString(R.string.nearMe_news))
-            add(context.getString(R.string.nearMe_hotel))
-            add(context.getString(R.string.nearMe_restaurants))
-            add(context.getString(R.string.nearMe_attractions))
+            add(context.getString(com.uroad.dubai.R.string.nearMe_hotel))
+            add(context.getString(com.uroad.dubai.R.string.nearMe_restaurants))
+            add(context.getString(com.uroad.dubai.R.string.nearMe_attractions))
         }
         rvNearByTab.adapter = NearMeTabAdapter(context, tabs).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
@@ -175,12 +193,12 @@ class MainFragment : BaseMapBoxLocationFragment() {
         val latitude = myLocation?.latitude ?: 0.0
         if (isFirstCommit) {
             val transaction = childFragmentManager.beginTransaction()
-            transaction.replace(R.id.flNearMeRoads, NearMeRoadsFragment.newInstance(longitude, latitude), TAG_ROADS)
-            transaction.replace(R.id.flNearMeEvents, NearMeEventsFragment.newInstance(longitude, latitude), TAG_EVENTS)
+            transaction.replace(com.uroad.dubai.R.id.flNearMeRoads, NearMeRoadsFragment.newInstance(longitude, latitude), TAG_ROADS)
+            transaction.replace(com.uroad.dubai.R.id.flNearMeEvents, NearMeEventsFragment.newInstance(longitude, latitude), TAG_EVENTS)
 //        transaction.replace(R.id.flNearMeNews, NearMeNewsFragment(), TAG_NEWS)
-            transaction.replace(R.id.flNearMeHotel, NearMeHotelFragment.newInstance(longitude, latitude), TAG_HOTEL)
-            transaction.replace(R.id.flNearMeRestaurants, NearMeRestaurantsFragment.newInstance(longitude, latitude), TAG_RESTAURANTS)
-            transaction.replace(R.id.flNearMeAttractions, NearMeAttractionsFragment.newInstance(longitude, latitude), TAG_ATTRACTIONS)
+            transaction.replace(com.uroad.dubai.R.id.flNearMeHotel, NearMeHotelFragment.newInstance(longitude, latitude), TAG_HOTEL)
+            transaction.replace(com.uroad.dubai.R.id.flNearMeRestaurants, NearMeRestaurantsFragment.newInstance(longitude, latitude), TAG_RESTAURANTS)
+            transaction.replace(com.uroad.dubai.R.id.flNearMeAttractions, NearMeAttractionsFragment.newInstance(longitude, latitude), TAG_ATTRACTIONS)
             transaction.commitAllowingStateLoss()
             setCurrentTab(0)
             isFirstCommit = false
@@ -289,5 +307,45 @@ class MainFragment : BaseMapBoxLocationFragment() {
     override fun onPause() {
         super.onPause()
         isNeedRefresh = true
+    }
+
+    override fun initData() {
+        presenter.messageCenter(WebApi.MESSAGECENTER, WebApi.messageCenter("1", getUserId(), 1, 10))
+        startShakeByViewAnim(ivMessage, 0.9f, 1.1f, 10f, 500)
+    }
+
+    override fun onGetNewList(list: MutableList<MessagesMDL>) {
+        if (list.isNotEmpty()) {
+            startShakeByViewAnim(ivMessage, 0.9f, 1.1f, 10f, 500)
+        }
+    }
+
+    private fun startShakeByViewAnim(view: View, scaleSmall: Float, scaleLarge: Float, shakeDegrees: Float, duration: Long) {
+        //由小变大
+        val scaleAnim = ScaleAnimation(scaleSmall, scaleLarge, scaleSmall, scaleLarge)
+        //从左向右
+        val rotateAnim = RotateAnimation(-shakeDegrees, shakeDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        scaleAnim.duration = duration
+        rotateAnim.duration = duration / 10
+        rotateAnim.repeatMode = Animation.REVERSE
+        rotateAnim.repeatCount = 10
+        val smallAnimationSet = AnimationSet(false)
+        smallAnimationSet.addAnimation(scaleAnim)
+        smallAnimationSet.addAnimation(rotateAnim)
+        view.startAnimation(smallAnimationSet)
+    }
+
+    override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onShowLoading() {
+    }
+
+    override fun onHideLoading() {
+    }
+
+    override fun onShowError(msg: String?) {
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 }

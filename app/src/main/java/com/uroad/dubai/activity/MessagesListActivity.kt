@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_base_refresh.*
 
 class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), MessagesView {
 
-    private var useruuid : String = ""
+    private var useruuid: String = ""
     private var index = 1
     private var size = 10
     private lateinit var data: MutableList<MessagesMDL>
@@ -21,10 +21,10 @@ class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), 
     override fun initViewData() {
         withTitle(getString(R.string.mine_messages))
         data = ArrayList()
-        adapter = MessagesListAdapter(this,data)
+        adapter = MessagesListAdapter(this, data)
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
-        useruuid = UserPreferenceHelper.getUserUUID(this@MessagesListActivity)?:""
+        useruuid = UserPreferenceHelper.getUserUUID(this@MessagesListActivity) ?: ""
     }
 
     override fun createPresenter(): MessagesPresenter = MessagesPresenter(this)
@@ -33,8 +33,8 @@ class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), 
         getMsgList()
     }
 
-    private fun getMsgList(){
-         presenter?.messageCenter(WebApi.MESSAGECENTER,WebApi.messageCenter(useruuid,index,size))
+    private fun getMsgList() {
+        presenter.messageCenter(WebApi.MESSAGECENTER, WebApi.messageCenter("", useruuid, index, size))
     }
 
     override fun onPullToRefresh() {

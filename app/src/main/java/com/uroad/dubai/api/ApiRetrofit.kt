@@ -24,7 +24,8 @@ object ApiRetrofit {
                         .addHeader("x-user-uuid", DubaiApplication.getUserId())
                         .addHeader("x-app-version", PackageInfoUtils.getVersionName(DubaiApplication.instance))
                         .addHeader("x-device-uuid", DeviceUtils.getAndroidID(DubaiApplication.instance))
-                        .addHeader("x-device-info", DeviceUtils.getSystemVersion())
+                        .addHeader("x-device-info", DeviceUtils.getModel())
+                        .addHeader("x-device-systemversion", DeviceUtils.getSystemVersion())
                         .build()
                 return@addInterceptor it.proceed(request)
             }

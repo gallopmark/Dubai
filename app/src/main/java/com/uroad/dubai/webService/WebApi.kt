@@ -143,7 +143,8 @@ class WebApi {
         }
 
         const val MESSAGECENTER = "messageCenter"
-        fun messageCenter(useruuid: String, index: Int, size: Int) = getBaseParams().apply {
+        fun messageCenter(type: String?, useruuid: String?, index: Int, size: Int) = getBaseParams().apply {
+            put("type", type)
             put("useruuid", useruuid)
             put("index", "$index")
             put("size", "$size")
