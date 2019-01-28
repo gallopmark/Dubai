@@ -40,6 +40,7 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
     private lateinit var adapter: FavoriteEventFmListAdapter
 
     override fun initViewData(view: View, savedInstanceState: Bundle?) {
+        initBundle()
         data = ArrayList()
         adapter = FavoriteEventFmListAdapter(context, data)
         recyclerView.adapter = adapter
