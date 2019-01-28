@@ -311,7 +311,6 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     override fun initData() {
         presenter.messageCenter(WebApi.MESSAGECENTER, WebApi.messageCenter("1", getUserId(), 1, 10))
-        startShakeByViewAnim(ivMessage, 0.9f, 1.1f, 10f, 500)
     }
 
     override fun onGetNewList(list: MutableList<MessagesMDL>) {
@@ -325,7 +324,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         val scaleAnim = ScaleAnimation(scaleSmall, scaleLarge, scaleSmall, scaleLarge)
         //从左向右
         val rotateAnim = RotateAnimation(-shakeDegrees, shakeDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        scaleAnim.duration = duration
+        scaleAnim.duration = 200
         rotateAnim.duration = duration / 10
         rotateAnim.repeatMode = Animation.REVERSE
         rotateAnim.repeatCount = 10
