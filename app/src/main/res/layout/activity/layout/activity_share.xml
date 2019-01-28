@@ -1,6 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ic_logo"
+        android:layout_marginTop="@dimen/space_30"
+        android:layout_width="@dimen/space_90"
+        android:layout_height="@dimen/space_90" />
+
+    <TextView
+        android:layout_marginTop="@dimen/space_10"
+        android:text="RTA Smart"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:padding="@dimen/space_10"
+        android:text="Current version : 1.0.0"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/font_14"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:padding="@dimen/space_10"
+        android:text="Last updated : 26/01/2019"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/font_14"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <View
+        android:layout_marginTop="@dimen/space_30"
+        android:background="@color/color_F9F9F9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_10"/>
+
+
+    <TextView
+        android:id="@+id/tvShare"
+        android:padding="@dimen/space_10"
+        android:text="Share this APP"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/layoutLoading"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/color_F9F9F9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"/>
+
+    <TextView
+        android:id="@+id/tvRate"
+        android:padding="@dimen/space_10"
+        android:text="Rate this APP"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/layoutLoading"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/color_F9F9F9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"/>
+
+    <TextView
+        android:id="@+id/tvTarms"
+        android:padding="@dimen/space_10"
+        android:text="@string/settings_term"
+        android:textSize="@dimen/font_16"
+        android:textColor="@color/layoutLoading"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/color_F9F9F9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+    <TextView
+        android:padding="@dimen/space_10"
+        android:text="Copyright ◎ 2019 RTA"
+        android:textSize="@dimen/font_12"
+        android:textColor="@color/layoutLoading"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:padding="@dimen/space_10"
+        android:text="ALL Rights Reserved"
+        android:textSize="@dimen/font_12"
+        android:textColor="@color/layoutLoading"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/space_20"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

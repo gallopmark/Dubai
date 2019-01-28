@@ -181,9 +181,10 @@
         <activity
             android:name=".photopicker.ui.ImageCropActivity"
             android:launchMode="singleTop" />
-        <activity
-            android:name=".activity.ShareActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".activity.ShareActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".activity.PersonalInformationActivity"
+            android:launchMode="singleTop"/>
 
         <service android:name=".service.VersionUpdateService" />
         <!--firebase service-->

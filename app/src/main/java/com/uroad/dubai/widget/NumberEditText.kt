@@ -77,6 +77,10 @@ class NumberEditText : LinearLayout {
         return invisibleEt!!.text.toString().trim { it <= ' ' }.length == inputTv.size
     }
 
+    fun setText(code : String){
+        invisibleEt?.setText(code)
+    }
+
     /**
      * 处理从edittext到textview
      */

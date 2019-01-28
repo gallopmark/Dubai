@@ -99,16 +99,10 @@ class WebApi {
 
 
         const val USER_LOGIN = "login"
-        fun login(logintype: String, phone: String, password: String, appversion: String,
-                  deviceid: String, devicename: String, devicetype: String, devicesysversion: String) = getBaseParams().apply {
+        fun login(logintype: String, phone: String, password: String) = getBaseParams().apply {
             put("logintype", logintype)
             put("phone", phone)
             put("password", password)
-            put("appversion", appversion)
-            put("deviceid", deviceid)
-            put("devicename", devicename)
-            put("devicetype", devicetype)
-            put("devicesysversion", devicesysversion)
         }
 
         const val SEND_VERIFICATION_CODE = "sendVerificationCode"
@@ -162,6 +156,11 @@ class WebApi {
             else put("longitude", "")
             if (latitude > 0) put("latitude", "$latitude")
             else put("latitude", "")
+        }
+
+        const val VALIDATIONDEVICE = "validationDevice"
+        fun validationDevice(deviceid : String) = getBaseParams().apply {
+            put("deviceid",deviceid)
         }
     }
 }
