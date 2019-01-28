@@ -16,6 +16,7 @@ import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.common.BaseFragment
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.photopicker.utils.ImagePicker
@@ -57,7 +58,7 @@ class MineFragment : BaseFragment() {
         }
 
         tvShare.setOnClickListener {
-            showTipsDialog(getString(R.string.developing))
+            openActivity(ShareActivity::class.java)
         }
 
         tvFeedback.setOnClickListener {
@@ -71,6 +72,7 @@ class MineFragment : BaseFragment() {
 
         ivUserHead.setOnClickListener {
             if (check()) return@setOnClickListener
+            openActivity(PersonalInformationActivity::class.java)
             /*ImagePicker.with(this@MineFragment)
                     .isCompress(true)
                     .requestCode(123)PersonalInformationActivity
@@ -102,7 +104,7 @@ class MineFragment : BaseFragment() {
         isLogin = UserPreferenceHelper.isLogin(context)
         if (isLogin){
             ivUserHead.setImageResource(R.mipmap.ic_user_default)
-            upDataUserName(UserPreferenceHelper.getUserName(context)?:"Emma",isLogin)
+            upDataUserName(DubaiApplication.user?.nickname?:"" ?:"Emma",isLogin)
         }else{
             ivUserHead.setImageResource(R.mipmap.icon_user_head_gray)
             upDataUserName("Me",isLogin)

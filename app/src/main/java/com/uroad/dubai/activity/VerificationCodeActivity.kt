@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import com.uroad.dubai.BuildConfig
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.LoginPresenter
 import com.uroad.dubai.api.view.LoginView
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.widget.NumberEditText
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.UserMDL
@@ -42,16 +44,10 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
     override fun onInputFinish(text: String) {
         if (TextUtils.equals(text,verificationcode) && isCreateNewAccount){
-            presenter.login(WebApi.USER_LOGIN,
-                    WebApi.login("1", this.phone,verificationcode,
-                            PackageInfoUtils.getVersionName(this@VerificationCodeActivity),
-                            DeviceUtils.getAndroidID(this@VerificationCodeActivity),
-                            DeviceUtils.getManufacturer(),
-                            "Android",
-                            "${DeviceUtils.getSDKVersion()}"))
-        } else if(!TextUtils.equals(text,verificationcode) && isCreateNewAccount){
+            hasContent = TextUtils.equals(text,verificationcode)
+        }/* else if(!TextUtils.equals(text,verificationcode) && isCreateNewAccount){
             showShortToast("Verification code error")
-        } else{
+        }*/ else{
             hasContent = TextUtils.equals(text,verificationcode)
         }
 
@@ -73,12 +69,17 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
         edVerify.setOnInputFinish(this@VerificationCodeActivity)
         if (isCreateNewAccount) {
-            btnVerify.visibility = View.GONE
+            //btnVerify.visibility = View.GONE
         }
         presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone))
 
         btnVerify.setOnClickListener {
             if (hasContent && edVerify.condition()){
+                if (isCreateNewAccount){
+                    presenter.login(WebApi.USER_LOGIN,
+                            WebApi.login("1", this.phone,verificationcode))
+                    return@setOnClickListener
+                }
                 openActivity(CreatePasswordActivity::class.java,Bundle().apply {
                     putString("phone",phone)
                     putString("code",verificationcode)
@@ -106,7 +107,7 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
                     override fun onNext(t: Long) {
                         if (millis<0){
-                            presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone?:""))
+                            presenter.sendVerificationCode(WebApi.SEND_VERIFICATION_CODE,WebApi.sendVerificationCode(phone))
                             millis = 60
                         }
                         tvRemainingTime.text = "${millis}s"
@@ -122,6 +123,7 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
     override fun loginSuccess(user: UserMDL?) {
         user?.let {
+            DubaiApplication.user = it
             UserPreferenceHelper.save(this@VerificationCodeActivity,it)
         }
         UserPreferenceHelper.saveAccount(this@VerificationCodeActivity, this.phone)
@@ -132,6 +134,7 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
     override fun getVerificationCode(code: String) {
         this@VerificationCodeActivity.verificationcode =  code
+        edVerify.setText(code)
     }
 
 

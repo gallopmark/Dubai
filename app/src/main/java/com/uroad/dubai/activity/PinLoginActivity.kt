@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.mapbox.core.utils.TextUtils
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.LoginPresenter
 import com.uroad.dubai.api.view.LoginView
@@ -30,7 +31,10 @@ class PinLoginActivity : BaseActivity(){
     private fun initView() {
         btnLogin.setOnClickListener {
             phone = edPhone.text.toString().trim()
-            if (phone.isEmpty()) return@setOnClickListener
+            if (TextUtils.isEmpty(phone) || phone.length>11 || phone.length <6) {
+                showLongToast("Phone number format is incorrect")
+                return@setOnClickListener
+            }
 
             openActivity(VerificationCodeActivity::class.java, Bundle().apply {
                 putBoolean("isCreate", true)

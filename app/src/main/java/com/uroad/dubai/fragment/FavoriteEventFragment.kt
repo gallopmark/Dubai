@@ -19,13 +19,28 @@ import java.util.*
 
 class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(), EventsPresenter.EventsView {
 
+    companion object {
+        fun newInstance(longitude: Double, latitude: Double): FavoriteEventFragment {
+            return FavoriteEventFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble("longitude", longitude)
+                    putDouble("latitude", latitude)
+                }
+            }
+        }
+    }
+
+
     private var type: String? = null
     private var index = 1
     private var size = 10
+    private var longitude : Double = 0.0
+    private var latitude : Double = 0.0
     private lateinit var data: MutableList<EventsMDL>
     private lateinit var adapter: FavoriteEventFmListAdapter
 
     override fun initViewData(view: View, savedInstanceState: Bundle?) {
+        initBundle()
         data = ArrayList()
         adapter = FavoriteEventFmListAdapter(context, data)
         recyclerView.adapter = adapter
@@ -38,6 +53,13 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
                 })
             }
         })
+    }
+
+    private fun initBundle() {
+        arguments?.let {
+            longitude = it.getDouble("longitude", 0.0)
+            latitude = it.getDouble("latitude", 0.0)
+        }
     }
 
     override fun onPullToRefresh() {
@@ -66,7 +88,7 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
     }
 
     private fun getMsgList() {
-        presenter?.getEventList(index,size,"",0.0,0.0)
+        presenter?.getEventList(index,size,"",longitude,latitude)
     }
 
     override fun createPresenter(): EventsPresenter? = EventsPresenter(this)

@@ -86,14 +86,14 @@ class CreatePasswordActivity : BaseActivity() ,LoginView{
 
     override fun loginSuccess(user: UserMDL?) { }
     override fun loginError(e: String) {
-        showShortToast(e)
+        showLongToast(e)
     }
 
     override fun getVerificationCode(verificationCode: String) {}
     override fun onShowLoading() {}
     override fun onHideLoading() {}
     override fun onShowError(msg: String?) {
-        showShortToast(msg)
+        showLongToast(msg)
     }
 
 

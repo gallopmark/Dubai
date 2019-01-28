@@ -30,10 +30,11 @@ class MessagesListAdapter(context: Context, data: MutableList<MessagesMDL>)
         1009003 notice
         1009004 system*/
         when (t.pushtype) {
-            "100" -> imageView.setImageResource(R.mipmap.icon_msg_accident)
-            "111" -> imageView.setImageResource(R.mipmap.icon_msg_news)
-            "211" -> imageView.setImageResource(R.mipmap.icon_msg_setting)
-            else -> imageView.setImageResource(R.mipmap.ic_new_message)
+            "1009001" -> imageView.setImageResource(R.mipmap.icon_msg_accident)
+            "1009002" -> imageView.setImageResource(R.mipmap.icon_msg_news)
+            "1009003" -> imageView.setImageResource(R.mipmap.icon_msg_setting)
+            else -> imageView.setImageResource(R.mipmap.icon_msg_setting)
+            //else -> imageView.setImageResource(R.mipmap.ic_new_message)
         }
 
     }

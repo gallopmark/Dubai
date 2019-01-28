@@ -10,6 +10,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.LoginPresenter
 import com.uroad.dubai.api.view.LoginView
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.UserMDL
 import com.uroad.dubai.utils.PackageInfoUtils
@@ -86,19 +87,14 @@ class LoginActivity : BaseActivity() , LoginView {
 
             presenter.login(WebApi.USER_LOGIN,
                     WebApi.login("2", this.account,
-                            MD5Utils.encoderByMd5(password),
-                            PackageInfoUtils.getVersionName(this@LoginActivity),
-                            DeviceUtils.getAndroidID(this@LoginActivity),
-                            DeviceUtils.getManufacturer(),
-                            "Android",
-                            "${DeviceUtils.getSDKVersion()}"))
+                            MD5Utils.encoderByMd5(password)))
 
         }
     }
 
     override fun loginSuccess(user: UserMDL?) {
         user?.let {
-
+            DubaiApplication.user = it
         }
         UserPreferenceHelper.saveAccount(this@LoginActivity, account)
         UserPreferenceHelper.saveUserPassword(this@LoginActivity, password)

@@ -26,7 +26,8 @@ class PhoneActivity : BaseActivity() {
         }
         btnNext.setOnClickListener {
             phone = edPhone.text.toString().trim()
-            if (TextUtils.isEmpty(phone)) {
+            if (TextUtils.isEmpty(phone) || phone.length>11 || phone.length <6) {
+                showLongToast("Phone number format is incorrect")
                 return@setOnClickListener
             }
 
@@ -39,7 +40,7 @@ class PhoneActivity : BaseActivity() {
             else
                 openActivity(VerifyActivity::class.java, Bundle().apply {
                     putString("phone", phone)
-                    //putBoolean("forgot",forgot)
+                    putBoolean("forgot",forgot)
                 })
             finish()
         }

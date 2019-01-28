@@ -37,15 +37,17 @@ class UserPreferenceHelper {
             return context.getSharedPreferences(PREFS_USER, Context.MODE_PRIVATE)
         }
 
-        fun save(context: Context, userMDL: UserMDL) {
+        fun save(context: Context, userMDL: UserMDL?) {
             from(context).edit().apply {
-                putString(USER_ID, userMDL.useruuid)
-                putString(USER_UUID, userMDL.useruuid)
-                putString(REAL_NAME, userMDL.name)
-                putString(USER_NICKNAME, userMDL.nickname)
-                putString(SEX, userMDL.sex)
-                putString(PHONE,userMDL.mobile)
-                putString(STATUS,userMDL.userstatus)
+                userMDL?.let {
+                    putString(USER_ID, it.useruuid)
+                    putString(USER_UUID, it.useruuid)
+                    putString(REAL_NAME, it.name)
+                    putString(USER_NICKNAME, it.nickname)
+                    putString(SEX, it.sex)
+                    putString(PHONE,it.mobile)
+                    putString(STATUS,it.userstatus)
+                }
             }.apply()
         }
 
