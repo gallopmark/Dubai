@@ -157,6 +157,9 @@
             android:name=".activity.FeedbackActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".activity.RoadLineActivity"
+            android:launchMode="singleTop" />
 
         <!--photopicker-->
         <provider
@@ -178,10 +181,11 @@
         <activity
             android:name=".photopicker.ui.ImageCropActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activity.ShareActivity"
-            android:launchMode="singleTop"/>
+        <activity
+            android:name=".activity.ShareActivity"
+            android:launchMode="singleTop" />
 
-        <service android:name=".service.VersionUpdateService"/>
+        <service android:name=".service.VersionUpdateService" />
         <!--firebase service-->
         <service android:name=".service.MessagePushService">
             <intent-filter>

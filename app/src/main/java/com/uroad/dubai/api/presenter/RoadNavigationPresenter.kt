@@ -3,16 +3,19 @@ package com.uroad.dubai.api.presenter
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
 import com.mapbox.mapboxsdk.style.expressions.Expression
 import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.RouteNavigationActivity
 import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.StringObserver
@@ -62,7 +65,7 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
 
     fun getScenic() {
 //        disposable?.dispose()
-        request(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 10), object : StringObserver(navigationView) {
+        request(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 10, 0.0, 0.0), object : StringObserver(navigationView) {
             override fun onHttpResultOk(data: String?) {
                 navigationView.onGetScenic(GsonUtils.fromDataToList(data, ScenicMDL::class.java))
             }
@@ -104,96 +107,15 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
                 val list = GsonUtils.fromDataToList(data, EventsMDL::class.java)
                 navigationView.onGetMapPoi(CODE, ArrayList<MapPointItem>().apply { addAll(list) })
             }
-            MapDataType.CCTV.CODE ->{
+            MapDataType.CCTV.CODE -> {
                 val list = GsonUtils.fromDataToList(data, CCTVSnapMDL::class.java)
                 navigationView.onGetMapPoi(CODE, ArrayList<MapPointItem>().apply { addAll(list) })
             }
-            MapDataType.DMS.CODE->{
+            MapDataType.DMS.CODE -> {
                 val list = GsonUtils.fromDataToList(data, DMSysMDL::class.java)
                 navigationView.onGetMapPoi(CODE, ArrayList<MapPointItem>().apply { addAll(list) })
             }
         }
-    }
-
-    private fun getAccident(): MutableList<MapPointItem> = ArrayList<MapPointItem>().apply {
-        add(EventsMDL().apply {
-            eventtypename = "Accident"
-            updatetime = "a min ago"
-            roadtitle = "Dubai to ABU dhabi"
-            statusname = "Jammed"
-            reportout = "On the morning of 6 February, 22 people were injured in  a major road accident along sheikh Mohammed bin rashid al-maktoum road (E311) from dubai to ABU dhabi."
-            latitude = latitudeArray[0]
-            longitude = longitudeArray[0]
-            subtype = MapDataType.ACCIDENT.CODE
-            occtime = "14:23"
-            handletime = "14:32"
-            realovertime = "16:42"
-        })
-        add(EventsMDL().apply {
-            eventtypename = "Accident"
-            updatetime = "a min ago"
-            roadtitle = "Dubai to ABU dhabi"
-            statusname = "Jammed"
-            reportout = "On the morning of 6 February, 22 people were injured in  a major road accident along sheikh Mohammed bin rashid al-maktoum road (E311) from dubai to ABU dhabi."
-            latitude = latitudeArray[1]
-            longitude = longitudeArray[1]
-            subtype = MapDataType.ACCIDENT.CODE
-            occtime = "14:23"
-            handletime = "14:32"
-            realovertime = "16:42"
-        })
-        add(EventsMDL().apply {
-            eventtypename = "Accident"
-            updatetime = "a min ago"
-            roadtitle = "Dubai to ABU dhabi"
-            statusname = "Jammed"
-            reportout = "On the morning of 6 February, 22 people were injured in  a major road accident along sheikh Mohammed bin rashid al-maktoum road (E311) from dubai to ABU dhabi."
-            latitude = latitudeArray[2]
-            longitude = longitudeArray[2]
-            subtype = MapDataType.ACCIDENT.CODE
-            occtime = "14:23"
-            handletime = "14:32"
-            realovertime = "16:42"
-        })
-    }
-
-    private fun getConstruction(): MutableList<MapPointItem> = ArrayList<MapPointItem>().apply {
-        add(EventsMDL().apply {
-            eventtypename = "Roadwork"
-            updatetime = "3 min ago"
-            roadtitle = "Dubai to ABU dhabi"
-            statusname = "Jammed"
-            reportout = "Construction is under way following a series of car collisions and damage to guardrails at the junction of Road E611 in the direction of the Road Maleha in the direction of Emirates Rd on S116 Road"
-            latitude = latitudeArray[3]
-            longitude = longitudeArray[3]
-            subtype = MapDataType.CONSTRUCTION.CODE
-            occtime = "14:23"
-            realovertime = "16:42"
-        })
-        add(EventsMDL().apply {
-            eventtypename = "Accident"
-            updatetime = "a min ago"
-            roadtitle = "Dubai to ABU dhabi"
-            statusname = "Jammed"
-            reportout = "On the morning of 6 February, 22 people were injured in  a major road accident along sheikh Mohammed bin rashid al-maktoum road (E311) from dubai to ABU dhabi."
-            latitude = latitudeArray[4]
-            longitude = longitudeArray[4]
-            subtype = MapDataType.CONSTRUCTION.CODE
-            occtime = "14:23"
-            realovertime = "16:42"
-        })
-        add(EventsMDL().apply {
-            eventtypename = "Accident"
-            updatetime = "a min ago"
-            roadtitle = "Dubai to ABU dhabi"
-            statusname = "Jammed"
-            reportout = "On the morning of 6 February, 22 people were injured in  a major road accident along sheikh Mohammed bin rashid al-maktoum road (E311) from dubai to ABU dhabi."
-            latitude = latitudeArray[5]
-            longitude = longitudeArray[5]
-            subtype = MapDataType.CONSTRUCTION.CODE
-            occtime = "14:23"
-            realovertime = "16:42"
-        })
     }
 
     private fun getParking(): MutableList<MapPointItem> = ArrayList<MapPointItem>().apply {
@@ -415,6 +337,22 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
                     dialog = BusStopDetailDialog(activity, item).setOnNavigateListener(object : BusStopDetailDialog.OnNavigateListener {
                         override fun onNavigate(mdl: BusStopMDL, dialog: BusStopDetailDialog) {
 
+                        }
+                    })
+                }
+                is NewsMDL -> {
+                    dialog = NewsDetailDialog(activity, item).setOnDialogViewClickListener(object : NewsDetailDialog.OnDialogViewClickListener {
+                        override fun onDetailClick(dialog: NewsDetailDialog) {
+                            dialog.dismiss()
+                            activity.finish()
+                        }
+
+                        override fun onNavigation(mdl: NewsMDL, dialog: NewsDetailDialog) {
+                            val point = Point.fromLngLat(mdl.getLatLng().longitude, mdl.getLatLng().latitude)
+                            activity.openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+                                putString("point", point.toJson())
+                                putString("endPointName", mdl.title)
+                            })
                         }
                     })
                 }

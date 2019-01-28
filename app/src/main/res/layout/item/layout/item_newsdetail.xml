@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/space_10">
+
+    <LinearLayout
+        android:id="@+id/llContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/mIconImageView"
+            android:layout_width="@dimen/space_40"
+            android:layout_height="@dimen/space_40" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mTitleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/appTextColor"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/mAddressTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_2"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:textColor="@color/color_66"
+                android:textSize="@dimen/font_14" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/mCloseImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/close"
+            android:padding="@dimen/space_3"
+            android:src="@mipmap/ic_close_grey" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/vLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_1"
+        android:layout_below="@+id/llContent"
+        android:layout_marginTop="@dimen/space_10"
+        android:background="@color/itemDivider" />
+
+    <LinearLayout
+        android:id="@+id/llTextViewContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vLine"
+        android:layout_marginStart="@dimen/space_50"
+        android:layout_marginTop="@dimen/space_10"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_66"
+                android:textSize="@dimen/font_14" />
+
+            <TextView
+                android:id="@+id/mPhoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_5"
+                android:textColor="@color/color_66"
+                android:textSize="@dimen/font_14" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mDetailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/space_5"
+            android:text="@string/detail"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/font_14" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/mNavigationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llTextViewContent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/space_10"
+        android:background="@mipmap/ic_navigation_shortbuttonbg"
+        android:gravity="center"
+        android:text="@string/navigate"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_16" />
+</RelativeLayout>

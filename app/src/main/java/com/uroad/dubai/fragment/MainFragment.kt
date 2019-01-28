@@ -1,12 +1,13 @@
 package com.uroad.dubai.fragment
 
+import android.location.Location
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.NearMeTabAdapter
-import com.uroad.dubai.common.BaseFragment
+import com.uroad.dubai.common.BaseMapBoxLocationFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.library.utils.DisplayUtils
@@ -16,16 +17,21 @@ import kotlinx.android.synthetic.main.home_content_scroll.*
 import kotlinx.android.synthetic.main.home_top_collapse.*
 import kotlinx.android.synthetic.main.home_top_expand.*
 import kotlinx.android.synthetic.main.home_top_flexhead.*
+import java.lang.Exception
 
 /**
  * @author MFB
  * @create 2018/12/12
  * @describe 首页
  */
-class MainFragment : BaseFragment() {
+class MainFragment : BaseMapBoxLocationFragment() {
 
     private var statusHeight = 0
     private var isNeedRefresh = false
+    private var myLocation: Location? = null
+    private var currentTab = 0
+    private var isFirstCommit = true
+    private var updateCount = 0
 
     companion object {
         private const val TAG_BANNER = "banner"
@@ -64,6 +70,7 @@ class MainFragment : BaseFragment() {
                 tlCollapse.visibility = View.VISIBLE
             }
         })
+        refreshLayout.setOnRefreshListener { onRefresh() }
     }
 
     private fun initMenu() {
@@ -88,7 +95,13 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initBanner() {
-        childFragmentManager.beginTransaction().replace(R.id.flBanner, MainBannerFragment(), TAG_BANNER).commitAllowingStateLoss()
+        childFragmentManager.beginTransaction().replace(R.id.flBanner, MainBannerFragment().apply {
+            setRequestCallback(object : FragmentRequestCallback {
+                override fun onRequestFinish() {
+                    onFinishRefresh()
+                }
+            })
+        }, TAG_BANNER).commitAllowingStateLoss()
     }
 
     private fun initNotice() {
@@ -97,6 +110,11 @@ class MainFragment : BaseFragment() {
                 override fun callback(isEmpty: Boolean) {
                     if (isEmpty) this@MainFragment.flNotice.visibility = View.GONE
                     else this@MainFragment.flNotice.visibility = View.VISIBLE
+                    onFinishRefresh()
+                }
+
+                override fun onFailure() {
+                    onFinishRefresh()
                 }
             })
         }, TAG_NOTICE).commitAllowingStateLoss()
@@ -108,6 +126,11 @@ class MainFragment : BaseFragment() {
                 override fun callback(isEmpty: Boolean) {
                     if (isEmpty) this@MainFragment.flFavorites.visibility = View.GONE
                     else this@MainFragment.flFavorites.visibility = View.VISIBLE
+                    onFinishRefresh()
+                }
+
+                override fun onFailure() {
+                    onFinishRefresh()
                 }
             })
         }, TAG_FAVORITES).commitAllowingStateLoss()
@@ -134,22 +157,40 @@ class MainFragment : BaseFragment() {
                 }
             })
         }
+        openLocation()
+    }
+
+    override fun afterLocation(location: Location) {
+        myLocation = location
+        initFragments()
+        closeLocation()
+    }
+
+    override fun onLocationFailure(exception: Exception) {
         initFragments()
     }
 
     private fun initFragments() {
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.flNearMeRoads, NearMeRoadsFragment(), TAG_ROADS)
-        transaction.replace(R.id.flNearMeEvents, NearMeEventsFragment(), TAG_EVENTS)
+        val longitude = myLocation?.longitude ?: 0.0
+        val latitude = myLocation?.latitude ?: 0.0
+        if (isFirstCommit) {
+            val transaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.flNearMeRoads, NearMeRoadsFragment.newInstance(longitude, latitude), TAG_ROADS)
+            transaction.replace(R.id.flNearMeEvents, NearMeEventsFragment.newInstance(longitude, latitude), TAG_EVENTS)
 //        transaction.replace(R.id.flNearMeNews, NearMeNewsFragment(), TAG_NEWS)
-        transaction.replace(R.id.flNearMeHotel, NearMeHotelFragment(), TAG_HOTEL)
-        transaction.replace(R.id.flNearMeRestaurants, NearMeRestaurantsFragment(), TAG_RESTAURANTS)
-        transaction.replace(R.id.flNearMeAttractions, NearMeAttractionsFragment(), TAG_ATTRACTIONS)
-        transaction.commitAllowingStateLoss()
-        setCurrentTab(0)
+            transaction.replace(R.id.flNearMeHotel, NearMeHotelFragment.newInstance(longitude, latitude), TAG_HOTEL)
+            transaction.replace(R.id.flNearMeRestaurants, NearMeRestaurantsFragment.newInstance(longitude, latitude), TAG_RESTAURANTS)
+            transaction.replace(R.id.flNearMeAttractions, NearMeAttractionsFragment.newInstance(longitude, latitude), TAG_ATTRACTIONS)
+            transaction.commitAllowingStateLoss()
+            setCurrentTab(0)
+            isFirstCommit = false
+        } else {
+            refreshNearMe(longitude, latitude)
+        }
     }
 
     private fun setCurrentTab(tab: Int) {
+        currentTab = tab
         hideFragments()
         when (tab) {
             0 -> flNearMeRoads.visibility = View.VISIBLE
@@ -180,10 +221,10 @@ class MainFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        onRefresh()
+        onRefreshFavorites()
     }
 
-    private fun onRefresh() {
+    private fun onRefreshFavorites() {
         if (!isNeedRefresh) return
         else {
             refreshFavorites()
@@ -191,9 +232,58 @@ class MainFragment : BaseFragment() {
         }
     }
 
+    private fun onRefresh() {
+        updateCount = 0
+        refreshBanner()
+        refreshNotice()
+        refreshFavorites()
+        openLocation()
+        refreshLayout.postDelayed({ refreshLayout.finishRefresh() }, 20 * 1000L)
+    }
+
+    private fun refreshBanner() {
+        val fragment = childFragmentManager.findFragmentByTag(TAG_BANNER)
+        if (fragment != null && fragment is MainBannerFragment) fragment.initData()
+    }
+
+    private fun refreshNotice() {
+        val fragment = childFragmentManager.findFragmentByTag(TAG_NOTICE)
+        if (fragment != null && fragment is MainNoticeFragment) fragment.initData()
+    }
+
     private fun refreshFavorites() {
         val fragment = childFragmentManager.findFragmentByTag(TAG_FAVORITES)
         if (fragment != null && fragment is MainFavoritesFragment) fragment.initData()
+    }
+
+    private fun refreshNearMe(longitude: Double, latitude: Double) {
+        when (currentTab) {
+            0 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_ROADS)
+                if (fragment != null && fragment is NearMeRoadsFragment) fragment.update(longitude, latitude)
+            }
+            1 -> {
+//                val fragment = childFragmentManager.findFragmentByTag(TAG_EVENTS)
+//                if (fragment != null && fragment is NearMeEventsFragment) fragment.initData()
+            }
+            2 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_HOTEL)
+                if (fragment != null && fragment is NearMeHotelFragment) fragment.update(longitude, latitude)
+            }
+            3 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)
+                if (fragment != null && fragment is NearMeRestaurantsFragment) fragment.update(longitude, latitude)
+            }
+            4 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_ATTRACTIONS)
+                if (fragment != null && fragment is NearMeAttractionsFragment) fragment.update(longitude, latitude)
+            }
+        }
+    }
+
+    private fun onFinishRefresh() {
+        updateCount++
+        if (updateCount >= 3) refreshLayout.finishRefresh()
     }
 
     override fun onPause() {

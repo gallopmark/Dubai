@@ -22,39 +22,25 @@ starttime	开始时间
 endtime	结束时间
  */
 class EventsMDL : MapPointItem {
-    var iconInt: Int = 0
-    var subscribestatus: Int? = 0
-    var subtype: String? = null
-    var eventtypename: String? = null
-    var roadtitle: String? = null
-    var reportout: String? = null
-    var occtime: String? = null
-    var handletime: String? = null
-    var realovertime: String? = null
-    var planovertime: String? = null
-    var statusname: String? = null
-    var statuscolor: String? = null
-    var updatetime: String? = null
-    var isuseful: Int? = 0
-
-    var eventid: String? = null
-    var eventinfo: String? = null
-    var eventtype: String? = null
-    var locdetail: String? = null
-    var direction: String? = null
-    var longitude: Double? = 0.0
-    var latitude: Double? = 0.0
-    var congtstatus: String? = null //拥堵状态
-    var congtstarttime: String? = null //拥堵开始时间
-    var congtendtime: String? = null //拥堵结束时间
-    var handldtime: String? = null //处理时间
-    var roadname: String? = null //路名
-    var congestiondistance: String? = null //拥堵距离	单位 km
-    var starttime: String? = null //开始时间
-    var endtime: String? = null //结束时间
+    var icon: String? = null
+    var eventid: String? = null    //事件ID
+    var eventinfo: String? = null   // 事件描述
+    var eventtype: String? = null   //事件类型
+    var locdetail: String? = null   //事件发生地
+    var direction: String? = null   // 方向
+    var longitude: Double? = 0.0    //经度
+    var latitude: Double? = 0.0   //维度
+    var congtstatus: String? = null   // 拥堵状态
+    var congtstarttime: String? = null  //  拥堵开始时间
+    var congtendtime: String? = null   //拥堵结束时间
+    var handldtime: String? = null   //处理时间
+    var roadname: String? = null  //路名
+    var congestiondistance: String? = null  // 拥堵距离    单位 km
+    var starttime: String? = null   // 开始时间
+    var endtime: String? = null   //结束时间
 
     fun getIcon(): Int {
-        subtype?.let {
+        eventtype?.let {
             if (it == MapDataType.ACCIDENT.CODE) return R.mipmap.ic_accident_round
             if (it == MapDataType.CONSTRUCTION.CODE) return R.mipmap.ic_construction_round
         }
@@ -62,7 +48,7 @@ class EventsMDL : MapPointItem {
     }
 
     override fun getSmallMarkerIcon(): Int {
-        subtype?.let {
+        eventtype?.let {
             if (it == MapDataType.ACCIDENT.CODE) return R.mipmap.ic_marker_accident
             if (it == MapDataType.CONSTRUCTION.CODE) return R.mipmap.ic_marker_construction
         }
@@ -70,7 +56,7 @@ class EventsMDL : MapPointItem {
     }
 
     override fun getBigMarkerIcon(): Int {
-        subtype?.let {
+        eventtype?.let {
             if (it == MapDataType.ACCIDENT.CODE) return R.mipmap.ic_marker_accident_big
             if (it == MapDataType.CONSTRUCTION.CODE) return R.mipmap.ic_marker_construction_big
         }

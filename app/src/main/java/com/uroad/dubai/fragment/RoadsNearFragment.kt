@@ -12,7 +12,7 @@ import com.uroad.dubai.model.RoadsMDL
 import com.uroad.dubai.webService.WebApi
 import java.util.*
 
-class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>() , RoadsNearFMView {
+class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>(), RoadsNearFMView {
     override fun createPresenter(): RoadsNearFMPresenter = RoadsNearFMPresenter(this)
 
     private var index = 1
@@ -22,11 +22,11 @@ class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>
 
     override fun initViewData(view: View, savedInstanceState: Bundle?) {
         data = ArrayList()
-        adapter = RoadsNearFmListAdapter(context,data)
+        adapter = RoadsNearFmListAdapter(context, data)
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
 
-        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
 
             }
@@ -34,9 +34,8 @@ class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>
     }
 
 
-
-    private fun getMsgList(){
-        presenter?.getNewsList(WebApi.GET_ROADS_LIST,WebApi.getRoadListParams(index,size,""))
+    private fun getMsgList() {
+        presenter?.getNewsList(WebApi.GET_ROADS_LIST, WebApi.getRoadListParams(index, size, "", 0.0, 0.0))
     }
 
     override fun onPullToRefresh() {
@@ -73,24 +72,24 @@ class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>
         showShortToast(errorMsg)
     }
 
-    private fun getMDL(): ArrayList<Int>{
+    private fun getMDL(): ArrayList<Int> {
         return ArrayList<Int>().apply {
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#ED1C24"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#F7F30A"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#ED1C24"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-                add(Color.parseColor("#06A72B"))
-            }
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#ED1C24"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#F7F30A"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#ED1C24"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+            add(Color.parseColor("#06A72B"))
+        }
 
     }
 }

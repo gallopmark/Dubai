@@ -32,12 +32,12 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
 
-        adapter.setOnItemClickListener(object :BaseRecyclerAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                 var mdl = data[position]
                 openActivity(NewsDetailsActivity::class.java, Bundle().apply {
-                    putString("newsId",mdl.newsid)
-                    putString("title",getString(R.string.home_menu_news))
+                    putString("newsId", mdl.newsid)
+                    putString("title", getString(R.string.home_menu_news))
                 })
             }
         })
@@ -46,7 +46,7 @@ class NewsListActivity : BaseRefreshPresenterActivity<NewsPresenter>(), NewsView
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)
 
     override fun initData() {
-        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", index, size))
+        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", index, size, 0.0, 0.0))
     }
 
     override fun onPullToRefresh() {

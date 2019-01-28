@@ -9,11 +9,14 @@ class WebApi {
         const val APP_VERSION = "getVersion"
         const val GET_NEWS_LIST = "getNewsList"
 
-        fun getNewsListParams(newstype: String?, keyword: String?, index: Int, size: Int) = getBaseParams().apply {
+        fun getNewsListParams(newstype: String?, keyword: String?, index: Int, size: Int,
+                              longitude: Double, latitude: Double) = getBaseParams().apply {
             put("newstype", newstype)
             put("keyword", keyword)
             put("index", index.toString())
             put("size", size.toString())
+            put("longitude", longitude.toString())
+            put("latitude", latitude.toString())
         }
 
         /*新闻详情*/
@@ -23,10 +26,12 @@ class WebApi {
 
         const val GET_ROADS_LIST = "getRoadList"
 
-        fun getRoadListParams(index: Int, size: Int, keyword: String) = getBaseParams().apply {
+        fun getRoadListParams(index: Int, size: Int, keyword: String, longitude: Double, latitude: Double) = getBaseParams().apply {
             put("keyword", keyword)
             put("index", index.toString())
             put("size", size.toString())
+            put("longitude", longitude.toString())
+            put("latitude", latitude.toString())
         }
 
         const val GET_WEATHER_LIST = "getWeather"
@@ -122,26 +127,40 @@ class WebApi {
         }
 
         const val FORGOT_PASSWORD = "forgotPassword"
-        fun forgotPassword(phone : String,verificationcode : String,password : String) = getBaseParams().apply {
-            put("phone",phone)
-            put("verificationcode",verificationcode)
-            put("password",password)
+        fun forgotPassword(phone: String, verificationcode: String, password: String) = getBaseParams().apply {
+            put("phone", phone)
+            put("verificationcode", verificationcode)
+            put("password", password)
         }
 
         const val SAVEFEEDBACK = "saveFeedBack"
-        fun saveFeedBack(useruuid : String,nickname : String,rating : String,feedbackcontent : String,phone : String) = getBaseParams().apply {
-            put("useruuid",useruuid)
-            put("nickname",nickname)
-            put("rating",rating)
-            put("feedbackcontent",feedbackcontent)
-            put("phone",phone)
+        fun saveFeedBack(useruuid: String, nickname: String, rating: String, feedbackcontent: String, phone: String) = getBaseParams().apply {
+            put("useruuid", useruuid)
+            put("nickname", nickname)
+            put("rating", rating)
+            put("feedbackcontent", feedbackcontent)
+            put("phone", phone)
         }
 
         const val MESSAGECENTER = "messageCenter"
-        fun messageCenter(useruuid : String,index : Int,size : Int) = getBaseParams().apply {
-            put("useruuid",useruuid)
-            put("index","$index")
-            put("size","$size")
+        fun messageCenter(useruuid: String, index: Int, size: Int) = getBaseParams().apply {
+            put("useruuid", useruuid)
+            put("index", "$index")
+            put("size", "$size")
+        }
+
+        const val EVENT_LIST = "getEventList"
+
+        fun eventListParams(index: Int, size: Int, roadid: String?, longitude: Double, latitude: Double) = getBaseParams().apply {
+            if (index == 0) put("index", "")
+            else put("index", "$index")
+            if (size == 0) put("size", "")
+            else put("size", "$size")
+            put("roadid", roadid)
+            if (longitude > 0) put("longitude", "$longitude")
+            else put("longitude", "")
+            if (latitude > 0) put("latitude", "$latitude")
+            else put("latitude", "")
         }
     }
 }

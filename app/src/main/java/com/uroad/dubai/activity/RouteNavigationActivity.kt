@@ -131,11 +131,11 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             }
             isFromHome = extras.getBoolean("fromHome", false)
             if (isFromHome) {
-                val routeId = extras.getString("routeId")
+                val routeId = extras.getString("routeId", "")
                 if (!TextUtils.isEmpty(routeId)) {
                     initRoute(routeId)
                 }
-                val profile = extras.getString("profile")
+                val profile = extras.getString("profile", "")
                 if (!TextUtils.isEmpty(profile)) {
                     initProfile(profile)
                 }

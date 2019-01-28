@@ -33,14 +33,14 @@ class EventsDetailDialog : BaseMapPointDialog<EventsMDL> {
 
         override fun onBindHoder(holder: RecyclerHolder, t: EventsMDL, position: Int) {
             holder.setImageResource(R.id.ivIcon, t.getIcon())
-            holder.setText(R.id.tvTitle, t.eventtypename)
-            holder.setText(R.id.tvTime, t.updatetime)
-            holder.setText(R.id.tvContent, t.roadtitle)
-            holder.setText(R.id.tvStatus, t.statusname)
-            holder.setText(R.id.tvDetail, t.reportout)
-            holder.setText(R.id.tvStartTime, t.occtime)
-            holder.setText(R.id.tvHandleTime, t.handletime)
-            holder.setText(R.id.tvEndTime, t.realovertime)
+            holder.setText(R.id.tvTitle, t.eventtype)
+            holder.setText(R.id.tvTime, "")
+            holder.setText(R.id.tvContent, t.roadname)
+            holder.setText(R.id.tvStatus, t.congtstatus)
+            holder.setText(R.id.tvDetail, t.eventinfo)
+            holder.setText(R.id.tvStartTime, t.starttime)
+            holder.setText(R.id.tvHandleTime, t.handldtime)
+            holder.setText(R.id.tvEndTime, t.endtime)
             holder.bindChildClick(R.id.ivClose)
         }
     }

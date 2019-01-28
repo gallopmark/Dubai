@@ -11,8 +11,8 @@ import com.uroad.dubai.model.EventsMDL
 import com.uroad.dubai.model.RouteMDL
 import com.uroad.library.utils.DisplayUtils
 
-class FavoriteEventFmListAdapter(private val context: Context, data: MutableList<EventsMDL>)
-      : BaseArrayRecyclerAdapter<EventsMDL>(context,data) {
+class FavoriteEventFmListAdapter(context: Context, data: MutableList<EventsMDL>)
+    : BaseArrayRecyclerAdapter<EventsMDL>(context, data) {
     private val imageWith = DisplayUtils.getWindowWidth(context) / 3
     private val imageHeight = imageWith * 3 / 4
     private val params = RelativeLayout.LayoutParams(imageWith, imageHeight)
@@ -21,10 +21,10 @@ class FavoriteEventFmListAdapter(private val context: Context, data: MutableList
 
     override fun onBindHoder(holder: RecyclerHolder, t: EventsMDL, position: Int) {
         //holder.setLayoutParams(R.id.ivFavEventType, params)
-        holder.setImageResource(R.id.ivFavEventType, t.iconInt)
-        holder.setText(R.id.tvFavEventName,t.roadtitle)
-        holder.setText(R.id.tvFavEventTime,t.updatetime)
-        holder.setText(R.id.tvFavEventContent,t.reportout)
+        holder.displayImage(R.id.ivFavEventType, t.icon,R.color.color_f7)
+        holder.setText(R.id.tvFavEventName, t.roadname)
+        holder.setText(R.id.tvFavEventTime, "")
+        holder.setText(R.id.tvFavEventContent, t.eventinfo)
         //holder.displayImage(R.id.ivFavEventType, t.iconInt, R.color.color_f7, RoundedCorners(dp4))
     }
 

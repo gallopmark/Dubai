@@ -44,6 +44,7 @@ import com.uroad.dubai.api.view.UserAddressView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.enumeration.AddressType
 import com.uroad.dubai.enumeration.MapDataType
+import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
 import com.uroad.library.utils.InputMethodUtils
@@ -285,6 +286,20 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         }
     }
 
+    private fun moveToUserLocation(location: Location) {
+        userMarker?.let { mapBoxMap?.removeMarker(it) }
+        val options = MarkerOptions()
+                .position(LatLng(location.latitude, location.longitude))
+                .icon(IconFactory.getInstance(this).fromResource(R.mipmap.ic_user_location))
+        userMarker = mapBoxMap?.addMarker(options)
+        var zoom = 17.toDouble()
+        mapBoxMap?.cameraPosition?.let { zoom = it.zoom }
+        val position = CameraPosition.Builder()
+                .target(LatLng(location.latitude, location.longitude))
+                .zoom(zoom).build()
+        mapBoxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+    }
+
     private fun changeTrafficLayer(isChecked: Boolean) {
         if (isChecked) {
             when (mapType) {
@@ -432,53 +447,6 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         mapBoxMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(nowLocation, scaleValue))
     }
 
-    /*map load complete*/
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
-        isMapAsync = true
-        mapBoxMap.setOnMarkerClickListener { marker ->
-            markerObjMap[marker.id]?.let { `object` -> presenter.onMarkerClick(marker, `object`) }
-            return@setOnMarkerClickListener true
-        }
-        openLocation()
-    }
-
-    override fun onDismissLocationPermission() {
-        Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun onExplanationLocationPermission(permissionsToExplain: MutableList<String>?) {
-        Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun afterLocation(location: Location) {
-        mUserLocation = location
-        longitude = location.longitude
-        latitude = location.latitude
-        getMapPoints()
-    }
-
-    private fun moveToUserLocation(location: Location) {
-        userMarker?.let { mapBoxMap?.removeMarker(it) }
-        val options = MarkerOptions()
-                .position(LatLng(location.latitude, location.longitude))
-                .icon(IconFactory.getInstance(this).fromResource(R.mipmap.ic_user_location))
-        userMarker = mapBoxMap?.addMarker(options)
-        var zoom = 17.toDouble()
-        mapBoxMap?.cameraPosition?.let { zoom = it.zoom }
-        val position = CameraPosition.Builder()
-                .target(LatLng(location.latitude, location.longitude))
-                .zoom(zoom).build()
-        mapBoxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
-    }
-
-    override fun onLocationFailure(exception: Exception) {
-        getMapPoints()
-    }
-
-    private fun getMapPoints() {
-        setCheckLayer()
-    }
-
     private fun initMenu() {
         val onCheckChangedListener = CompoundButton.OnCheckedChangeListener { view, isChecked ->
             when (view.id) {
@@ -512,6 +480,51 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
 
     private fun removePointFromMap(code: String) {
         markerMap[code]?.let { for (marker in it) mapBoxMap?.removeMarker(marker) }
+    }
+
+    /*map load complete*/
+    override fun onMapAsync(mapBoxMap: MapboxMap) {
+        isMapAsync = true
+        mapBoxMap.setOnMarkerClickListener { marker ->
+            markerObjMap[marker.id]?.let { `object` -> presenter.onMarkerClick(marker, `object`) }
+            return@setOnMarkerClickListener true
+        }
+        openLocation()
+    }
+
+    override fun onDismissLocationPermission() {
+        Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onExplanationLocationPermission(permissionsToExplain: MutableList<String>?) {
+        Snackbar.make(ivLocation, "user location permission not granted", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun afterLocation(location: Location) {
+        mUserLocation = location
+        longitude = location.longitude
+        latitude = location.latitude
+        onMapDataSource()
+    }
+
+    override fun onLocationFailure(exception: Exception) {
+        onMapDataSource()
+    }
+
+    private fun onMapDataSource() {
+        val mdl = intent.extras?.getSerializable("dataMDL")
+        if (mdl != null) {
+            drawMarker(mdl as NewsMDL)
+        } else {
+            setCheckLayer()
+        }
+    }
+
+    private fun drawMarker(mdl: NewsMDL) {
+        val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(mdl.getSmallMarkerIcon()), mdl.getLatLng()))
+        marker?.let { markerObjMap[it.id] = mdl }
+        mapBoxMap?.animateCamera(CameraUpdateFactory.newLatLng(mdl.getLatLng()))
+        marker?.let { presenter.onMarkerClick(it, mdl) }
     }
 
     private fun setCheckLayer() {

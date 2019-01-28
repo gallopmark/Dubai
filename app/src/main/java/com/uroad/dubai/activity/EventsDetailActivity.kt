@@ -6,6 +6,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.model.EventsMDL
 import com.uroad.dubai.utils.GsonUtils
+import com.uroad.glidev4.GlideV4
 import com.uroad.library.utils.BitmapUtils
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_eventdetail.*
@@ -37,13 +38,15 @@ class EventsDetailActivity : BaseActivity() {
     }
 
     private fun updateUI(mdl: EventsMDL) {
-        ivIcon.setImageResource(mdl.iconInt)
-        tvTitle.text = mdl.roadtitle
-        tvTime.text = mdl.updatetime
-        tvContent.text = mdl.reportout
-        tvStartTime.text = "14:23"
-        tvHandleTime.text = "14:35"
-        tvEndTime.text = "15:12"
-        tvDistance.text = "5km"
+        GlideV4.getInstance().displayImage(this, mdl.icon, ivIcon)
+        tvTitle.text = mdl.roadname
+        mDirectionTv.text = mdl.direction
+        tvContent.text = mdl.eventinfo
+        tvStartTime.text = mdl.starttime
+        tvHandleTime.text = mdl.handldtime
+        tvEndTime.text = mdl.endtime
+        var distance = "0km"
+        mdl.congestiondistance?.let { distance = "${it}km" }
+        tvDistance.text = distance
     }
 }

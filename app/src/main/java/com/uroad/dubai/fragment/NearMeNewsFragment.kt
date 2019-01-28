@@ -20,7 +20,7 @@ import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
-class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
+class NearMeNewsFragment : NearMeBaseFragment<NewsPresenter>(), NewsView {
 
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)
     private val data = ArrayList<NewsMDL>()
@@ -47,7 +47,7 @@ class NearMeNewsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
 
 
     override fun initData() {
-        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", 1, 4))
+        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.NEWS.code, "", 1, 4, longitude, latitude))
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {

@@ -10,7 +10,6 @@ import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.AttractionListCardAdapter
 import com.uroad.dubai.api.presenter.AttractionPresenter
 import com.uroad.dubai.api.view.AttractionView
-import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
@@ -20,7 +19,17 @@ import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
-class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), AttractionView {
+class NearMeAttractionsFragment : NearMeBaseFragment<AttractionPresenter>(), AttractionView {
+    companion object {
+        fun newInstance(longitude: Double, latitude: Double): NearMeAttractionsFragment {
+            return NearMeAttractionsFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble("longitude", longitude)
+                    putDouble("latitude", latitude)
+                }
+            }
+        }
+    }
 
     private val data = ArrayList<ScenicMDL>()
     private lateinit var adapter: AttractionListCardAdapter
@@ -30,7 +39,15 @@ class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), 
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainmearme)
+        initBundle()
         initRv()
+    }
+
+    private fun initBundle() {
+        arguments?.let {
+            longitude = it.getDouble("longitude", 0.0)
+            latitude = it.getDouble("latitude", 0.0)
+        }
     }
 
     private fun initRv() {
@@ -47,7 +64,7 @@ class NearMeAttractionsFragment : BasePresenterFragment<AttractionPresenter>(), 
     }
 
     override fun initData() {
-        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
+        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4, longitude, latitude))
     }
 
     override fun onGetAttraction(attractions: MutableList<ScenicMDL>) {

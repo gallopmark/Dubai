@@ -98,13 +98,22 @@ class DeviceUtils {
         }
 
         /**
+         * 获取当前手机系统版本号
+         *
+         * @return  系统版本号
+         */
+        fun getSystemVersion(): String {
+            return android.os.Build.VERSION.RELEASE ?: ""
+        }
+
+        /**
          * 获取设备型号
          *
          * 如MI2SC
          *
          * @return 设备型号
          */
-        fun getModel(): String {
+        fun getModel(): String? {
             var model: String? = Build.MODEL
             model = model?.trim()?.replace("\\s*".toRegex(), "") ?: ""
             return model

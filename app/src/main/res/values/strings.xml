@@ -228,4 +228,6 @@
     <string name="version_update_confirm">Update now</string>
     <string name="version_update_cancel">Use again</string>
     <string name="version_update_error_url">Download link error!</string>
+
+    <string name="detail">Detail</string>
 </resources>

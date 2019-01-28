@@ -17,8 +17,7 @@ class RoadsListCardAdapter(private val context: Context, data: MutableList<Roads
         holder.setText(R.id.tvTitle, t.roadname)
         holder.setText(R.id.tvContent, t.content)
         holder.setText(R.id.tvEventInfo, "Event Info")
-        holder.setText(R.id.tvConstruction, "1")
-        holder.setText(R.id.tvAccident, "3")
+        holder.setText(R.id.mCountTextView, t.eventdata)
         holder.setText(R.id.tvDistance, t.distance)
         val recyclerView = holder.obtainView<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.HORIZONTAL }

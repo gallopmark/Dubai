@@ -42,13 +42,7 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
         ivBack.setOnClickListener { onBackPressed() }
         ivBack2.setOnClickListener { onBackPressed() }
         llTopLayout.setOnClickListener {
-            newsMDL?.let { scenic ->
-                val point = Point.fromLngLat(scenic.getLatLng().longitude, scenic.getLatLng().latitude)
-                openActivity(RouteNavigationActivity::class.java, Bundle().apply {
-                    putString("point", point.toJson())
-                    putString("endPointName", scenic.title)
-                })
-            }
+            newsMDL?.let { dataMDL -> openActivity(RoadNavigationActivity::class.java, Bundle().apply { putSerializable("dataMDL", dataMDL) }) }
         }
     }
 
@@ -96,9 +90,7 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
         tvHours.text = mdl.hours
         tvTel.text = mdl.phone
         tvTitle.text = mdl.title
-        tvTel.setOnClickListener {
-            PhoneUtils.call(this@ScenicDetailActivity,mdl.phone?:"")
-        }
+        tvTel.setOnClickListener { PhoneUtils.call(this@ScenicDetailActivity, mdl.phone ?: "") }
     }
 
     override fun onDestroy() {

@@ -154,14 +154,17 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
 
     override fun onShowError(msg: String?) {
         handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        callback?.onFailure()
     }
 
     override fun onFailure(errMsg: String?, errCode: Int?) {
         handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        callback?.onFailure()
     }
 
     interface OnRequestCallback {
         fun callback(isEmpty: Boolean)
+        fun onFailure()
     }
 
     fun setOnRequestCallback(callback: OnRequestCallback) {

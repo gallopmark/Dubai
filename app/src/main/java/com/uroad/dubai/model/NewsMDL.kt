@@ -2,10 +2,14 @@ package com.uroad.dubai.model
 
 import android.text.TextUtils
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.uroad.dubai.R
+import com.uroad.dubai.enumeration.NewsType
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class NewsMDL {
+open class NewsMDL : Serializable, MapPointItem {
+
     var newsid: String? = null
     var publishtime: String? = null
     var title: String? = null
@@ -22,7 +26,25 @@ open class NewsMDL {
     var newstype: String? = null
     var distance: String? = null
 
-    fun getLatLng(): LatLng {
+    fun getIcon(): Int = when (newstype) {
+        NewsType.HOTEL.code -> R.mipmap.ic_hotel_round
+        NewsType.RESTAURANT.code -> R.mipmap.ic_restaurations_round
+        else -> R.mipmap.ic_attractions_round
+    }
+
+    override fun getSmallMarkerIcon(): Int = when (newstype) {
+        NewsType.HOTEL.code -> R.mipmap.ic_marker_hotel
+        NewsType.RESTAURANT.code -> R.mipmap.ic_marker_restaurants
+        else -> R.mipmap.ic_marker_attractions
+    }
+
+    override fun getBigMarkerIcon(): Int = when (newstype) {
+        NewsType.HOTEL.code -> R.mipmap.ic_marker_hotel_big
+        NewsType.RESTAURANT.code -> R.mipmap.ic_marker_restaurants_big
+        else -> R.mipmap.ic_marker_attractions_big
+    }
+
+    override fun getLatLng(): LatLng {
         var latitude = 0.0
         var longitude = 0.0
         this.latitude?.let { latitude = it }

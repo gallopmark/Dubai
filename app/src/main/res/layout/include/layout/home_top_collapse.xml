@@ -7,52 +7,52 @@
 
     <ImageView
         android:id="@+id/ivNavigation"
-        android:layout_width="@dimen/space_35"
-        android:layout_height="@dimen/space_35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:padding="@dimen/space_5"
         android:contentDescription="@string/navigate"
-        android:src="@mipmap/ic_navigation_white" />
+        android:src="@mipmap/ic_navigation_white_small" />
 
     <ImageView
         android:id="@+id/ivHighWay"
-        android:layout_width="@dimen/space_35"
-        android:layout_height="@dimen/space_35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivNavigation"
         android:contentDescription="@string/home_menu_roads"
         android:padding="@dimen/space_5"
-        android:src="@mipmap/ic_highway_white" />
+        android:src="@mipmap/ic_highway_white_small" />
 
     <ImageView
         android:id="@+id/ivNews"
-        android:layout_width="@dimen/space_35"
-        android:layout_height="@dimen/space_35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivHighWay"
         android:contentDescription="@string/home_menu_news"
         android:padding="@dimen/space_5"
-        android:src="@mipmap/ic_news_white" />
+        android:src="@mipmap/ic_news_white_small" />
 
     <ImageView
         android:id="@+id/ivMore"
-        android:layout_width="@dimen/space_35"
-        android:layout_height="@dimen/space_35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivNews"
         android:contentDescription="@string/home_menu_more"
         android:padding="@dimen/space_5"
-        android:src="@mipmap/ic_more_white" />
+        android:src="@mipmap/ic_more_white_small" />
 
     <ImageView
         android:id="@+id/ivMessageColl"
-        android:layout_width="@dimen/space_35"
-        android:layout_height="@dimen/space_35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivMore"
         android:padding="@dimen/space_5"
         android:contentDescription="@string/mine_messages"
-        android:src="@mipmap/ic_message_white_big" />
+        android:src="@mipmap/ic_message_white_small" />
 
     <ImageView
         android:id="@+id/ivSearchColl"

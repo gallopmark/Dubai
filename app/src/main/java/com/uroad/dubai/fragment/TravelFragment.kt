@@ -63,6 +63,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         initBanner()
         initRv()
         initCalendar()
+        initRefresh()
     }
 
     override fun createPresenter(): AttractionPresenter = AttractionPresenter(this)
@@ -154,9 +155,12 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         inspectPermissions()
     }
 
+    private fun initRefresh(){
+        refreshLayout.setOnRefreshListener { initData() }
+    }
 
     override fun initData() {
-        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4))
+        presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4, 0.0, 0.0))
         bannerPresenter.getBannerNews(BannerType.TRAVEL.CODE)
     }
 
@@ -165,10 +169,12 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         bannerData.addAll(data)
         bannerAdapter.notifyDataSetChanged()
         if (bannerData.size > 0) collapsingLayout.title = bannerData[0].title
+        refreshLayout.finishRefresh()
     }
 
     override fun onFailure(errorMsg: String?, errorCode: Int?) {
         handler.postDelayed(runnable, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        refreshLayout.finishRefresh()
     }
 
     override fun onGetAttraction(attractions: MutableList<ScenicMDL>) {
@@ -189,6 +195,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
 
     override fun onShowError(msg: String?) {
         handler.postDelayed(runnable, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        refreshLayout.finishRefresh()
     }
 
     private val runnable = Runnable { initData() }

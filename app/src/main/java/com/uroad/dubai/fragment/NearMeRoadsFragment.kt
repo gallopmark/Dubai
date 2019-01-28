@@ -7,10 +7,11 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.uroad.dubai.R
+import com.uroad.dubai.activity.RoadLineActivity
 import com.uroad.dubai.adapter.RoadsListCardAdapter
 import com.uroad.dubai.api.presenter.RoadsNearFMPresenter
 import com.uroad.dubai.api.view.RoadsNearFMView
-import com.uroad.dubai.common.BasePresenterFragment
+import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.RoadsMDL
 import com.uroad.dubai.webService.WebApi
@@ -18,28 +19,58 @@ import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
-class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), RoadsNearFMView {
+class NearMeRoadsFragment : NearMeBaseFragment<RoadsNearFMPresenter>(), RoadsNearFMView {
+
+    companion object {
+        fun newInstance(longitude: Double, latitude: Double): NearMeRoadsFragment {
+            return NearMeRoadsFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble("longitude", longitude)
+                    putDouble("latitude", latitude)
+                }
+            }
+        }
+    }
 
     override fun createPresenter(): RoadsNearFMPresenter = RoadsNearFMPresenter(this)
 
     private val data = ArrayList<RoadsMDL>()
-    private lateinit var cardAdapter: RoadsListCardAdapter
+    private lateinit var adapter: RoadsListCardAdapter
     private val handler = Handler()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainmearme)
+        initBundle()
         initRv()
+    }
+
+    private fun initBundle() {
+        arguments?.let {
+            longitude = it.getDouble("longitude", 0.0)
+            latitude = it.getDouble("latitude", 0.0)
+        }
     }
 
     private fun initRv() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.addItemDecoration(ItemDecoration(context, LinearLayoutManager.VERTICAL, DisplayUtils.dip2px(context, 5f), ContextCompat.getColor(context, R.color.white)))
-        cardAdapter = RoadsListCardAdapter(context, data)
-        recyclerView.adapter = cardAdapter
+        adapter = RoadsListCardAdapter(context, data).apply {
+            setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
+                    if (position !in 0 until data.size) return
+                    openActivity(RoadLineActivity::class.java, Bundle().apply {
+                        putString("title", data[position].roadname)
+                        putString("startPoint", data[position].getStartPoint()?.toJson())
+                        putString("endPoint", data[position].getEndPoint()?.toJson())
+                    })
+                }
+            })
+        }
+        recyclerView.adapter = adapter
     }
 
     override fun initData() {
-        presenter.getNewsList(WebApi.GET_ROADS_LIST, WebApi.getRoadListParams(1, 4, ""))
+        presenter.getNewsList(WebApi.GET_ROADS_LIST, WebApi.getRoadListParams(1, 4, "", longitude, latitude))
     }
 
     override fun onGetNewList(list: MutableList<RoadsMDL>) {
@@ -66,7 +97,7 @@ class NearMeRoadsFragment : BasePresenterFragment<RoadsNearFMPresenter>(), Roads
                 add(Color.parseColor("#06A72B"))
             }
         }
-        cardAdapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {

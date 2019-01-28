@@ -73,25 +73,20 @@
                             android:textColor="@color/gary"
                             android:textSize="@dimen/font_12" />
 
-                        <TextView
-                            android:id="@+id/tvConstruction"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <ImageView
+                            android:layout_width="@dimen/space_18"
+                            android:layout_height="@dimen/space_18"
                             android:layout_marginStart="@dimen/space_10"
-                            android:drawableStart="@mipmap/ic_event_construction"
-                            android:drawablePadding="@dimen/space_5"
-                            android:gravity="center"
-                            android:textSize="@dimen/font_16" />
+                            android:layout_gravity="center"
+                            android:src="@mipmap/ic_mapdata_events_checked" />
 
                         <TextView
-                            android:id="@+id/tvAccident"
+                            android:id="@+id/mCountTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/space_10"
-                            android:drawableStart="@mipmap/ic_event_accident"
-                            android:drawablePadding="@dimen/space_5"
-                            android:gravity="center"
-                            android:textSize="@dimen/font_16" />
+                            android:layout_gravity="center"
+                            android:textSize="@dimen/font_16"
+                            android:layout_marginStart="@dimen/space_5" />
                     </LinearLayout>
 
                     <TextView

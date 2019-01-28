@@ -20,10 +20,10 @@ import com.uroad.library.widget.banner.BaseBannerAdapter
 import kotlinx.android.synthetic.main.fragment_mainbanner.*
 
 class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView {
-
     private val handler = Handler()
     private lateinit var data: MutableList<NewsMDL>
     private lateinit var adapter: MainBannerAdapter
+    private var callback: FragmentRequestCallback? = null
 
     override fun createPresenter(): BannerPresenter = BannerPresenter(this)
 
@@ -45,7 +45,7 @@ class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView 
                     } else if (TextUtils.equals(t.newstype, NewsType.NEWS.code)) {
                         openActivity(NewsDetailsActivity::class.java, Bundle().apply {
                             putString("newsId", t.newsid)
-                            putString("title",getString(R.string.home_menu_news))
+                            putString("title", getString(R.string.home_menu_news))
                         })
                     }
                 }
@@ -62,13 +62,20 @@ class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView 
         this.data.clear()
         this.data.addAll(data)
         adapter.notifyDataSetChanged()
+        callback?.onRequestFinish()
     }
 
     override fun onFailure(errorMsg: String?, errorCode: Int?) {
         handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        callback?.onRequestFinish()
     }
 
     override fun onShowError(msg: String?) {
         handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        callback?.onRequestFinish()
+    }
+
+    fun setRequestCallback(callback: FragmentRequestCallback) {
+        this.callback = callback
     }
 }

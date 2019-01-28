@@ -28,7 +28,6 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
     private var mPosition: Int = 0
     private lateinit var handler: MHandler
     private var callback: OnRequestCallback? = null
-
     companion object {
         private const val CODE_MESSAGE = 100
         private const val CODE_RETRY = 110
@@ -84,6 +83,7 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
     override fun getNoticeList(data: MutableList<NoticeMDL>) {
         this.data.clear()
         this.data.addAll(data)
+        handler.removeMessages(CODE_MESSAGE)
         if (!this.data.isEmpty()) {
             textSwitcher.setText(this.data[0].content)
             handler.sendEmptyMessageDelayed(CODE_MESSAGE, 5000)
@@ -93,10 +93,12 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
 
     override fun onShowError(msg: String?) {
         handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        callback?.onFailure()
     }
 
     override fun onFailure(errorMsg: String?, errorCode: Int?) {
         handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        callback?.onFailure()
     }
 
     override fun onDestroyView() {
@@ -106,6 +108,7 @@ class MainNoticeFragment : BasePresenterFragment<NoticePresenter>(), NoticeView 
 
     interface OnRequestCallback {
         fun callback(isEmpty: Boolean)
+        fun onFailure()
     }
 
     fun setOnRequestCallback(callback: OnRequestCallback) {

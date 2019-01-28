@@ -58,7 +58,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
             else -> NewsType.ATTRACTION.code        //1001004 景点
 
         }
-        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(code, "", index, size))
+        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(code, "", index, size, 0.0, 0.0))
         /*onPullToLoadSuccess()
         val mdl = AttractionNearFMMDL()
         var num = Random()

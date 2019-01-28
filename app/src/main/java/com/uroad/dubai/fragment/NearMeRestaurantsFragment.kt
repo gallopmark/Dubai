@@ -10,19 +10,26 @@ import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.RestaurantsListCardAdapter
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
-import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
-import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.fragment_mainmearme.*
 
-class NearMeRestaurantsFragment : BasePresenterFragment<NewsPresenter>(), NewsView {
-
+class NearMeRestaurantsFragment : NearMeBaseFragment<NewsPresenter>(), NewsView {
+    companion object {
+        fun newInstance(longitude: Double, latitude: Double): NearMeRestaurantsFragment {
+            return NearMeRestaurantsFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble("longitude", longitude)
+                    putDouble("latitude", latitude)
+                }
+            }
+        }
+    }
     private val data = ArrayList<NewsMDL>()
     private lateinit var adapter: RestaurantsListCardAdapter
     private val handler = Handler()
@@ -31,7 +38,15 @@ class NearMeRestaurantsFragment : BasePresenterFragment<NewsPresenter>(), NewsVi
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainmearme)
+        initBundle()
         initRv()
+    }
+
+    private fun initBundle() {
+        arguments?.let {
+            longitude = it.getDouble("longitude", 0.0)
+            latitude = it.getDouble("latitude", 0.0)
+        }
     }
 
     private fun initRv() {
@@ -47,7 +62,7 @@ class NearMeRestaurantsFragment : BasePresenterFragment<NewsPresenter>(), NewsVi
     }
 
     override fun initData() {
-        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.RESTAURANT.code, "", 1, 4))
+        presenter.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.RESTAURANT.code, "", 1, 4, longitude, latitude))
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {

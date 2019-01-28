@@ -149,6 +149,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
 
     private var originMarker: Marker? = null
     private var destinationMarker: Marker? = null
+    private var drawWayPointMarkers = true
 
     /**
      * Construct an instance of [NavigationMapRoute].
@@ -228,6 +229,10 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
         layerIds = ArrayList()
         initialize()
         addListeners()
+    }
+
+    fun isDrawWayPointMarkers(drawWayPointMarkers: Boolean) {
+        this.drawWayPointMarkers = drawWayPointMarkers
     }
 
     /**
@@ -781,6 +786,7 @@ class AppCompatNavigationMapRoute : LifecycleObserver {
     }
 
     private fun drawWayPointMarkers() {
+        if(!drawWayPointMarkers) return
         this.originMarker?.let { mapboxMap.removeMarker(it) }
         this.destinationMarker?.let { mapboxMap.removeMarker(it) }
         val route = directionsRoutes[primaryRouteIndex]
