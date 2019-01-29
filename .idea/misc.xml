@@ -36,4 +36,11 @@
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="Rxjava2Lib" />
+      </set>
+    </option>
+  </component>
 </project>

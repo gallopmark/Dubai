@@ -10,7 +10,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.model.SubscribeMDL
 import com.uroad.dubai.utils.TimeUtils
-import com.uroad.dubai.utils.Utils
+import com.uroad.dubai.utils.DubaiUtils
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.widget.banner.BaseBannerAdapter
 
@@ -37,7 +37,7 @@ class MainSubscribeAdapter(private val context: Context,
         tvSubscribeName.text = "Route"
         tvRouteArrow.text = item.getStartEndPoint()
         var distance = ""
-        item.distance?.let { distance = Utils.convertDistance(it.toInt()) }
+        item.distance?.let { distance = DubaiUtils.convertDistance(it.toInt()) }
         tvDistance.text = distance
         var travelTime = ""
         item.travelTime?.let { travelTime = TimeUtils.convertSecond2Min(it.toInt()) }

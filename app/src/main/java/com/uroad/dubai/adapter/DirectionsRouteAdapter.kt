@@ -8,7 +8,7 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseArrayRecyclerAdapter
 import com.uroad.dubai.utils.TimeUtils
-import com.uroad.dubai.utils.Utils
+import com.uroad.dubai.utils.DubaiUtils
 import com.uroad.library.utils.DisplayUtils
 
 class DirectionsRouteAdapter(context: Activity, routes: MutableList<DirectionsRoute>)
@@ -38,7 +38,7 @@ class DirectionsRouteAdapter(context: Activity, routes: MutableList<DirectionsRo
         }
         val distance = t.distance()
         if (distance != null) {
-            holder.setText(R.id.tvDistance, Utils.convertDistance(distance.toInt()))
+            holder.setText(R.id.tvDistance, DubaiUtils.convertDistance(distance.toInt()))
         } else {
             holder.setText(R.id.tvDistance, "")
         }

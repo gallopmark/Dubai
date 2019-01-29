@@ -113,7 +113,7 @@ class DeviceUtils {
          *
          * @return 设备型号
          */
-        fun getModel(): String? {
+        fun getModel(): String {
             var model: String? = Build.MODEL
             model = model?.trim()?.replace("\\s*".toRegex(), "") ?: ""
             return model

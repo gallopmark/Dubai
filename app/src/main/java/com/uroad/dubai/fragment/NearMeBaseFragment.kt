@@ -1,7 +1,9 @@
 package com.uroad.dubai.fragment
 
+import android.os.Handler
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.common.BasePresenterFragment
+import com.uroad.dubai.common.DubaiApplication
 
 /**
  * @author MFB
@@ -9,7 +11,7 @@ import com.uroad.dubai.common.BasePresenterFragment
  * @describe
  */
 abstract class NearMeBaseFragment<P : BasePresenter<*>> : BasePresenterFragment<P>() {
-
+    val handler = Handler()
     var longitude: Double = 0.0
     var latitude: Double = 0.0
 
@@ -19,4 +21,12 @@ abstract class NearMeBaseFragment<P : BasePresenter<*>> : BasePresenterFragment<
         initData()
     }
 
+    open fun onRetry() {
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroyView()
+    }
 }

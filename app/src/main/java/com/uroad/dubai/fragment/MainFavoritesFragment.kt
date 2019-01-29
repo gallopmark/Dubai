@@ -16,7 +16,10 @@ import com.uroad.dubai.api.view.SubscribeView
 import com.uroad.dubai.common.BasePresenterFragment
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.SubscribeMDL
+import com.uroad.dubai.rx2bus.MessageEvent
+import com.uroad.dubai.rx2bus.Rx2Bus
 import com.uroad.library.widget.banner.BaseBannerAdapter
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_mainfavorites.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -72,6 +75,7 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
         initViewParams()
         initial()
         handler = MHandler(this)
+        toObservable()
     }
 
     private fun initViewParams() {
@@ -97,6 +101,12 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
             })
         }
         banner.setAdapter(adapter)
+    }
+
+    private fun toObservable() {
+        presenter.addDisposable(Rx2Bus.toObservable(MessageEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { initData() })
     }
 
     override fun initData() {

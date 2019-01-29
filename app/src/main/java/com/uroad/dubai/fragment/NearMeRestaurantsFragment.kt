@@ -32,7 +32,6 @@ class NearMeRestaurantsFragment : NearMeBaseFragment<NewsPresenter>(), NewsView 
     }
     private val data = ArrayList<NewsMDL>()
     private lateinit var adapter: RestaurantsListCardAdapter
-    private val handler = Handler()
 
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)
 
@@ -85,15 +84,10 @@ class NearMeRestaurantsFragment : NearMeBaseFragment<NewsPresenter>(), NewsView 
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        onRetry()
     }
 
     override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-    }
-
-    override fun onDestroyView() {
-        handler.removeCallbacksAndMessages(null)
-        super.onDestroyView()
+        onRetry()
     }
 }

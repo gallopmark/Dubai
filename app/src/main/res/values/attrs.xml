@@ -199,4 +199,11 @@
         <attr name="starFill" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="NoticeView">
+        <attr name="anim_delayed" format="integer"/>
+        <attr name="anim_duration" format="integer"/>
+        <attr name="tipTextSizs" format="dimension"/>
+        <attr name="tipTextColor" format="color"/>
+        <attr name="tipMaxLine" format="integer"/>
+    </declare-styleable>
 </resources>

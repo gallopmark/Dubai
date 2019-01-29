@@ -30,7 +30,10 @@ class NoticeListActivity : BaseRefreshPresenterActivity<NoticePresenter>(), Noti
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                     if (position in 0 until data.size) {
-                        NoticeDialog(this@NoticeListActivity, data[position]).show()
+                        NoticeDialog(this@NoticeListActivity)
+                                .setCustomTitle(data[position].publishtime)
+                                .setContent(data[position].content)
+                                .show()
                     }
                 }
             })

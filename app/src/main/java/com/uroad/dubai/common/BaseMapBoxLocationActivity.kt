@@ -5,6 +5,7 @@ import android.location.Location
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.uroad.dubai.utils.DubaiUtils
 import java.lang.Exception
 
 abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
@@ -52,6 +53,7 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
                 requestLocationUpdates(this, this@BaseMapBoxLocationActivity, null)
             }
         }
+        if (!DubaiUtils.isLocationEnabled(this)) onLocationFailure(Exception("Location closed"))
         isOpenLocation = true
     }
 

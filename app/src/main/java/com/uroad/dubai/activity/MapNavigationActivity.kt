@@ -34,7 +34,7 @@ import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.model.MapPointItem
 import com.uroad.dubai.model.ScenicMDL
 import com.uroad.dubai.utils.TimeUtils
-import com.uroad.dubai.utils.Utils
+import com.uroad.dubai.utils.DubaiUtils
 import kotlinx.android.synthetic.main.activity_mapnavigation.*
 import kotlinx.android.synthetic.main.content_mapnavigation.*
 import kotlinx.android.synthetic.main.content_mapnavigationoptions.*
@@ -100,7 +100,7 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
             }
             val distance = route.distance()
             if (distance != null) {
-                tvDistance.text = Utils.convertDistance(distance.toInt())
+                tvDistance.text = DubaiUtils.convertDistance(distance.toInt())
             }
         }
     }
@@ -192,7 +192,7 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
     }
 
     private fun updateProgress(progress: RouteProgress) {
-        val text = "${Utils.convertDistance(progress.distanceRemaining().toInt())}•${TimeUtils.convertSecond2Min(progress.durationRemaining().toInt())}"
+        val text = "${DubaiUtils.convertDistance(progress.distanceRemaining().toInt())}•${TimeUtils.convertSecond2Min(progress.durationRemaining().toInt())}"
         tvDistance.text = text
     }
 

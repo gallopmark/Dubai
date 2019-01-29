@@ -13,10 +13,10 @@ class WebApi {
                               longitude: Double, latitude: Double) = getBaseParams().apply {
             put("newstype", newstype)
             put("keyword", keyword)
-            put("index", index.toString())
-            put("size", size.toString())
-            put("longitude", longitude.toString())
-            put("latitude", latitude.toString())
+            put("index", "$index")
+            put("size", "$size")
+            put("longitude", "$longitude")
+            put("latitude", "$latitude")
         }
 
         /*新闻详情*/
@@ -28,10 +28,10 @@ class WebApi {
 
         fun getRoadListParams(index: Int, size: Int, keyword: String, longitude: Double, latitude: Double) = getBaseParams().apply {
             put("keyword", keyword)
-            put("index", index.toString())
-            put("size", size.toString())
-            put("longitude", longitude.toString())
-            put("latitude", latitude.toString())
+            put("index", "$index")
+            put("size", "$size")
+            put("longitude", "$longitude")
+            put("latitude", "$latitude")
         }
 
         const val GET_WEATHER_LIST = "getWeather"
@@ -136,13 +136,17 @@ class WebApi {
             put("phone", phone)
         }
 
-        const val MESSAGECENTER = "messageCenter"
+        const val MESSAGE_CENTER = "messageCenter"
         fun messageCenter(type: String?, useruuid: String?, index: Int, size: Int) = getBaseParams().apply {
             put("type", type)
             put("useruuid", useruuid)
             put("index", "$index")
             put("size", "$size")
         }
+
+        const val MESSAGE_DETAIL = "getMessageDetails"
+
+        fun messageDetailParams(messageid: String?) = getBaseParams().apply { put("messageid", messageid) }
 
         const val EVENT_LIST = "getEventList"
 
@@ -159,8 +163,8 @@ class WebApi {
         }
 
         const val VALIDATIONDEVICE = "validationDevice"
-        fun validationDevice(deviceid : String) = getBaseParams().apply {
-            put("deviceid",deviceid)
+        fun validationDevice(deviceid: String) = getBaseParams().apply {
+            put("deviceid", deviceid)
         }
     }
 }

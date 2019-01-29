@@ -10,8 +10,21 @@ import android.widget.TextView
 import com.uroad.dubai.R
 import com.uroad.dubai.model.NoticeMDL
 
-class NoticeDialog(private val mContext: Context, private val mdl: NoticeMDL)
+class NoticeDialog(private val mContext: Context)
     : Dialog(mContext, R.style.AppDialog) {
+
+    private var mTitle: CharSequence? = null
+    private var mContent: CharSequence? = null
+
+    fun setCustomTitle(mTitle: CharSequence?): NoticeDialog {
+        this.mTitle = mTitle
+        return this
+    }
+
+    fun setContent(mContent: CharSequence?): NoticeDialog {
+        this.mContent = mContent
+        return this
+    }
 
     override fun show() {
         super.show()
@@ -25,8 +38,8 @@ class NoticeDialog(private val mContext: Context, private val mdl: NoticeMDL)
             val mCloseImageView = contentView.findViewById<ImageView>(R.id.mCloseImageView)
             val mContentTextView = contentView.findViewById<TextView>(R.id.mContentTextView)
             mCloseImageView.setOnClickListener { dismiss() }
-            mTimeTextView.text = mdl.publishtime
-            mContentTextView.text = mdl.content
+            mTimeTextView.text = mTitle
+            mContentTextView.text = mContent
             window.setContentView(contentView)
             window.setGravity(Gravity.CENTER)
         }

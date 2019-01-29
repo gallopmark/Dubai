@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llNotice"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <ImageView
@@ -11,11 +13,12 @@
         android:layout_marginEnd="@dimen/space_5"
         android:src="@mipmap/ic_notice_grey" />
 
-    <TextSwitcher
-        android:id="@+id/textSwitcher"
-        android:layout_width="wrap_content"
+    <com.uroad.dubai.widget.NoticeView
+        android:id="@+id/noticeView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inAnimation="@anim/push_up_in"
-        android:layout_gravity="center"
-        android:outAnimation="@anim/push_up_out" />
+        app:tipMaxLine="2"
+        app:tipTextColor="@color/appTextColor"
+        app:tipTextSizs="@dimen/font_14"
+        android:layout_gravity="center" />
 </LinearLayout>

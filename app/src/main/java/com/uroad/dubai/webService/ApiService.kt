@@ -6,9 +6,10 @@ import com.uroad.dubai.api.ApiRetrofit
 import com.uroad.dubai.utils.AndroidBase64Utils
 import io.reactivex.Observable
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.POST
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 interface ApiService {
     companion object {
@@ -30,4 +31,8 @@ interface ApiService {
 
     @POST("ApiIndex")
     fun doPost(@Body body: RequestBody): Observable<String>
+
+    @Multipart
+    @POST("Upload/uploadImg")
+    fun uploadFile(@Part part: MultipartBody.Part): Observable<ResponseBody>
 }

@@ -1,14 +1,11 @@
 package com.uroad.dubai.fragment
 
+import android.animation.ObjectAnimator
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.CycleInterpolator
-import android.view.animation.TranslateAnimation
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.NearMeTabAdapter
 import com.uroad.dubai.api.presenter.MessagesPresenter
@@ -18,6 +15,7 @@ import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.MessagesMDL
+import com.uroad.dubai.utils.AnimUtils
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.content_mainnearby.*
@@ -27,10 +25,6 @@ import kotlinx.android.synthetic.main.home_top_collapse.*
 import kotlinx.android.synthetic.main.home_top_expand.*
 import kotlinx.android.synthetic.main.home_top_flexhead.*
 import java.lang.Exception
-import android.view.animation.AnimationSet
-import android.view.animation.RotateAnimation
-import android.view.animation.ScaleAnimation
-
 
 
 /**
@@ -40,14 +34,13 @@ import android.view.animation.ScaleAnimation
  */
 class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
-    private var statusHeight = 0
-    private var isNeedRefresh = false
     private var myLocation: Location? = null
     private var currentTab = 0
     private var isFirstCommit = true
     private var updateCount = 0
     private lateinit var presenter: MessagesPresenter
     private lateinit var handler: Handler
+    private var animator: ObjectAnimator? = null
 
     companion object {
         private const val TAG_BANNER = "banner"
@@ -55,7 +48,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         private const val TAG_FAVORITES = "favorites"
         private const val TAG_ROADS = "roads"
         private const val TAG_EVENTS = "events"
-        private const val TAG_NEWS = "news"
+        //        private const val TAG_NEWS = "news"
         private const val TAG_HOTEL = "hotel"
         private const val TAG_RESTAURANTS = "restaurants"
         private const val TAG_ATTRACTIONS = "attractions"
@@ -63,7 +56,6 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(com.uroad.dubai.R.layout.fragment_main)
-        statusHeight = DisplayUtils.getStatusHeight(context)
         initLayout()
         initMenu()
         initBanner()
@@ -75,7 +67,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     private fun initLayout() {
-        ablBar.setPadding(0, statusHeight, 0, 0)
+        ablBar.setPadding(0, DisplayUtils.getStatusHeight(context), 0, 0)
 //        tlCollapse.layoutParams = (tlCollapse.layoutParams as Toolbar.LayoutParams).apply { topMargin = statusHeight }
         ablBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val offset = Math.abs(verticalOffset)
@@ -239,19 +231,18 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     override fun onResume() {
         super.onResume()
-        onRefreshFavorites()
+        getUnreadMsg()
     }
 
-    private fun onRefreshFavorites() {
-        if (!isNeedRefresh) return
-        else {
-            refreshFavorites()
-            isNeedRefresh = false
-        }
+    /*获取未读消息*/
+    private fun getUnreadMsg() {
+        animator?.cancel()
+        presenter.messageCenter(WebApi.MESSAGE_CENTER, WebApi.messageCenter("1", getUserId(), 1, 10))
     }
 
     private fun onRefresh() {
         updateCount = 0
+        getUnreadMsg()
         refreshBanner()
         refreshNotice()
         refreshFavorites()
@@ -304,34 +295,10 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         if (updateCount >= 3) refreshLayout.finishRefresh()
     }
 
-    override fun onPause() {
-        super.onPause()
-        isNeedRefresh = true
-    }
-
-    override fun initData() {
-        presenter.messageCenter(WebApi.MESSAGECENTER, WebApi.messageCenter("1", getUserId(), 1, 10))
-    }
-
     override fun onGetNewList(list: MutableList<MessagesMDL>) {
         if (list.isNotEmpty()) {
-            startShakeByViewAnim(ivMessage, 0.9f, 1.1f, 10f, 500)
+            animator = AnimUtils.rotate(ivMessage).apply { start() }
         }
-    }
-
-    private fun startShakeByViewAnim(view: View, scaleSmall: Float, scaleLarge: Float, shakeDegrees: Float, duration: Long) {
-        //由小变大
-        val scaleAnim = ScaleAnimation(scaleSmall, scaleLarge, scaleSmall, scaleLarge)
-        //从左向右
-        val rotateAnim = RotateAnimation(-shakeDegrees, shakeDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        scaleAnim.duration = 200
-        rotateAnim.duration = duration / 10
-        rotateAnim.repeatMode = Animation.REVERSE
-        rotateAnim.repeatCount = 10
-        val smallAnimationSet = AnimationSet(false)
-        smallAnimationSet.addAnimation(scaleAnim)
-        smallAnimationSet.addAnimation(rotateAnim)
-        view.startAnimation(smallAnimationSet)
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
@@ -346,5 +313,11 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     override fun onShowError(msg: String?) {
         handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onDestroyView() {
+        presenter.detachView()
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroyView()
     }
 }

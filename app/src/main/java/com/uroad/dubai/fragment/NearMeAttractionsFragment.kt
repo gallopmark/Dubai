@@ -33,7 +33,6 @@ class NearMeAttractionsFragment : NearMeBaseFragment<AttractionPresenter>(), Att
 
     private val data = ArrayList<ScenicMDL>()
     private lateinit var adapter: AttractionListCardAdapter
-    private val handler = Handler()
 
     override fun createPresenter(): AttractionPresenter = AttractionPresenter(this)
 
@@ -87,11 +86,6 @@ class NearMeAttractionsFragment : NearMeBaseFragment<AttractionPresenter>(), Att
     }
 
     override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-    }
-
-    override fun onDestroyView() {
-        handler.removeCallbacksAndMessages(null)
-        super.onDestroyView()
+        onRetry()
     }
 }

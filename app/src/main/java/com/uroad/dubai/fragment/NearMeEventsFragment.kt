@@ -59,4 +59,8 @@ class NearMeEventsFragment : NearMeBaseFragment<EventsPresenter>(), EventsPresen
         this.data.addAll(data)
         adapter.notifyDataSetChanged()
     }
+
+    override fun onShowError(msg: String?) {
+        onRetry()
+    }
 }

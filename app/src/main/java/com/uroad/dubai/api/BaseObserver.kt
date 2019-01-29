@@ -13,7 +13,12 @@ import java.util.concurrent.TimeoutException
 import javax.net.ssl.SSLHandshakeException
 
 
-abstract class BaseObserver<T>(var view: BaseView?) : DisposableObserver<T>() {
+abstract class BaseObserver<T>() : DisposableObserver<T>() {
+
+    var view: BaseView? = null
+    constructor(view: BaseView?) :this(){
+        this.view = view
+    }
 
     override fun onStart() {
         view?.onShowLoading()
@@ -40,7 +45,7 @@ abstract class BaseObserver<T>(var view: BaseView?) : DisposableObserver<T>() {
         } else if (e is TimeoutException) {
             message = "Network connection timeout, please check your network status, try again later!"
         } else if (e is UnknownHostException) {
-           message = "Network connection is abnormal. Please check your network status and try again later!"
+            message = "Network connection is abnormal. Please check your network status and try again later!"
         } else if (e is NullPointerException) {
             message = "Null pointer exception"
         } else if (e is SSLHandshakeException) {
@@ -68,5 +73,5 @@ abstract class BaseObserver<T>(var view: BaseView?) : DisposableObserver<T>() {
 
     abstract fun onSuccess(result: T)
 
-    open fun onFailure(msg: String?){}
+    open fun onFailure(msg: String?) {}
 }

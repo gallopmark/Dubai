@@ -51,6 +51,8 @@ import com.uroad.dubai.model.MultiItem
 import com.uroad.dubai.model.PoiSearchPoiMDL
 import com.uroad.dubai.model.PoiSearchTextMDL
 import com.uroad.dubai.model.UserAddressMDL
+import com.uroad.dubai.rx2bus.MessageEvent
+import com.uroad.dubai.rx2bus.Rx2Bus
 import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.webService.WebApi
 import com.uroad.dubai.widget.AppCompatNavigationMapRoute
@@ -568,6 +570,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             showTipsDialog(getString(R.string.remove_route_success))
             clearSave()
         }
+        Rx2Bus.post(MessageEvent())
     }
 
     /*subscribe route failure*/

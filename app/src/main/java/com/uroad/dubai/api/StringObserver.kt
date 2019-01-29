@@ -3,7 +3,12 @@ package com.uroad.dubai.api
 import com.uroad.dubai.utils.AndroidBase64Utils
 import com.uroad.dubai.utils.GsonUtils
 
-abstract class StringObserver(view: BaseView?) : BaseObserver<String>(view) {
+abstract class StringObserver() : BaseObserver<String>(){
+
+    constructor(view: BaseView?) : this(){
+        this.view = view
+    }
+
     override fun onSuccess(result: String) {
         val data = AndroidBase64Utils.decodeToString(result)
         if (GsonUtils.isResultOk(data)) {

@@ -33,7 +33,7 @@
 //import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 //import com.uroad.dubai.common.BaseRecyclerAdapter
 //import com.uroad.dubai.utils.TimeUtils
-//import com.uroad.dubai.utils.Utils
+//import com.uroad.dubai.utils.DubaiUtils
 //import com.uroad.dubai.api.presenter.RouteNavigationPresenter
 //import com.uroad.dubai.api.view.RouteNavigationView
 //import com.uroad.dubai.widget.AppCompatNavigationMapRoute
@@ -405,7 +405,7 @@
 //            }
 //            val distance = t.distance()
 //            if (distance != null) {
-//                holder.setText(R.id.tvDistance, Utils.convertDistance(distance.toInt()))
+//                holder.setText(R.id.tvDistance, DubaiUtils.convertDistance(distance.toInt()))
 //            } else {
 //                holder.setText(R.id.tvDistance, "")
 //            }

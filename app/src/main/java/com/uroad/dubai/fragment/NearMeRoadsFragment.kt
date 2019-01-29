@@ -36,7 +36,6 @@ class NearMeRoadsFragment : NearMeBaseFragment<RoadsNearFMPresenter>(), RoadsNea
 
     private val data = ArrayList<RoadsMDL>()
     private lateinit var adapter: RoadsListCardAdapter
-    private val handler = Handler()
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mainmearme)
@@ -101,15 +100,10 @@ class NearMeRoadsFragment : NearMeBaseFragment<RoadsNearFMPresenter>(), RoadsNea
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        onRetry()
     }
 
     override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-    }
-
-    override fun onDestroyView() {
-        handler.removeCallbacksAndMessages(null)
-        super.onDestroyView()
+        onRetry()
     }
 }

@@ -1,7 +1,6 @@
 package com.uroad.dubai.fragment
 
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -11,7 +10,6 @@ import com.uroad.dubai.adapter.HotelListCardAdapter
 import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.webService.WebApi
@@ -33,7 +31,6 @@ class NearMeHotelFragment : NearMeBaseFragment<NewsPresenter>(), NewsView {
 
     private val data = ArrayList<NewsMDL>()
     private lateinit var adapter: HotelListCardAdapter
-    private val handler = Handler()
 
     override fun createPresenter(): NewsPresenter = NewsPresenter(this)
 
@@ -86,15 +83,10 @@ class NearMeHotelFragment : NearMeBaseFragment<NewsPresenter>(), NewsView {
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        onRetry()
     }
 
     override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-    }
-
-    override fun onDestroyView() {
-        handler.removeCallbacksAndMessages(null)
-        super.onDestroyView()
+        onRetry()
     }
 }
