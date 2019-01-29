@@ -36,7 +36,12 @@ import com.uroad.library.decoration.ItemDecoration
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.widget.banner.BaseBannerAdapter
 import kotlinx.android.synthetic.main.fragment_travel.*
+import kotlinx.android.synthetic.main.item_calendar_norecord.*
 import kotlinx.android.synthetic.main.travel_content_menu.*
+import android.provider.CalendarContract
+import android.content.Intent
+import kotlinx.android.synthetic.main.item_history_norecord.*
+
 
 /**
  * @author MFB
@@ -91,6 +96,9 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         }
         //recyclerView.adapter = adapter
         recyclerView.adapter = adapterRoads
+        btnNavigate.setOnClickListener {
+            openActivity(RouteNavigationActivity::class.java)
+        }
     }
 
     private fun initBanner() {
@@ -130,6 +138,17 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private fun initCalendar() {
         calendarBanner = TravelCalendarAdapter(context, calendarList)
         baCalendar.setAdapter(calendarBanner)
+        btnAdd.setOnClickListener {
+            try {
+                val intent = Intent(Intent.ACTION_INSERT)
+                intent.data = CalendarContract.Events.CONTENT_URI
+                intent.putExtra(CalendarContract.Events.TITLE, "")
+                context.startActivityForResult(intent, 100)
+            }catch (e : Exception){
+                e.printStackTrace()
+            }
+        }
+
     }
 
     private fun initView() {
@@ -162,6 +181,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     override fun initData() {
         presenter.getAttractions(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(NewsType.ATTRACTION.code, "", 1, 4, 0.0, 0.0))
         bannerPresenter.getBannerNews(BannerType.TRAVEL.CODE)
+        loadCalender()
     }
 
     override fun onGetNews(data: MutableList<NewsMDL>) {
@@ -189,6 +209,13 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         }
         this.data.clear()
         this.data.addAll(attractions)
+        if(data.size > 0){
+            recyclerView.visibility = View.VISIBLE
+            ilHistoryNoR.visibility = View.GONE
+        }else{
+            recyclerView.visibility = View.GONE
+            ilHistoryNoR.visibility = View.VISIBLE
+        }
         adapter.notifyDataSetChanged()
         adapterRoads.notifyDataSetChanged()
     }
@@ -207,17 +234,26 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
 
     override fun loadCalendarSuccess(list: ArrayList<CalendarMDL>) {
         when {
-            list.size <= 3 -> {
+            list.size in 1..3 -> {
                 calendarList.clear()
                 calendarList.addAll(list)
+                baCalendar.visibility = View.VISIBLE
+                ilCalendarNoR.visibility = View.GONE
+                tvMoreClan.visibility = View.VISIBLE
             }
             list.size > 3 -> {
                 calendarList.clear()
                 calendarList.add(list[0])
                 calendarList.add(list[1])
                 calendarList.add(list[2])
+                baCalendar.visibility = View.VISIBLE
+                ilCalendarNoR.visibility = View.GONE
+                tvMoreClan.visibility = View.VISIBLE
             }
             else -> {
+                baCalendar.visibility = View.GONE
+                ilCalendarNoR.visibility = View.VISIBLE
+                tvMoreClan.visibility = View.INVISIBLE
             }
         }
         calendarBanner.notifyDataSetChanged()
@@ -239,6 +275,10 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
 
     private fun inspectPermissions() {
         calendarPresenter = CalendarPresenter(this@TravelFragment)
+        loadCalender()
+    }
+
+    private fun loadCalender() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context,
                             Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
@@ -250,6 +290,13 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
             }
         } else {
             calendarPresenter.getCalendar(context)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100){
+            loadCalender()
         }
     }
 

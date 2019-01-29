@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
 import com.uroad.dubai.model.CalendarMDL
-import com.uroad.dubai.model.FavoritesMDL
 import com.uroad.library.widget.banner.BaseBannerAdapter
 
 class TravelCalendarAdapter(context: Context, data: MutableList<CalendarMDL>)

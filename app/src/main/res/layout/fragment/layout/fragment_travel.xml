@@ -114,6 +114,7 @@
 
                 <com.uroad.library.widget.banner.Banner
                     android:id="@+id/baCalendar"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:bannerAnimDuration="1000"
@@ -127,19 +128,29 @@
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.7" />
 
+                <include
+                    android:id="@+id/ilCalendarNoR"
+                    layout="@layout/item_calendar_norecord"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/space_16"
                     android:layout_marginTop="@dimen/space_10"
                     android:layout_marginRight="@dimen/space_16"
-                    android:layout_marginBottom="@dimen/space_10"
                     android:text="@string/view_histroy"
                     android:textColor="@color/color_66"
                     android:textSize="@dimen/font_20" />
 
+                <include
+                    android:id="@+id/ilHistoryNoR"
+                    layout="@layout/item_history_norecord"/>
+
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerView"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/space_10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

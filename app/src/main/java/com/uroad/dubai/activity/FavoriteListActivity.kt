@@ -1,5 +1,6 @@
 package com.uroad.dubai.activity
 
+import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -9,24 +10,38 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.common.BaseMapBoxLocationActivity
 import com.uroad.dubai.fragment.FavoriteEventFragment
 import com.uroad.dubai.fragment.FavoriteRouteFragment
 import kotlinx.android.synthetic.main.activity_favorites.*
+import java.lang.Exception
 
-class FavoriteListActivity : BaseActivity() {
+class FavoriteListActivity : BaseMapBoxLocationActivity() {
 
     private val mFragmentList = ArrayList<Fragment>()
+    private var longitude : Double = 0.0
+    private var latitude : Double = 0.0
 
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_favorites)
         withTitle(getString(R.string.home_title_favorites))
+
+        openLocation()
+    }
+
+    override fun afterLocation(location: Location) {
+        longitude = location.longitude
+        latitude = location.latitude
+        initTab()
+    }
+
+    override fun onLocationFailure(exception: Exception) {
         initTab()
     }
 
     private fun initTab(){
         mFragmentList.add(FavoriteRouteFragment())
-        mFragmentList.add(FavoriteEventFragment())
+        mFragmentList.add(FavoriteEventFragment.newInstance(longitude,latitude))
         mViewPager.adapter = MyPagerAdapter(supportFragmentManager,mFragmentList)
         mViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(p0: Int) {}

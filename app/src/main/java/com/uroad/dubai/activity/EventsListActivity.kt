@@ -10,7 +10,6 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.common.BaseMapBoxLocationActivity
 import com.uroad.dubai.fragment.FavoriteEventFragment
 import kotlinx.android.synthetic.main.activity_event.*
