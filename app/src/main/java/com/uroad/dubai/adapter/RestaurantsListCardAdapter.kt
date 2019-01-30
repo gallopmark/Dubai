@@ -24,6 +24,6 @@ class RestaurantsListCardAdapter(context: Context, data: MutableList<NewsMDL>)
         holder.setText(R.id.mTitleTv, t.title)
         holder.setText(R.id.mAddressTv, t.address)
         holder.setText(R.id.mTimeTv, t.hours)
-        holder.setText(R.id.mDistanceTv, t.distance)
+        holder.setText(R.id.mDistanceTv, t.getMDistance())
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.FragmentTransaction
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.AppVersionPresenter
@@ -131,5 +132,11 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPre
 
     override fun onShowError(msg: String?) {
         handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

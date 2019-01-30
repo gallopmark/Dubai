@@ -3,22 +3,15 @@ package com.uroad.dubai.fragment
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
-import com.uroad.dubai.R
 import com.uroad.dubai.activity.EventsDetailActivity
 import com.uroad.dubai.adapter.FavoriteEventFmListAdapter
 import com.uroad.dubai.api.presenter.EventsPresenter
-import com.uroad.dubai.api.presenter.FavoriteEventFMPresenter
-import com.uroad.dubai.api.presenter.RoadsNearFMPresenter
-import com.uroad.dubai.api.view.FavoriteEventFMView
-import com.uroad.dubai.api.view.RoadsNearFMView
 import com.uroad.dubai.common.BasePageRefreshPresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.model.EventsMDL
-import com.uroad.dubai.model.RoadsMDL
 import java.util.*
 
 class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(), EventsPresenter.EventsView {
-
     companion object {
         fun newInstance(longitude: Double, latitude: Double): FavoriteEventFragment {
             return FavoriteEventFragment().apply {
@@ -34,8 +27,8 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
     private var type: String? = null
     private var index = 1
     private var size = 10
-    private var longitude : Double = 0.0
-    private var latitude : Double = 0.0
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
     private lateinit var data: MutableList<EventsMDL>
     private lateinit var adapter: FavoriteEventFmListAdapter
 
@@ -48,9 +41,8 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
 
         adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
-                openActivity(EventsDetailActivity::class.java, Bundle().apply {
-                    putString("eventMDL", Gson().toJson(data[position]))
-                })
+                if (position !in 0 until data.size) return
+                openActivity(EventsDetailActivity::class.java, Bundle().apply { putString("eventId", data[position].eventid) })
             }
         })
     }
@@ -88,7 +80,7 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
     }
 
     private fun getMsgList() {
-        presenter?.getEventList(index,size,"",longitude,latitude)
+        presenter?.getEventList(index, size, "", longitude, latitude)
     }
 
     override fun createPresenter(): EventsPresenter? = EventsPresenter(this)

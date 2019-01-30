@@ -42,7 +42,7 @@ class NearMeEventsFragment : NearMeBaseFragment<EventsPresenter>(), EventsPresen
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
                     if (position in 0 until data.size) {
-                        openActivity(EventsDetailActivity::class.java, Bundle().apply { putString("eventMDL", GsonUtils.fromObjectToJson(data[position])) })
+                        openActivity(EventsDetailActivity::class.java, Bundle().apply { putString("eventId", data[position].eventid) })
                     }
                 }
             })

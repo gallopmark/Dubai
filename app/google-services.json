@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "989065036867",
-    "firebase_url": "https://dubaiandroid-c7b55.firebaseio.com",
-    "project_id": "dubaiandroid-c7b55",
-    "storage_bucket": "dubaiandroid-c7b55.appspot.com"
+    "project_number": "886391442452",
+    "firebase_url": "https://dubaitest-a3a32.firebaseio.com",
+    "project_id": "dubaitest-a3a32",
+    "storage_bucket": "dubaitest-a3a32.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:989065036867:android:02176b379f09377d",
+        "mobilesdk_app_id": "1:886391442452:android:02176b379f09377d",
         "android_client_info": {
           "package_name": "com.uroad.dubai"
         }
       },
       "oauth_client": [
         {
-          "client_id": "989065036867-ujq9d7vciore62dm0p22ka4uerkmu5f7.apps.googleusercontent.com",
+          "client_id": "886391442452-ntevl3kdqm9fharr8n4562l9nbj41gv6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.uroad.dubai",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "989065036867-34d565tetbvslho5ud6d4arbgkbadrse.apps.googleusercontent.com",
+          "client_id": "886391442452-gs1sdf77393fitcre1dhnl740k3qkd5a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB_8bNC4Ai6cZIAJlfctXDI0FrxybRuNFk"
+          "current_key": "AIzaSyDU-BF-X6HDDQKI1H77GaUU_4AdNBE9VJ4"
         }
       ],
       "services": {
@@ -40,8 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "989065036867-34d565tetbvslho5ud6d4arbgkbadrse.apps.googleusercontent.com",
+              "client_id": "886391442452-gs1sdf77393fitcre1dhnl740k3qkd5a.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "886391442452-i7u1g9638704lf9jltms5ge3c15ptl4a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.uroad.DubaiGST"
+              }
             }
           ]
         },

@@ -65,22 +65,9 @@ class NearMeRestaurantsFragment : NearMeBaseFragment<NewsPresenter>(), NewsView 
     }
 
     override fun onGetNewList(news: MutableList<NewsMDL>) {
-        addDistance(news)
         this.data.clear()
         this.data.addAll(news)
         adapter.notifyDataSetChanged()
-    }
-
-    private fun addDistance(list: MutableList<NewsMDL>) {
-        val array = arrayOf("1.2km", "1.7km", "2.1km", "5.6km")
-        for (i in 0 until list.size) {
-            if (i < array.size) {
-                list[i].distance = array[i]
-            } else {
-                val pos = i % array.size
-                list[i].distance = array[pos]
-            }
-        }
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {

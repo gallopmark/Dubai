@@ -3,9 +3,9 @@ package com.uroad.dubai.activity
 import android.os.Bundle
 import android.widget.LinearLayout
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.api.presenter.EventsPresenter
+import com.uroad.dubai.common.BasePresenterActivity
 import com.uroad.dubai.model.EventsMDL
-import com.uroad.dubai.utils.GsonUtils
 import com.uroad.glidev4.GlideV4
 import com.uroad.library.utils.BitmapUtils
 import com.uroad.library.utils.DisplayUtils
@@ -16,12 +16,19 @@ import kotlinx.android.synthetic.main.activity_eventdetail.*
  * @create 2019/1/17
  * @describe event detail activity
  */
-class EventsDetailActivity : BaseActivity() {
+class EventsDetailActivity : BasePresenterActivity<EventsPresenter>(), EventsPresenter.EventDetailView {
+
+    private var eventId: String? = null
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_eventdetail)
         withTitle(getString(R.string.details))
-        setTopImage()
         initBundle()
+        setTopImage()
+    }
+
+    override fun createPresenter(): EventsPresenter = EventsPresenter()
+    private fun initBundle() {
+        eventId = intent.extras?.getString("eventId")
     }
 
     private fun setTopImage() {
@@ -31,10 +38,20 @@ class EventsDetailActivity : BaseActivity() {
         ivBg.setImageBitmap(BitmapUtils.decodeSampledBitmapFromResource(resources, R.mipmap.ic_eventdetail_bg, imageWidth, imageHeight))
     }
 
-    private fun initBundle() {
-        val json = intent.extras?.getString("eventMDL")
-        val mdl = GsonUtils.fromJsonToObject(json, EventsMDL::class.java)
-        mdl?.let { updateUI(mdl) }
+    override fun initData() {
+        presenter.getEventDetails(eventId, getUserUUID(), this)
+    }
+
+    override fun onShowLoading() {
+        onPageLoading()
+    }
+
+    override fun onGetEventDetail(eventMDL: EventsMDL) {
+        updateUI(eventMDL)
+    }
+
+    override fun onShowError(msg: String?) {
+        onPageError()
     }
 
     private fun updateUI(mdl: EventsMDL) {

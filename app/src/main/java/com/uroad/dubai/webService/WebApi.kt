@@ -162,6 +162,13 @@ class WebApi {
             else put("latitude", "")
         }
 
+        const val EVENT_DETAILS = "getEventDetails"
+
+        fun eventDetailsParams(eventid: String?, useruuid: String?) = getBaseParams().apply {
+            put("eventid", eventid)
+            put("useruuid", useruuid)
+        }
+
         const val VALIDATIONDEVICE = "validationDevice"
         fun validationDevice(deviceid: String) = getBaseParams().apply {
             put("deviceid", deviceid)

@@ -62,4 +62,10 @@ open class NewsMDL : Serializable, MapPointItem {
             ""
         }
     }
+
+    fun getMDistance(): String {
+        var k = "0km"
+        distance?.let { k = "${it}km" }
+        return k
+    }
 }

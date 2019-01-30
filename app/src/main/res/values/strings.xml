@@ -20,6 +20,7 @@
     <string name="openSettings">Open Settings</string>
     <string name="exit">Exit</string>
     <string name="ok">OK</string>
+    <string name="quit_app_tips">Are you sure to quit the RTA Smart</string>
 
     <string name="welcome_title">Welcome to Dubai!</string>
     <string name="welcome_message">Thank you for using RTA Smart. This app allows you to:\n

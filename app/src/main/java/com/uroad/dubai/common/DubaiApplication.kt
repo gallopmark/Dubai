@@ -6,6 +6,7 @@ import android.os.Message
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.google.firebase.FirebaseApp
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.mapbox.mapboxsdk.Mapbox
@@ -50,7 +51,7 @@ class DubaiApplication : MultiDexApplication() {
         super.onCreate()
         instance = this
         initMapbox()
-        initFirebase()
+//        initFirebase()
         initCompressorPath()
         initBugly()
         validationDevice()
@@ -61,15 +62,9 @@ class DubaiApplication : MultiDexApplication() {
     }
 
     private fun initFirebase() {
-        FirebaseApp.initializeApp(this)
+        FirebaseMessaging.getInstance().subscribeToTopic("fcm_test")
         FirebaseMessaging.getInstance().subscribeToTopic("${MessageTopic.EVENT.CODE}${getUserId()}")
-        FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.NEWS.CODE).addOnCompleteListener {
-            if(it.isSuccessful){
-                Log.e("firebase","successful")
-            } else {
-                Log.e("firebase","failure")
-            }
-        }
+        FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.NEWS.CODE)
         FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.NOTICE.CODE)
         FirebaseMessaging.getInstance().subscribeToTopic(MessageTopic.SYSTEM.CODE)
     }

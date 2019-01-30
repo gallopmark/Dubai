@@ -14,7 +14,13 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-open class BasePresenter<V : BaseView>(private var baseView: V?) {
+abstract class BasePresenter<V : BaseView> {
+    private var baseView: V? = null
+
+    constructor()
+    constructor(baseView: V?) {
+        this.baseView = baseView
+    }
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     /**
