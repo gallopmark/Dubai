@@ -87,16 +87,15 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
         adapter = MainSubscribeAdapter(context, data).apply {
             setOnItemClickListener(object : BaseBannerAdapter.OnItemClickListener<SubscribeMDL> {
                 override fun onItemClick(t: SubscribeMDL, position: Int) {
-                    val point = t.getDestinationPoint()
-                    point?.let {
-                        openActivity(RouteNavigationActivity::class.java, Bundle().apply {
-                            putBoolean("fromHome", true)
-                            putString("routeId", t.routeid)
-                            putString("profile", t.getProfile())
-                            putString("point", it.toJson())
-                            putString("endPointName", t.endpoint)
-                        })
-                    }
+                    openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+                        putBoolean("fromHome", true)
+                        putString("routeId", t.routeid)
+                        putString("profile", t.getProfile())
+                        putString("startPoint",t.getOriginPoint()?.toJson())
+                        putString("startPointName",t.startpoint)
+                        putString("endPoint", t.getDestinationPoint()?.toJson())
+                        putString("endPointName", t.endpoint)
+                    })
                 }
             })
         }

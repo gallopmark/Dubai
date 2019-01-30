@@ -69,7 +69,7 @@ class MainSubscribeAdapter(private val context: Context,
     private class RouteColorAdapter(context: Context, data: MutableList<Int>)
         : BaseArrayRecyclerAdapter<Int>(context, data) {
         private val width = DisplayUtils.getWindowWidth(context) - DisplayUtils.dip2px(context, 16f) * 2
-        private val routeWidth = Math.floor(width.toDouble() / data.size).toInt()
+        private val routeWidth = Math.ceil(width.toDouble() / data.size).toInt()
         override fun bindView(viewType: Int): Int = R.layout.item_routeline
 
         override fun onBindHoder(holder: RecyclerHolder, t: Int, position: Int) {

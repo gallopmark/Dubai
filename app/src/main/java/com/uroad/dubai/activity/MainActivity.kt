@@ -127,7 +127,9 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPre
 
     private fun startUpdate(url: String?) {
         if (TextUtils.isEmpty(url)) showShortToast(getString(R.string.version_update_error_url))
-        else { startService(Intent(this@MainActivity, VersionUpdateService::class.java).apply { putExtra("downloadUrl", url) }) }
+        else {
+            startService(Intent(this@MainActivity, VersionUpdateService::class.java).apply { putExtra("downloadUrl", url) })
+        }
     }
 
     override fun onShowError(msg: String?) {
@@ -135,7 +137,19 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPre
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showDialog(getString(R.string.dialog_default_title), getString(R.string.quit_app_tips)
+                    , getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), object : DialogViewClickListener {
+                override fun onConfirm(v: View, dialog: AppDialog) {
+                    dialog.dismiss()
+                    finish()
+                }
+
+                override fun onCancel(v: View, dialog: AppDialog) {
+                    dialog.dismiss()
+                }
+            })
+            return true
         }
         return super.onKeyDown(keyCode, event)
     }

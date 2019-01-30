@@ -102,7 +102,7 @@ class NavigationAddressActivity : BasePresenterActivity<UserAddressPresenter>(),
 
     private fun onNavigationRoute(point: Point, endPointName: String?) {
         openActivity(RouteNavigationActivity::class.java, Bundle().apply {
-            putString("point", point.toJson())
+            putString("endPoint", point.toJson())
             putString("endPointName", endPointName)
         })
     }

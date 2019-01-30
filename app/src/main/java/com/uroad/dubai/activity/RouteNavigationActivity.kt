@@ -141,11 +141,16 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
                 if (!TextUtils.isEmpty(profile)) {
                     initProfile(profile)
                 }
+                tvStartPoint.text = extras.getString("startPointName")
+                val startPoint = extras.getString("startPoint", "")
+                if (!TextUtils.isEmpty(startPoint)) {
+                    this.startPoint = Point.fromJson(startPoint)
+                }
             }
-            val point = extras.getString("point")
-            point?.let {
+            val endPoint = extras.getString("endPoint")
+            endPoint?.let {
                 isFromBundle = true
-                endPoint = Point.fromJson(it)
+                this.endPoint = Point.fromJson(it)
                 tvEndPoint.text = extras.getString("endPointName")
             }
         }
@@ -285,7 +290,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             tvEndPoint.text = carmenFeature?.placeName()
         }
         onInitialState()
-        startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+        onNavigationRoutes()
     }
 
     private fun showHistory() {
@@ -347,7 +352,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             val tempText = tvStartPoint.text
             tvStartPoint.text = tvEndPoint.text
             tvEndPoint.text = tempText
-            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+            onNavigationRoutes()
         }
     }
 
@@ -367,7 +372,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
                     profile = DirectionsCriteria.PROFILE_WALKING
                 }
             }
-            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+            onNavigationRoutes()
         }
     }
 
@@ -393,7 +398,8 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     override fun onMapAsync(mapBoxMap: MapboxMap) {
-        openLocation()
+        if (startPoint == null) openLocation()
+        onNavigationRoutes()
     }
 
     override fun onDismissLocationPermission() {
@@ -412,10 +418,12 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     private fun initMyLocation(location: Location) {
-        startPoint = Point.fromLngLat(location.longitude, location.latitude)
-        tvStartPoint.text = getString(R.string.route_myLocation)
+        if (startPoint == null) {
+            startPoint = Point.fromLngLat(location.longitude, location.latitude)
+            tvStartPoint.text = getString(R.string.route_myLocation)
+        }
         if (isFromBundle) {
-            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+            onNavigationRoutes()
             isFromBundle = false
         }
     }
@@ -460,7 +468,11 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     override fun onShowError(msg: String?) {
-        if (isRouteNavigation) showShortToast(msg)
+        if (isRouteNavigation || isSubscribe) showShortToast(msg)
+    }
+
+    private fun onNavigationRoutes() {
+        startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
     }
 
     private fun navigationRoutes(origin: Point, destination: Point) {
@@ -610,7 +622,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
             }
             point?.let { if (poiType == 1) startPoint = it else endPoint = it }
             if (!TextUtils.isEmpty(address)) tvEndPoint.text = address
-            startPoint?.let { startP -> endPoint?.let { endP -> navigationRoutes(startP, endP) } }
+            onNavigationRoutes()
         }
     }
 

@@ -350,7 +350,7 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
                         override fun onNavigation(mdl: NewsMDL, dialog: NewsDetailDialog) {
                             val point = Point.fromLngLat(mdl.getLatLng().longitude, mdl.getLatLng().latitude)
                             activity.openActivity(RouteNavigationActivity::class.java, Bundle().apply {
-                                putString("point", point.toJson())
+                                putString("endPoint", point.toJson())
                                 putString("endPointName", mdl.title)
                             })
                         }
