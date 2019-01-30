@@ -103,8 +103,10 @@ class MineFragment : BaseFragment() {
         super.onResume()
         isLogin = UserPreferenceHelper.isLogin(context)
         if (isLogin){
-            ivUserHead.setImageResource(R.mipmap.ic_user_default)
-            upDataUserName(DubaiApplication.user?.nickname?:"" ?:"Emma",isLogin)
+            GlideV4.getInstance().displayCircleImage(context,
+                    UserPreferenceHelper.getAvatar(context),
+                    ivUserHead,R.mipmap.ic_user_default)
+            upDataUserName(UserPreferenceHelper.getUserNickName(context)?:"Emma",isLogin)
         }else{
             ivUserHead.setImageResource(R.mipmap.icon_user_head_gray)
             upDataUserName("Me",isLogin)

@@ -1,7 +1,6 @@
 package com.uroad.dubai.fragment
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.adapter.AttrNearFmListAdapter
@@ -9,10 +8,8 @@ import com.uroad.dubai.api.presenter.AttractionNearFMPresenter
 import com.uroad.dubai.api.view.AttractionNearFMView
 import com.uroad.dubai.common.BasePageRefreshPresenterFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.NewsType
-import com.uroad.dubai.model.AttractionNearFMMDL
-import com.uroad.dubai.model.ScenicMDL
+import com.uroad.dubai.model.NewsMDL
 import com.uroad.dubai.webService.WebApi
 import java.util.*
 
@@ -22,12 +19,28 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
     private var type: String? = null
     private var index = 1
     private var size = 10
-    private lateinit var data: MutableList<AttractionNearFMMDL>
+    private lateinit var data: MutableList<NewsMDL>
     private lateinit var adapter: AttrNearFmListAdapter
+    private var longitude : Double = 0.0
+    private var latitude : Double = 0.0
+
+    companion object {
+        fun newInstance(longitude: Double, latitude: Double, type : String): AttractionNearFragment {
+            return AttractionNearFragment().apply {
+                arguments = Bundle().apply {
+                    putDouble("longitude", longitude)
+                    putDouble("latitude", latitude)
+                    putString("userstatus",type)
+                }
+            }
+        }
+    }
 
     override fun initViewData(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
             type = it.getString("userstatus")
+            longitude = it.getDouble("longitude",0.0)
+            latitude = it.getDouble("latitude",0.0)
         }
         data = ArrayList()
         adapter = AttrNearFmListAdapter(context, type, data)
@@ -58,7 +71,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
             else -> NewsType.ATTRACTION.code        //1001004 景点
 
         }
-        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(code, "", index, size, 0.0, 0.0))
+        presenter?.getNewsList(WebApi.GET_NEWS_LIST, WebApi.getNewsListParams(code, "", index, size, longitude, latitude))
         /*onPullToLoadSuccess()
         val mdl = AttractionNearFMMDL()
         var num = Random()
@@ -79,7 +92,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
         getMsgList()
     }
 
-    override fun onGetNewList(list: MutableList<AttractionNearFMMDL>) {
+    override fun onGetNewList(list: MutableList<NewsMDL>) {
         onPullToLoadSuccess()
         if (index == 1) {
             data.clear()

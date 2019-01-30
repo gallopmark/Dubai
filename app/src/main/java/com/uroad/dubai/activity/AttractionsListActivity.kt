@@ -1,6 +1,7 @@
 package com.uroad.dubai.activity
 
 import android.graphics.Typeface
+import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -11,11 +12,13 @@ import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.common.BaseMapBoxLocationActivity
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.fragment.AttractionNearFragment
 import kotlinx.android.synthetic.main.activity_attraction.*
+import java.lang.Exception
 
-class AttractionsListActivity : BaseActivity() {
+class AttractionsListActivity : BaseMapBoxLocationActivity() {
 
     private var mTitle: String? = null
     private var type :String? = null
@@ -26,10 +29,13 @@ class AttractionsListActivity : BaseActivity() {
     private val mTabTitleList = ArrayList<String>()
 
     private val mFragmentList = ArrayList<Fragment>()
+    private var longitude : Double = 0.0
+    private var latitude : Double = 0.0
 
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_attraction)
         val bundle = intent.extras
+        openLocation()
         bundle?.let {
             type = it.getString("userstatus")
         }
@@ -38,14 +44,23 @@ class AttractionsListActivity : BaseActivity() {
             NewsType.RESTAURANT.code -> withTitle(getString(R.string.travel_menu_restaurants)) //餐厅
             else -> withTitle(getString(R.string.travel_menu_attractions))      //1001004 景点
         }
+    }
+
+    override fun afterLocation(location: Location) {
+        longitude = location.longitude
+        latitude = location.latitude
+        initTab()
+    }
+
+    override fun onLocationFailure(exception: Exception) {
         initTab()
     }
 
     private fun initTab(){
         mTabTitleList.add("Near me")
         mTabTitleList.add("All")
-        mFragmentList.add(getFragment())
-        mFragmentList.add(getFragment())
+        mFragmentList.add(AttractionNearFragment.newInstance(longitude,latitude,"$type"))
+        mFragmentList.add(AttractionNearFragment.newInstance(0.0,0.0,"$type"))
         mViewPager.adapter = MyPagerAdapter(supportFragmentManager,mFragmentList)
         mViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(p0: Int) {}
@@ -76,14 +91,14 @@ class AttractionsListActivity : BaseActivity() {
         onPagerChange(0)
     }
 
-    private fun getFragment() : AttractionNearFragment{
+   /* private fun getFragment(code : Int) : AttractionNearFragment{
         val nearFragment = AttractionNearFragment()
         val bundle = Bundle()
         bundle.putString("userstatus",type)
         //nearFragment.arguments?.putBundle("bundle",bundle)
         nearFragment.arguments = bundle
         return nearFragment
-    }
+    }*/
 
     private fun onPagerChange(position : Int){
         if (position == 0){

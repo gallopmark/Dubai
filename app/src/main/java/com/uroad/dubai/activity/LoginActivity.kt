@@ -94,7 +94,7 @@ class LoginActivity : BaseActivity() , LoginView {
 
     override fun loginSuccess(user: UserMDL?) {
         user?.let {
-            DubaiApplication.user = it
+            UserPreferenceHelper.save(this@LoginActivity, it)
         }
         UserPreferenceHelper.saveAccount(this@LoginActivity, account)
         UserPreferenceHelper.saveUserPassword(this@LoginActivity, password)

@@ -123,7 +123,7 @@ class VerificationCodeActivity : BaseActivity() ,LoginView, NumberEditText.OnInp
 
     override fun loginSuccess(user: UserMDL?) {
         user?.let {
-            DubaiApplication.user = it
+            UserPreferenceHelper.save(this@VerificationCodeActivity, it)
             UserPreferenceHelper.save(this@VerificationCodeActivity,it)
         }
         UserPreferenceHelper.saveAccount(this@VerificationCodeActivity, this.phone)
