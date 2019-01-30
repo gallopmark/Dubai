@@ -32,6 +32,7 @@ class UserPreferenceHelper {
         const val SHOW_SEARCH_HISTORY = "SHOW_SEARCH_HISTORY"
         const val LOADING_PHOTOS = "LOADING_PHOTOS"
         const val USER_NICKNAME = "nickname"
+        const val USER_AVATAR = "avatar"
 
         private fun from(context: Context): SharedPreferences {
             return context.getSharedPreferences(PREFS_USER, Context.MODE_PRIVATE)
@@ -44,6 +45,7 @@ class UserPreferenceHelper {
                     putString(USER_UUID, it.useruuid)
                     putString(REAL_NAME, it.name)
                     putString(USER_NICKNAME, it.nickname)
+                    putString(USER_AVATAR, it.headimg)
                     putString(SEX, it.sex)
                     putString(PHONE,it.mobile)
                     putString(STATUS,it.userstatus)
@@ -57,10 +59,16 @@ class UserPreferenceHelper {
 
         fun getUserUUID(context: Context): String? = from(context).getString(USER_UUID, "")
         fun getUserNickName(context: Context): String? = from(context).getString(USER_NICKNAME,"")
+        fun getUserSex(context: Context) : String? = from(context).getString(SEX,"0")
+        fun getAvatar(context: Context) : String? = from(context).getString(USER_AVATAR,"")
         fun getPushID(context: Context): String? = from(context).getString(PUSH_ID, "")
         fun saveRealName(context: Context, realName: String) {
             from(context).edit().putString(REAL_NAME, realName).apply()
         }
+
+        fun saveAvatar(context: Context,url : String) = from(context).edit().putString(USER_AVATAR,url).apply()
+        fun saveUserNickname(context: Context,name : String) = from(context).edit().putString(USER_NICKNAME,name).apply()
+        fun saveUserSex(context: Context,sex : String) = from(context).edit().putString(SEX,sex).apply()
 
         fun getRealName(context: Context): String? {
             return from(context).getString(REAL_NAME, "")
@@ -108,12 +116,12 @@ class UserPreferenceHelper {
             return from(context).getString(ICON_FILE, "")
         }
 
-        fun saveSex(context: Context, sex: Int) {
-            from(context).edit().putInt(SEX, sex).apply()
+        fun saveSex(context: Context, sex: String) {
+            from(context).edit().putString(SEX, sex).apply()
         }
 
-        fun getSex(context: Context): Int {
-            return from(context).getInt(SEX, 0)
+        fun getSex(context: Context): String? {
+            return from(context).getString(SEX, "0")
         }
 
         fun logOut(context: Context) {

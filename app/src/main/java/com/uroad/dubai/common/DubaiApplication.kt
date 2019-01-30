@@ -35,7 +35,6 @@ class DubaiApplication : MultiDexApplication() {
         //25.19703, 55.274221
         private var compositeDisposable: CompositeDisposable = CompositeDisposable()
         lateinit var instance: DubaiApplication
-        var user : UserMDL? = null
         var userStatus : Boolean = false
         val DEFAULT_LATLNG = LatLng(25.271139, 55.307485)
         const val DEFAULT_ZOOM = 10.toDouble()
@@ -91,8 +90,8 @@ class DubaiApplication : MultiDexApplication() {
                     if (GsonUtils.isResultOk(string)) {
                         handler.removeCallbacksAndMessages(null)
                         userStatus = jsonObject.getBoolean("status")
-                        user = GsonUtils.fromDataBean(string, UserMDL::class.java)
-                        UserPreferenceHelper.save(this@DubaiApplication, user)
+                        val userMDL = GsonUtils.fromDataBean(string, UserMDL::class.java)
+                        UserPreferenceHelper.save(this@DubaiApplication, userMDL)
                     } else {
                         handler.sendEmptyMessageDelayed(10, DEFAULT_DELAY_MILLIS)
                     }

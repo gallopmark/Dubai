@@ -90,8 +90,10 @@ class SettingActivity : BaseActivity() {
                 resources.updateConfiguration(config, dm)
             }
             else -> {
-                config.locale = Locale.US
+                //config.locale = Locale.US
+                config.setLocale(Locale.US)
                 resources.updateConfiguration(config, dm)
+
             }
         }
     }

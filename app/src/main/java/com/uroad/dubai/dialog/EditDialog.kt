@@ -2,6 +2,7 @@ package com.uroad.dubai.dialog
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -18,7 +19,7 @@ import com.uroad.library.utils.DisplayUtils
  *Created by MFB on 2018/8/13.
  * 编辑框
  */
-class EditDialog(private val context: Activity) : AlertDialog(context, R.style.AppDialog) {
+class EditDialog(private val context: Activity) : Dialog(context, R.style.EditDialog) {
     private var hint: String? = null
     private var content: String? = null
     private var buttonText: String? = null
@@ -91,7 +92,7 @@ class EditDialog(private val context: Activity) : AlertDialog(context, R.style.A
                 val content = editText.text.toString()
                 onButtonClickListener?.onButtonClick(content, this@EditDialog)
             }
-            window.setLayout(DisplayUtils.getWindowWidth(context), WindowManager.LayoutParams.WRAP_CONTENT)
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
             window.setWindowAnimations(R.style.OperateAnim)
             window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)

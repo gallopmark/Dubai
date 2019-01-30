@@ -173,5 +173,13 @@ class WebApi {
         fun validationDevice(deviceid: String) = getBaseParams().apply {
             put("deviceid", deviceid)
         }
+
+        const val UPDATEPERSONALINFORMATION = "updatePersonalInformation"
+        fun updatePersonalInformation(useruuid : String,nickname : String,sex : String,headimg : String) = getBaseParams().apply {
+            put("useruuid",useruuid)
+            put("nickname",nickname)
+            put("sex",sex)
+            put("headimg",headimg)
+        }
     }
 }

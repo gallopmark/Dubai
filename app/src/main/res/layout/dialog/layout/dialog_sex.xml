@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_corners_white_5dp"
+    android:minWidth="@dimen/space_280"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/space_20"
+        android:gravity="center"
+        android:paddingLeft="@dimen/space_20"
+        android:paddingRight="@dimen/space_20"
+        android:text="@string/dialog_default_title"
+        android:textColor="@color/dialog_title"
+        android:textSize="@dimen/font_20" />
+
+    <RadioGroup
+        android:id="@+id/rgSex"
+        android:padding="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/rbMan"
+            android:text="man"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="@dimen/space_10"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/rbFemale"
+            android:text="female"
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_0_5"
+        android:background="@color/dialog_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_50"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/dialog_button_cancel"
+            android:textColor="@color/dialog_positiveButton"
+            android:textSize="@dimen/font_16"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="@dimen/space_0_5"
+            android:layout_height="match_parent"
+            android:background="@color/dialog_line" />
+
+        <TextView
+            android:id="@+id/tvConfirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/dialog_button_confirm"
+            android:textColor="@color/dialog_negativeButton"
+            android:textSize="@dimen/font_16"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

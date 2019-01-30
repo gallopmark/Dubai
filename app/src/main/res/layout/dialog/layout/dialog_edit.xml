@@ -36,13 +36,14 @@
 
         <Button
             android:id="@+id/mButton"
-            android:layout_width="@dimen/space_70"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/space_45"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/space_10"
             android:layout_marginRight="@dimen/space_10"
             android:background="@drawable/bg_button_comment_selector"
             android:text="@string/confirm"
+            android:textAllCaps="false"
             android:textColor="@color/comment_button_color_selector"
             android:textSize="@dimen/font_16" />
     </LinearLayout>
