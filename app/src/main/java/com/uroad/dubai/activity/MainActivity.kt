@@ -1,32 +1,27 @@
 package com.uroad.dubai.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.FragmentTransaction
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
+import com.google.android.gms.common.*
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.AppVersionPresenter
 import com.uroad.dubai.common.BasePresenterActivity
-import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.WelcomeDialog
 import com.uroad.dubai.fragment.MainFragment
 import com.uroad.dubai.fragment.MineFragment
 import com.uroad.dubai.fragment.TravelFragment
 import com.uroad.dubai.local.AppSource
-import com.uroad.dubai.model.VersionMDL
-import com.uroad.dubai.service.VersionUpdateService
-import com.uroad.dubai.utils.PackageInfoUtils
 import com.uroad.library.compat.AppDialog
-import com.uroad.library.utils.VersionUtils
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPresenter.AppVersionView {
+class MainActivity : BasePresenterActivity<AppVersionPresenter<MainActivity>>() {
 
-    override fun createPresenter(): AppVersionPresenter = AppVersionPresenter(this)
+    override fun createPresenter(): AppVersionPresenter<MainActivity> = AppVersionPresenter(this, this)
 
     companion object {
         private const val TAB_HOME = "home"
@@ -34,13 +29,12 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPre
         private const val TAB_MINE = "mine"
     }
 
-    private val handler = Handler()
-
     override fun setUp(savedInstanceState: Bundle?) {
         requestWindowFullScreen()
         setBaseContentViewWithoutTitle(R.layout.activity_main, true)
         initTab()
         onWelcome()
+        checkGoogleService()
     }
 
     private fun initTab() {
@@ -97,43 +91,36 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter>(), AppVersionPre
         }
     }
 
+    private fun checkGoogleService() {
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
+            showDialog(getString(R.string.dialog_default_title),
+                    getString(R.string.without_google_services),
+                    getString(R.string.dialog_button_cancel),
+                    getString(R.string.install), object : DialogViewClickListener {
+                override fun onCancel(v: View, dialog: AppDialog) {
+                    dialog.dismiss()
+                }
+
+                override fun onConfirm(v: View, dialog: AppDialog) {
+                    dialog.dismiss()
+                    installGoogleServices()
+                }
+            })
+        }
+    }
+
+    private fun installGoogleServices() {
+        try {
+            val url = "https://play.google.com/store/apps/details?id=${GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE}"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        } catch (e: Exception) {
+        }
+    }
+
     override fun initData() {
         presenter.checkVersion()
-    }
-
-    override fun getVersion(mdl: VersionMDL?) {
-        mdl?.let { checkOrUpdate(it) }
-    }
-
-    private fun checkOrUpdate(mdl: VersionMDL) {
-        var version = ""
-        mdl.version?.let { version = it }
-        if (VersionUtils.isNeedUpdate(version, PackageInfoUtils.getVersionName(this))) {
-            showDialog(getString(R.string.dialog_default_title), mdl.versioncontent,
-                    getString(R.string.version_update_cancel),
-                    getString(R.string.version_update_confirm),
-                    object : DialogViewClickListener {
-                        override fun onConfirm(v: View, dialog: AppDialog) {
-                            dialog.dismiss()
-                            startUpdate(mdl.url)
-                        }
-
-                        override fun onCancel(v: View, dialog: AppDialog) {
-                            dialog.dismiss()
-                        }
-                    })
-        }
-    }
-
-    private fun startUpdate(url: String?) {
-        if (TextUtils.isEmpty(url)) showShortToast(getString(R.string.version_update_error_url))
-        else {
-            startService(Intent(this@MainActivity, VersionUpdateService::class.java).apply { putExtra("downloadUrl", url) })
-        }
-    }
-
-    override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

@@ -9,7 +9,6 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.NotificationCompat
-import android.util.Log
 import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.google.firebase.messaging.FirebaseMessaging
@@ -22,7 +21,7 @@ import com.uroad.dubai.enumeration.MessageType
 
 class MessagePushService : FirebaseMessagingService() {
     companion object {
-        private const val TAG = "FirebaseMsgService"
+//        private const val TAG = "FirebaseMsgService"
     }
 
     private var notificationID = 0x0000
@@ -44,10 +43,10 @@ class MessagePushService : FirebaseMessagingService() {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: ${remoteMessage?.from}")
-        Log.d(TAG, "messageId: ${remoteMessage?.messageId}")
-        Log.d(TAG, "messageType: ${remoteMessage?.messageType}")
-        remoteMessage?.data?.let { Log.d(TAG, "Message data payload: $it") }
+//        Log.d(TAG, "From: ${remoteMessage?.from}")
+//        Log.d(TAG, "messageId: ${remoteMessage?.messageId}")
+//        Log.d(TAG, "messageType: ${remoteMessage?.messageType}")
+//        remoteMessage?.data?.let { Log.d(TAG, "Message data payload: $it") }
 //        remoteMessage?.data?.isNotEmpty()?.let {
 //            Log.d(TAG, "Message data payload: " + remoteMessage.data)
 //            if (/* Check if data needs to be processed by long running job */ true) {
@@ -62,7 +61,7 @@ class MessagePushService : FirebaseMessagingService() {
 //        remoteMessage?.notification?.let { sendNotification(it.body) }
         // Check if message contains a notification payload.
         remoteMessage?.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
+//            Log.d(TAG, "Message Notification Body: ${it.body}")
         }
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
@@ -102,9 +101,7 @@ class MessagePushService : FirebaseMessagingService() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
-                    MessagePushService::class.java.name,
-                    NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(channelId, getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(notificationID /* ID of notification */, notificationBuilder.build())
@@ -119,12 +116,13 @@ class MessagePushService : FirebaseMessagingService() {
      * is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String?) {
-        Log.d(TAG, "Refreshed token: $token")
+//        Log.d(TAG, "Refreshed token: $token")
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(token)
+//        sendRegistrationToServer(token)
+        initFirebase()
     }
     // [END on_new_token]
 
@@ -146,7 +144,7 @@ class MessagePushService : FirebaseMessagingService() {
      * Handle time allotted to BroadcastReceivers.
      */
     private fun handleNow() {
-        Log.d(TAG, "Short lived task is done.")
+//        Log.d(TAG, "Short lived task is done.")
     }
 
     /**
