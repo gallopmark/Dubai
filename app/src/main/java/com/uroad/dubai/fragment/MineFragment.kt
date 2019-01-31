@@ -2,10 +2,13 @@ package com.uroad.dubai.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -13,13 +16,16 @@ import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.common.BaseFragment
-import com.uroad.dubai.common.DubaiApplication
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.photopicker.utils.ImagePicker
+import com.uroad.dubai.utils.SoftHideKeyBoardUtil
 import com.uroad.glidev4.GlideV4
 import kotlinx.android.synthetic.main.fragment_mine.*
 
@@ -75,7 +81,7 @@ class MineFragment : BaseFragment() {
             openActivity(PersonalInformationActivity::class.java)
             /*ImagePicker.with(this@MineFragment)
                     .isCompress(true)
-                    .requestCode(123)PersonalInformationActivity
+                    .requestCode(123)
                     .start()*/
         }
         if (isLogin){
@@ -103,9 +109,13 @@ class MineFragment : BaseFragment() {
         super.onResume()
         isLogin = UserPreferenceHelper.isLogin(context)
         if (isLogin){
-            GlideV4.getInstance().displayCircleImage(context,
+           /* GlideV4.getInstance().displayCircleImage(context,
                     UserPreferenceHelper.getAvatar(context),
-                    ivUserHead,R.mipmap.ic_user_default)
+                    ivUserHead,R.mipmap.ic_user_default)*/
+
+            loadCirclePic(context,
+                    UserPreferenceHelper.getAvatar(context)?:"",ivUserHead)
+
             upDataUserName(UserPreferenceHelper.getUserNickName(context)?:"Emma",isLogin)
         }else{
             ivUserHead.setImageResource(R.mipmap.icon_user_head_gray)
@@ -151,5 +161,18 @@ class MineFragment : BaseFragment() {
                 GlideV4.getInstance().displayCircleImage(context,images[0],ivUserHead,R.mipmap.ic_user_default)
             }
         }
+    }
+
+    private fun loadCirclePic(context: Context, url: String, imageView: ImageView) {
+        Glide.with(context)
+                .asBitmap()
+                .load(url)
+                .into(object : BitmapImageViewTarget(imageView) {
+                    override fun setResource(resource: Bitmap?) {
+                        val circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.resources, resource)
+                        circularBitmapDrawable.isCircular = true
+                        imageView.setImageDrawable(circularBitmapDrawable)
+                    }
+                })
     }
 }

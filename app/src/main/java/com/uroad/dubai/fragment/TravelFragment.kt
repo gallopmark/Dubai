@@ -40,6 +40,7 @@ import kotlinx.android.synthetic.main.item_calendar_norecord.*
 import kotlinx.android.synthetic.main.travel_content_menu.*
 import android.provider.CalendarContract
 import android.content.Intent
+import android.widget.Toast
 import kotlinx.android.synthetic.main.item_history_norecord.*
 
 
@@ -142,10 +143,15 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
             try {
                 val intent = Intent(Intent.ACTION_INSERT)
                 intent.data = CalendarContract.Events.CONTENT_URI
-                intent.putExtra(CalendarContract.Events.TITLE, "")
+                //intent.putExtra(CalendarContract.Events.TITLE, "")
+                intent.action = "android.intent.action.EDIT"
+                intent.addCategory ("android.intent.category.DEFAULT")
+                intent.type = "vnd.android.cursor.item/event"
+
                 context.startActivityForResult(intent, 100)
             }catch (e : Exception){
                 e.printStackTrace()
+                Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show()
             }
         }
 
