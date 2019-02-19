@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.library.common.BaseActivity
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.local.AppSource
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.library.compat.AppDialog

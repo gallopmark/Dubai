@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager
 import android.util.TypedValue
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.library.common.BaseActivity
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.fragment.ReportFCFragment
 import com.uroad.dubai.fragment.ReportQRSFragment
 import kotlinx.android.synthetic.main.activity_report.*

@@ -9,8 +9,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
 import com.uroad.dubai.api.StringObserver
-import com.uroad.library.common.BaseActivity
-import com.uroad.library.common.BaseLucaActivity
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.model.VersionMDL
 import com.uroad.dubai.service.VersionUpdateService
@@ -56,7 +55,7 @@ class AppVersionPresenter<T : BaseActivity> : BasePresenter<BaseView> {
             activity.showDialog(activity.getString(R.string.dialog_default_title), mdl.versioncontent,
                     activity.getString(R.string.version_update_cancel),
                     activity.getString(R.string.version_update_confirm),
-                    object : BaseLucaActivity.DialogViewClickListener {
+                    object : BaseActivity.DialogViewClickListener {
                         override fun onConfirm(v: View, dialog: AppDialog) {
                             dialog.dismiss()
                             startUpdate(mdl.url)

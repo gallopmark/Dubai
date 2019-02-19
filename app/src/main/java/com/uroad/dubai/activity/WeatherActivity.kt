@@ -10,7 +10,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.adapter.WeatherAdapter
 import com.uroad.dubai.api.presenter.WeatherPresenter
 import com.uroad.dubai.api.view.WeatherView
-import com.uroad.library.common.BaseActivity
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.model.WeatherMDL
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_weather.*

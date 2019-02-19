@@ -11,18 +11,18 @@ import android.widget.LinearLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.adaptervp.GuideAdapter
 import com.uroad.dubai.api.presenter.SplashPresenter
-import com.uroad.library.common.BaseLucaActivity
 import com.uroad.dubai.local.AppSource
 import com.uroad.dubai.model.StartupMDL
 import com.uroad.dubai.push.Constants
 import com.uroad.glidev4.GlideV4
 import com.uroad.glidev4.listener.IImageLoaderListener
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.lang.Exception
 import java.lang.ref.WeakReference
 
-class SplashActivity : BaseLucaActivity(), SplashPresenter.SplashView {
+class SplashActivity : BaseActivity(), SplashPresenter.SplashView {
 
     private var presenter: SplashPresenter? = null
     private var handler: MHandler? = null

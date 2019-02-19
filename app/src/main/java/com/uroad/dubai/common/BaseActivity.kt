@@ -1,4 +1,4 @@
-package com.uroad.library.common
+package com.uroad.dubai.common
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -9,24 +9,34 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.TextView
-import com.uroad.library.R
+import android.widget.Toast
+import com.uroad.dubai.R
 import com.uroad.library.compat.AppDialog
+import com.uroad.library.compat.AppToast
+import com.uroad.library.compat.LoadingDialog
 import com.uroad.library.utils.NetworkUtils
 import com.uroad.library.widget.CurrencyLoadView
 import kotlinx.android.synthetic.main.activity_base.*
-
 
 /**
  * 多语言设置（阿拉伯文会导致布局页面翻转）
  * 最后加入不需要进行翻转 我们需要在布局的XML文件中写android:layoutDirection="ltr"
  */
-abstract class BaseLucaActivity : AppCompatActivity() {
-
+/*需要toast提示时的页面继承改activity*/
+abstract class BaseActivity : AppCompatActivity() {
     private var baseContentView: View? = null
+    private var mShortToast: Toast? = null
+    private var mLongToast: Toast? = null
+    private var mLoadingDialog: LoadingDialog? = null
 
 //    override fun attachBaseContext(context: Context) {
 //        val language = LanguageHelper.getLanguage(context)
@@ -357,4 +367,61 @@ abstract class BaseLucaActivity : AppCompatActivity() {
 
         }
     }
+
+    open fun showShortToast(text: CharSequence?) {
+        if (TextUtils.isEmpty(text)) return
+        val v = LayoutInflater.from(this).inflate(R.layout.layout_compat_toast, LinearLayout(this), false)
+        val textView = v.findViewById<TextView>(R.id.tv_text)
+        textView.text = text
+        if (mShortToast == null) {
+            mShortToast = AppToast(this, R.style.CompatToast).apply { duration = Toast.LENGTH_SHORT }
+        }
+        mShortToast?.let {
+            it.view = v
+            it.show()
+        }
+    }
+
+    open fun showLongToast(text: CharSequence?) {
+        if (TextUtils.isEmpty(text)) return
+        val v = LayoutInflater.from(this).inflate(R.layout.layout_compat_toast, LinearLayout(this), false)
+        val textView = v.findViewById<TextView>(R.id.tv_text)
+        textView.text = text
+        if (mLongToast == null) {
+            mLongToast = AppToast(this, R.style.CompatToast).apply { duration = Toast.LENGTH_LONG }
+        }
+        mLongToast?.let {
+            it.view = v
+            it.show()
+        }
+    }
+
+    open fun showLoading() {
+        showLoading("")
+    }
+
+    open fun showLoading(msg: CharSequence?) {
+        mLoadingDialog?.let {
+            if (it.isShowing) it.dismiss()
+            mLoadingDialog = null
+        }
+        mLoadingDialog = LoadingDialog(this).setMsg(msg).apply { show() }
+    }
+
+    open fun endLoading() {
+        mLoadingDialog?.let {
+            it.dismiss()
+            mLoadingDialog = null
+        }
+    }
+
+    override fun onDestroy() {
+        mShortToast?.cancel()
+        mLongToast?.cancel()
+        mLoadingDialog?.dismiss()
+        super.onDestroy()
+    }
+
+    open fun drawable(id: Int) = ContextCompat.getDrawable(this@BaseActivity, id)
+
 }
