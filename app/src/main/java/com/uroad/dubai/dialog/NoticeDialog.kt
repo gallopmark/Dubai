@@ -2,6 +2,7 @@ package com.uroad.dubai.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.text.method.ScrollingMovementMethod
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
@@ -40,6 +41,7 @@ class NoticeDialog(private val mContext: Context)
             mCloseImageView.setOnClickListener { dismiss() }
             mTimeTextView.text = mTitle
             mContentTextView.text = mContent
+            mContentTextView.movementMethod = ScrollingMovementMethod.getInstance()
             window.setContentView(contentView)
             window.setGravity(Gravity.CENTER)
         }

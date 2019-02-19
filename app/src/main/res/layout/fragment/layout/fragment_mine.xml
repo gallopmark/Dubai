@@ -28,6 +28,7 @@
             android:id="@+id/ivUserHead"
             android:layout_width="@dimen/space_80"
             android:layout_height="@dimen/space_80"
+            android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/space_20"
             android:layout_marginRight="@dimen/space_20"

@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CalendarPresenter(val calendarView: CalendarView) : BasePresenter<CalendarView>(calendarView) {
+class CalendarPresenter(private val calendarView: CalendarView) : BasePresenter<CalendarView>(calendarView) {
 
     //private var CALENDER_URL: String = "content://com.android.calendar/calendars"
     private var CALENDER_EVENT_URL: String = "content://com.android.calendar/events"
