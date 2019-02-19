@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.mapbox.core.utils.TextUtils
 import com.uroad.dubai.R
-import com.uroad.library.common.BaseActivity
+import com.uroad.dubai.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_pin_login.*
 

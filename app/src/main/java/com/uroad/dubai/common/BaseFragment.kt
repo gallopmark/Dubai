@@ -1,4 +1,4 @@
-package com.uroad.library.common
+package com.uroad.dubai.common
 
 import android.app.Activity
 import android.content.Context
@@ -6,29 +6,32 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.uroad.library.R
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import com.uroad.dubai.R
 import com.uroad.library.compat.AppDialog
+import com.uroad.library.compat.AppToast
+import com.uroad.library.compat.LoadingDialog
 import com.uroad.library.utils.NetworkUtils
 import com.uroad.library.widget.CurrencyLoadView
 
-/**
- * @author MFB
- * @create 2018/12/11
- * @describe fragment基础类(viewpager切换不适宜运用 onDestroyView()方法后view会报空指针异常)
- */
-abstract class BaseLucaFragment : Fragment() {
-
+abstract class BaseFragment : Fragment() {
     private var rootView: View? = null
     open lateinit var context: Activity
     open lateinit var fgBaseParent: FrameLayout
     open lateinit var fgBaseLoadView: CurrencyLoadView
     open var contentView: View? = null
+    private var mShortToast: Toast? = null
+    private var mLongToast: Toast? = null
+    private var mLoadingDialog: LoadingDialog? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,7 +84,7 @@ abstract class BaseLucaFragment : Fragment() {
 
     open fun onPageError() {
         contentView?.visibility = View.GONE
-        if (!NetworkUtils.isConnected(this@BaseLucaFragment.context))
+        if (!NetworkUtils.isConnected(context))
             fgBaseLoadView.setState(CurrencyLoadView.State.STATE_NO_NETWORK)
         else
             fgBaseLoadView.setState(CurrencyLoadView.State.STATE_ERROR)
@@ -181,10 +184,10 @@ abstract class BaseLucaFragment : Fragment() {
 
     open fun showTipsDialog(message: CharSequence?, textPositive: CharSequence?, listener: AppDialog.OnClickListener?) {
         val dialog = AppDialog(context)
-        dialog.setTitle(getString(R.string.dialog_default_title))
+        dialog.setTitle(context.getString(R.string.dialog_default_title))
         dialog.setMessage(message)
         dialog.hideDivider()
-        val text = if (TextUtils.isEmpty(textPositive)) getString(R.string.dialog_button_confirm) else textPositive
+        val text = if (TextUtils.isEmpty(textPositive)) context.getString(R.string.dialog_button_confirm) else textPositive
         dialog.setPositiveButton(text, object : AppDialog.OnClickListener {
             override fun onClick(v: View, dialog: AppDialog) {
                 if (listener == null) dialog.dismiss()
@@ -194,16 +197,39 @@ abstract class BaseLucaFragment : Fragment() {
         dialog.show()
     }
 
-    open fun showDialog(title: CharSequence?, message: CharSequence?, listener: BaseLucaActivity.DialogViewClickListener?) {
-        showDialog(title, message, getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), listener)
+    open fun showDialog(@StringRes messageRes: Int, listener: SimpleDialogInterface?) {
+        showDialog(context.getString(R.string.dialog_default_title), context.getString(messageRes), context.getString(R.string.dialog_button_cancel), context.getString(R.string.dialog_button_confirm), listener)
     }
 
-    open fun showDialog(title: CharSequence?, message: CharSequence?, cancelCs: CharSequence?, confirmCs: CharSequence?, listener: BaseLucaActivity.DialogViewClickListener?) {
+    open fun showDialog(@StringRes messageRes: Int, @StringRes confirmCsRes: Int, listener: SimpleDialogInterface?) {
+        showDialog(context.getString(R.string.dialog_default_title), context.getString(messageRes), context.getString(R.string.dialog_button_cancel), context.getString(confirmCsRes), listener)
+    }
+
+    open fun showDialog(messageRes: CharSequence?, confirmCsRes: CharSequence?, listener: SimpleDialogInterface?) {
+        showDialog(context.getString(R.string.dialog_default_title), messageRes, context.getString(R.string.dialog_button_cancel), confirmCsRes, listener)
+    }
+
+    open fun showDialog(@StringRes titleRes: Int, @StringRes messageRes: Int, listener: DialogViewClickListener?) {
+        showDialog(context.getString(titleRes), context.getString(messageRes), context.getString(R.string.dialog_button_cancel), context.getString(R.string.dialog_button_confirm), listener)
+    }
+
+    open fun showDialog(title: CharSequence?, message: CharSequence?, listener: DialogViewClickListener?) {
+        showDialog(title, message, context.getString(R.string.dialog_button_cancel), context.getString(R.string.dialog_button_confirm), listener)
+    }
+
+    open fun showDialog(@StringRes titleRes: Int, @StringRes messageRes: Int, @StringRes cancelCsRes: Int, @StringRes confirmCsRes: Int, listener: DialogViewClickListener?) {
+        showDialog(context.getString(titleRes), context.getString(messageRes), context.getString(cancelCsRes), context.getString(confirmCsRes), listener)
+    }
+
+    open fun showDialog(title: CharSequence?, message: CharSequence?, cancelCs: CharSequence?, confirmCs: CharSequence?, listener: DialogViewClickListener?) {
         val dialog = AppDialog(context)
         dialog.setTitle(title)
         dialog.setMessage(message)
         dialog.setNegativeButton(cancelCs, object : AppDialog.OnClickListener {
             override fun onClick(v: View, dialog: AppDialog) {
+                if (listener != null && listener is SimpleDialogInterface) {
+                    dialog.dismiss()
+                }
                 listener?.onCancel(v, dialog)
             }
         })
@@ -215,4 +241,69 @@ abstract class BaseLucaFragment : Fragment() {
         dialog.show()
     }
 
+    interface DialogViewClickListener {
+        fun onCancel(v: View, dialog: AppDialog)
+        fun onConfirm(v: View, dialog: AppDialog)
+    }
+
+    abstract class SimpleDialogInterface : DialogViewClickListener {
+        override fun onCancel(v: View, dialog: AppDialog) {
+
+        }
+    }
+
+    open fun showShortToast(text: CharSequence?) {
+        if (TextUtils.isEmpty(text)) return
+        val v = LayoutInflater.from(context).inflate(R.layout.layout_compat_toast, LinearLayout(context), false)
+        val textView = v.findViewById<TextView>(R.id.tv_text)
+        textView.text = text
+        if (mShortToast == null) {
+            mShortToast = AppToast(context, R.style.CompatToast).apply { duration = Toast.LENGTH_SHORT }
+        }
+        mShortToast?.let {
+            it.view = v
+            it.show()
+        }
+    }
+
+    open fun showLongToast(text: CharSequence?) {
+        if (TextUtils.isEmpty(text)) return
+        val v = LayoutInflater.from(context).inflate(R.layout.layout_compat_toast, LinearLayout(context), false)
+        val textView = v.findViewById<TextView>(R.id.tv_text)
+        textView.text = text
+        if (mLongToast == null) {
+            mLongToast = AppToast(context, R.style.CompatToast).apply { duration = Toast.LENGTH_LONG }
+        }
+        mLongToast?.let {
+            it.view = v
+            it.show()
+        }
+    }
+
+    open fun showLoading() {
+        showLoading("")
+    }
+
+    open fun showLoading(msg: CharSequence?) {
+        mLoadingDialog?.let {
+            if (it.isShowing) it.dismiss()
+            mLoadingDialog = null
+        }
+        mLoadingDialog = LoadingDialog(context).setMsg(msg).apply { show() }
+    }
+
+    open fun endLoading() {
+        mLoadingDialog?.let {
+            it.dismiss()
+            mLoadingDialog = null
+        }
+    }
+
+    override fun onDestroyView() {
+        mShortToast?.cancel()
+        mLongToast?.cancel()
+        mLoadingDialog?.dismiss()
+        super.onDestroy()
+        super.onDestroyView()
+    }
 }

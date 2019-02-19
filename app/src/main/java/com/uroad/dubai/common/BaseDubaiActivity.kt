@@ -2,7 +2,6 @@ package com.uroad.dubai.common
 
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.utils.DubaiUtils
-import com.uroad.library.common.BaseActivity
 import com.uroad.library.utils.DeviceUtils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

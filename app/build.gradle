@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
-androidExtensions { experimental = true }
+
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
@@ -34,10 +34,10 @@ android {
             ]
         }
     }
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     signingConfigs {
         release {
             storeFile file("uroadDubai.jks")   //签名文件全路径
@@ -57,10 +57,7 @@ android {
         }
     }
 }
-repositories {
-    mavenCentral()
-    maven { url 'https://mapbox.bintray.com/mapbox' }
-}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':UroadLib')
@@ -69,11 +66,11 @@ dependencies {
     implementation project(':ImageLoader')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:7.0.1') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:7.1.2') {
         exclude group: 'group_name', module: 'module_name'
     }
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.3.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.27.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.5.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.30.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-18'
     implementation 'top.zibin:Luban:1.1.8'

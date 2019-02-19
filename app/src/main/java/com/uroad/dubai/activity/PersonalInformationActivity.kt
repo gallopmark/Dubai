@@ -5,7 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.uroad.library.common.BaseActivity
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.PersonalInformationPresenter
 import com.uroad.dubai.api.view.PersonalInformationView

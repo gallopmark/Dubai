@@ -14,7 +14,6 @@ import android.view.View
 import com.uroad.dubai.BuildConfig
 import com.uroad.dubai.R
 import com.uroad.dubai.api.BasePresenter
-import com.uroad.library.common.BaseLucaActivity
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.photopicker.adapter.ImageGridAdapter
 import com.uroad.dubai.photopicker.model.ImageItem
@@ -22,6 +21,7 @@ import com.uroad.dubai.photopicker.ui.ImageCropActivity
 import com.uroad.dubai.photopicker.ui.ImagePreViewActivity
 import com.uroad.dubai.photopicker.ui.PhotoPickerActivity
 import com.uroad.dubai.photopicker.utils.ImagePicker
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.library.compat.AppDialog
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -231,7 +231,7 @@ class ImagePickerPresenter(private val context: PhotoPickerActivity,
     private fun dismissCamera(type: Int) {
         when (type) {
             1 -> {
-                context.showDialog(context.getString(R.string.dialog_default_title), context.getString(R.string.photopicker_noCamera), object : BaseLucaActivity.DialogViewClickListener {
+                context.showDialog(context.getString(R.string.dialog_default_title), context.getString(R.string.photopicker_noCamera), object : BaseActivity.DialogViewClickListener {
                     override fun onConfirm(v: View, dialog: AppDialog) {
                         context.openSettings()
                         dialog.dismiss()
@@ -243,7 +243,7 @@ class ImagePickerPresenter(private val context: PhotoPickerActivity,
                 })
             }
             else -> {
-                context.showDialog(context.getString(R.string.dialog_default_title), context.getString(R.string.photopicker_dismiss_camera), object : BaseLucaActivity.DialogViewClickListener {
+                context.showDialog(context.getString(R.string.dialog_default_title), context.getString(R.string.photopicker_dismiss_camera), object : BaseActivity.DialogViewClickListener {
                     override fun onConfirm(v: View, dialog: AppDialog) {
                         applyCameraPermission()
                         dialog.dismiss()

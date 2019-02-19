@@ -6,7 +6,6 @@ import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.uroad.dubai.utils.DubaiUtils
-import com.uroad.library.common.BaseFragment
 import java.lang.Exception
 
 abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
