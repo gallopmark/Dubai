@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
 
-abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseFragment(), BaseView {
+abstract class BasePresenterFragment<P : BasePresenter<*>> : BaseDubaiFragment(), BaseView {
     open lateinit var presenter: P
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

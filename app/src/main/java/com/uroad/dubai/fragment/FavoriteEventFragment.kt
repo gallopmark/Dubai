@@ -32,7 +32,7 @@ class FavoriteEventFragment : BasePageRefreshPresenterFragment<EventsPresenter>(
     private lateinit var data: MutableList<EventsMDL>
     private lateinit var adapter: FavoriteEventFmListAdapter
 
-    override fun initViewData(view: View, savedInstanceState: Bundle?) {
+    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         initBundle()
         data = ArrayList()
         adapter = FavoriteEventFmListAdapter(context, data)

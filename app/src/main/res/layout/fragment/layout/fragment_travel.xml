@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 app:collapsedTitleGravity="center"
                 app:collapsedTitleTextAppearance="@style/CollapsedTitleTextAppearance"
-                app:contentScrim="@drawable/bg_main_top_bg"
+                app:contentScrim="@color/transparent"
                 app:expandedTitleGravity="start|bottom"
                 app:expandedTitleMarginBottom="@dimen/space_15"
                 app:expandedTitleMarginStart="@dimen/space_15"

@@ -1,6 +1,5 @@
 package com.uroad.dubai.activity
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -10,8 +9,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
-import com.uroad.dubai.fragment.AttractionNearFragment
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.fragment.RoadsNearFragment
 import kotlinx.android.synthetic.main.activity_attraction.*
 

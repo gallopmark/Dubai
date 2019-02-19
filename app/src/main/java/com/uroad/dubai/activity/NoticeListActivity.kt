@@ -9,7 +9,7 @@ import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.dialog.NoticeDialog
 import com.uroad.dubai.model.NoticeMDL
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
 /**
  * @author MFB

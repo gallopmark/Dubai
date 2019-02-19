@@ -11,21 +11,21 @@ import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.model.RouteMDL
 import java.util.*
 
-class FavoriteRouteFragment  : BasePageRefreshPresenterFragment<FavoriteRouteFMPresenter>() , FavoriteRouteFMView {
+class FavoriteRouteFragment : BasePageRefreshPresenterFragment<FavoriteRouteFMPresenter>(), FavoriteRouteFMView {
 
-    private var type : String? = null
+    private var type: String? = null
     private var index = 1
     private var size = 10
     private lateinit var data: MutableList<RouteMDL>
-    private lateinit var adapter : FavoriteRouteFmListAdapter
+    private lateinit var adapter: FavoriteRouteFmListAdapter
 
-    override fun initViewData(view: View, savedInstanceState: Bundle?) {
+    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         data = ArrayList()
-        adapter = FavoriteRouteFmListAdapter(context,data)
+        adapter = FavoriteRouteFmListAdapter(context, data)
         recyclerView.adapter = adapter
         baseRefreshLayout.autoRefresh()
 
-        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
             override fun onItemClick(adapter: BaseRecyclerAdapter, holder: BaseRecyclerAdapter.RecyclerHolder, view: View, position: Int) {
 
             }
@@ -41,10 +41,10 @@ class FavoriteRouteFragment  : BasePageRefreshPresenterFragment<FavoriteRouteFMP
         getMsgList()
     }
 
-    private fun getMsgList(){
+    private fun getMsgList() {
         onPullToLoadSuccess()
         data.clear()
-        data.add(getMDL(Random().nextInt(4)-1))
+        data.add(getMDL(Random().nextInt(4) - 1))
         adapter.notifyDataSetChanged()
         onFinishLoadMoreWithNoMoreData()
     }
@@ -74,12 +74,12 @@ class FavoriteRouteFragment  : BasePageRefreshPresenterFragment<FavoriteRouteFMP
         showShortToast(errorMsg)
     }
 
-    private fun getMDL(position: Int): RouteMDL{
+    private fun getMDL(position: Int): RouteMDL {
         return RouteMDL().apply {
-            title = when(position){
-                0-> "Home-Burj AI Arab"
-                1-> "Home-Dubai museum"
-                2-> "Home-Dubai aquarium and..."
+            title = when (position) {
+                0 -> "Home-Burj AI Arab"
+                1 -> "Home-Dubai museum"
+                2 -> "Home-Dubai aquarium and..."
                 else -> "Home-Gold street, dubai"
             }
             colors = ArrayList<Int>().apply {

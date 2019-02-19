@@ -10,7 +10,7 @@ import com.uroad.dubai.model.CalendarMDL
 import com.uroad.dubai.permission.PermissionHelper
 import com.uroad.dubai.permission.PermissionInterface
 import com.uroad.dubai.permission.PermissionUtil
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 import kotlin.collections.ArrayList
 
 class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), CalendarView, PermissionInterface {

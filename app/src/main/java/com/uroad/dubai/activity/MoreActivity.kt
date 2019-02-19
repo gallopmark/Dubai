@@ -2,7 +2,8 @@ package com.uroad.dubai.activity
 
 import android.os.Bundle
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
+import com.uroad.dubai.enumeration.NewsType
 import kotlinx.android.synthetic.main.activity_more.*
 
 /**
@@ -20,15 +21,15 @@ class MoreActivity : BaseActivity() {
     private fun initView() {
         val bundle = Bundle()
         tvHotels.setOnClickListener {
-            bundle.putString("userstatus", "1001002")
+            bundle.putString("userstatus", NewsType.HOTEL.code)
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvRestaurants.setOnClickListener {
-            bundle.putString("userstatus", "1001003")
+            bundle.putString("userstatus", NewsType.RESTAURANT.code)
             openActivity(AttractionsListActivity::class.java, bundle)
         }
         tvAttractions.setOnClickListener {
-            bundle.putString("userstatus", "1001004")
+            bundle.putString("userstatus", NewsType.ATTRACTION.code)
             openActivity(AttractionsListActivity::class.java, bundle)
         }
 
@@ -38,6 +39,6 @@ class MoreActivity : BaseActivity() {
         tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
         tvGroups.setOnClickListener { openActivity(GroupsSetupActivity::class.java) }
         tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
-        tvReport.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvReport.setOnClickListener { openActivity(ReportActivity::class.java) }
     }
 }

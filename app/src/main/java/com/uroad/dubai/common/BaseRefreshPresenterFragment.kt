@@ -8,9 +8,9 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.uroad.dubai.R
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
-import kotlinx.android.synthetic.main.fragment_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
-abstract class BaseRefreshPresenterFragment<P : BasePresenter<*>> : BaseFragment(), BaseView {
+abstract class BaseRefreshPresenterFragment<P : BasePresenter<*>> : BaseDubaiFragment(), BaseView {
     open var presenter: P? = null
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {

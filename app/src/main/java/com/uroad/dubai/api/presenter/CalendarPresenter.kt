@@ -5,8 +5,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.CalendarContract
 import android.text.TextUtils
-import com.uroad.dubai.api.view.CalendarView
 import com.uroad.dubai.api.BasePresenter
+import com.uroad.dubai.api.view.CalendarView
 import com.uroad.dubai.model.CalendarListMDL
 import com.uroad.dubai.model.CalendarMDL
 import io.reactivex.Observable

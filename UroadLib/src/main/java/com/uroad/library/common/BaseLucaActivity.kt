@@ -1,4 +1,4 @@
-package com.uroad.dubai.common
+package com.uroad.library.common
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -7,19 +7,17 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.*
 import android.widget.TextView
-import com.uroad.dubai.R
-import com.uroad.dubai.widget.CurrencyLoadView
+import com.uroad.library.R
 import com.uroad.library.compat.AppDialog
 import com.uroad.library.utils.NetworkUtils
+import com.uroad.library.widget.CurrencyLoadView
 import kotlinx.android.synthetic.main.activity_base.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 
 /**
@@ -29,7 +27,6 @@ import io.reactivex.disposables.Disposable
 abstract class BaseLucaActivity : AppCompatActivity() {
 
     private var baseContentView: View? = null
-    private val disposables = CompositeDisposable()
 
 //    override fun attachBaseContext(context: Context) {
 //        val language = LanguageHelper.getLanguage(context)
@@ -287,21 +284,13 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         startActivityForResult(intent, requestCode)
     }
 
-    open fun addDisposable(disposable: Disposable?) {
-        disposable?.let { disposables.add(it) }
-    }
-
-    open fun removeDisposable(disposable: Disposable?) {
-        disposable?.let { disposables.remove(disposable) }
-    }
-
     open fun showTipsDialog(message: CharSequence?) {
         showTipsDialog(message, "", null)
     }
 
     open fun showTipsDialog(message: CharSequence?, textPositive: CharSequence?, listener: AppDialog.OnClickListener?) {
         val dialog = AppDialog(this)
-        dialog.setTitle(getString(R.string.tips))
+        dialog.setTitle(getString(R.string.dialog_default_title))
         dialog.setMessage(message)
         dialog.hideDivider()
         val text = if (TextUtils.isEmpty(textPositive)) getString(R.string.dialog_button_confirm) else textPositive
@@ -314,8 +303,28 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    open fun showDialog(@StringRes messageRes: Int, listener: SimpleDialogInterface?) {
+        showDialog(getString(R.string.dialog_default_title), getString(messageRes), getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), listener)
+    }
+
+    open fun showDialog(@StringRes messageRes: Int, @StringRes confirmCsRes: Int, listener: SimpleDialogInterface?) {
+        showDialog(getString(R.string.dialog_default_title), getString(messageRes), getString(R.string.dialog_button_cancel), getString(confirmCsRes), listener)
+    }
+
+    open fun showDialog(messageRes: CharSequence?, confirmCsRes: CharSequence?, listener: SimpleDialogInterface?) {
+        showDialog(getString(R.string.dialog_default_title), messageRes, getString(R.string.dialog_button_cancel), confirmCsRes, listener)
+    }
+
+    open fun showDialog(@StringRes titleRes: Int, @StringRes messageRes: Int, listener: DialogViewClickListener?) {
+        showDialog(getString(titleRes), getString(messageRes), getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), listener)
+    }
+
     open fun showDialog(title: CharSequence?, message: CharSequence?, listener: DialogViewClickListener?) {
         showDialog(title, message, getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), listener)
+    }
+
+    open fun showDialog(@StringRes titleRes: Int, @StringRes messageRes: Int, @StringRes cancelCsRes: Int, @StringRes confirmCsRes: Int, listener: DialogViewClickListener?) {
+        showDialog(getString(titleRes), getString(messageRes), getString(cancelCsRes), getString(confirmCsRes), listener)
     }
 
     open fun showDialog(title: CharSequence?, message: CharSequence?, cancelCs: CharSequence?, confirmCs: CharSequence?, listener: DialogViewClickListener?) {
@@ -324,6 +333,9 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         dialog.setMessage(message)
         dialog.setNegativeButton(cancelCs, object : AppDialog.OnClickListener {
             override fun onClick(v: View, dialog: AppDialog) {
+                if (listener != null && listener is SimpleDialogInterface) {
+                    dialog.dismiss()
+                }
                 listener?.onCancel(v, dialog)
             }
         })
@@ -335,23 +347,14 @@ abstract class BaseLucaActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    override fun onDestroy() {
-        if (disposables.size() > 0) disposables.dispose()
-        super.onDestroy()
-    }
-
     interface DialogViewClickListener {
         fun onCancel(v: View, dialog: AppDialog)
         fun onConfirm(v: View, dialog: AppDialog)
     }
 
-    fun openSettings() {
-        try {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.fromParts("package", applicationContext.packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        } catch (e: Exception) {
+    abstract class SimpleDialogInterface : DialogViewClickListener {
+        override fun onCancel(v: View, dialog: AppDialog) {
+
         }
     }
 }

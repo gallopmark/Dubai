@@ -7,14 +7,14 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import com.uroad.dubai.R
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
 /**
  * @author MFB
  * @create 2018/12/21
  * @describe
  */
-abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseActivity(), BaseView {
+abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseDubaiActivity(), BaseView {
     open lateinit var presenter: P
 
     protected abstract fun createPresenter(): P

@@ -15,8 +15,7 @@ import android.text.style.StyleSpan
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
-import com.uroad.dubai.common.BaseFragment
-import com.uroad.dubai.common.DubaiApplication
+import com.uroad.library.common.BaseFragment
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.photopicker.utils.ImagePicker

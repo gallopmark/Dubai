@@ -2,7 +2,6 @@ package com.uroad.dubai.activity
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
@@ -18,7 +17,6 @@ import com.uroad.dubai.common.BasePresenterActivity
 import com.uroad.dubai.model.GroupsInviteMDL
 import com.uroad.dubai.model.MultiItem
 import com.uroad.library.utils.DisplayUtils
-import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_groupsinvite.*
 
 /**

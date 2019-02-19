@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.local.AppSource
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.library.compat.AppDialog
@@ -42,7 +42,7 @@ class SettingActivity : BaseActivity() {
             })
         }
         btnLogOut.setOnClickListener {
-            showDialog(getString(R.string.tips),getString(R.string.logout_tips),object : DialogViewClickListener{
+            showDialog(getString(R.string.tips), getString(R.string.logout_tips), object : DialogViewClickListener {
                 override fun onCancel(v: View, dialog: AppDialog) {
                     dialog.dismiss()
                 }
@@ -62,7 +62,10 @@ class SettingActivity : BaseActivity() {
         tvAbout.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvTerm.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvOffline.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        tvNavigationAddress.setOnClickListener { openActivity(NavigationAddressActivity::class.java) }
+        tvNavigationAddress.setOnClickListener {
+            if (isLogin) openActivity(NavigationAddressActivity::class.java)
+            else openActivity(LoginActivity::class.java)
+        }
 
         swSearchHistory.setOnCheckedChangeListener { _, isChecked -> AppSource.setShowSearchHistory(this@SettingActivity, isChecked) }
         swLoadingPhoto.setOnCheckedChangeListener { _, isChecked -> AppSource.setCanLoadPhoto(this@SettingActivity, isChecked) }

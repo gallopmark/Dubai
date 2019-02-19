@@ -196,7 +196,7 @@ class SettingAddressActivity : BaseMapBoxLocationActivity(), PoiSearchView, User
 
     private fun setUpUserAddress(address: String?, longitude: Double, latitude: Double) {
         isSetUp = true
-        presenter.setUpUserAddress(getTestUserId(), address, "$longitude,$latitude", type)
+        presenter.setUpUserAddress(getUserUUID(), address, "$longitude,$latitude", type)
     }
 
     override fun onShowLoading() {

@@ -21,6 +21,7 @@ import android.support.v4.util.ArrayMap
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -44,7 +45,6 @@ import com.uroad.dubai.api.view.UserAddressView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.enumeration.AddressType
 import com.uroad.dubai.enumeration.MapDataType
-import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
 import com.uroad.library.utils.InputMethodUtils
@@ -130,12 +130,20 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         ivBack.setOnClickListener { onInitialState() }
         cvSearch.layoutParams = (cvSearch.layoutParams as RelativeLayout.LayoutParams).apply { this.topMargin = topMargin + statusHeight }
         llHome.setOnClickListener {
-            userAddressType = 1
-            userAddressPresenter.getUserAddress(getTestUserId())
+            if (isLogin()) {
+                userAddressType = 1
+                userAddressPresenter.getUserAddress(getUserUUID())
+            } else {
+                openActivity(LoginActivity::class.java)
+            }
         }
         llWork.setOnClickListener {
-            userAddressType = 2
-            userAddressPresenter.getUserAddress(getTestUserId())
+            if (isLogin()) {
+                userAddressType = 2
+                userAddressPresenter.getUserAddress(getUserUUID())
+            } else {
+                openActivity(LoginActivity::class.java)
+            }
         }
         initEtSearch()
         initRvPoi()
@@ -258,7 +266,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         cvSearchIM.visibility = View.INVISIBLE
         contentSearch.visibility = View.VISIBLE
         etSearch.requestFocus()
-        InputMethodUtils.showSoftInput(this, etSearch)
+        InputMethodUtils.showSoftInput(this)
     }
 
     private fun removeRunnable() {

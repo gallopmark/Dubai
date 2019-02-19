@@ -8,7 +8,7 @@ import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.ParkingMDL
 import com.uroad.dubai.api.presenter.ParkingPresenter
 import com.uroad.dubai.api.view.ParkingView
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
 class ParkingListActivity: BaseRefreshPresenterActivity<ParkingPresenter>(), ParkingView {
 

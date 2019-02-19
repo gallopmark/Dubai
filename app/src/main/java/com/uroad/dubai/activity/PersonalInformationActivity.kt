@@ -4,22 +4,18 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.PersonalInformationPresenter
 import com.uroad.dubai.api.view.PersonalInformationView
-import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.EditDialog
 import com.uroad.dubai.dialog.SexDialog
 import com.uroad.dubai.local.UserPreferenceHelper
-import com.uroad.dubai.model.UserMDL
 import com.uroad.dubai.photopicker.utils.ImagePicker
 import com.uroad.dubai.webService.WebApi
 import com.uroad.glidev4.GlideV4
 import kotlinx.android.synthetic.main.activity_personal_information.*
-import java.io.File
 
 class PersonalInformationActivity : BaseActivity() ,PersonalInformationView{
 

@@ -1,7 +1,7 @@
 package com.uroad.dubai.api.presenter
 
-import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.api.BasePresenter
+import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.view.LoginView
 import com.uroad.dubai.model.UserMDL

@@ -1,5 +1,6 @@
 package com.uroad.dubai.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -10,9 +11,10 @@ import android.widget.LinearLayout
 import com.uroad.dubai.R
 import com.uroad.dubai.adaptervp.GuideAdapter
 import com.uroad.dubai.api.presenter.SplashPresenter
-import com.uroad.dubai.common.BaseLucaActivity
+import com.uroad.library.common.BaseLucaActivity
 import com.uroad.dubai.local.AppSource
 import com.uroad.dubai.model.StartupMDL
+import com.uroad.dubai.push.Constants
 import com.uroad.glidev4.GlideV4
 import com.uroad.glidev4.listener.IImageLoaderListener
 import com.uroad.library.utils.DisplayUtils
@@ -103,7 +105,7 @@ class SplashActivity : BaseLucaActivity(), SplashPresenter.SplashView {
     }
 
     private fun openMainPage() {
-        openActivity(MainActivity::class.java)
+        openActivity(Intent(this, MainActivity::class.java).apply { intent.getBundleExtra(Constants.EXTRA_BUNDLE)?.let { putExtra(Constants.EXTRA_BUNDLE, it) } })
         isGoMain = true
         finish()
     }
@@ -120,7 +122,6 @@ class SplashActivity : BaseLucaActivity(), SplashPresenter.SplashView {
     }
 
     private fun displayImage(mdl: StartupMDL) {
-        handler?.postDelayed(runMainTask, 5000L)
         GlideV4.getInstance().displayImage(this, mdl.startupimage, ivSplash, object : IImageLoaderListener {
             override fun onLoadingComplete(url: String?, target: ImageView?) {
                 removeTask()
@@ -132,6 +133,7 @@ class SplashActivity : BaseLucaActivity(), SplashPresenter.SplashView {
 
             }
         })
+        handler?.postDelayed(runMainTask, 5000L)
     }
 
     override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {

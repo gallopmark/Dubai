@@ -3,7 +3,6 @@ package com.uroad.dubai.api
 import com.uroad.dubai.webService.ApiService
 import com.uroad.dubai.api.upload.RequestBodyWrapper
 import com.uroad.dubai.api.upload.UploadFileCallback
-import com.uroad.zhgs.utils.MimeTypeTool
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

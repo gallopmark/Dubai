@@ -1,7 +1,6 @@
 package com.uroad.dubai.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.view.KeyEvent
@@ -11,10 +10,13 @@ import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.AppVersionPresenter
 import com.uroad.dubai.common.BasePresenterActivity
 import com.uroad.dubai.dialog.WelcomeDialog
+import com.uroad.dubai.enumeration.MessageType
 import com.uroad.dubai.fragment.MainFragment
 import com.uroad.dubai.fragment.MineFragment
 import com.uroad.dubai.fragment.TravelFragment
 import com.uroad.dubai.local.AppSource
+import com.uroad.dubai.push.Constants
+import com.uroad.dubai.utils.DubaiUtils
 import com.uroad.library.compat.AppDialog
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,6 +35,7 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter<MainActivity>>() 
         requestWindowFullScreen()
         setBaseContentViewWithoutTitle(R.layout.activity_main, true)
         initTab()
+        initBundle()
         onWelcome()
         checkGoogleService()
     }
@@ -84,6 +87,30 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter<MainActivity>>() 
         for (fragment in supportFragmentManager.fragments) transaction.hide(fragment)
     }
 
+    private fun initBundle() {
+        val bundle = intent.getBundleExtra(Constants.EXTRA_BUNDLE)
+        bundle?.let {
+            var detailIntent: Intent? = null
+            val messageId = it.getString(Constants.PUSH_MESSAGE_ID)
+            val messageType = it.getString(Constants.PUSH_MESSAGE_TYPE)
+            when (messageType) {
+                MessageType.EVENT.CODE -> {
+                    detailIntent = Intent(this, EventsDetailActivity::class.java).apply { putExtras(Bundle().apply { putString("eventId", messageId) }) }
+                }
+                MessageType.NOTICE.CODE -> {
+                    detailIntent = Intent(this, NoticeListActivity::class.java)
+                }
+                MessageType.NEWS.CODE -> {
+                    detailIntent = Intent(this, NewsDetailsActivity::class.java).apply { putExtras(Bundle().apply { putString("newsId", messageId) }) }
+                }
+                MessageType.SYSTEM.CODE -> {
+                    detailIntent = Intent(this, MessagesListActivity::class.java)
+                }
+            }
+            detailIntent?.let { openActivity(it) }
+        }
+    }
+
     private fun onWelcome() {
         if (!AppSource.isWelcome(this)) {
             WelcomeDialog(this).show()
@@ -93,29 +120,12 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter<MainActivity>>() 
 
     private fun checkGoogleService() {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
-            showDialog(getString(R.string.dialog_default_title),
-                    getString(R.string.without_google_services),
-                    getString(R.string.dialog_button_cancel),
-                    getString(R.string.install), object : DialogViewClickListener {
-                override fun onCancel(v: View, dialog: AppDialog) {
-                    dialog.dismiss()
-                }
-
+            showDialog(R.string.without_google_services, R.string.install, object : SimpleDialogInterface() {
                 override fun onConfirm(v: View, dialog: AppDialog) {
                     dialog.dismiss()
-                    installGoogleServices()
+                    DubaiUtils.openGoogleServices(this@MainActivity)
                 }
             })
-        }
-    }
-
-    private fun installGoogleServices() {
-        try {
-            val url = "https://play.google.com/store/apps/details?id=${GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE}"
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent)
-        } catch (e: Exception) {
         }
     }
 
@@ -125,15 +135,10 @@ class MainActivity : BasePresenterActivity<AppVersionPresenter<MainActivity>>() 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            showDialog(getString(R.string.dialog_default_title), getString(R.string.quit_app_tips)
-                    , getString(R.string.dialog_button_cancel), getString(R.string.dialog_button_confirm), object : DialogViewClickListener {
+            showDialog(R.string.quit_app_tips, object : SimpleDialogInterface() {
                 override fun onConfirm(v: View, dialog: AppDialog) {
                     dialog.dismiss()
                     finish()
-                }
-
-                override fun onCancel(v: View, dialog: AppDialog) {
-                    dialog.dismiss()
                 }
             })
             return true

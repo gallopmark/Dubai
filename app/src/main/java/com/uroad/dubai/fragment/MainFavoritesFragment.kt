@@ -2,11 +2,10 @@ package com.uroad.dubai.fragment
 
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
+import android.support.v4.util.ArrayMap
 import android.view.View
 import android.widget.FrameLayout
 import com.mapbox.api.directions.v5.MapboxDirections
-import com.mapbox.api.directions.v5.models.DirectionsResponse
 import com.mapbox.api.directions.v5.models.DirectionsRoute
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.RouteNavigationActivity
@@ -21,10 +20,6 @@ import com.uroad.dubai.rx2bus.Rx2Bus
 import com.uroad.library.widget.banner.BaseBannerAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_mainfavorites.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.ref.WeakReference
 
 /**
  * @author MFB
@@ -35,38 +30,9 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
 
     private lateinit var data: MutableList<SubscribeMDL>
     private lateinit var adapter: MainSubscribeAdapter
-    private lateinit var handler: MHandler
+    private lateinit var handler: Handler
+    private lateinit var arrayMap: ArrayMap<Int, MapboxDirections>
     private var callback: OnRequestCallback? = null
-
-    companion object {
-        private const val CODE_RETRY = 100
-        private const val CODE_ROUTE = 101
-        private const val CODE_ROUTE_RETRY = 102
-    }
-
-    private class MHandler(fragment: MainFavoritesFragment) : Handler() {
-        private val weakReference = WeakReference<MainFavoritesFragment>(fragment)
-
-        override fun handleMessage(msg: Message) {
-            val fragment = weakReference.get() ?: return
-            when (msg.what) {
-                CODE_RETRY -> fragment.initData()
-                CODE_ROUTE -> {
-                    val position = msg.arg1
-                    val route = msg.obj as DirectionsRoute
-                    fragment.data[position].distance = route.distance()
-                    fragment.data[position].travelTime = route.duration()
-                    val congestion = route.legs()?.get(0)?.annotation()?.congestion()
-                    fragment.data[position].congestion = congestion
-                    fragment.adapter.notifyDataSetChanged()
-                }
-                CODE_ROUTE_RETRY -> {
-                    val position = msg.arg1
-                    fragment.enqueueRoute(position)
-                }
-            }
-        }
-    }
 
     override fun createPresenter(): SubscribePresenter = SubscribePresenter(context, this)
 
@@ -74,7 +40,7 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
         setContentView(R.layout.fragment_mainfavorites)
         initViewParams()
         initial()
-        handler = MHandler(this)
+        handler = Handler()
         toObservable()
     }
 
@@ -83,6 +49,7 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
     }
 
     private fun initial() {
+        arrayMap = ArrayMap()
         data = ArrayList()
         adapter = MainSubscribeAdapter(context, data).apply {
             setOnItemClickListener(object : BaseBannerAdapter.OnItemClickListener<SubscribeMDL> {
@@ -91,8 +58,8 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
                         putBoolean("fromHome", true)
                         putString("routeId", t.routeid)
                         putString("profile", t.getProfile())
-                        putString("startPoint",t.getOriginPoint()?.toJson())
-                        putString("startPointName",t.startpoint)
+                        putString("startPoint", t.getOriginPoint()?.toJson())
+                        putString("startPointName", t.startpoint)
                         putString("endPoint", t.getDestinationPoint()?.toJson())
                         putString("endPointName", t.endpoint)
                     })
@@ -121,53 +88,26 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
     }
 
     private fun getRoutes() {
-        for (i in 0 until data.size) {
-            handler.postDelayed({ enqueueRoute(i) }, i * 100L)
-        }
-    }
-
-    private fun enqueueRoute(position: Int) {
-        if (position !in 0 until data.size) return
-        val startPoint = data[position].getOriginPoint()
-        val endPoint = data[position].getDestinationPoint()
-        if (startPoint != null && endPoint != null) {
-            requestRoutes(position, presenter.buildDirections(startPoint, endPoint, data[position].getProfile()))
-        }
-    }
-
-    private fun requestRoutes(position: Int, directions: MapboxDirections) {
-        directions.cloneCall().enqueue(object : Callback<DirectionsResponse> {
-            override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
-                activity ?: return
-                val directionsRoute = response.body()?.routes()?.get(0)
-                directionsRoute?.let { route ->
-                    val msg = Message().apply {
-                        what = CODE_ROUTE
-                        arg1 = position
-                        obj = route
-                    }
-                    handler.sendMessage(msg)
+        presenter.requestRoutes(data, object : SubscribePresenter.SubscribeRouteCallback {
+            override fun getRoutes(map: ArrayMap<Int, DirectionsRoute>) {
+                for ((k, v) in map) {
+                    data[k].distance = v.distance()
+                    data[k].travelTime = v.duration()
+                    val congestion = v.legs()?.get(0)?.annotation()?.congestion()
+                    data[k].congestion = congestion
                 }
-            }
-
-            override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
-                activity ?: return
-                val msg = Message().apply {
-                    what = CODE_ROUTE_RETRY
-                    arg1 = position
-                }
-                handler.sendMessage(msg)
+                adapter.notifyDataSetChanged()
             }
         })
     }
 
     override fun onShowError(msg: String?) {
-        handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
         callback?.onFailure()
     }
 
     override fun onFailure(errMsg: String?, errCode: Int?) {
-        handler.sendEmptyMessageDelayed(CODE_RETRY, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
         callback?.onFailure()
     }
 

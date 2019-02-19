@@ -8,7 +8,7 @@ import android.app.Activity
 
 class InputMethodUtils {
     companion object {
-        fun showSoftInput(context: Context, view: View) {
+        fun showSoftInput(context: Context) {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
         }
@@ -20,9 +20,7 @@ class InputMethodUtils {
 
         fun hideSoftInput(context: Activity) {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (context.currentFocus != null && context.currentFocus.windowToken != null) {
-                imm.hideSoftInputFromWindow(context.currentFocus.windowToken, 0)
-            }
+            context.currentFocus?.windowToken?.let { imm.hideSoftInputFromWindow(it, 0) }
         }
     }
 }

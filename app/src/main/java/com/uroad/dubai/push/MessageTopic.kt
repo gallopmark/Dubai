@@ -1,4 +1,4 @@
-package com.uroad.dubai.service
+package com.uroad.dubai.push
 
 enum class MessageTopic(var CODE:String) {
     EVENT("Event_"),

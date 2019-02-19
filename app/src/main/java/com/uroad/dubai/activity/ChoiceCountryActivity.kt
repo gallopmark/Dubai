@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import com.google.gson.Gson
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.SortCityAdapter
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.model.ContactMDL
 import com.uroad.dubai.utils.PinyinComparator
 import com.uroad.dubai.widget.MyLetterSortView

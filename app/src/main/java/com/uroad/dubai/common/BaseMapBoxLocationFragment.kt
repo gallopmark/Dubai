@@ -5,11 +5,11 @@ import android.location.Location
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
-import com.tencent.bugly.Bugly.applicationContext
 import com.uroad.dubai.utils.DubaiUtils
+import com.uroad.library.common.BaseFragment
 import java.lang.Exception
 
-abstract class BaseMapBoxLocationFragment : BaseFragment(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
+abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
     private var isUserRequestLocation = false
     private var isOpenLocation = false
     private var permissionsManager: PermissionsManager? = null

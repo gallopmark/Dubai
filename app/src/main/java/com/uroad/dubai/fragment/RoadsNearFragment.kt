@@ -20,7 +20,7 @@ class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>
     private lateinit var data: MutableList<RoadsMDL>
     private lateinit var adapter: RoadsNearFmListAdapter
 
-    override fun initViewData(view: View, savedInstanceState: Bundle?) {
+    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         data = ArrayList()
         adapter = RoadsNearFmListAdapter(context, data)
         recyclerView.adapter = adapter
@@ -32,7 +32,6 @@ class RoadsNearFragment : BasePageRefreshPresenterFragment<RoadsNearFMPresenter>
             }
         })
     }
-
 
     private fun getMsgList() {
         presenter?.getNewsList(WebApi.GET_ROADS_LIST, WebApi.getRoadListParams(index, size, "", 0.0, 0.0))

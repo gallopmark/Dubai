@@ -1,28 +1,30 @@
-package com.uroad.dubai.common
+package com.uroad.library.common
 
+
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import com.uroad.dubai.R
-import com.uroad.dubai.local.UserPreferenceHelper
+import com.uroad.library.R
 import com.uroad.library.compat.AppToast
 import com.uroad.library.compat.LoadingDialog
-import com.uroad.library.utils.DeviceUtils
 
-abstract class BaseFragment : BaseLucaFragment() {
+/*需要toast提示时的页面继承改activity*/
+abstract class BaseActivity : BaseLucaActivity() {
+
     private var mShortToast: Toast? = null
     private var mLongToast: Toast? = null
     private var mLoadingDialog: LoadingDialog? = null
 
     open fun showShortToast(text: CharSequence?) {
         if (TextUtils.isEmpty(text)) return
-        val v = LayoutInflater.from(context).inflate(R.layout.layout_compat_toast, LinearLayout(context), false)
+        val v = LayoutInflater.from(this).inflate(R.layout.layout_compat_toast, LinearLayout(this), false)
         val textView = v.findViewById<TextView>(R.id.tv_text)
         textView.text = text
         if (mShortToast == null) {
-            mShortToast = AppToast(context, R.style.CompatToast).apply { duration = Toast.LENGTH_SHORT }
+            mShortToast = AppToast(this, R.style.CompatToast).apply { duration = Toast.LENGTH_SHORT }
         }
         mShortToast?.let {
             it.view = v
@@ -32,11 +34,11 @@ abstract class BaseFragment : BaseLucaFragment() {
 
     open fun showLongToast(text: CharSequence?) {
         if (TextUtils.isEmpty(text)) return
-        val v = LayoutInflater.from(context).inflate(R.layout.layout_compat_toast, LinearLayout(context), false)
+        val v = LayoutInflater.from(this).inflate(R.layout.layout_compat_toast, LinearLayout(this), false)
         val textView = v.findViewById<TextView>(R.id.tv_text)
         textView.text = text
         if (mLongToast == null) {
-            mLongToast = AppToast(context, R.style.CompatToast).apply { duration = Toast.LENGTH_LONG }
+            mLongToast = AppToast(this, R.style.CompatToast).apply { duration = Toast.LENGTH_LONG }
         }
         mLongToast?.let {
             it.view = v
@@ -53,12 +55,8 @@ abstract class BaseFragment : BaseLucaFragment() {
             if (it.isShowing) it.dismiss()
             mLoadingDialog = null
         }
-        mLoadingDialog = LoadingDialog(context).setMsg(msg).apply { show() }
+        mLoadingDialog = LoadingDialog(this).setMsg(msg).apply { show() }
     }
-
-    fun getUserId() = UserPreferenceHelper.getUserId(context)
-
-    fun getAndroidID() = DeviceUtils.getAndroidID(context)
 
     open fun endLoading() {
         mLoadingDialog?.let {
@@ -67,11 +65,13 @@ abstract class BaseFragment : BaseLucaFragment() {
         }
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         mShortToast?.cancel()
         mLongToast?.cancel()
         mLoadingDialog?.dismiss()
         super.onDestroy()
-        super.onDestroyView()
     }
+
+    open fun drawable(id: Int) = ContextCompat.getDrawable(this@BaseActivity, id)
+
 }
