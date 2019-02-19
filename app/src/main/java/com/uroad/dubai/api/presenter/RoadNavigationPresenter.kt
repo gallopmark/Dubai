@@ -20,7 +20,7 @@ import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.view.RoadNavigationView
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.common.BaseDubaiActivity
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
@@ -29,12 +29,11 @@ import com.uroad.dubai.model.*
 import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.utils.SymbolGenerator
 import com.uroad.dubai.webService.WebApi
-import io.reactivex.disposables.Disposable
 
-class RoadNavigationPresenter(private val activity: BaseActivity,
+class RoadNavigationPresenter(private val activity: BaseDubaiActivity,
                               private val navigationView: RoadNavigationView)
     : BasePresenter<RoadNavigationView>(navigationView) {
-    private val useruuid = activity.getTestUserId()
+    private val useruuid = activity.getUserUUID()
 
     private val latitudeArray = doubleArrayOf(24.29045862222854, 25.71109733694287, 25.50251457879257,
             25.260430807520947, 24.98663128116354, 24.861623304922887, 24.583673073761176, 24.65789600887483,

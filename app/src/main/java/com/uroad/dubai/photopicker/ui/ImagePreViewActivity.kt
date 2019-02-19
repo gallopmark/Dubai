@@ -7,7 +7,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.photopicker.adapter.ImagePageAdapter
 import com.uroad.dubai.photopicker.model.ImageItem

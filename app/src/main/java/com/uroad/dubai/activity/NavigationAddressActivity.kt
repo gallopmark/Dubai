@@ -109,7 +109,7 @@ class NavigationAddressActivity : BasePresenterActivity<UserAddressPresenter>(),
 
     override fun initData() {
         isInitialization = true
-        presenter.getUserAddress(getTestUserId())
+        presenter.getUserAddress(getUserUUID())
     }
 
     private fun deleteItem(mdl: UserAddressMDL) {

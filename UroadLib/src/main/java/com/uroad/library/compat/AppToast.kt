@@ -17,12 +17,10 @@ class AppToast(context: Context, anim: Int) : Toast(context) {
             mTN.isAccessible = true
             val mObj = mTN.get(this)
             val field = mObj.javaClass.getDeclaredField("mParams")
-            if (field != null) {
-                field.isAccessible = true
-                val mParams = field.get(mObj)
-                if (mParams != null && mParams is WindowManager.LayoutParams) {
-                    mParams.windowAnimations = anim
-                }
+            field.isAccessible = true
+            val mParams = field.get(mObj)
+            if (mParams != null && mParams is WindowManager.LayoutParams) {
+                mParams.windowAnimations = anim
             }
         } catch (e: Exception) {
             e.printStackTrace()

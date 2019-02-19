@@ -1,4 +1,4 @@
-package com.uroad.dubai.widget
+package com.uroad.library.widget
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.uroad.dubai.R
+import com.uroad.library.R
 
 class CurrencyLoadView : FrameLayout {
     private val mContext: Context

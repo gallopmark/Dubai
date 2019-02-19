@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/llTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/mRlTab1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/space_5"
+            android:paddingTop="@dimen/space_14"
+            android:paddingEnd="@dimen/space_5"
+            android:paddingBottom="@dimen/space_14">
+
+            <View
+                android:id="@+id/vTab1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_4"
+                android:layout_below="@+id/mTab1"
+                android:layout_alignStart="@+id/mTab1"
+                android:layout_alignEnd="@+id/mTab1"
+                android:layout_marginStart="@dimen/space_14"
+                android:layout_marginTop="@dimen/minus_6"
+                android:layout_marginEnd="@dimen/space_14"
+                android:background="@color/color_calendar"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/mTab1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/report_qrs"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_12" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/mRlTab2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="@dimen/space_5"
+            android:paddingTop="@dimen/space_14"
+            android:paddingEnd="@dimen/space_5"
+            android:paddingBottom="@dimen/space_14">
+
+            <View
+                android:id="@+id/vTab2"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/space_4"
+                android:layout_below="@+id/mTab2"
+                android:layout_alignStart="@+id/mTab2"
+                android:layout_alignEnd="@+id/mTab2"
+                android:layout_marginStart="@dimen/space_14"
+                android:layout_marginTop="@dimen/minus_6"
+                android:layout_marginEnd="@dimen/space_14"
+                android:background="@color/color_calendar"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/mTab2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/report_fc"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_12" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llTab" />
+
+    <ImageView
+        android:id="@+id/mReportIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/space_5"
+        android:layout_marginBottom="@dimen/space_15"
+        android:src="@mipmap/ic_report_button" />
+</RelativeLayout>

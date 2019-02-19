@@ -1,7 +1,5 @@
 package com.uroad.dubai.activity
 
-import android.content.Intent
-import android.net.Uri
 import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.PoliceListAdapter
@@ -11,7 +9,7 @@ import com.uroad.dubai.api.presenter.PolicePresenter
 import com.uroad.dubai.api.view.PoliceView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.library.utils.PhoneUtils
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
 class PoliceListActivity: BaseRefreshPresenterActivity<PolicePresenter>(), PoliceView {
 

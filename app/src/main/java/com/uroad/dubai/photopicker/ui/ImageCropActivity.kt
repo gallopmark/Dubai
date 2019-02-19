@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.photopicker.widget.CropImageView
 import kotlinx.android.synthetic.main.activity_photopicker_crop.*
 import java.io.File

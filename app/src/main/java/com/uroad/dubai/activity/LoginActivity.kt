@@ -9,13 +9,10 @@ import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.LoginPresenter
 import com.uroad.dubai.api.view.LoginView
-import com.uroad.dubai.common.BaseActivity
-import com.uroad.dubai.common.DubaiApplication
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.UserMDL
-import com.uroad.dubai.utils.PackageInfoUtils
 import com.uroad.dubai.webService.WebApi
-import com.uroad.library.utils.DeviceUtils
 import com.uroad.library.utils.MD5Utils
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_login.*

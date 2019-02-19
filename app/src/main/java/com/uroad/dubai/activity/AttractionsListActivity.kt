@@ -1,6 +1,5 @@
 package com.uroad.dubai.activity
 
-import android.graphics.Typeface
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,7 +10,6 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.common.BaseMapBoxLocationActivity
 import com.uroad.dubai.enumeration.NewsType
 import com.uroad.dubai.fragment.AttractionNearFragment

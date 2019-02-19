@@ -13,10 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.uroad.dubai.R
-import com.uroad.dubai.widget.CurrencyLoadView
 import com.uroad.library.compat.AppToast
 import com.uroad.library.compat.LoadingDialog
 import com.uroad.library.utils.NetworkUtils
+import com.uroad.library.widget.CurrencyLoadView
 
 /* viewpager结合fragment使用 使用懒加载处理，避免重复加载数据*/
 abstract class BasePageFragment : Fragment() {

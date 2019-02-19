@@ -114,4 +114,6 @@
     <dimen name="font_70">70sp</dimen>
     <dimen name="font_80">80sp</dimen>
     <dimen name="font_120">100sp</dimen>
+
+    <dimen name="toolbar_size">@dimen/space_50</dimen>
 </resources>

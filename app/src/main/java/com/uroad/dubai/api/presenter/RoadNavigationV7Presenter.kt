@@ -15,7 +15,7 @@
 //import com.uroad.dubai.R
 //import com.uroad.dubai.activity.RoadNavigationV7Activity
 //import com.uroad.dubai.activity.ScenicDetailActivity
-//import com.uroad.dubai.api.BasePresenter
+//import com.uroad.library.api.BasePresenter
 //import com.uroad.dubai.api.StringObserver
 //import com.uroad.dubai.api.view.RoadNavigationView
 //import com.uroad.dubai.common.DubaiApplication

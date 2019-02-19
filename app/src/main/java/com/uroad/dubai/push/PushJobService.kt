@@ -1,4 +1,4 @@
-package com.uroad.dubai.service
+package com.uroad.dubai.push
 
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService

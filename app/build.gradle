@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'com.google.gms.google-services'
+androidExtensions { experimental = true }
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
@@ -79,13 +80,13 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     implementation 'com.tencent.bugly:crashreport:2.8.6'
 
-    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-iid:17.0.4'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
     /*filedownloader*/
     implementation 'com.liulishuo.filedownloader:library:1.7.5'
-}
 
-apply plugin: 'com.google.gms.google-services'
+    implementation 'jsc.kit.wheel:wheel-view:0.5.3'
+}

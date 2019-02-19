@@ -36,7 +36,7 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
         }
     }
 
-    override fun initViewData(view: View, savedInstanceState: Bundle?) {
+    override fun onViewReady(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
             type = it.getString("userstatus")
             longitude = it.getDouble("longitude",0.0)
@@ -62,7 +62,6 @@ class AttractionNearFragment : BasePageRefreshPresenterFragment<AttractionNearFM
             }
         })
     }
-
 
     private fun getMsgList() {
         val code = when (type) {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/mCancelTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/space_16"
+            android:text="@string/cancel"
+            android:textColor="@color/dialog_positiveButton"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            android:id="@+id/mConfirmTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/selectableItemBackground"
+            android:padding="@dimen/space_16"
+            android:text="@string/confirm"
+            android:textColor="@color/dialog_negativeButton"
+            android:textSize="@dimen/font_16" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <jsc.kit.wheel.base.WheelView
+            android:id="@+id/mDayWv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheelItemVerticalSpace="@dimen/space_20"
+            app:wheelTextColor="@color/appTextColor"
+            app:wheelTextSize="@dimen/font_16"
+            app:wheelTotalOffsetX="@dimen/space_5" />
+
+        <jsc.kit.wheel.base.WheelView
+            android:id="@+id/mMonthWv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheelItemVerticalSpace="@dimen/space_20"
+            app:wheelTextColor="@color/appTextColor"
+            app:wheelTextSize="@dimen/font_16"
+            app:wheelTotalOffsetX="@dimen/space_5" />
+
+        <jsc.kit.wheel.base.WheelView
+            android:id="@+id/mYearWv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheelItemVerticalSpace="@dimen/space_20"
+            app:wheelTextColor="@color/appTextColor"
+            app:wheelTextSize="@dimen/font_16"
+            app:wheelTotalOffsetX="@dimen/space_5" />
+
+        <jsc.kit.wheel.base.WheelView
+            android:id="@+id/mHourWv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheelItemVerticalSpace="@dimen/space_20"
+            app:wheelTextColor="@color/appTextColor"
+            app:wheelTextSize="@dimen/font_16"
+            app:wheelTotalOffsetX="@dimen/space_5" />
+
+        <jsc.kit.wheel.base.WheelView
+            android:id="@+id/mMinuteWv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:wheelItemVerticalSpace="@dimen/space_20"
+            app:wheelTextColor="@color/appTextColor"
+            app:wheelTextSize="@dimen/font_16"
+            app:wheelTotalOffsetX="@dimen/space_5" />
+    </LinearLayout>
+</LinearLayout>

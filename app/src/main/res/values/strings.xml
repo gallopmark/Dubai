@@ -233,4 +233,26 @@
     <string name="version_update_error_url">Download link error!</string>
 
     <string name="detail">Detail</string>
+
+    <string name="report">Report</string>
+    <string name="report_qrs">Query Request Status</string>
+    <string name="report_fc">Final Confirmation</string>
+    <string name="report_permitNum">Permit Number</string>
+    <string name="report_status">Status</string>
+    <string name="report_road">Road</string>
+    <string name="report_direction">Direction</string>
+    <string name="report_reason">Reason</string>
+    <string name="report_closed">Closed</string>
+    <string name="report_construction">Construction</string>
+    <string name="report_details">Details</string>
+    <string name="report_details_hint">Please enter the reason of the event</string>
+    <string name="report_time">Time</string>
+    <string name="report_time_start">Start:</string>
+    <string name="report_time_end">End:</string>
+    <string name="report_name">Name</string>
+    <string name="report_contractorID">Contractor ID</string>
+    <string name="report_phoneNum">Phone Number</string>
+    <string name="report_submit">Submit Request</string>
+    <string name="report_final_confirmation">Final Confirmation</string>
+    <string name="report_reporterInfo">Reporter’s info</string>
 </resources>

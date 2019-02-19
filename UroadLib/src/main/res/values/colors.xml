@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#B1B1B1</color>
+    <color name="colorAccent">#FFFF3B30</color>
+
+    <color name="color_baseLine">#DADADA</color>
+    <color name="appTextColor">#333333</color>
+
     <color name="itemDivider">#ffedeeef</color>
 
     <color name="colorBackground">#FFFFFF</color>

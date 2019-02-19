@@ -6,7 +6,7 @@ import com.uroad.dubai.api.BaseView
 import org.jetbrains.annotations.NotNull
 
 
-abstract class BasePresenterActivity<P : BasePresenter<*>> : BaseActivity(), BaseView {
+abstract class BasePresenterActivity<P : BasePresenter<*>> : BaseDubaiActivity(), BaseView {
 
     open lateinit var presenter: P
     @NotNull

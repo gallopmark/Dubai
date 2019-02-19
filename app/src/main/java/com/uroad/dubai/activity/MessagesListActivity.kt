@@ -10,7 +10,7 @@ import com.uroad.dubai.api.view.MessagesView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.dialog.NoticeDialog
 import com.uroad.dubai.webService.WebApi
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
 class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), MessagesView, MessagesPresenter.MessageDetailView {
     private var index = 1

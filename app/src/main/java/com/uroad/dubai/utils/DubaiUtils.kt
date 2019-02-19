@@ -1,9 +1,16 @@
 package com.uroad.dubai.utils
 
+import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
+import android.util.Log
+import com.google.android.gms.common.GoogleApiAvailability
 import java.math.BigDecimal
+
 
 class DubaiUtils {
     companion object {
@@ -25,6 +32,61 @@ class DubaiUtils {
             val network = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
             if (gps || network) {
                 return true
+            }
+            return false
+        }
+
+        fun openGoogleServices(context: Context) {
+            try {
+                val url = "https://play.google.com/store/apps/details?id=${GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE}"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                context.startActivity(intent)
+            } catch (e: Exception) {
+            }
+        }
+
+        fun openNotificationSettings(context: Context) {
+            try {
+                val intent = Intent()
+                when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> { //android 8.0引导
+                        intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                        intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    }
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> { //android 5.0-7.0
+                        intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                        intent.putExtra("app_package", context.packageName)
+                        intent.putExtra("app_uid", context.applicationInfo.uid)
+                    }
+                    else -> {
+                        intent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
+                        intent.data = Uri.fromParts("package", context.packageName, null)
+                    }
+                }
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun openSettings(context: Context) {
+            try {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", context.applicationContext.packageName, null)
+                intent.data = uri
+                context.startActivity(intent)
+            } catch (e: Exception) {
+            }
+        }
+
+        fun isAppAlive(context: Context, packageName: String): Boolean {
+            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val processList = activityManager.runningAppProcesses
+            for (i in 0 until processList.size) {
+                if (processList[i].processName == packageName) {
+                    return true
+                }
             }
             return false
         }

@@ -21,7 +21,7 @@
         android:layout_height="@dimen/space_1"
         android:background="@color/color_baseLine" />
 
-    <com.uroad.dubai.widget.CurrencyLoadView
+    <com.uroad.library.widget.CurrencyLoadView
         android:id="@id/baseLoadView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

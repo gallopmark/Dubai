@@ -11,7 +11,7 @@ import com.uroad.dubai.api.presenter.NewsPresenter
 import com.uroad.dubai.api.view.NewsView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.webService.WebApi
-import kotlinx.android.synthetic.main.activity_base_refresh.*
+import kotlinx.android.synthetic.main.content_smartrefresh.*
 
 /**
  * @author MFB

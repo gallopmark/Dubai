@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_permitNum" />
+
+        <TextView
+            android:id="@+id/mPermitNumTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="000156" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_status" />
+
+        <TextView
+            android:id="@+id/mStatusTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="New" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_road" />
+
+        <TextView
+            android:id="@+id/mRoadTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="E 15 (Arada-Gayathi adjoining to E11 Abu Dhabi-Ghuwei fat Highway)" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_direction" />
+
+        <TextView
+            android:id="@+id/mDirectionTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="Dubai-Hatta" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_reason" />
+
+        <TextView
+            android:id="@+id/mReasonTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="Closed" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_details" />
+
+        <TextView
+            android:id="@+id/mDetailsTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="On the morning of 6 Feb,22 people were injured in a major road accident along sheikh Mohammed bin rashid al-maktoumroad (E311) from dubai to ABU dhabi." />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/start_time" />
+
+        <TextView
+            android:id="@+id/mStartTimeTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="23/11/2018  07:23" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/end_time" />
+
+        <TextView
+            android:id="@+id/mEndTimeTv"
+            style="@style/ReportConfirmTvDetailStyle"
+            android:text="23/11/2018  16:23" />
+
+        <TextView
+            style="@style/ReportConfirmTextViewStyle"
+            android:text="@string/report_reporterInfo" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/space_16"
+            android:paddingTop="@dimen/space_6"
+            android:paddingEnd="@dimen/space_16"
+            android:paddingBottom="@dimen/space_6">
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/tvPhoneNum"
+                android:layout_alignEnd="@+id/tvPhoneNum"
+                android:text="@string/report_name"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/mNameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_10"
+                android:layout_toEndOf="@+id/tvName"
+                android:text="Tom Hiddleston"
+                android:textColor="@color/appTextColor"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/tvContractorID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvName"
+                android:layout_alignStart="@+id/tvPhoneNum"
+                android:layout_alignEnd="@+id/tvPhoneNum"
+                android:text="@string/report_contractorID"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/mContractorIDTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvName"
+                android:layout_alignStart="@+id/mNameTv"
+                android:layout_toEndOf="@+id/tvContractorID"
+                android:text="C0007"
+                android:textColor="@color/appTextColor"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/tvPhoneNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvContractorID"
+                android:text="@string/report_phoneNum"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/mPhoneNumTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvContractorID"
+                android:layout_alignStart="@+id/mNameTv"
+                android:layout_toEndOf="@+id/tvPhoneNum"
+                android:text="+971 050 3742218"
+                android:textColor="@color/appTextColor"
+                android:textSize="@dimen/font_16" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_16"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_corners_50dp_stroke1dp"
+                android:gravity="center"
+                android:paddingTop="@dimen/space_10"
+                android:paddingBottom="@dimen/space_10"
+                android:text="@string/cancel"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_10"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="@dimen/space_10"
+                android:paddingBottom="@dimen/space_10"
+                android:text="@string/confirm"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_corners_50dp" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -14,7 +14,7 @@ import android.view.View
 import com.uroad.dubai.BuildConfig
 import com.uroad.dubai.R
 import com.uroad.dubai.api.BasePresenter
-import com.uroad.dubai.common.BaseLucaActivity
+import com.uroad.library.common.BaseLucaActivity
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.photopicker.adapter.ImageGridAdapter
 import com.uroad.dubai.photopicker.model.ImageItem

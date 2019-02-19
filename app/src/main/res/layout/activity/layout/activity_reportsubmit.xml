@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="@dimen/space_16">
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:layout_marginTop="0dp"
+            android:text="@string/report_permitNum" />
+
+        <TextView
+            android:id="@+id/mPermitNumTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="000156"
+            android:textColor="@color/gary"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_status" />
+
+        <TextView
+            android:id="@+id/mStatusTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="New"
+            android:textColor="@color/gary"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_road" />
+
+        <TextView
+            android:id="@+id/mRoadTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:drawableEnd="@mipmap/ic_arrow_down_black"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="E 44 (Al Khail Road)"
+            android:textColor="@color/appTextColor"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_direction" />
+
+        <TextView
+            android:id="@+id/mDirectionTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:drawableEnd="@mipmap/ic_direction_arrow"
+            android:drawablePadding="@dimen/space_10"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="Dubai-Hatta"
+            android:textColor="@color/appTextColor"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_reason" />
+
+        <RadioGroup
+            android:id="@+id/mRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/mClosedRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_selector"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:paddingStart="@dimen/space_16"
+                android:paddingTop="@dimen/space_6"
+                android:paddingEnd="@dimen/space_16"
+                android:paddingBottom="@dimen/space_6"
+                android:text="@string/report_closed"
+                android:textColor="@color/button_color_selector"
+                android:textSize="@dimen/font_16" />
+
+            <RadioButton
+                android:id="@+id/mConstructionRb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_5"
+                android:background="@drawable/bg_button_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:paddingStart="@dimen/space_16"
+                android:paddingTop="@dimen/space_6"
+                android:paddingEnd="@dimen/space_16"
+                android:paddingBottom="@dimen/space_6"
+                android:text="@string/report_construction"
+                android:textColor="@color/button_color_selector"
+                android:textSize="@dimen/font_16" />
+        </RadioGroup>
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_details" />
+
+        <EditText
+            android:id="@+id/mDetailsEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:gravity="top|start"
+            android:hint="@string/report_details_hint"
+            android:maxLines="3"
+            android:minLines="3"
+            android:padding="@dimen/space_10"
+            android:textColor="@color/appTextColor"
+            android:textColorHint="@color/gary"
+            android:textSize="@dimen/font_14" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_time" />
+
+        <LinearLayout
+            android:id="@+id/mStartTimeLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_5"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/report_time_start"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/mStartTimeTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="23/11/2018  07:23"
+                android:textColor="@color/appTextColor"
+                android:textSize="@dimen/font_16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mEndTimeLl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_5"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/space_10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/report_time_end"
+                android:textColor="@color/gary"
+                android:textSize="@dimen/font_16" />
+
+            <TextView
+                android:id="@+id/mEndTimeTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="23/11/2018  07:23"
+                android:textColor="@color/appTextColor"
+                android:textSize="@dimen/font_16" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_name" />
+
+        <TextView
+            android:id="@+id/mNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="Tom Hiddleston"
+            android:textColor="@color/appTextColor"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_contractorID" />
+
+        <TextView
+            android:id="@+id/mContractorIDTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="C0007"
+            android:textColor="@color/appTextColor"
+            android:textSize="@dimen/font_16" />
+
+        <TextView
+            style="@style/ReportTextViewStyle"
+            android:text="@string/report_phoneNum" />
+
+        <TextView
+            android:id="@+id/mPhoneNumTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_10"
+            android:background="@color/color_F4F6FA"
+            android:gravity="center"
+            android:padding="@dimen/space_10"
+            android:text="+971 050 3742218"
+            android:textColor="@color/appTextColor"
+            android:textSize="@dimen/font_16" />
+
+        <Button
+            android:id="@+id/mSubmitBt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_25"
+            android:background="@mipmap/ic_submit_button"
+            android:gravity="center"
+            android:text="@string/report_submit"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_16" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

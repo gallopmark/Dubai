@@ -27,6 +27,7 @@
         tools:targetApi="n">
         <activity
             android:name=".activity.SplashActivity"
+            android:launchMode="singleInstance"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +37,7 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
+            android:alwaysRetainTaskState="true"
             android:launchMode="singleTask" />
 
         <activity
@@ -160,6 +162,15 @@
         <activity
             android:name=".activity.RoadLineActivity"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.ReportActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.ReportSubmitActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.ReportConfirmActivity"
+            android:launchMode="singleTop" />
 
         <!--photopicker-->
         <provider
@@ -204,14 +215,17 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+
         <service
-            android:name=".service.PushJobService"
+            android:name=".push.PushJobService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
-        <service android:name=".service.MessagePushService">
+        <service
+            android:name=".push.MessagePushService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

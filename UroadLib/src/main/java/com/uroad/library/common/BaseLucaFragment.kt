@@ -1,4 +1,4 @@
-package com.uroad.dubai.common
+package com.uroad.library.common
 
 import android.app.Activity
 import android.content.Context
@@ -12,10 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.uroad.dubai.R
-import com.uroad.dubai.widget.CurrencyLoadView
+import com.uroad.library.R
 import com.uroad.library.compat.AppDialog
 import com.uroad.library.utils.NetworkUtils
+import com.uroad.library.widget.CurrencyLoadView
 
 /**
  * @author MFB
@@ -181,7 +181,7 @@ abstract class BaseLucaFragment : Fragment() {
 
     open fun showTipsDialog(message: CharSequence?, textPositive: CharSequence?, listener: AppDialog.OnClickListener?) {
         val dialog = AppDialog(context)
-        dialog.setTitle(getString(R.string.tips))
+        dialog.setTitle(getString(R.string.dialog_default_title))
         dialog.setMessage(message)
         dialog.hideDivider()
         val text = if (TextUtils.isEmpty(textPositive)) getString(R.string.dialog_button_confirm) else textPositive

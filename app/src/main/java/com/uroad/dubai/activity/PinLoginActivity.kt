@@ -3,14 +3,10 @@ package com.uroad.dubai.activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.mapbox.core.utils.TextUtils
 import com.uroad.dubai.R
-import com.uroad.dubai.api.presenter.LoginPresenter
-import com.uroad.dubai.api.view.LoginView
-import com.uroad.dubai.common.BaseActivity
-import com.uroad.dubai.model.UserMDL
+import com.uroad.library.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_pin_login.*
 

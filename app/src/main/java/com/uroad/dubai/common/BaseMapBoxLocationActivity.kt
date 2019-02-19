@@ -8,7 +8,7 @@ import com.mapbox.android.core.permissions.PermissionsManager
 import com.uroad.dubai.utils.DubaiUtils
 import java.lang.Exception
 
-abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
+abstract class BaseMapBoxLocationActivity : BaseDubaiActivity(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
     private var isUserRequestLocation = false
     private var isOpenLocation = false
     private var permissionsManager: PermissionsManager? = null

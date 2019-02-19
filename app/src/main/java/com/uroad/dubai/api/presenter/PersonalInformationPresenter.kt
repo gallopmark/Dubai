@@ -5,7 +5,6 @@ import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.upload.UploadFileCallback
 import com.uroad.dubai.api.view.PersonalInformationView
 import org.json.JSONObject
-import java.io.File
 
 class PersonalInformationPresenter(var personalInformationView: PersonalInformationView) : BasePresenter<PersonalInformationView>(personalInformationView) {
 

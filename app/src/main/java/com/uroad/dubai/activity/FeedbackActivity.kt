@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.FeedbackPresenter
 import com.uroad.dubai.api.view.FeedbackView
-import com.uroad.dubai.common.BaseActivity
+import com.uroad.library.common.BaseActivity
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.webService.WebApi
 import kotlinx.android.synthetic.main.activity_feed_back.*
