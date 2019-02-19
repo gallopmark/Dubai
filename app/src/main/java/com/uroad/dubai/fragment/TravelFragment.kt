@@ -53,7 +53,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
 
     private val data = ArrayList<ScenicMDL>()
     private val handler = Handler()
-    private lateinit var calendarPresenter: CalendarPresenter
+    private var calendarPresenter: CalendarPresenter? = null
     private lateinit var adapter: ViewHistoryListCardAdapter
     private lateinit var adapterRoads: ViewHistoryRoadsListCardAdapter
     private lateinit var bannerPresenter: BannerPresenter
@@ -257,16 +257,23 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                 tvMoreClan.visibility = View.VISIBLE
             }
             else -> {
+                calendarList.clear()
                 baCalendar.visibility = View.GONE
                 ilCalendarNoR.visibility = View.VISIBLE
                 tvMoreClan.visibility = View.INVISIBLE
             }
         }
+        baCalendar.getViewPager().adapter = null
         calendarBanner.notifyDataSetChanged()
+        baCalendar.setAdapter(calendarBanner)
     }
 
     override fun loadError(e: String) {
-
+        try {
+            calendarBanner.notifyDataSetChanged()
+        }catch (e : Exception){
+            e.printStackTrace()
+        }
     }
 
     override fun onResume() {
@@ -274,12 +281,8 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
         inspectPermissions()
     }
 
-    override fun onPause() {
-        super.onPause()
-        inspectPermissions()
-    }
-
     private fun inspectPermissions() {
+        calendarPresenter = null
         calendarPresenter = CalendarPresenter(this@TravelFragment)
         loadCalender()
     }
@@ -290,12 +293,12 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                             Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(context,
                             Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-                calendarPresenter.getCalendar(context)
+                calendarPresenter?.getCalendar(context)
             } else {
                 requestPermissions(arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR), 1)
             }
         } else {
-            calendarPresenter.getCalendar(context)
+            calendarPresenter?.getCalendar(context)
         }
     }
 
@@ -317,7 +320,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                 }
             }
             if (hasPermission) {
-                calendarPresenter.getCalendar(context)
+                calendarPresenter?.getCalendar(context)
             }
         }
     }
