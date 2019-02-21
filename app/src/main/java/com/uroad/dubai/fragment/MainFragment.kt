@@ -5,7 +5,9 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.AppBarLayout
+import android.support.v4.app.FragmentTransaction
 import android.view.View
+import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.NearMeTabAdapter
 import com.uroad.dubai.api.presenter.MessagesPresenter
@@ -18,7 +20,6 @@ import com.uroad.dubai.model.MessagesMDL
 import com.uroad.dubai.utils.AnimUtils
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.utils.DisplayUtils
-import kotlinx.android.synthetic.main.content_mainnearby.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.home_content_scroll.*
 import kotlinx.android.synthetic.main.home_top_collapse.*
@@ -36,7 +37,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     private var myLocation: Location? = null
     private var currentTab = 0
-    private var isFirstCommit = true
+    private var isOnRefresh = false
     private var updateCount = 0
     private lateinit var presenter: MessagesPresenter
     private lateinit var handler: Handler
@@ -55,7 +56,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
-        setContentView(com.uroad.dubai.R.layout.fragment_main)
+        setContentView(R.layout.fragment_main)
         initLayout()
         initMenu()
         initBanner()
@@ -92,8 +93,8 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
             if (check()) return@setOnClickListener
             openActivity(MessagesListActivity::class.java)
         }
-        ivSearch.setOnClickListener { showTipsDialog(getString(com.uroad.dubai.R.string.developing)) }
-        ivSearchColl.setOnClickListener { showTipsDialog(getString(com.uroad.dubai.R.string.developing)) }
+        ivSearch.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        ivSearchColl.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         ivNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
         tvHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
@@ -105,7 +106,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     private fun initBanner() {
-        childFragmentManager.beginTransaction().replace(com.uroad.dubai.R.id.flBanner, MainBannerFragment().apply {
+        childFragmentManager.beginTransaction().replace(R.id.flBanner, MainBannerFragment().apply {
             setRequestCallback(object : FragmentRequestCallback {
                 override fun onRequestFinish() {
                     onFinishRefresh()
@@ -115,7 +116,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     private fun initNotice() {
-        childFragmentManager.beginTransaction().replace(com.uroad.dubai.R.id.flNotice, MainNoticeFragment().apply {
+        childFragmentManager.beginTransaction().replace(R.id.flNotice, MainNoticeFragment().apply {
             setOnRequestCallback(object : MainNoticeFragment.OnRequestCallback {
                 override fun callback(isEmpty: Boolean) {
                     if (isEmpty) this@MainFragment.flNotice.visibility = View.GONE
@@ -131,7 +132,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     private fun initFavorites() {
-        childFragmentManager.beginTransaction().replace(com.uroad.dubai.R.id.flFavorites, MainFavoritesFragment().apply {
+        childFragmentManager.beginTransaction().replace(R.id.flFavorites, MainFavoritesFragment().apply {
             setOnRequestCallback(object : MainFavoritesFragment.OnRequestCallback {
                 override fun callback(isEmpty: Boolean) {
                     if (isEmpty) this@MainFragment.flFavorites.visibility = View.GONE
@@ -149,12 +150,12 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     private fun initNearBy() {
         rvNearByTab.isNestedScrollingEnabled = false
         val tabs = ArrayList<String>().apply {
-            add(context.getString(com.uroad.dubai.R.string.nearMe_roads))
-            add(context.getString(com.uroad.dubai.R.string.nearMe_events))
+            add(context.getString(R.string.nearMe_roads))
+            add(context.getString(R.string.nearMe_events))
 //            add(context.getString(R.string.nearMe_news))
-            add(context.getString(com.uroad.dubai.R.string.nearMe_hotel))
-            add(context.getString(com.uroad.dubai.R.string.nearMe_restaurants))
-            add(context.getString(com.uroad.dubai.R.string.nearMe_attractions))
+            add(context.getString(R.string.nearMe_hotel))
+            add(context.getString(R.string.nearMe_restaurants))
+            add(context.getString(R.string.nearMe_attractions))
         }
         rvNearByTab.adapter = NearMeTabAdapter(context, tabs).apply {
             setOnItemClickListener(object : BaseRecyclerAdapter.OnItemClickListener {
@@ -172,53 +173,58 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     override fun afterLocation(location: Location) {
         myLocation = location
-        initFragments()
+        setCurrentTab(currentTab)
+        if (isOnRefresh) refreshNearMe(location.longitude, location.latitude)
         closeLocation()
     }
 
     override fun onLocationFailure(exception: Exception) {
-        initFragments()
-    }
-
-    private fun initFragments() {
-        val longitude = myLocation?.longitude ?: 0.0
-        val latitude = myLocation?.latitude ?: 0.0
-        if (isFirstCommit) {
-            val transaction = childFragmentManager.beginTransaction()
-            transaction.replace(com.uroad.dubai.R.id.flNearMeRoads, NearMeRoadsFragment.newInstance(longitude, latitude), TAG_ROADS)
-            transaction.replace(com.uroad.dubai.R.id.flNearMeEvents, NearMeEventsFragment.newInstance(longitude, latitude), TAG_EVENTS)
-//        transaction.replace(R.id.flNearMeNews, NearMeNewsFragment(), TAG_NEWS)
-            transaction.replace(com.uroad.dubai.R.id.flNearMeHotel, NearMeHotelFragment.newInstance(longitude, latitude), TAG_HOTEL)
-            transaction.replace(com.uroad.dubai.R.id.flNearMeRestaurants, NearMeRestaurantsFragment.newInstance(longitude, latitude), TAG_RESTAURANTS)
-            transaction.replace(com.uroad.dubai.R.id.flNearMeAttractions, NearMeAttractionsFragment.newInstance(longitude, latitude), TAG_ATTRACTIONS)
-            transaction.commitAllowingStateLoss()
-            setCurrentTab(0)
-            isFirstCommit = false
-        } else {
-            refreshNearMe(longitude, latitude)
-        }
+        setCurrentTab(currentTab)
     }
 
     private fun setCurrentTab(tab: Int) {
         currentTab = tab
-        hideFragments()
+        val myLocation = this.myLocation ?: return
+        val longitude = myLocation.longitude
+        val latitude = myLocation.latitude
+        val transaction = childFragmentManager.beginTransaction()
+        hideFragments(transaction)
         when (tab) {
-            0 -> flNearMeRoads.visibility = View.VISIBLE
-            1 -> flNearMeEvents.visibility = View.VISIBLE
-//            2 -> flNearMeNews.visibility = View.VISIBLE
-            2 -> flNearMeHotel.visibility = View.VISIBLE
-            3 -> flNearMeRestaurants.visibility = View.VISIBLE
-            4 -> flNearMeAttractions.visibility = View.VISIBLE
+            0 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_ROADS)
+                if (fragment != null) transaction.show(fragment)
+                else transaction.add(R.id.mNearByFl, NearMeRoadsFragment.newInstance(longitude, latitude), TAG_ROADS)
+            }
+            1 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_EVENTS)
+                if (fragment != null) transaction.show(fragment)
+                else transaction.add(R.id.mNearByFl, NearMeEventsFragment.newInstance(longitude, latitude), TAG_EVENTS)
+            }
+            2 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_HOTEL)
+                if (fragment != null) transaction.show(fragment)
+                else transaction.add(R.id.mNearByFl, NearMeHotelFragment.newInstance(longitude, latitude), TAG_HOTEL)
+            }
+            3 -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)
+                if (fragment != null) transaction.show(fragment)
+                else transaction.add(R.id.mNearByFl, NearMeRestaurantsFragment.newInstance(longitude, latitude), TAG_RESTAURANTS)
+            }
+            else -> {
+                val fragment = childFragmentManager.findFragmentByTag(TAG_ATTRACTIONS)
+                if (fragment != null) transaction.show(fragment)
+                else transaction.add(R.id.mNearByFl, NearMeAttractionsFragment.newInstance(longitude, latitude), TAG_ATTRACTIONS)
+            }
         }
+        transaction.commitAllowingStateLoss()
     }
 
-    private fun hideFragments() {
-        flNearMeRoads.visibility = View.GONE
-        flNearMeEvents.visibility = View.GONE
-        flNearMeNews.visibility = View.GONE
-        flNearMeHotel.visibility = View.GONE
-        flNearMeRestaurants.visibility = View.GONE
-        flNearMeAttractions.visibility = View.GONE
+    private fun hideFragments(transaction: FragmentTransaction) {
+        childFragmentManager.findFragmentByTag(TAG_ROADS)?.let { transaction.hide(it) }
+        childFragmentManager.findFragmentByTag(TAG_EVENTS)?.let { transaction.hide(it) }
+        childFragmentManager.findFragmentByTag(TAG_HOTEL)?.let { transaction.hide(it) }
+        childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)?.let { transaction.hide(it) }
+        childFragmentManager.findFragmentByTag(TAG_ATTRACTIONS)?.let { transaction.hide(it) }
     }
 
     private fun check(): Boolean {
@@ -241,6 +247,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     private fun onRefresh() {
+        isOnRefresh = true
         updateCount = 0
         getUnreadMsg()
         refreshBanner()
@@ -272,8 +279,8 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
                 if (fragment != null && fragment is NearMeRoadsFragment) fragment.update(longitude, latitude)
             }
             1 -> {
-//                val fragment = childFragmentManager.findFragmentByTag(TAG_EVENTS)
-//                if (fragment != null && fragment is NearMeEventsFragment) fragment.initData()
+                val fragment = childFragmentManager.findFragmentByTag(TAG_EVENTS)
+                if (fragment != null && fragment is NearMeEventsFragment) fragment.update(longitude, latitude)
             }
             2 -> {
                 val fragment = childFragmentManager.findFragmentByTag(TAG_HOTEL)
@@ -283,7 +290,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
                 val fragment = childFragmentManager.findFragmentByTag(TAG_RESTAURANTS)
                 if (fragment != null && fragment is NearMeRestaurantsFragment) fragment.update(longitude, latitude)
             }
-            4 -> {
+            else -> {
                 val fragment = childFragmentManager.findFragmentByTag(TAG_ATTRACTIONS)
                 if (fragment != null && fragment is NearMeAttractionsFragment) fragment.update(longitude, latitude)
             }

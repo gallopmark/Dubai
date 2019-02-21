@@ -22,7 +22,6 @@ import com.mapbox.services.android.navigation.ui.v5.listeners.InstructionListLis
 import com.mapbox.services.android.navigation.ui.v5.summary.SummaryBottomSheet
 import com.mapbox.services.android.navigation.v5.milestone.Milestone
 import com.mapbox.services.android.navigation.v5.milestone.MilestoneEventListener
-import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
@@ -118,7 +117,6 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
         return NavigationViewOptions.builder()
                 .directionsRoute(route)
                 .shouldSimulateRoute(shouldSimulateRoute)
-                .navigationOptions(MapboxNavigationOptions.builder().build())
                 .instructionListListener(this)
                 .milestoneEventListener(this)
                 .progressChangeListener(this)
@@ -133,11 +131,11 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
 
     private fun initNavigationOptions() {
         contentOptions.setOnClickListener { hideNavigationOptions() }
-        cbParking.setOnCheckedChangeListener { _, isChecked ->
-//            if (isChecked) presenter.getMapPointByType(MapDataType.PARKING.CODE)
+        cbParking.setOnCheckedChangeListener { _, _ ->
+            //            if (isChecked) presenter.getMapPointByType(MapDataType.PARKING.CODE)
 //            else removePointFromMap(MapDataType.PARKING.CODE)
         }
-        cbGasStation.setOnCheckedChangeListener { _, isChecked ->
+        cbGasStation.setOnCheckedChangeListener { _, _ ->
             showTipsDialog(getString(R.string.developing))
             cbGasStation.isChecked = false
         }
@@ -145,7 +143,7 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
             if (isChecked) presenter.getScenic()
             else removePointFromMap(MapDataType.SCENIC.CODE)
         }
-        cbShopping.setOnCheckedChangeListener { _, isChecked ->
+        cbShopping.setOnCheckedChangeListener { _, _ ->
             showTipsDialog(getString(R.string.developing))
             cbShopping.isChecked = false
         }
@@ -271,6 +269,16 @@ class MapNavigationActivity : BaseMapBoxLocationActivity(), MilestoneEventListen
             return true
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onBackPressed() {
+        if(contentOptions.visibility != View.GONE){
+            hideNavigationOptions()
+        } else {
+            if (!navigationView.onBackPressed()) {
+                super.onBackPressed()
+            }
+        }
     }
 
     override fun onStart() {

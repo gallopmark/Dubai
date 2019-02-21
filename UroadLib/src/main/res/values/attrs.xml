@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="CircularProgressView">
+        <attr name="border_Width" format="dimension" />
+        <attr name="colorSequence" format="reference" />
+        <attr name="sweepAnimationDurationMillis" format="integer" />
+        <attr name="angleAnimationDurationMillis" format="integer" />
+        <attr name="minSweepAngle" format="integer" />
+    </declare-styleable>
+    <array name="circular_loading_color_sequence">
+        <item>@color/dialog_negativeButton</item>
+        <item>@color/dialog_negativeButton</item>
+        <item>@color/dialog_negativeButton</item>
+        <item>@color/dialog_negativeButton</item>
+    </array>
+
+    <integer name="circular_default_sweepAnimationDuration">900</integer>
+    <integer name="circular_default_angleAnimationDurationMillis">1000</integer>
+    <integer name="circular_default_miniSweepAngle">30</integer>
+    <integer name="circelprogressbar_default_animator_duration">1000</integer>
     <!--Banner无限轮播属性-->
     <declare-styleable name="Banner">
         <attr name="bannerPageMargin" format="dimension" />

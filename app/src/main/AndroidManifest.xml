@@ -96,7 +96,8 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.ScenicDetailActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".activity.LoginActivity"
             android:launchMode="singleTop" />

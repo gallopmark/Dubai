@@ -70,12 +70,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/space_10"
-            android:layout_marginEnd="@dimen/space_10"
             android:layout_marginTop="@dimen/space_10"
+            android:layout_marginEnd="@dimen/space_10"
             android:layout_marginBottom="@dimen/space_5"
             android:orientation="horizontal"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-        <include layout="@layout/content_mainnearby" />
+        <FrameLayout
+            android:id="@+id/mNearByFl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

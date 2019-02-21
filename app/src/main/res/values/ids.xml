@@ -11,7 +11,7 @@
     <!--baseActivity-->
 
     <!--baseRefreshActivity-->
-    <item name="baseRefreshLayout" type="id"/>
+    <item name="baseRefreshLayout" type="id" />
 
     <!--baseFragment-->
     <item name="fgBaseParent" type="id" />
@@ -20,4 +20,7 @@
     <!--baseFragment-->
 
     <item name="mapView" type="id" />
+
+    <item name="appbarZoomView" type="id" />
+    <item name="zoomScrollViewEx" type="id" />
 </resources>

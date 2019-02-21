@@ -3,9 +3,7 @@ package com.uroad.dubai.activity
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
-import android.view.View
 import android.widget.FrameLayout
-import com.mapbox.geojson.Point
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.NewsDetailPresenter
 import com.uroad.dubai.api.view.NewsDetailView
@@ -17,18 +15,10 @@ import com.uroad.library.utils.DisplayUtils
 import com.uroad.library.utils.PhoneUtils
 import kotlinx.android.synthetic.main.activity_scenicdetail.*
 
-/**
- * @author MFB
- * @create 2019/1/3
- * @describe
- */
 class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsDetailView {
 
     private var newsId: String? = null
     private var newsMDL: NewsMDL? = null
-    override fun requestWindow() {
-        requestWindowFullScreen()
-    }
 
     override fun createPresenter(): NewsDetailPresenter = NewsDetailPresenter(this)
     override fun setUp(savedInstanceState: Bundle?) {
@@ -39,27 +29,21 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
     }
 
     private fun initView() {
-        ivBack.setOnClickListener { onBackPressed() }
-        ivBack2.setOnClickListener { onBackPressed() }
-        llTopLayout.setOnClickListener {
-            newsMDL?.let { dataMDL -> openActivity(RoadNavigationActivity::class.java, Bundle().apply { putSerializable("dataMDL", dataMDL) }) }
-        }
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+        llTopLayout.setOnClickListener { newsMDL?.let { dataMDL -> openActivity(RoadNavigationActivity::class.java, Bundle().apply { putSerializable("dataMDL", dataMDL) }) } }
+//        val behavior = (appBarLayout.layoutParams as CoordinatorLayout.LayoutParams).behavior as AppbarLayoutZoomBehavior
+//        behavior.setMaxZoomHeight(DisplayUtils.getWindowHeight(this).toFloat())
     }
 
     private fun initLayout() {
         val statusHeight = DisplayUtils.getStatusHeight(this)
-        ivBack.layoutParams = (ivBack.layoutParams as FrameLayout.LayoutParams).apply { topMargin = statusHeight }
         toolbar.layoutParams = (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).apply { topMargin = statusHeight }
         val picHeight = DisplayUtils.getWindowHeight(this) / 3
-        flTopPic.layoutParams = (flTopPic.layoutParams as CollapsingToolbarLayout.LayoutParams).apply { height = picHeight }
+        appbarZoomView.layoutParams = (appbarZoomView.layoutParams as FrameLayout.LayoutParams).apply { height = picHeight }
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
             val offset = Math.abs(verticalOffset)
             val total = appBarLayout.totalScrollRange
-            if (offset <= total / 2) {
-                toolbar.visibility = View.GONE
-            } else {
-                toolbar.visibility = View.VISIBLE
-            }
+            collapsingLayout.isTitleEnabled = offset > total / 2
         })
     }
 
@@ -83,13 +67,13 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
 
     private fun updateUI(mdl: NewsMDL) {
         this.newsMDL = mdl
-        GlideV4.getInstance().displayImage(this, mdl.headimg, ivTopPic)
+        GlideV4.getInstance().displayImage(this, mdl.headimg, appbarZoomView)
         tvSubTitle.text = mdl.title
         tvAddress.text = mdl.address
         tvContent.text = mdl.content
         tvHours.text = mdl.hours
         tvTel.text = mdl.phone
-        tvTitle.text = mdl.title
+        collapsingLayout.title = mdl.title
         tvTel.setOnClickListener { PhoneUtils.call(this@ScenicDetailActivity, mdl.phone ?: "") }
     }
 

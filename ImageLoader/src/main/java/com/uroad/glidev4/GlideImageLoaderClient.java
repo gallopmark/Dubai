@@ -22,6 +22,7 @@ import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -394,7 +395,8 @@ public class GlideImageLoaderClient implements IImageLoaderClient {
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .placeholder(defRes)
-                        .error(defRes))
+                        .error(defRes)
+                        .transform(new CircleCrop()))
                 .into(imageView);
     }
 
@@ -405,7 +407,7 @@ public class GlideImageLoaderClient implements IImageLoaderClient {
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .placeholder(defRes)
                         .error(defRes)
-                        .transform(new GlideCircleTransformation()))
+                        .transform(new CircleCrop()))
                 .into(imageView);
     }
 
