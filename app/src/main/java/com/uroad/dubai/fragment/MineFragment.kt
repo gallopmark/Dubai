@@ -8,6 +8,9 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -22,12 +25,9 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.common.BaseFragment
-import com.uroad.dubai.common.BaseFragment
-import com.uroad.library.common.BaseFragment
 import com.uroad.library.utils.DisplayUtils
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.photopicker.utils.ImagePicker
-import com.uroad.dubai.utils.SoftHideKeyBoardUtil
 import com.uroad.glidev4.GlideV4
 import kotlinx.android.synthetic.main.fragment_mine.*
 
@@ -43,6 +43,7 @@ class MineFragment : BaseFragment() {
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_mine)
         initTopLayout()
+        initLayout()
 
         isLogin = UserPreferenceHelper.isLogin(context)
         tvMessage.setOnClickListener{
@@ -81,21 +82,46 @@ class MineFragment : BaseFragment() {
         ivUserHead.setOnClickListener {
             if (check()) return@setOnClickListener
             openActivity(PersonalInformationActivity::class.java)
-            /*ImagePicker.with(this@MineFragment)
-                    .isCompress(true)
-                    .requestCode(123)
-                    .start()*/
         }
+
+        ivUserHeadTop.setOnClickListener {
+            if (check()) return@setOnClickListener
+            openActivity(PersonalInformationActivity::class.java)
+        }
+
         if (isLogin){
             ivUserHead.setImageResource(R.mipmap.ic_user_default)
+            ivUserHeadTop.setImageResource(R.mipmap.ic_user_default)
         }else{
             ivUserHead.setImageResource(R.mipmap.icon_user_head_gray)
+            ivUserHeadTop.setImageResource(R.mipmap.icon_user_head_gray)
         }
     }
 
     private fun initTopLayout() {
         val paddingTop = llUserInfo.paddingTop + DisplayUtils.getStatusHeight(context)
         llUserInfo.setPadding(llUserInfo.paddingStart, paddingTop, llUserInfo.paddingEnd, llUserInfo.paddingBottom)
+    }
+
+    private fun initLayout() {
+        val statusHeight = DisplayUtils.getStatusHeight(context)
+        ivUserHeadTop.layoutParams = (ivUserHeadTop.layoutParams as ConstraintLayout.LayoutParams).apply {
+            //topMargin = statusHeight
+            leftMargin = statusHeight
+        }
+        toolbar.layoutParams = (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).apply {
+            topMargin = statusHeight
+            leftMargin = statusHeight
+        }
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val offset = Math.abs(verticalOffset)
+            val total = appBarLayout.totalScrollRange
+            if (offset <= total / 2) {
+                ivUserHeadTop.visibility = View.GONE
+            } else {
+                ivUserHeadTop.visibility = View.VISIBLE
+            }
+        })
     }
 
     private fun check() : Boolean{
@@ -111,9 +137,11 @@ class MineFragment : BaseFragment() {
         super.onResume()
         isLogin = UserPreferenceHelper.isLogin(context)
         if (isLogin){
-           /* GlideV4.getInstance().displayCircleImage(context,
+            GlideV4.getInstance().displayCircleImage(context,
                     UserPreferenceHelper.getAvatar(context),
-                    ivUserHead,R.mipmap.ic_user_default)*/
+                    ivUserHeadTop,R.mipmap.ic_user_default)
+            /*loadCirclePic(context,
+                    UserPreferenceHelper.getAvatar(context)?:"",ivUserHeadTop)*/
 
             loadCirclePic(context,
                     UserPreferenceHelper.getAvatar(context)?:"",ivUserHead)

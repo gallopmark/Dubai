@@ -61,6 +61,7 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
     private lateinit var bannerAdapter: TravelBannerAdapter
     private lateinit var calendarBanner: TravelCalendarAdapter
     private val calendarList = ArrayList<CalendarMDL>()
+    private var hasPermissions : Boolean = false
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {
         setContentView(R.layout.fragment_travel)
@@ -278,7 +279,9 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
 
     override fun onResume() {
         super.onResume()
-        inspectPermissions()
+        if(hasPermissions){
+            inspectPermissions()
+        }
     }
 
     private fun inspectPermissions() {
@@ -319,8 +322,13 @@ class TravelFragment : BasePresenterFragment<AttractionPresenter>(), AttractionV
                     break
                 }
             }
+            this@TravelFragment.hasPermissions = hasPermissions
             if (hasPermission) {
                 calendarPresenter?.getCalendar(context)
+            }else{
+                baCalendar.visibility = View.GONE
+                ilCalendarNoR.visibility = View.VISIBLE
+                tvMoreClan.visibility = View.INVISIBLE
             }
         }
     }

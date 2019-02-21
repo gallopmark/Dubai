@@ -1,30 +1,26 @@
 package com.uroad.dubai.activity
 
 import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.support.v4.content.ContextCompat
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.CalendarListAdapter
 import com.uroad.dubai.api.presenter.CalendarPresenter
 import com.uroad.dubai.api.view.CalendarView
 import com.uroad.dubai.common.BaseRefreshPresenterActivity
 import com.uroad.dubai.model.CalendarMDL
-import com.uroad.dubai.permission.PermissionHelper
-import com.uroad.dubai.permission.PermissionInterface
-import com.uroad.dubai.permission.PermissionUtil
 import kotlinx.android.synthetic.main.content_smartrefresh.*
 import kotlin.collections.ArrayList
 
-class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), CalendarView, PermissionInterface {
+class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), CalendarView {
 
     private lateinit var data: MutableList<CalendarMDL>
     private lateinit var adapter: CalendarListAdapter
-    private lateinit var mPermissionHelper: PermissionHelper
 
 
     override fun initViewData() {
         withTitle(getString(R.string.mine_calendar))
-        mPermissionHelper = PermissionHelper(this@CalendarListActivity,
-                this@CalendarListActivity)
-        mPermissionHelper.requestPermissions()
         data = ArrayList()
         adapter = CalendarListAdapter(this, data)
         recyclerView.adapter = adapter
@@ -37,14 +33,28 @@ class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), 
     }
 
     private fun getList() {
-        if (PermissionUtil.hasPermission(this, Manifest.permission.READ_CALENDAR)
-                && PermissionUtil.hasPermission(this, Manifest.permission.WRITE_CALENDAR)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CALENDAR)
+                    == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_CALENDAR)
+                    == PackageManager.PERMISSION_GRANTED){
+
+                presenter?.let {
+                    it.getCalendar(this@CalendarListActivity)
+                }
+
+                adapter.notifyDataSetChanged()
+
+            }else{
+                requestPermissions(arrayOf(Manifest.permission.READ_CALENDAR,
+                        Manifest.permission.WRITE_CALENDAR),10000)
+            }
+
+        }else{
             presenter?.let {
                 it.getCalendar(this@CalendarListActivity)
             }
             adapter.notifyDataSetChanged()
-        } else {
-            mPermissionHelper.requestPermissions()
         }
     }
 
@@ -76,28 +86,23 @@ class CalendarListActivity : BaseRefreshPresenterActivity<CalendarPresenter>(), 
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (mPermissionHelper.requestPermissionsResult(requestCode, permissions, grantResults)) {
-            //权限请求结果，并已经处理了该回调
-            return
-        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-
-    override fun getPermissionsRequestCode(): Int = 10000
-
-    override fun getPermissions(): Array<String> =
-            arrayOf(Manifest.permission.READ_CALENDAR,
-                    Manifest.permission.WRITE_CALENDAR)
-
-    override fun requestPermissionsSuccess() {
-        presenter?.let {
-            it.getCalendar(this@CalendarListActivity)
+        if (requestCode == 10000){
+            var isAllGranted = true//是否全部权限已授权
+            for (result in grantResults) {
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    isAllGranted = false
+                    break
+                }
+            }
+            if (isAllGranted){
+                presenter?.let {
+                    it.getCalendar(this@CalendarListActivity)
+                }
+            }else{
+                onPullToLoadSuccess()
+            }
         }
-    }
-
-    override fun requestPermissionsFail() {
-        onPullToLoadSuccess()
     }
 
 }
