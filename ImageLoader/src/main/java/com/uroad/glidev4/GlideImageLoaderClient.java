@@ -224,7 +224,7 @@ public class GlideImageLoaderClient implements IImageLoaderClient {
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .placeholder(defRes)
                         .error(defRes)
-                        .transform(new GlideCircleTransformation()))
+                        .transform(new CircleCrop()))
                 .into(imageView);
     }
 
@@ -235,7 +235,7 @@ public class GlideImageLoaderClient implements IImageLoaderClient {
                         .diskCacheStrategy(DiskCacheStrategy.DATA)
                         .placeholder(defRes)
                         .error(defRes)
-                        .transform(new GlideCircleTransformation()))
+                        .transform(new CircleCrop()))
                 .into(imageView);
     }
 
