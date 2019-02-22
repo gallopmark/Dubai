@@ -15,7 +15,6 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
-                    'src/main/res/layout/menu',
                     'src/main/res/layout/dialog',
                     'src/main/res/layout/include',
                     'src/main/res/layout/widget',
