@@ -20,11 +20,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.uroad.dubai.R
+import com.uroad.dubai.local.UserPreferenceHelper
+import com.uroad.dubai.utils.DubaiUtils
 import com.uroad.library.compat.AppDialog
 import com.uroad.library.compat.AppToast
 import com.uroad.library.compat.LoadingDialog
+import com.uroad.library.utils.DeviceUtils
 import com.uroad.library.utils.NetworkUtils
 import com.uroad.library.widget.CurrencyLoadView
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_base.*
 
 /**
@@ -37,6 +42,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private var mShortToast: Toast? = null
     private var mLongToast: Toast? = null
     private var mLoadingDialog: LoadingDialog? = null
+    private val disposables = CompositeDisposable()
 
 //    override fun attachBaseContext(context: Context) {
 //        val language = LanguageHelper.getLanguage(context)
@@ -415,10 +421,32 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    open fun addDisposable(disposable: Disposable?) {
+        disposable?.let { disposables.add(it) }
+    }
+
+    open fun removeDisposable(disposable: Disposable?) {
+        disposable?.let { disposables.remove(disposable) }
+    }
+
+    fun getUserId() = UserPreferenceHelper.getUserId(this)
+
+    fun getUserUUID() = UserPreferenceHelper.getUserUUID(this)
+
+    fun isLogin() = UserPreferenceHelper.isLogin(this)
+    fun getTestUserId() = "201901227175316"
+
+    fun getAndroidID() = DeviceUtils.getAndroidID(this)
+
+    fun openSettings() {
+        DubaiUtils.openSettings(this)
+    }
+
     override fun onDestroy() {
         mShortToast?.cancel()
         mLongToast?.cancel()
         mLoadingDialog?.dismiss()
+        if (disposables.size() > 0) disposables.dispose()
         super.onDestroy()
     }
 

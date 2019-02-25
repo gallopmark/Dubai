@@ -45,7 +45,7 @@ class ImageGridAdapter(private val context: Activity,
         if (itemType == ITEM_IMAGE) {
             val ivPic = holder.obtainView<ImageView>(R.id.ivPic)
             val checkBox = holder.obtainView<CheckBox>(R.id.checkBox)
-            GlideV4.getInstance().displayImage(context, t.path,
+            GlideV4.displayImage(context, t.path,
                     ivPic, R.color.darkgrey,
                     ImageSize(mImageSize, mImageSize))
             if (isMultiple) {

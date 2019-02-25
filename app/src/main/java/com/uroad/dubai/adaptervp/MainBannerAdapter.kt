@@ -24,6 +24,6 @@ class MainBannerAdapter(private val context: Context, data: MutableList<NewsMDL>
             width = itemWidth
             height = itemHeight
         }
-        GlideV4.getInstance().displayImage(context, item.headimg, ivPic)
+        GlideV4.displayImage(context, item.headimg, ivPic)
     }
 }

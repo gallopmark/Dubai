@@ -33,17 +33,15 @@ import com.uroad.dubai.R
 import com.uroad.dubai.adapter.DirectionsRouteAdapter
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
-import com.uroad.dubai.api.presenter.PoiSearchPresenter
+import com.uroad.dubai.api.presenter.*
 import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
-import com.uroad.dubai.api.presenter.RouteNavigationPresenter
-import com.uroad.dubai.api.presenter.RouteSubscribePresenter
-import com.uroad.dubai.api.presenter.UserAddressPresenter
 import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.api.view.RouteSubscribeView
 import com.uroad.dubai.api.view.UserAddressView
 import com.uroad.dubai.enumeration.AddressType
+import com.uroad.dubai.enumeration.StatisticsType
 import com.uroad.dubai.enumeration.SubscribeType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.MultiItem
@@ -96,11 +94,12 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     private lateinit var userAddressPresenter: UserAddressPresenter
     private var userAddressType: Int = 1
 
+    private lateinit var statisticsPresenter: FunctionStatisticsPresenter
+
     override fun setBaseMapBoxView(): Int = R.layout.activity_routenavigation
     override fun onMapSetUp(savedInstanceState: Bundle?) {
         ivBackIM.setOnClickListener { onBackPressed() }
-        routePresenter = RouteNavigationPresenter(this, this)
-        subscribePresenter = RouteSubscribePresenter(this)
+        initPresenter()
         initPoiTextView()
         initBundle()
         initSearch()
@@ -108,6 +107,12 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         initProfileRg()
         initRoutesRv()
         initBottomView()
+    }
+
+    private fun initPresenter() {
+        routePresenter = RouteNavigationPresenter(this, this)
+        subscribePresenter = RouteSubscribePresenter(this)
+        statisticsPresenter = FunctionStatisticsPresenter(this)
     }
 
     private fun initPoiTextView() {
@@ -638,6 +643,10 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         ivSave.setImageResource(R.mipmap.ic_collect_default)
     }
 
+    override fun initData() {
+        statisticsPresenter.onFuncStatistics(StatisticsType.NAVIGATION_NAVI.CODE)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && contentSearch.visibility != View.GONE) {
             onInitialState()
@@ -647,12 +656,17 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
     }
 
     override fun onDestroy() {
+        release()
+        super.onDestroy()
+    }
+
+    private fun release() {
         InputMethodUtils.hideSoftInput(this)
         poiPresenter.detachView()
         routePresenter.detachView()
         subscribePresenter.detachView()
         userAddressPresenter.detachView()
+        statisticsPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
-        super.onDestroy()
     }
 }

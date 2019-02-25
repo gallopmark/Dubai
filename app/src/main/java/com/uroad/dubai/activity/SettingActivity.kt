@@ -13,13 +13,11 @@ import java.util.*
 
 class SettingActivity : BaseActivity() {
 
-    private var isLogin: Boolean = false
     private var phone: String = ""
 
     override fun setUp(savedInstanceState: Bundle?) {
         withTitle(getString(R.string.settings))
         setBaseContentView(R.layout.activity_setting)
-        isLogin = UserPreferenceHelper.isLogin(this@SettingActivity)
         phone = UserPreferenceHelper.getAccount(this@SettingActivity)
         initView()
     }
@@ -33,7 +31,7 @@ class SettingActivity : BaseActivity() {
         }
 
         tvPassword.setOnClickListener {
-            if (!isLogin) {
+            if (!isLogin()) {
                 openActivity(LoginActivity::class.java)
                 return@setOnClickListener
             }
@@ -63,13 +61,13 @@ class SettingActivity : BaseActivity() {
         tvTerm.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvOffline.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         tvNavigationAddress.setOnClickListener {
-            if (isLogin) openActivity(NavigationAddressActivity::class.java)
+            if (isLogin()) openActivity(NavigationAddressActivity::class.java)
             else openActivity(LoginActivity::class.java)
         }
 
         swSearchHistory.setOnCheckedChangeListener { _, isChecked -> AppSource.setShowSearchHistory(this@SettingActivity, isChecked) }
         swLoadingPhoto.setOnCheckedChangeListener { _, isChecked -> AppSource.setCanLoadPhoto(this@SettingActivity, isChecked) }
-        if (!isLogin) btnLogOut.visibility = View.GONE
+        if (!isLogin()) btnLogOut.visibility = View.GONE
         swSearchHistory.isChecked = AppSource.isShowSearchHistory(this)
         swLoadingPhoto.isChecked = AppSource.isCanLoadPhoto(this)
     }

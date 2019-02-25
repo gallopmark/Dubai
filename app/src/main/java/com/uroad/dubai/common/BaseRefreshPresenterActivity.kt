@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.content_smartrefresh.*
  * @create 2018/12/21
  * @describe
  */
-abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseDubaiActivity(), BaseView {
+abstract class BaseRefreshPresenterActivity<P : BasePresenter<*>> : BaseActivity(), BaseView {
     open lateinit var presenter: P
 
     protected abstract fun createPresenter(): P

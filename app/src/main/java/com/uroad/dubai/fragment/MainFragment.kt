@@ -10,22 +10,25 @@ import android.view.View
 import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.NearMeTabAdapter
+import com.uroad.dubai.api.presenter.FunctionStatisticsPresenter
 import com.uroad.dubai.api.presenter.MessagesPresenter
 import com.uroad.dubai.api.view.MessagesView
 import com.uroad.dubai.common.BaseMapBoxLocationFragment
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
+import com.uroad.dubai.enumeration.StatisticsType
 import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.dubai.model.MessagesMDL
 import com.uroad.dubai.utils.AnimUtils
 import com.uroad.dubai.webService.WebApi
 import com.uroad.library.utils.DisplayUtils
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.home_content_scroll.*
 import kotlinx.android.synthetic.main.home_top_collapse.*
 import kotlinx.android.synthetic.main.home_top_expand.*
 import kotlinx.android.synthetic.main.home_top_flexhead.*
 import java.lang.Exception
+import java.util.*
 
 
 /**
@@ -42,6 +45,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     private lateinit var presenter: MessagesPresenter
     private lateinit var handler: Handler
     private var animator: ObjectAnimator? = null
+    private lateinit var statisticsPresenter: FunctionStatisticsPresenter
 
     companion object {
         private const val TAG_BANNER = "banner"
@@ -64,6 +68,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         initFavorites()
         initNearBy()
         presenter = MessagesPresenter(this)
+        statisticsPresenter = FunctionStatisticsPresenter(context)
         handler = Handler()
     }
 
@@ -95,14 +100,38 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         }
         ivSearch.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         ivSearchColl.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        tvNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
-        ivNavigation.setOnClickListener { openActivity(RoadNavigationActivity::class.java) }
-        tvHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
-        ivHighWay.setOnClickListener { openActivity(RoadsListActivity::class.java) }
-        tvNews.setOnClickListener { openActivity(NewsListActivity::class.java) }
-        ivNews.setOnClickListener { openActivity(NewsListActivity::class.java) }
+        tvNavigation.setOnClickListener { openNavigation() }
+        ivNavigation.setOnClickListener { openNavigation() }
+        tvHighWay.setOnClickListener { openRoadsList() }
+        ivHighWay.setOnClickListener { openRoadsList() }
+        tvNews.setOnClickListener { openNewsList() }
+        ivNews.setOnClickListener { openNewsList() }
         tvMore.setOnClickListener { openActivity(MoreActivity::class.java) }
         ivMore.setOnClickListener { openActivity(MoreActivity::class.java) }
+    }
+
+    /**
+     * Click Home Navigation (Statistics and Open Navigation Page)
+     */
+    private fun openNavigation() {
+        statisticsPresenter.onFuncStatistics(StatisticsType.HOME_NAVIGATION.CODE)
+        openActivity(RoadNavigationActivity::class.java)
+    }
+
+    /**
+     *Click on Home Roads (Statistics and Open Roadlist  page)
+     */
+    private fun openRoadsList() {
+        statisticsPresenter.onFuncStatistics(StatisticsType.HOME_ROADS.CODE)
+        openActivity(RoadsListActivity::class.java)
+    }
+
+    /**
+     *Click on the home page News (statistics and open News)
+     */
+    private fun openNewsList() {
+        statisticsPresenter.onFuncStatistics(StatisticsType.HOME_NEWS.CODE)
+        openActivity(NewsListActivity::class.java)
     }
 
     private fun initBanner() {
@@ -243,7 +272,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     /*获取未读消息*/
     private fun getUnreadMsg() {
         animator?.cancel()
-        presenter.messageCenter(WebApi.MESSAGE_CENTER, WebApi.messageCenter("1", getUserId(), 1, 10))
+        presenter.messageCenter(WebApi.MESSAGE_CENTER, WebApi.messageCenter("1", getUserUUID(), 1, 10))
     }
 
     private fun onRefresh() {
@@ -254,7 +283,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         refreshNotice()
         refreshFavorites()
         openLocation()
-        refreshLayout.postDelayed({ refreshLayout.finishRefresh() }, 20 * 1000L)
+        refreshLayout.postDelayed({ refreshLayout.finishRefresh() }, 30 * 1000L)
     }
 
     private fun refreshBanner() {
@@ -324,6 +353,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
 
     override fun onDestroyView() {
         presenter.detachView()
+        statisticsPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
         super.onDestroyView()
     }

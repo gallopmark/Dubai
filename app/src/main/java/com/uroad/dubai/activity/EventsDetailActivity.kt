@@ -55,7 +55,7 @@ class EventsDetailActivity : BasePresenterActivity<EventsPresenter>(), EventsPre
     }
 
     private fun updateUI(mdl: EventsMDL) {
-        GlideV4.getInstance().displayImage(this, mdl.icon, ivIcon)
+        GlideV4.displayImage(this, mdl.icon, ivIcon)
         tvTitle.text = mdl.roadname
         mDirectionTv.text = mdl.direction
         tvContent.text = mdl.eventinfo

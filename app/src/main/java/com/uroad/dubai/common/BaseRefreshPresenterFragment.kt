@@ -10,7 +10,7 @@ import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.BaseView
 import kotlinx.android.synthetic.main.content_smartrefresh.*
 
-abstract class BaseRefreshPresenterFragment<P : BasePresenter<*>> : BaseDubaiFragment(), BaseView {
+abstract class BaseRefreshPresenterFragment<P : BasePresenter<*>> : BaseFragment(), BaseView {
     open var presenter: P? = null
 
     override fun setUp(view: View, savedInstanceState: Bundle?) {

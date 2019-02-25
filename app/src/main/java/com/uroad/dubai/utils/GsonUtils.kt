@@ -108,6 +108,15 @@ class GsonUtils {
             }
         }
 
+        fun getDataString(json: String?, key: String?): String? {
+            if (TextUtils.isEmpty(json)) return ""
+            return try {
+                JsonParser().parse(json).asJsonObject.get("data").asJsonObject.get(key).asString
+            } catch (e: Exception) {
+                ""
+            }
+        }
+
         fun getDataAsString(json: String?): String {
             if (TextUtils.isEmpty(json)) return ""
             return try {
@@ -261,11 +270,11 @@ class GsonUtils {
 
         fun isJson(json: String?): Boolean {
             if (TextUtils.isEmpty(json)) return false
-            try {
+            return try {
                 JsonParser().parse(json).asJsonObject
-                return true
+                true
             } catch (e: Exception) {
-                return false
+                false
             }
         }
     }

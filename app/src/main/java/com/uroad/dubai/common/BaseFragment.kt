@@ -17,9 +17,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.uroad.dubai.R
+import com.uroad.dubai.local.UserPreferenceHelper
 import com.uroad.library.compat.AppDialog
 import com.uroad.library.compat.AppToast
 import com.uroad.library.compat.LoadingDialog
+import com.uroad.library.utils.DeviceUtils
 import com.uroad.library.utils.NetworkUtils
 import com.uroad.library.widget.CurrencyLoadView
 
@@ -306,4 +308,12 @@ abstract class BaseFragment : Fragment() {
         super.onDestroy()
         super.onDestroyView()
     }
+
+    fun getUserId() = UserPreferenceHelper.getUserId(context)
+
+    fun getUserUUID() = UserPreferenceHelper.getUserUUID(context)
+
+    fun getAndroidID() = DeviceUtils.getAndroidID(context)
+
+    fun isLogin() = UserPreferenceHelper.isLogin(context)
 }

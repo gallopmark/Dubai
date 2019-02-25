@@ -34,7 +34,7 @@ class NewsDetailsActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsDe
         tvDetailTitle.text = newsMDL.title
         tvDetailTime.text = newsMDL.publishtime
         tvDetailContent.text = newsMDL.content
-        GlideV4.getInstance().displayImage(this, newsMDL.headimg, ivDetails, R.color.color_f7)
+        GlideV4.displayImage(this, newsMDL.headimg, ivDetails, R.color.color_f7)
     }
 
     override fun onParseError() {

@@ -36,6 +36,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
+import com.uroad.dubai.api.presenter.FunctionStatisticsPresenter
 import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.api.presenter.RoadNavigationPresenter
 import com.uroad.dubai.api.presenter.UserAddressPresenter
@@ -45,6 +46,7 @@ import com.uroad.dubai.api.view.UserAddressView
 import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.enumeration.AddressType
 import com.uroad.dubai.enumeration.MapDataType
+import com.uroad.dubai.enumeration.StatisticsType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
 import com.uroad.library.utils.InputMethodUtils
@@ -79,6 +81,8 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
 
+    private lateinit var statisticsPresenter: FunctionStatisticsPresenter
+
     companion object {
         private const val TYPE_DEFAULT = "default"
         private const val TYPE_3D = "3d"
@@ -95,6 +99,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         initSearch()
         initLayer()
         initMenu()
+        statisticsPresenter = FunctionStatisticsPresenter(this)
     }
 
     private fun initSource() {
@@ -657,6 +662,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     override fun onFailure(errMsg: String?, errCode: Int?) {
     }
 
+    override fun initData() {
+        statisticsPresenter.onFuncStatistics(StatisticsType.NAVIGATION_SEARCH.CODE)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && contentSearch.visibility != View.GONE) {
             onInitialState()
@@ -666,10 +675,15 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     override fun onDestroy() {
+        release()
+        super.onDestroy()
+    }
+
+    private fun release() {
         presenter.detachView()
         poiPresenter.detachView()
         userAddressPresenter.detachView()
+        statisticsPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
-        super.onDestroy()
     }
 }

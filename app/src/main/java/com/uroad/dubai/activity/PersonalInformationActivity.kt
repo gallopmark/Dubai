@@ -39,7 +39,7 @@ class PersonalInformationActivity : BaseActivity() ,PersonalInformationView{
         sex  = UserPreferenceHelper.getUserSex(this@PersonalInformationActivity)?:"0"
         avatar = UserPreferenceHelper.getAvatar(this@PersonalInformationActivity)?:""
 
-        GlideV4.getInstance().displayImage(this@PersonalInformationActivity,
+        GlideV4.displayImage(this@PersonalInformationActivity,
                 avatar,
                 ivAvatar,R.mipmap.ic_user_default)
         tvSex.text = sex(sex)
@@ -108,7 +108,7 @@ class PersonalInformationActivity : BaseActivity() ,PersonalInformationView{
         if ( requestCode == 123 && resultCode == Activity.RESULT_OK ){
             val images = data?.getStringArrayListExtra(ImagePicker.EXTRA_PATHS)
             images?.let {
-                GlideV4.getInstance().displayImage(this@PersonalInformationActivity,
+                GlideV4.displayImage(this@PersonalInformationActivity,
                         images[0],ivAvatar,R.mipmap.ic_user_default)
                 presenter.doUploadAvatar(images[0])
             }

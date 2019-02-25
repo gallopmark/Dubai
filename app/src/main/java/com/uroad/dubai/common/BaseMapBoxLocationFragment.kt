@@ -2,20 +2,37 @@ package com.uroad.dubai.common
 
 import android.annotation.SuppressLint
 import android.location.Location
+import android.os.Handler
+import android.os.Looper
+import android.support.annotation.IntRange
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.uroad.dubai.utils.DubaiUtils
 import java.lang.Exception
 
-abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
+abstract class BaseMapBoxLocationFragment : BaseFragment(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
     private var isUserRequestLocation = false
     private var isOpenLocation = false
     private var permissionsManager: PermissionsManager? = null
-    var locationEngine: LocationEngine? = null
+    open var locationEngine: LocationEngine? = null
     private var locationEngineRequest: LocationEngineRequest? = null
+    private var handler: Handler? = null
+    private var interval: Long = 0L
 
     open fun openLocation() {
+        onLocationGranted()
+    }
+
+    open fun openLocation(@IntRange(from = 1000, to = 10 * 1000) interval: Long) {
+        if (interval > 0) {
+            this.interval = interval
+            handler = Handler(Looper.getMainLooper())
+        }
+        onLocationGranted()
+    }
+
+    private fun onLocationGranted() {
         if (PermissionsManager.areLocationPermissionsGranted(context)) {
             onLocation()
         } else {
@@ -48,11 +65,9 @@ abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsList
 
     @SuppressLint("MissingPermission")
     private fun onLocation() {
-        locationEngine = LocationEngineProvider.getBestLocationEngine(context).apply {
-            locationEngineRequest = buildEngineRequest().apply { requestLocationUpdates(this, this@BaseMapBoxLocationFragment, null) }
-        }
+        locationEngine = LocationEngineProvider.getBestLocationEngine(context).apply { locationEngineRequest = buildEngineRequest().apply { requestLocationUpdates(this, this@BaseMapBoxLocationFragment, null) } }
         if (!DubaiUtils.isLocationEnabled(context)) onLocationFailure(Exception("Location closed"))
-        isOpenLocation = true
+        handler?.postDelayed({ onLocation() }, interval)
     }
 
     private fun buildEngineRequest(): LocationEngineRequest {
@@ -62,6 +77,7 @@ abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsList
     }
 
     override fun onSuccess(result: LocationEngineResult?) {
+        isOpenLocation = true
         result?.lastLocation?.let { afterLocation(it) }
     }
 
@@ -77,6 +93,7 @@ abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsList
 
     open fun closeLocation() {
         locationEngine?.removeLocationUpdates(this)
+        handler?.removeCallbacksAndMessages(null)
     }
 
     override fun onResume() {
@@ -87,7 +104,7 @@ abstract class BaseMapBoxLocationFragment : BaseDubaiFragment(), PermissionsList
     }
 
     override fun onDestroy() {
-        locationEngine?.removeLocationUpdates(this)
+        closeLocation()
         super.onDestroy()
     }
 }

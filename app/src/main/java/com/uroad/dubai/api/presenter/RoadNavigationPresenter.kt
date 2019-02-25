@@ -20,7 +20,7 @@ import com.uroad.dubai.activity.ScenicDetailActivity
 import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.view.RoadNavigationView
-import com.uroad.dubai.common.BaseDubaiActivity
+import com.uroad.dubai.common.BaseActivity
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.dialog.*
 import com.uroad.dubai.enumeration.MapDataType
@@ -30,7 +30,7 @@ import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.utils.SymbolGenerator
 import com.uroad.dubai.webService.WebApi
 
-class RoadNavigationPresenter(private val activity: BaseDubaiActivity,
+class RoadNavigationPresenter(private val activity: BaseActivity,
                               private val navigationView: RoadNavigationView)
     : BasePresenter<RoadNavigationView>(navigationView) {
     private val useruuid = activity.getUserUUID()

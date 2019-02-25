@@ -1,1 +1,1 @@
-include ':app', ':UroadLib', ':Rxjava2Lib', ':OkHttpLib', ':ImageLoader'
+include ':app', ':UroadLib', ':Rxjava2Lib', ':OkHttpLib', ':ImageLoader', ':MqttClient'

@@ -67,7 +67,7 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
 
     private fun updateUI(mdl: NewsMDL) {
         this.newsMDL = mdl
-        GlideV4.getInstance().displayImage(this, mdl.headimg, appbarZoomView)
+        GlideV4.displayImage(this, mdl.headimg, appbarZoomView)
         tvSubTitle.text = mdl.title
         tvAddress.text = mdl.address
         tvContent.text = mdl.content

@@ -23,7 +23,7 @@ class LoginPresenter(val loginView: LoginView) : BasePresenter<LoginView>(loginV
     fun sendVerificationCode(method: String?, params: HashMap<String, String?>){
         request(method, params, object : StringObserver(loginView) {
             override fun onHttpResultOk(data: String?) {
-                val verificationcode = JSONObject(GsonUtils.getData(data)).getString("verificationcode")
+                val verificationcode = JSONObject(GsonUtils.getData(data)).optString("verificationcode")
                 loginView.getVerificationCode(verificationcode?:"")
             }
 

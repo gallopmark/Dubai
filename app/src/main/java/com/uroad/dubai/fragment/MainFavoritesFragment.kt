@@ -46,7 +46,6 @@ class MainFavoritesFragment : BasePresenterFragment<SubscribePresenter>(), Subsc
             val fragment = weakReference.get() ?: return
             val position = msg.arg1
             val directionsRoute = msg.obj as DirectionsRoute
-            Log.e("obj","${directionsRoute.toJson()}")
             fragment.data[position].distance = directionsRoute.distance()
             fragment.data[position].travelTime = directionsRoute.duration()
             val congestion = directionsRoute.legs()?.get(0)?.annotation()?.congestion()

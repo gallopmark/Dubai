@@ -96,7 +96,7 @@
             android:textSize="@dimen/font_12" />
 
         <TextView
-            android:id="@+id/tvTransport"
+            android:id="@+id/tvBusStop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

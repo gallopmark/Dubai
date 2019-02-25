@@ -16,7 +16,8 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.CarmenFeatureAdapter
-import com.uroad.dubai.api.presenter.GroupsEditPresenter
+import com.uroad.dubai.api.presenter.GroupsPresenter
+import com.uroad.dubai.api.presenter.PoiSearchPresenter
 import com.uroad.dubai.api.view.GroupsEditView
 import com.uroad.dubai.common.BaseMapBoxActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
@@ -26,11 +27,12 @@ import kotlinx.android.synthetic.main.activity_groupsedit.*
 /**
  * @author MFB
  * @create 2019/1/9
- * @describe create a group
+ * @describe edit a group
  */
 class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
 
-    private lateinit var presenter: GroupsEditPresenter
+    private lateinit var presenter: GroupsPresenter
+    private lateinit var poiSearchPresenter: PoiSearchPresenter
     private var poiKey: String? = ""
     private val handler = Handler()
     private val features = ArrayList<CarmenFeature>()
@@ -39,18 +41,27 @@ class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
     private var destination: CarmenFeature? = null
     private var destinationMarker: Marker? = null
     private var teamName: String? = null
+    private var isOnConfirm = false
+    private var isModify = false
     override fun setBaseMapBoxView(): Int = R.layout.activity_groupsedit
 
     override fun onMapSetUp(savedInstanceState: Bundle?) {
         withTitle(getString(R.string.groups_create))
         withOption(getString(R.string.confirm), View.OnClickListener { whenConfirm() })
-        presenter = GroupsEditPresenter(this, this)
+        presenter = GroupsPresenter(this)
+        poiSearchPresenter = PoiSearchPresenter(this, this)
+        initBundle()
         initDestination()
         initRvPoi()
     }
 
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
-
+    private fun initBundle() {
+        val teamId = intent.extras?.getString("teamId")
+        isModify = !TextUtils.isEmpty(teamId)
+        val teamName = intent.extras?.getString("teamName")
+        val toPlace = intent.extras?.getString("toPlace")
+        if (!TextUtils.isEmpty(teamName)) etTeamName.setText(teamName)
+        if (!TextUtils.isEmpty(toPlace)) etDestination.setText(toPlace)
     }
 
     private fun initDestination() {
@@ -74,8 +85,11 @@ class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
     }
 
     private val poiSearchRun = Runnable {
-        presenter.cancelCall()
-        poiKey?.let { presenter.doPoiSearch(it) }
+        poiSearchPresenter.cancelCall()
+        poiKey?.let {
+            isOnConfirm = false
+            poiSearchPresenter.doPoiSearch(it)
+        }
     }
 
     private fun whenContentEmpty() {
@@ -103,7 +117,10 @@ class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
                         isItemSelected = true
                         etDestination.setText(target.placeName())
                         etDestination.setSelection(etDestination.text.length)
-                        target.center()?.let { moveCamera(target, it) }
+                        target.center()?.let {
+                            destination = target
+                            moveCamera(it)
+                        }
                         rvPoi.visibility = View.GONE
                     }
                 }
@@ -112,22 +129,17 @@ class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
         rvPoi.adapter = featureAdapter
     }
 
-    private fun moveCamera(target: CarmenFeature, point: Point) {
+    override fun onMapAsync(mapBoxMap: MapboxMap) {
+        val json = intent.extras?.getString("point")
+        json?.let { moveCamera(Point.fromJson(it)) }
+    }
+
+    private fun moveCamera(point: Point) {
         InputMethodUtils.hideSoftInput(this)
-        destination = target
         val position = LatLng(point.latitude(), point.longitude())
         mapBoxMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10.toDouble()))
         destinationMarker?.let { mapBoxMap?.removeMarker(it) }
         destinationMarker = mapBoxMap?.addMarker(MarkerOptions().position(position).icon(IconFactory.getInstance(this).fromResource(R.mipmap.ic_destination_red)))
-    }
-
-    override fun onShowLoading() {
-    }
-
-    override fun onHideLoading() {
-    }
-
-    override fun onShowError(msg: String?) {
     }
 
     override fun onPoiResult(features: MutableList<CarmenFeature>) {
@@ -149,14 +161,30 @@ class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
     }
 
     private fun createGroup(teamName: String?, latitude: Double?, longitude: Double?) {
-        presenter.createGroup(teamName, latitude, longitude)
+        isOnConfirm = true
+        presenter.createGroup(teamName, destination?.placeName(),
+                latitude, longitude, getUserUUID())
     }
 
-    override fun onCreateGroupResult() {
-        openActivity(GroupsDetailActivity::class.java, Bundle().apply {
-            putString("teamName", teamName)
-            putString("destination", destination?.toJson())
-        })
+    override fun onCreateGroupResult(teamId: String?) {
+        openActivity(GroupsDetailActivity::class.java, Bundle().apply { putString("teamId", teamId) })
         finish()
+    }
+
+    override fun onShowLoading() {
+        if (isOnConfirm) showLoading()
+    }
+
+    override fun onHideLoading() {
+        endLoading()
+    }
+
+    override fun onShowError(msg: String?) {
+        if (isOnConfirm) showShortToast(msg)
+    }
+
+    override fun onDestroy() {
+        poiSearchPresenter.detachView()
+        super.onDestroy()
     }
 }

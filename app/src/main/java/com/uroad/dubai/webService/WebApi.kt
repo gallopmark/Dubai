@@ -1,5 +1,7 @@
 package com.uroad.dubai.webService
 
+import android.text.TextUtils
+
 class WebApi {
     companion object {
         fun getBaseParams() = HashMap<String, String?>()
@@ -99,14 +101,14 @@ class WebApi {
 
 
         const val USER_LOGIN = "login"
-        fun login(logintype: String, phone: String, password: String) = getBaseParams().apply {
+        fun login(logintype: String?, phone: String?, password: String?) = getBaseParams().apply {
             put("logintype", logintype)
             put("phone", phone)
             put("password", password)
         }
 
         const val SEND_VERIFICATION_CODE = "sendVerificationCode"
-        fun sendVerificationCode(phone: String) = getBaseParams().apply {
+        fun sendVerificationCode(phone: String?) = getBaseParams().apply {
             put("phone", phone)
         }
 
@@ -170,16 +172,41 @@ class WebApi {
         }
 
         const val VALIDATIONDEVICE = "validationDevice"
-        fun validationDevice(deviceid: String) = getBaseParams().apply {
+        fun validationDevice(deviceid: String?) = getBaseParams().apply {
             put("deviceid", deviceid)
         }
 
         const val UPDATEPERSONALINFORMATION = "updatePersonalInformation"
-        fun updatePersonalInformation(useruuid : String,nickname : String,sex : String,headimg : String) = getBaseParams().apply {
-            put("useruuid",useruuid)
-            put("nickname",nickname)
-            put("sex",sex)
-            put("headimg",headimg)
+        fun updatePersonalInformation(useruuid: String?, nickname: String?, sex: String?, headimg: String?) = getBaseParams().apply {
+            put("useruuid", useruuid)
+            put("nickname", nickname)
+            put("sex", sex)
+            put("headimg", headimg)
         }
+
+        const val FUNCTION_STATISTICS = "functionStatistical"
+
+        fun functionStatisticsParams(useruuid: String?, functionid: String?) = getBaseParams().apply {
+            put("useruuid", useruuid)
+            put("functionid", functionid)
+            put("devicetype", "Android")
+        }
+
+        const val CHECK_CAR_TEAM ="checkCarTeamSituation"
+
+        const val CREATE_CAR_TEAM = "createCarTeam"
+        fun editCarTeamParams(teamid: String?, toplace: String?, teamname: String?,
+                              longitude: Double?, latitude: Double?, teamleader: String?) = getBaseParams().apply {
+            if (!TextUtils.isEmpty(teamid)) put("teamid", teamid)
+            put("toplace", toplace)
+            put("teamname", teamname)
+            put("longitude", "$longitude")
+            put("latitude", "$latitude")
+            put("teamleader", "$teamleader")
+        }
+
+        const val CAR_TEAM_DATA = "getCarTeamData"
+        fun carTeamDataWithId(teamId: String?) = getBaseParams().apply { put("teamid", teamId) }
+        fun carTeamDataWithToken(inToken: String?) = getBaseParams().apply { put("intoken", inToken) }
     }
 }

@@ -11,6 +11,7 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.uroad.dubai.photopicker.model.ImageItem
 import com.uroad.dubai.photopicker.utils.ImageUtil
 import com.uroad.glidev4.GlideV4
+import com.uroad.glidev4.listener.IGetBitmapListener
 
 
 class ImagePageAdapter(private val context: Context, private val images: ArrayList<ImageItem>) : PagerAdapter() {
@@ -29,18 +30,19 @@ class ImagePageAdapter(private val context: Context, private val images: ArrayLi
         val photoView = PhotoView(context)
         photoView.adjustViewBounds = true
         container.addView(photoView)
-        GlideV4.getInstance().getBitmapFromCache(context, images[position].path) { resource ->
-            resource?.let {
+        GlideV4.getBitmapFromCache(context, images[position].path, object : IGetBitmapListener {
+            override fun onBitmap(bitmap: Bitmap?) {
+               val resource = bitmap?:return
                 val bw = resource.width
                 val bh = resource.height
                 if (bw > 8192 || bh > 8192) {
-                    val bitmap = ImageUtil.zoomBitmap(resource, 8192, 8192)
-                    setBitmap(photoView, bitmap)
+                    val newBitmap = ImageUtil.zoomBitmap(resource, 8192, 8192)
+                    setBitmap(photoView, newBitmap)
                 } else {
                     setBitmap(photoView, resource)
                 }
             }
-        }
+        })
         photoView.setOnClickListener { mListener?.onItemClick(position, images[position]) }
         return photoView
     }

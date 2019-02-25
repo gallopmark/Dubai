@@ -19,7 +19,6 @@ import com.uroad.glidev4.listener.IImageLoaderListener
 import com.uroad.dubai.common.BaseActivity
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_splash.*
-import java.lang.Exception
 import java.lang.ref.WeakReference
 
 class SplashActivity : BaseActivity(), SplashPresenter.SplashView {
@@ -122,16 +121,16 @@ class SplashActivity : BaseActivity(), SplashPresenter.SplashView {
     }
 
     private fun displayImage(mdl: StartupMDL) {
-        GlideV4.getInstance().displayImage(this, mdl.startupimage, ivSplash, object : IImageLoaderListener {
-            override fun onLoadingComplete(url: String?, target: ImageView?) {
+        GlideV4.displayImage(this, mdl.startupimage, ivSplash, object : IImageLoaderListener {
+            override fun onLoadingFailed(url: String?, target: ImageView, exception: Exception?) {
+            }
+
+            override fun onLoadingComplete(url: String?, target: ImageView) {
                 removeTask()
                 this@SplashActivity.second = mdl.displaytime ?: 3
                 handler?.sendEmptyMessage(updateCode)
             }
 
-            override fun onLoadingFailed(url: String?, target: ImageView?, exception: Exception?) {
-
-            }
         })
         handler?.postDelayed(runMainTask, 5000L)
     }

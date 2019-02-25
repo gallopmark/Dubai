@@ -2,8 +2,11 @@ package com.uroad.dubai.activity
 
 import android.os.Bundle
 import com.uroad.dubai.R
+import com.uroad.dubai.api.presenter.FunctionStatisticsPresenter
 import com.uroad.dubai.common.BaseActivity
+import com.uroad.dubai.common.BasePresenterActivity
 import com.uroad.dubai.enumeration.NewsType
+import com.uroad.dubai.enumeration.StatisticsType
 import kotlinx.android.synthetic.main.activity_more.*
 
 /**
@@ -11,7 +14,10 @@ import kotlinx.android.synthetic.main.activity_more.*
  * @create 2018/12/29
  * @describe more function activity
  */
-class MoreActivity : BaseActivity() {
+class MoreActivity : BasePresenterActivity<FunctionStatisticsPresenter>() {
+
+    override fun createPresenter(): FunctionStatisticsPresenter = FunctionStatisticsPresenter(this)
+
     override fun setUp(savedInstanceState: Bundle?) {
         withTitle(getString(R.string.home_menu_more))
         setBaseContentView(R.layout.activity_more)
@@ -19,26 +25,65 @@ class MoreActivity : BaseActivity() {
     }
 
     private fun initView() {
-        val bundle = Bundle()
-        tvHotels.setOnClickListener {
-            bundle.putString("userstatus", NewsType.HOTEL.code)
-            openActivity(AttractionsListActivity::class.java, bundle)
-        }
-        tvRestaurants.setOnClickListener {
-            bundle.putString("userstatus", NewsType.RESTAURANT.code)
-            openActivity(AttractionsListActivity::class.java, bundle)
-        }
-        tvAttractions.setOnClickListener {
-            bundle.putString("userstatus", NewsType.ATTRACTION.code)
-            openActivity(AttractionsListActivity::class.java, bundle)
-        }
+        tvEvents.setOnClickListener { openEvents() }
+        tvHotels.setOnClickListener { openHotels() }
+        tvRestaurants.setOnClickListener { openRestaurants() }
+        tvAttractions.setOnClickListener { openAttractions() }
+        tvBusStop.setOnClickListener { openBusStop() }
+        tvParking.setOnClickListener { openParking() }
+        tvPolice.setOnClickListener { openPolice() }
+        tvGroups.setOnClickListener { openGroups() }
+        tvWeather.setOnClickListener { openWeather() }
+        tvReport.setOnClickListener { openReport() }
+    }
 
-        tvEvents.setOnClickListener { openActivity(EventsListActivity::class.java) }
-        tvTransport.setOnClickListener { openActivity(BusStopListActivity::class.java) }
-        tvParking.setOnClickListener { openActivity(ParkingListActivity::class.java) }
-        tvPolice.setOnClickListener { openActivity(PoliceListActivity::class.java) }
-        tvGroups.setOnClickListener { openActivity(GroupsSetupActivity::class.java) }
-        tvWeather.setOnClickListener { openActivity(WeatherActivity::class.java) }
-        tvReport.setOnClickListener { openActivity(ReportActivity::class.java) }
+    private fun openEvents() {
+        presenter.onFuncStatistics(StatisticsType.TAB_EVENTS.CODE)
+        openActivity(EventsListActivity::class.java)
+    }
+
+    private fun openHotels() {
+        presenter.onFuncStatistics(StatisticsType.TAB_HOTELS.CODE)
+        openActivity(AttractionsListActivity::class.java, Bundle().apply { putString("userstatus", NewsType.HOTEL.code) })
+    }
+
+    private fun openRestaurants() {
+        presenter.onFuncStatistics(StatisticsType.TAB_RESTAURANTS.CODE)
+        openActivity(AttractionsListActivity::class.java, Bundle().apply { putString("userstatus", NewsType.RESTAURANT.code) })
+    }
+
+    private fun openAttractions() {
+        presenter.onFuncStatistics(StatisticsType.TAB_ATTRACTIONS.CODE)
+        openActivity(AttractionsListActivity::class.java, Bundle().apply { putString("userstatus", NewsType.ATTRACTION.code) })
+    }
+
+    private fun openBusStop() {
+        presenter.onFuncStatistics(StatisticsType.BUS_STOPS.CODE)
+        openActivity(BusStopListActivity::class.java)
+    }
+
+    private fun openParking() {
+        presenter.onFuncStatistics(StatisticsType.RTA_PARKING.CODE)
+        openActivity(ParkingListActivity::class.java)
+    }
+
+    private fun openPolice() {
+        presenter.onFuncStatistics(StatisticsType.POLICE.CODE)
+        openActivity(PoliceListActivity::class.java)
+    }
+
+    private fun openGroups() {
+        presenter.onFuncStatistics(StatisticsType.GROUPS.CODE)
+        openActivity(GroupsSetupActivity::class.java)
+    }
+
+    private fun openWeather() {
+        presenter.onFuncStatistics(StatisticsType.WEATHER.CODE)
+        openActivity(WeatherActivity::class.java)
+    }
+
+    private fun openReport() {
+        presenter.onFuncStatistics(StatisticsType.REPORT.CODE)
+        openActivity(ReportActivity::class.java)
     }
 }

@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ImageLoader" />
+            <option value="$PROJECT_DIR$/MqttClient" />
             <option value="$PROJECT_DIR$/OkHttpLib" />
             <option value="$PROJECT_DIR$/Rxjava2Lib" />
             <option value="$PROJECT_DIR$/UroadLib" />

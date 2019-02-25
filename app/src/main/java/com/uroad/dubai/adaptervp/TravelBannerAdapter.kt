@@ -18,6 +18,6 @@ class TravelBannerAdapter(private val context: Context, data: MutableList<NewsMD
 
     override fun convert(mConvertView: View, item: NewsMDL, realPosition: Int) {
         val ivPic = obtainView<ImageView>(R.id.ivPic)
-        GlideV4.getInstance().displayImage(context, item.headimg, ivPic, ImageSize(width, height))
+        GlideV4.displayImage(context, item.headimg, ivPic, ImageSize(width, height))
     }
 }

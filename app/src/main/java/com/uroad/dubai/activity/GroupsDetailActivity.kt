@@ -2,6 +2,8 @@ package com.uroad.dubai.activity
 
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.text.TextUtils
 import android.view.View
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
@@ -13,7 +15,10 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.uroad.dubai.R
+import com.uroad.dubai.api.presenter.GroupsPresenter
 import com.uroad.dubai.common.BaseMapBoxActivity
+import com.uroad.dubai.common.DubaiApplication
+import com.uroad.dubai.model.CarTeamDataMDL
 import kotlinx.android.synthetic.main.activity_groupsdetail.*
 
 /**
@@ -21,30 +26,65 @@ import kotlinx.android.synthetic.main.activity_groupsdetail.*
  * @create 2019/1/10
  * @describe groups detail
  */
-class GroupsDetailActivity : BaseMapBoxActivity() {
+class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamCallback {
+    private var teamId: String? = null
     private var destination: CarmenFeature? = null
     private var destinationMarker: Marker? = null
     private var userMarker: Marker? = null
+    private lateinit var presenter: GroupsPresenter
+    private lateinit var handler: Handler
+
     override fun setBaseMapBoxView(): Int = R.layout.activity_groupsdetail
 
     override fun onMapSetUp(savedInstanceState: Bundle?) {
         setBaseContentView(R.layout.activity_groupsdetail)
-        withTitle("Benjamin’s group")
-        withOption(getString(R.string.groups_modify), View.OnClickListener { showTipsDialog(getString(R.string.developing)) })
         initBundle()
         initView()
+        presenter = GroupsPresenter()
+        handler = Handler()
     }
 
     private fun initBundle() {
-        val teamName = intent.extras?.getString("teamName")
-        val destination = intent.extras?.getString("destination")
-        destination?.let { this.destination = CarmenFeature.fromJson(it) }
-        withTitle(teamName)
-        tvDestination.text = this.destination?.placeName()
+        teamId = intent.extras?.getString("teamId")
     }
 
     override fun onMapAsync(mapBoxMap: MapboxMap) {
-        this.destination?.center()?.let { moveCamera(it) }
+        getCarTeamData()
+    }
+
+    private fun getCarTeamData() {
+        presenter.getCarTeamDataWithId(teamId, this)
+    }
+
+    override fun onGetCarTeamData(mdl: CarTeamDataMDL?) {
+        withTitle(mdl?.team_data?.teamname)
+        tvDestination.text = mdl?.team_data?.toplace
+        mdl?.team_data?.point()?.let { moveCamera(it) }
+        if (isHeader(mdl?.teammember)) {
+            val bundle = Bundle().apply {
+                putString("teamId", teamId)
+                putString("point", mdl?.team_data?.point()?.toJson())
+                putString("teamName", mdl?.team_data?.teamname)
+                putString("toPlace", mdl?.team_data?.toplace)
+            }
+            withOption(getString(R.string.groups_modify), View.OnClickListener { openActivity(GroupsEditActivity::class.java, bundle) })
+        }
+    }
+
+    private fun isHeader(members: MutableList<CarTeamDataMDL.TeamMember>?): Boolean {
+        members ?: return false
+        var isHeader = false
+        for (member in members) {
+            if (member.isown == 1 && TextUtils.equals(member.useruuid, getUserUUID())) {
+                isHeader = true
+                break
+            }
+        }
+        return isHeader
+    }
+
+    override fun onShowError(errorMsg: String?) {
+        handler.postDelayed({ getCarTeamData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 
     private fun moveCamera(point: Point) {
@@ -86,5 +126,11 @@ class GroupsDetailActivity : BaseMapBoxActivity() {
                 .target(LatLng(location.latitude, location.longitude))
                 .zoom(zoom).build()
         mapBoxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 }

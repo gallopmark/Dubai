@@ -142,17 +142,17 @@ abstract class BaseRecyclerAdapter(private val context: Context) : RecyclerView.
 
         fun displayImage(id: Int, url: String?) {
             val imageView = obtainView<ImageView>(id)
-            GlideV4.getInstance().displayImage(context, url, imageView)
+            GlideV4.displayImage(context, url, imageView)
         }
 
         fun displayImage(id: Int, url: String?, defRes: Int) {
             val imageView = obtainView<ImageView>(id)
-            GlideV4.getInstance().displayImage(context, url, imageView, defRes)
+            GlideV4.displayImage(context, url, imageView, defRes)
         }
 
         fun displayImage(id: Int, url: String?, defRes: Int, transformations: BitmapTransformation) {
             val imageView = obtainView<ImageView>(id)
-            GlideV4.getInstance().displayImage(context, url, imageView, defRes, transformations)
+            GlideV4.displayImage(context, url, imageView, defRes, transformations)
         }
 
         fun setVisibility(id: Int, visibility: Int) {
