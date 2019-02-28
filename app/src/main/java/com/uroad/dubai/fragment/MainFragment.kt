@@ -11,6 +11,7 @@ import com.uroad.dubai.R
 import com.uroad.dubai.activity.*
 import com.uroad.dubai.adapter.NearMeTabAdapter
 import com.uroad.dubai.api.presenter.FunctionStatisticsPresenter
+import com.uroad.dubai.api.presenter.GroupsPresenter
 import com.uroad.dubai.api.presenter.MessagesPresenter
 import com.uroad.dubai.api.view.MessagesView
 import com.uroad.dubai.common.BaseMapBoxLocationFragment
@@ -18,6 +19,7 @@ import com.uroad.dubai.common.BaseRecyclerAdapter
 import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.StatisticsType
 import com.uroad.dubai.local.UserPreferenceHelper
+import com.uroad.dubai.model.GroupsStateMDL
 import com.uroad.dubai.model.MessagesMDL
 import com.uroad.dubai.utils.AnimUtils
 import com.uroad.dubai.webService.WebApi
@@ -36,16 +38,17 @@ import java.util.*
  * @create 2018/12/12
  * @describe 首页
  */
-class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
-
+class MainFragment : BaseMapBoxLocationFragment(), MessagesView, GroupsPresenter.OnCheckCarStateCallback {
     private var myLocation: Location? = null
     private var currentTab = 0
     private var isOnRefresh = false
     private var updateCount = 0
     private lateinit var presenter: MessagesPresenter
+    private lateinit var groupsPresenter: GroupsPresenter
     private lateinit var handler: Handler
     private var animator: ObjectAnimator? = null
     private lateinit var statisticsPresenter: FunctionStatisticsPresenter
+    private var groupsStateMDL: GroupsStateMDL? = null
 
     companion object {
         private const val TAG_BANNER = "banner"
@@ -67,9 +70,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         initNotice()
         initFavorites()
         initNearBy()
-        presenter = MessagesPresenter(this)
-        statisticsPresenter = FunctionStatisticsPresenter(context)
-        handler = Handler()
+        initP()
     }
 
     private fun initLayout() {
@@ -108,6 +109,19 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         ivNews.setOnClickListener { openNewsList() }
         tvMore.setOnClickListener { openActivity(MoreActivity::class.java) }
         ivMore.setOnClickListener { openActivity(MoreActivity::class.java) }
+        ivCenterLogo.setOnClickListener {
+            val content = groupsStateMDL?.content
+            if (!content.isNullOrEmpty()) {
+                openActivity(GroupsDetailActivity::class.java, Bundle().apply { putString("teamId", content[0].teamid) })
+            }
+        }
+    }
+
+    private fun initP() {
+        presenter = MessagesPresenter(this)
+        groupsPresenter = GroupsPresenter()
+        statisticsPresenter = FunctionStatisticsPresenter(context)
+        handler = Handler()
     }
 
     /**
@@ -267,12 +281,18 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     override fun onResume() {
         super.onResume()
         getUnreadMsg()
+        getGroupsMsg()
     }
 
     /*获取未读消息*/
     private fun getUnreadMsg() {
         animator?.cancel()
         presenter.messageCenter(WebApi.MESSAGE_CENTER, WebApi.messageCenter("1", getUserUUID(), 1, 10))
+    }
+
+    private fun getGroupsMsg() {
+        if (!isLogin()) return
+        groupsPresenter.checkCarTeam(getUserUUID(), this)
     }
 
     private fun onRefresh() {
@@ -337,10 +357,6 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
         }
     }
 
-    override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
-    }
-
     override fun onShowLoading() {
     }
 
@@ -348,13 +364,26 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView {
     }
 
     override fun onShowError(msg: String?) {
-        handler.postDelayed({ initData() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+        handler.postDelayed({ getUnreadMsg() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
+    }
+
+    override fun onCheckCarResult(mdl: GroupsStateMDL?) {
+        this.groupsStateMDL = mdl
+    }
+
+    override fun onCheckCarFailure(errorMsg: String?) {
+        handler.postDelayed({ getGroupsMsg() }, DubaiApplication.DEFAULT_DELAY_MILLIS)
     }
 
     override fun onDestroyView() {
+        release()
+        super.onDestroyView()
+    }
+
+    private fun release(){
         presenter.detachView()
         statisticsPresenter.detachView()
+        groupsPresenter.detachView()
         handler.removeCallbacksAndMessages(null)
-        super.onDestroyView()
     }
 }

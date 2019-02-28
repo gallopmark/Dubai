@@ -11,21 +11,21 @@ interface IMqttCallback {
      * @param message 消息内容
      * @param qos     消息策略
      */
-    fun messageArrived(topic: String, message: String, qos: Int)
+    fun messageArrived(topic: String?, message: String?, qos: Int)
 
     /**
      * 连接断开
      *
      * @param arg0 抛出的异常信息
      */
-    fun connectionLost(cause: Throwable)
+    fun connectionLost(cause: Throwable?)
 
     /**
      * 传送完成
      *
      * @param token
      */
-    fun deliveryComplete(token: IMqttDeliveryToken)
+    fun deliveryComplete(token: IMqttDeliveryToken?)
 
     /**
      * 连接成功

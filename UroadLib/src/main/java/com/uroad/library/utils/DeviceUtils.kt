@@ -114,7 +114,7 @@ class DeviceUtils {
          * @return 设备型号
          */
         fun getModel(): String {
-            var model: String? = Build.MODEL
+            var model = Build.MODEL
             model = model?.trim()?.replace("\\s*".toRegex(), "") ?: ""
             return model
         }
@@ -168,13 +168,13 @@ class DeviceUtils {
 
         @SuppressLint("HardwareIds", "MissingPermission")
         fun getUniqueId(context: Context): String {
-            val androidID = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-            val id = androidID + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Build.getSerial() else Build.SERIAL
             return try {
+                val androidID = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+                val id = androidID + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Build.getSerial() else Build.SERIAL
                 toMD5(id)
             } catch (e: Exception) {
                 e.printStackTrace()
-                id
+                ""
             }
         }
 

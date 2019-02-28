@@ -2,7 +2,7 @@ package com.uroad.dubai.model
 
 import com.mapbox.geojson.Point
 
-class CarTeamDataMDL {
+class GroupsTeamDataMDL {
     var team_data: TeamData? = null
     var teammember: MutableList<TeamMember>? = null
 

@@ -77,10 +77,6 @@ class MessagesListActivity : BaseRefreshPresenterActivity<MessagesPresenter>(), 
         }
     }
 
-    override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
-        showShortToast(errorMsg)
-    }
-
     override fun onShowError(msg: String?) {
         onPageError()
     }

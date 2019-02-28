@@ -10,6 +10,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
+@Deprecated("Technical Support HttpLib")
 object ApiRetrofit {
     private const val DEBUG_UTL = "http://dubaiatis.u-road.com/DubaiApi/index.php/api/"
     private const val API_URL = "http://dubaiatis.u-road.com/DubaiApi/index.php/api/"

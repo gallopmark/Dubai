@@ -38,7 +38,7 @@ class ImagePreViewActivity : BaseActivity() {
     private fun initPhotos() {
         intent.extras?.let {
             val data = it.getParcelableArrayList<ImageItem>("photos")
-            if (data.size > 0) {
+            if (!data.isNullOrEmpty()) {
                 this.photos.addAll(data)
                 for (i in 0 until this.photos.size) {
                     checkItems[i] = this.photos[i]

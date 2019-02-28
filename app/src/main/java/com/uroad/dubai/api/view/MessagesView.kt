@@ -5,5 +5,4 @@ import com.uroad.dubai.model.MessagesMDL
 
 interface MessagesView : BaseView {
     fun onGetNewList(list: MutableList<MessagesMDL>)
-    fun onHttpResultError(errorMsg: String?, errorCode: Int?)
 }

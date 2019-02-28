@@ -5,22 +5,16 @@ import android.location.Location
 import android.os.Handler
 import android.os.Looper
 import android.support.annotation.IntRange
-import android.support.annotation.LongDef
-import android.support.annotation.Size
-import android.util.Log
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.mapboxsdk.location.LocationComponentOptions
 import com.uroad.dubai.utils.DubaiUtils
-import timber.log.Timber
 import java.lang.Exception
 
 abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener, LocationEngineCallback<LocationEngineResult> {
-    private var isUserRequestLocation = false
-    private var isOpenLocation = false
     private var permissionsManager: PermissionsManager? = null
     open var locationEngine: LocationEngine? = null
-    private var locationEngineRequest: LocationEngineRequest? = null
     private var handler: Handler? = null
     private var interval: Long = 0L
 
@@ -69,23 +63,27 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
 
     @SuppressLint("MissingPermission")
     private fun onLocation() {
-        locationEngine = LocationEngineProvider.getBestLocationEngine(applicationContext).apply { locationEngineRequest = buildEngineRequest().apply { requestLocationUpdates(this, this@BaseMapBoxLocationActivity, null) } }
+        if (locationEngine != null) releaseLocation()
+        locationEngine = LocationEngineProvider.getBestLocationEngine(this)
+        val request = buildEngineRequest()
+        locationEngine?.requestLocationUpdates(request, this, Looper.getMainLooper())
         if (!DubaiUtils.isLocationEnabled(this)) onLocationFailure(Exception("Location closed"))
-        handler?.postDelayed({ onLocation() }, interval)
+        handler?.postDelayed(locationRun, interval)
     }
 
     private fun buildEngineRequest(): LocationEngineRequest {
         return LocationEngineRequest
-                .Builder(1000).setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+                .Builder(interval).setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
                 .setFastestInterval(500).build()
     }
 
     override fun onSuccess(result: LocationEngineResult?) {
-        isOpenLocation = true
+        if (isFinishing) return
         result?.lastLocation?.let { afterLocation(it) }
     }
 
     override fun onFailure(exception: Exception) {
+        if (isFinishing) return
         onLocationFailure(exception)
     }
 
@@ -95,26 +93,22 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
 
     open fun onLocationFailure(exception: Exception) {}
 
-    @SuppressLint("MissingPermission")
-    override fun onStart() {
-        super.onStart()
-//        locationEngineRequest?.let { locationEngine?.requestLocationUpdates(it, this, null) }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (isUserRequestLocation && PermissionsManager.areLocationPermissionsGranted(this) && !isOpenLocation) {
-            onLocation()
-        }
-    }
-
     override fun onDestroy() {
         closeLocation()
         super.onDestroy()
     }
 
+    private val locationRun = Runnable { onLocation() }
+
+    open fun releaseLocation() {
+        closeLocation()
+    }
+
     open fun closeLocation() {
-        locationEngine?.removeLocationUpdates(this)
-        handler?.removeCallbacksAndMessages(null)
+        locationEngine?.let {
+            it.removeLocationUpdates(this)
+            locationEngine = null
+        }
+        handler?.removeCallbacks(locationRun)
     }
 }

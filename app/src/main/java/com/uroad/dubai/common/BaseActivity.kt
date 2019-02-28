@@ -433,6 +433,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun getUserUUID() = UserPreferenceHelper.getUserUUID(this)
 
+    fun getUserName() = UserPreferenceHelper.getUserName(this)
+
     fun isLogin() = UserPreferenceHelper.isLogin(this)
     fun getTestUserId() = "201901227175316"
 

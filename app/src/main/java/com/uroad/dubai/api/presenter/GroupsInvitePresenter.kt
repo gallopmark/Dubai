@@ -4,17 +4,23 @@ import com.uroad.dubai.api.BasePresenter
 import com.uroad.dubai.api.view.GroupsInviteView
 import com.uroad.dubai.model.GroupsInviteMDL
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class GroupsInvitePresenter(private val inviteView: GroupsInviteView)
     : BasePresenter<GroupsInviteView>(inviteView) {
 
     fun getInviteList(userid: String?, keyword: String?) {
-        addDisposable(Observable.fromCallable {
-            Thread.sleep(3000)
-            getData()
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        addDisposable(Observable.timer(3000, TimeUnit.MILLISECONDS)
+                .map { getData() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ mdl -> inviteView.onGetInviteList(mdl.lastteammember, mdl.follow) }
                         , { inviteView.onHideLoading() }
                         , { inviteView.onHideLoading() },

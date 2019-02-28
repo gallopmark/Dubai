@@ -11,9 +11,9 @@ import org.eclipse.paho.client.mqttv3.IMqttMessageListener
 class MQTTService(builder: Builder) {
 
     private lateinit var client: MqttAndroidClient
-    private lateinit var conOpt: MqttConnectOptions
+    private lateinit var options: MqttConnectOptions
 
-    private var context: Context? = null
+    private var context: Context
     private var serverUrl: String? = ""
     private var userName = "admin"
     private var passWord = "password"
@@ -43,7 +43,7 @@ class MQTTService(builder: Builder) {
         // 服务器地址（协议+地址+端口号）
         client = MqttAndroidClient(context, serverUrl, clientId).apply { setCallback(iMQTTCallback) }
         // 设置MQTT监听并且接受消息
-        conOpt = MqttConnectOptions().apply {
+        options = MqttConnectOptions().apply {
             isCleanSession = this@MQTTService.cleanSession  // 清除缓存
             connectionTimeout = this@MQTTService.timeOut // 设置超时时间，单位：秒
             keepAliveInterval = this@MQTTService.keepAliveInterval // 心跳包发送间隔，单位：秒
@@ -58,7 +58,7 @@ class MQTTService(builder: Builder) {
         this.starMQTTCallBack = starMQTTCallBack
         if (!client.isConnected) {
             try {
-                client.connect(conOpt, null, iMqttActionListener)
+                client.connect(options, null, iMqttActionListener)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -176,7 +176,6 @@ class MQTTService(builder: Builder) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun publish(topic: String, payload: ByteArray, qos: Int,
@@ -197,7 +196,6 @@ class MQTTService(builder: Builder) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun unsubscribe(topicFilter: String) {
@@ -207,7 +205,6 @@ class MQTTService(builder: Builder) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun unsubscribe(topic: Array<String>) {
@@ -226,7 +223,6 @@ class MQTTService(builder: Builder) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun unsubscribe(topicFilters: Array<String>, userContext: Any, callback: IMqttActionListener) {
@@ -236,7 +232,26 @@ class MQTTService(builder: Builder) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
 
+    fun unregisterResources() {
+        client.unregisterResources()
+    }
+
+    /**
+     * 关闭客户端
+     */
+    fun close() {
+        client.close()
+    }
+
+    fun release() {
+        try {
+            unregisterResources()
+            close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     /**
@@ -244,8 +259,6 @@ class MQTTService(builder: Builder) {
      */
     fun disconnect() {
         try {
-            client.unregisterResources()
-            client.close()
             client.disconnect()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -255,30 +268,27 @@ class MQTTService(builder: Builder) {
     /**
      * 判断连接是否断开
      */
-    fun isConnected(): Boolean {
-        return try {
-            client.isConnected
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun isConnected(): Boolean = client.isConnected
 
     // MQTT监听并且接受消息
     private val iMQTTCallback = object : MqttCallback {
-
         @Throws(Exception::class)
-        override fun messageArrived(topic: String, message: MqttMessage) {
-            val msgContent = String(message.payload)
-            starMQTTCallBack?.messageArrived(topic, msgContent, message.qos)
+        override fun messageArrived(topic: String?, message: MqttMessage?) {
+            var msgContent: String? = null
+            var qos = 1
+            message?.let {
+                msgContent = String(it.payload)
+                qos = it.qos
+            }
+            starMQTTCallBack?.messageArrived(topic, msgContent, qos)
         }
 
-        override fun deliveryComplete(token: IMqttDeliveryToken) {
+        override fun deliveryComplete(token: IMqttDeliveryToken?) {
             starMQTTCallBack?.deliveryComplete(token)
         }
 
         // 失去连接，重连
-        override fun connectionLost(cause: Throwable) {
+        override fun connectionLost(cause: Throwable?) {
             starMQTTCallBack?.connectionLost(cause)
         }
     }
@@ -294,21 +304,9 @@ class MQTTService(builder: Builder) {
     }
 
     /**
-     * 关闭客户端
-     */
-    fun close() {
-        try {
-            client.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    /**
      * Builder 构造类
      */
-    class Builder {
-        internal var context: Context? = null
+    class Builder(var context: Context) {
         internal var serverUrl: String? = null
         internal var userName = "admin"
         internal var passWord = "password"
@@ -364,8 +362,7 @@ class MQTTService(builder: Builder) {
             return this
         }
 
-        fun bulid(context: Context): MQTTService {
-            this.context = context
+        fun build(): MQTTService {
             return MQTTService(this)
         }
     }

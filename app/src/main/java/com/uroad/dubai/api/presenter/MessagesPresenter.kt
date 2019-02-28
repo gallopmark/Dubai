@@ -16,7 +16,7 @@ class MessagesPresenter(val messagesView: MessagesView) : BasePresenter<Messages
             }
 
             override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
-                messagesView.onHttpResultError(errorMsg, errorCode)
+                messagesView.onShowError(errorMsg)
             }
         })
     }

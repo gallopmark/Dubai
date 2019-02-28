@@ -4,6 +4,7 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
@@ -18,20 +19,29 @@ import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.GroupsPresenter
 import com.uroad.dubai.common.BaseMapBoxActivity
 import com.uroad.dubai.common.DubaiApplication
-import com.uroad.dubai.model.CarTeamDataMDL
+import com.uroad.dubai.model.GroupsTeamDataMDL
+import com.uroad.dubai.model.mqtt.LocUpdateMDL
+import com.uroad.dubai.utils.GsonUtils
+import com.uroad.dubai.webService.ApiService
+import com.uroad.mqtt.IMqttCallback
+import com.uroad.mqtt.MQTTService
 import kotlinx.android.synthetic.main.activity_groupsdetail.*
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.IMqttToken
 
 /**
  * @author MFB
  * @create 2019/1/10
  * @describe groups detail
  */
-class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamCallback {
+class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamCallback, IMqttCallback {
+
     private var teamId: String? = null
-    private var destination: CarmenFeature? = null
+    private var dataMDL: GroupsTeamDataMDL.TeamData? = null
     private var destinationMarker: Marker? = null
     private var userMarker: Marker? = null
     private lateinit var presenter: GroupsPresenter
+    private lateinit var mqService: MQTTService
     private lateinit var handler: Handler
 
     override fun setBaseMapBoxView(): Int = R.layout.activity_groupsdetail
@@ -40,6 +50,7 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
         setBaseContentView(R.layout.activity_groupsdetail)
         initBundle()
         initView()
+        initMQTT()
         presenter = GroupsPresenter()
         handler = Handler()
     }
@@ -48,15 +59,58 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
         teamId = intent.extras?.getString("teamId")
     }
 
+    private fun initView() {
+        ivLocation.setOnClickListener { openLocation() }
+        ivScenic.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        ivTraffic.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
+        tvInvite.setOnClickListener { openActivity(GroupsInviteActivity::class.java) }
+        tvNavigation.setOnClickListener { onNavigation() }
+    }
+
+    private fun onNavigation() {
+        val mdl = this.dataMDL ?: return
+        openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+            putString("endPoint", mdl.point()?.toJson())
+            putString("endPointName", mdl.toplace)
+        })
+    }
+
+    private fun initMQTT() {
+        mqService = ApiService.buildMQTTService(this)
+        mqService.connect(this)
+    }
+
+    override fun messageArrived(topic: String?, message: String?, qos: Int) {
+        Log.e("mqtt", "messageArrived")
+    }
+
+    override fun connectionLost(cause: Throwable?) {
+        Log.e("mqtt", "connectionLost")
+    }
+
+    override fun deliveryComplete(token: IMqttDeliveryToken?) {
+        Log.e("mqtt", "deliveryComplete")
+    }
+
+    override fun connectSuccess(asyncActionToken: IMqttToken?) {
+        Log.e("mqtt", "connectSuccess")
+    }
+
+    override fun connectFailed(asyncActionToken: IMqttToken?, exception: Throwable?) {
+        Log.e("mqtt", "connectFailed")
+    }
+
     override fun onMapAsync(mapBoxMap: MapboxMap) {
         getCarTeamData()
+        openLocation(5000L)
     }
 
     private fun getCarTeamData() {
         presenter.getCarTeamDataWithId(teamId, this)
     }
 
-    override fun onGetCarTeamData(mdl: CarTeamDataMDL?) {
+    override fun onGetCarTeamData(mdl: GroupsTeamDataMDL?) {
+        dataMDL = mdl?.team_data
         withTitle(mdl?.team_data?.teamname)
         tvDestination.text = mdl?.team_data?.toplace
         mdl?.team_data?.point()?.let { moveCamera(it) }
@@ -71,8 +125,8 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
         }
     }
 
-    private fun isHeader(members: MutableList<CarTeamDataMDL.TeamMember>?): Boolean {
-        members ?: return false
+    private fun isHeader(members: MutableList<GroupsTeamDataMDL.TeamMember>?): Boolean {
+        if(members.isNullOrEmpty()) return false
         var isHeader = false
         for (member in members) {
             if (member.isown == 1 && TextUtils.equals(member.useruuid, getUserUUID())) {
@@ -94,14 +148,6 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
         destinationMarker = mapBoxMap?.addMarker(MarkerOptions().position(position).icon(IconFactory.getInstance(this).fromResource(R.mipmap.ic_destination_red)))
     }
 
-    private fun initView() {
-        ivLocation.setOnClickListener { openLocation() }
-        ivScenic.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        ivTraffic.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
-        tvInvite.setOnClickListener { openActivity(GroupsInviteActivity::class.java) }
-        tvNavigation.setOnClickListener { openActivity(RouteNavigationActivity::class.java, Bundle().apply { putString("destination", destination?.toJson()) }) }
-    }
-
     override fun onDismissLocationPermission() {
         showShortToast("user location permission not granted")
     }
@@ -111,7 +157,21 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
     }
 
     override fun afterLocation(location: Location) {
-        moveToUserLocation(location)
+        submitLocation(location)
+//        moveToUserLocation(location)
+    }
+
+    /*发送mq通知用户信息位置更新*/
+    private fun submitLocation(location: Location) {
+        val locUpdateMDL = LocUpdateMDL().apply {
+            teamid = this@GroupsDetailActivity.teamId
+            userid = getUserUUID()
+            username = getUserName()
+            longitude = location.longitude
+            latitude = location.latitude
+        }
+        mqService.publish("${ApiService.TOPIC_LOC_UPDATE}$teamId", locUpdateMDL.obtainMessage())
+        Log.e("publishMsg", GsonUtils.fromObjectToJson(locUpdateMDL.obtainMessage()))
     }
 
     private fun moveToUserLocation(location: Location) {
@@ -129,8 +189,13 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
     }
 
     override fun onDestroy() {
-        presenter.detachView()
-        handler.removeCallbacksAndMessages(null)
+        release()
         super.onDestroy()
+    }
+
+    private fun release() {
+        presenter.detachView()
+        mqService.release()
+        handler.removeCallbacksAndMessages(null)
     }
 }

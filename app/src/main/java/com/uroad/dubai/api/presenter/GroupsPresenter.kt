@@ -1,10 +1,10 @@
 package com.uroad.dubai.api.presenter
 
 import com.uroad.dubai.api.BasePresenter
-import com.uroad.dubai.api.BaseView
 import com.uroad.dubai.api.StringObserver
 import com.uroad.dubai.api.view.GroupsEditView
-import com.uroad.dubai.model.CarTeamDataMDL
+import com.uroad.dubai.model.GroupsStateMDL
+import com.uroad.dubai.model.GroupsTeamDataMDL
 import com.uroad.dubai.utils.GsonUtils
 import com.uroad.dubai.webService.WebApi
 
@@ -40,7 +40,11 @@ class GroupsPresenter() : BasePresenter<GroupsEditView>() {
     private fun getCarTeamData(params: HashMap<String, String?>, callback: OnGetCarTeamCallback?) {
         request(WebApi.CAR_TEAM_DATA, params, object : StringObserver() {
             override fun onHttpResultOk(data: String?) {
-                callback?.onGetCarTeamData(GsonUtils.fromDataBean(data, CarTeamDataMDL::class.java))
+                callback?.onGetCarTeamData(GsonUtils.fromDataBean(data, GroupsTeamDataMDL::class.java))
+            }
+
+            override fun onError(e: Throwable) {
+                callback?.onShowError(e.message)
             }
 
             override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
@@ -49,8 +53,29 @@ class GroupsPresenter() : BasePresenter<GroupsEditView>() {
         })
     }
 
+    fun checkCarTeam(userUUID: String?, callback: OnCheckCarStateCallback?) {
+        request(WebApi.CHECK_CAR_TEAM, WebApi.simpleParams(userUUID), object : StringObserver() {
+            override fun onHttpResultOk(data: String?) {
+                callback?.onCheckCarResult(GsonUtils.fromDataBean(data, GroupsStateMDL::class.java))
+            }
+
+            override fun onError(e: Throwable) {
+                callback?.onCheckCarFailure(e.message)
+            }
+
+            override fun onHttpResultError(errorMsg: String?, errorCode: Int?) {
+                callback?.onCheckCarFailure(errorMsg)
+            }
+        })
+    }
+
     interface OnGetCarTeamCallback {
-        fun onGetCarTeamData(mdl: CarTeamDataMDL?)
+        fun onGetCarTeamData(mdl: GroupsTeamDataMDL?)
         fun onShowError(errorMsg: String?)
+    }
+
+    interface OnCheckCarStateCallback {
+        fun onCheckCarResult(mdl: GroupsStateMDL?)
+        fun onCheckCarFailure(errorMsg: String?)
     }
 }
