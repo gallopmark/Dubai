@@ -3,7 +3,7 @@ package com.uroad.dubai.model
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.R
 
-class DMSysMDL : MapPointItem {
+class DMSysMDL : MapPointItem() {
     var id: String? = null
     var title: String? = null
     var content: String? = null

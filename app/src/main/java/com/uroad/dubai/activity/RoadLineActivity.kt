@@ -8,16 +8,13 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.EventsPresenter
-import com.uroad.dubai.api.presenter.RoadsNearFMPresenter
 import com.uroad.dubai.api.presenter.RouteNavigationPresenter
-import com.uroad.dubai.api.view.RoadsNearFMView
 import com.uroad.dubai.api.view.RouteNavigationView
 import com.uroad.dubai.common.BaseMapBoxActivity
 import com.uroad.dubai.model.EventsMDL
-import com.uroad.dubai.model.RoadsMDL
-import com.uroad.dubai.webService.WebApi
 import com.uroad.dubai.widget.AppCompatNavigationMapRoute
 import com.uroad.library.utils.DisplayUtils
 
@@ -35,7 +32,7 @@ class RoadLineActivity : BaseMapBoxActivity(), RouteNavigationView, EventsPresen
         withTitle(intent.extras?.getString("title"))
     }
 
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
+    override fun onMapAsync(mapBoxMap: MapboxMap, style: Style) {
         navigationMapRoute = AppCompatNavigationMapRoute(mapView, mapBoxMap).apply { isDrawWayPointMarkers(false) }
         val startPoint = intent.extras?.getString("startPoint")
         val endPoint = intent.extras?.getString("endPoint")

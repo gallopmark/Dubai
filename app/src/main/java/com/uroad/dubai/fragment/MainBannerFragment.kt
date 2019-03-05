@@ -38,11 +38,11 @@ class MainBannerFragment : BasePresenterFragment<BannerPresenter>(), BannerView 
         adapter = MainBannerAdapter(context, data).apply {
             setOnItemClickListener(object : BaseBannerAdapter.OnItemClickListener<NewsMDL> {
                 override fun onItemClick(t: NewsMDL, position: Int) {
-                    if (TextUtils.equals(t.newstype, NewsType.HOTEL.code) ||
-                            TextUtils.equals(t.newstype, NewsType.RESTAURANT.code) ||
-                            TextUtils.equals(t.newstype, NewsType.ATTRACTION.code)) {
+                    if (TextUtils.equals(t.newstypename, NewsType.TYPE_NAME_HOTEL.code) ||
+                            TextUtils.equals(t.newstypename, NewsType.TYPE_NAME_RESTAURANT.code) ||
+                            TextUtils.equals(t.newstypename, NewsType.TYPE_NAME_ATTRACTION.code)) {
                         openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", t.newsid) })
-                    } else if (TextUtils.equals(t.newstype, NewsType.NEWS.code)) {
+                    } else if (TextUtils.equals(t.newstypename, NewsType.NEWS.code)) {
                         openActivity(NewsDetailsActivity::class.java, Bundle().apply {
                             putString("newsId", t.newsid)
                             putString("title", getString(R.string.home_menu_news))

@@ -1,0 +1,68 @@
+package com.uroad.dubai.enumeration
+
+enum class MapPointId(var CODE: String) {
+    EVENTS_SOURCE_ID("point-events-source-id"),
+    PARKING_SOURCE_ID("point-parking-source-id"),
+    CCTV_SOURCE_ID("point-cctv-source-id"),
+    DMS_SOURCE_ID("point-dms-source-id"),
+    POLICE_SOURCE_ID("point-police-source-id"),
+    WEATHER_SOURCE_ID("point-weather-source-id"),
+    RWIS_SOURCE_ID("point-rwis-source-id"),
+    BUS_STOP_SOURCE_ID("point-bus-stop-source-id"),
+
+    EVENTS_UNCLUSTER_IMAGE_ID("point-events-image-id"),
+    PARKING_UNCLUSTER_IMAGE_ID("point-parking-image-id"),
+    CCTV_UNCLUSTER_IMAGE_ID("point-cctv-image-id"),
+    DMS_UNCLUSTER_IMAGE_ID("point-dms-image-id"),
+    POLICE_UNCLUSTER_IMAGE_ID("point-police-image-id"),
+    WEATHER_UNCLUSTER_IMAGE_ID("point-weather-image-id"),
+    RWIS_UNCLUSTER_IMAGE_ID("point-rwis-image-id"),
+    BUS_STOP_UNCLUSTER_IMAGE_ID("point-busstop-image-id"),
+
+    EVENTS_CLUSTER_IMAGE_ID("point-events-cluster-image-id"),
+    PARKING_CLUSTER_IMAGE_ID("point-parking-cluster-image-id"),
+    CCTV_CLUSTER_IMAGE_ID("point-cctv-cluster-image-id"),
+    DMS_CLUSTER_IMAGE_ID("point-dms-cluster-image-id"),
+    POLICE_CLUSTER_IMAGE_ID("point-police-cluster-image-id"),
+    WEATHER_CLUSTER_IMAGE_ID("point-weather-cluster-image-id"),
+    RWIS_CLUSTER_IMAGE_ID("point-rwis-cluster-image-id"),
+    BUS_STOP_CLUSTER_IMAGE_ID("point-busstop-cluster-image-id"),
+
+    EVENTS_UNCLUSTER_LAYER_ID("point-events-layer-id"),
+    PARKING_UNCLUSTER_LAYER_ID("point-parking-layer-id"),
+    CCTV_UNCLUSTER_LAYER_ID("point-cctv-layer-id"),
+    DMS_UNCLUSTER_LAYER_ID("point-dms-layer-id"),
+    POLICE_UNCLUSTER_LAYER_ID("point-police-layer-id"),
+    WEATHER_UNCLUSTER_LAYER_ID("point-weather-layer-id"),
+    RWIS_UNCLUSTER_LAYER_ID("point-rwis-layer-id"),
+    BUS_STOP_UNCLUSTER_LAYER_ID("point-busstop-layer-id"),
+
+    EVENTS_CLUSTER_LAYER_ID("point-events-cluster-layer-id"),
+    PARKING_CLUSTER_LAYER_ID("point-parking-cluster-layer-id"),
+    CCTV_CLUSTER_LAYER_ID("point-cctv-cluster-layer-id"),
+    DMS_CLUSTER_LAYER_ID("point-dms-cluster-layer-id"),
+    POLICE_CLUSTER_LAYER_ID("point-police-cluster-layer-id"),
+    WEATHER_CLUSTER_LAYER_ID("point-weather-cluster-layer-id"),
+    RWIS_CLUSTER_LAYER_ID("point-rwis-cluster-layer-id"),
+    BUS_STOP_CLUSTER_LAYER_ID("point-busstop-cluster-layer-id"),
+
+    EVENTS_PROPERTY("events-property"),
+    PARKING_PROPERTY("parking-property"),
+    CCTV_PROPERTY("cctv-property"),
+    DMS_PROPERTY("dms-property"),
+    POLICE_PROPERTY("police-property"),
+    WEATHER_PROPERTY("weather-property"),
+    RWIS_PROPERTY("rwis-property"),
+    BUS_STOP_PROPERTY("busstop-property"),
+
+    EVENTS_COUNT_LAYER_ID("point-events-count-layer-id"),
+    PARKING_COUNT_LAYER_ID("point-parking-count-layer-id"),
+    CCTV_COUNT_LAYER_ID("point-cctv-count-layer-id"),
+    DMS_COUNT_LAYER_ID("point-dms-count-layer-id"),
+    POLICE_COUNT_LAYER_ID("point-police-count-layer-id"),
+    WEATHER_COUNT_LAYER_ID("point-weather-count-layer-id"),
+    RWIS_COUNT_LAYER_ID("point-rwis-count-layer-id"),
+    BUS_STOP_COUNT_LAYER_ID("point-busstop-count-layer-id"),
+
+    POINT_COUNT("point_count")
+}

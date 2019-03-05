@@ -76,9 +76,4 @@ class ScenicDetailActivity : BasePresenterActivity<NewsDetailPresenter>(), NewsD
         collapsingLayout.title = mdl.title
         tvTel.setOnClickListener { PhoneUtils.call(this@ScenicDetailActivity, mdl.phone ?: "") }
     }
-
-    override fun onDestroy() {
-        DubaiApplication.clickItemScenic = null
-        super.onDestroy()
-    }
 }

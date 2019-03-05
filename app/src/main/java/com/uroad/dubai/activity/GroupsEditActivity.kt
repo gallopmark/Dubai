@@ -14,6 +14,7 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.CarmenFeatureAdapter
 import com.uroad.dubai.api.presenter.GroupsPresenter
@@ -129,7 +130,7 @@ class GroupsEditActivity : BaseMapBoxActivity(), GroupsEditView {
         rvPoi.adapter = featureAdapter
     }
 
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
+    override fun onMapAsync(mapBoxMap: MapboxMap, style: Style) {
         val json = intent.extras?.getString("point")
         json?.let { moveCamera(Point.fromJson(it)) }
     }

@@ -1,33 +1,34 @@
 package com.uroad.dubai.common
 
 import android.annotation.SuppressLint
-import android.location.Location
 import android.os.Bundle
-import com.mapbox.android.core.location.*
-import com.mapbox.android.core.permissions.PermissionsListener
-import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.R
-import java.lang.Exception
 
 abstract class BaseMapBoxActivity : BaseMapBoxLocationActivity() {
     lateinit var mapView: MapView
     var mapBoxMap: MapboxMap? = null
+    var mapStyle: Style? = null
 
     override fun setUp(savedInstanceState: Bundle?) {
         setBaseContentView(setBaseMapBoxView())
+        initMapView(savedInstanceState)
+    }
+
+    fun initMapView(savedInstanceState: Bundle?) {
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
         onMapSetUp(savedInstanceState)
         mapView.getMapAsync { mapBoxMap ->
             mapBoxMap.setStyle(Style.MAPBOX_STREETS) {
                 this@BaseMapBoxActivity.mapBoxMap = mapBoxMap
+                this@BaseMapBoxActivity.mapStyle = it
                 setDefaultValue(mapBoxMap)
-                onMapAsync(mapBoxMap)
+                onMapAsync(mapBoxMap, it)
             }
         }
     }
@@ -40,7 +41,7 @@ abstract class BaseMapBoxActivity : BaseMapBoxLocationActivity() {
         mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
     }
 
-    abstract fun onMapAsync(mapBoxMap: MapboxMap)
+    open fun onMapAsync(mapBoxMap: MapboxMap, style: Style){}
 
     abstract fun setBaseMapBoxView(): Int
 

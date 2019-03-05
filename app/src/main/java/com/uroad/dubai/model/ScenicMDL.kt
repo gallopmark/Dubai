@@ -2,7 +2,7 @@ package com.uroad.dubai.model
 
 import com.uroad.dubai.R
 
-class ScenicMDL : NewsMDL(), MapPointItem {
+class ScenicMDL : NewsMDL() {
     var name: String? = null
     var picurls: String? = null
     var detailurl: String? = null

@@ -30,6 +30,7 @@ android {
                     'src/main/res/layout/menu',
                     'src/main/res/layout/dialog',
                     'src/main/res/layout/include',
+                    'src/main/res/layout/mapbox',
                     'src/main/res/layout',
                     'src/main/res'
             ]
@@ -68,9 +69,10 @@ dependencies {
     implementation project(':MqttClient')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:7.1.2') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:7.2.0') {
         exclude group: 'group_name', module: 'module_name'
     }
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v7:0.2.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.5.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.30.0'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-18'

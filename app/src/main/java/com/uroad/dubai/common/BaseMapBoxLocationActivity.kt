@@ -8,7 +8,6 @@ import android.support.annotation.IntRange
 import com.mapbox.android.core.location.*
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
-import com.mapbox.mapboxsdk.location.LocationComponentOptions
 import com.uroad.dubai.utils.DubaiUtils
 import java.lang.Exception
 
@@ -17,6 +16,7 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
     open var locationEngine: LocationEngine? = null
     private var handler: Handler? = null
     private var interval: Long = 0L
+    private var isLocationClosed = false
 
     open fun openLocation() {
         onLocationGranted()
@@ -64,6 +64,7 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
     @SuppressLint("MissingPermission")
     private fun onLocation() {
         if (locationEngine != null) releaseLocation()
+        isLocationClosed = false
         locationEngine = LocationEngineProvider.getBestLocationEngine(this)
         val request = buildEngineRequest()
         locationEngine?.requestLocationUpdates(request, this, Looper.getMainLooper())
@@ -78,12 +79,12 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
     }
 
     override fun onSuccess(result: LocationEngineResult?) {
-        if (isFinishing) return
+        if (isFinishing || isLocationClosed) return
         result?.lastLocation?.let { afterLocation(it) }
     }
 
     override fun onFailure(exception: Exception) {
-        if (isFinishing) return
+        if (isFinishing || isLocationClosed) return
         onLocationFailure(exception)
     }
 
@@ -110,5 +111,6 @@ abstract class BaseMapBoxLocationActivity : BaseActivity(), PermissionsListener,
             locationEngine = null
         }
         handler?.removeCallbacks(locationRun)
+        isLocationClosed = true
     }
 }

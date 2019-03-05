@@ -6,7 +6,6 @@ import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.IconFactory
 import com.mapbox.mapboxsdk.annotations.Marker
@@ -15,6 +14,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.R
 import com.uroad.dubai.api.presenter.GroupsPresenter
 import com.uroad.dubai.common.BaseMapBoxActivity
@@ -100,7 +100,7 @@ class GroupsDetailActivity : BaseMapBoxActivity(), GroupsPresenter.OnGetCarTeamC
         Log.e("mqtt", "connectFailed")
     }
 
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
+    override fun onMapAsync(mapBoxMap: MapboxMap, style: Style) {
         getCarTeamData()
         openLocation(5000L)
     }

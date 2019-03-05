@@ -36,7 +36,6 @@ class DubaiApplication : MultiDexApplication() {
         val DEFAULT_LATLNG = LatLng(25.271139, 55.307485)
         const val DEFAULT_ZOOM = 10.toDouble()
         const val DEFAULT_DELAY_MILLIS = 3000L
-        var clickItemScenic: ScenicMDL? = null
         lateinit var COMPRESSOR_PATH: String
         fun getUserId(): String {
             return UserPreferenceHelper.getUserId(instance) ?: ""

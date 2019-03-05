@@ -8,7 +8,7 @@ import com.uroad.dubai.R
  * @create 2018/12/26
  * @describe
  */
-class RWISMDL : MapPointItem {
+class RWISMDL : MapPointItem() {
 
     var id: String? = null
     var title: String? = null

@@ -28,6 +28,7 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.ui.v5.route.OnRouteSelectionChangeListener
 import com.uroad.dubai.R
 import com.uroad.dubai.adapter.DirectionsRouteAdapter
@@ -409,7 +410,7 @@ class RouteNavigationActivity : BaseNoTitleMapBoxActivity(), RouteNavigationView
         }
     }
 
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
+    override fun onMapAsync(mapBoxMap: MapboxMap, style: Style) {
         if (startPoint == null) openLocation()
         onNavigationRoutes()
     }

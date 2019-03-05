@@ -8,7 +8,7 @@ import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class NewsMDL : Serializable, MapPointItem {
+open class NewsMDL : MapPointItem(), Serializable {
 
     var newsid: String? = null
     var publishtime: String? = null
@@ -23,24 +23,24 @@ open class NewsMDL : Serializable, MapPointItem {
     var website: String? = null
     var hours: String? = null
     var commentstar: String? = null
-    var newstype: String? = null
+    var newstypename: String? = null
     var distance: String? = null
 
-    fun getIcon(): Int = when (newstype) {
-        NewsType.HOTEL.code -> R.mipmap.ic_hotel_round
-        NewsType.RESTAURANT.code -> R.mipmap.ic_restaurations_round
+    fun getIcon(): Int = when (newstypename) {
+        NewsType.TYPE_NAME_HOTEL.code -> R.mipmap.ic_hotel_round
+        NewsType.TYPE_NAME_RESTAURANT.code -> R.mipmap.ic_restaurations_round
         else -> R.mipmap.ic_attractions_round
     }
 
-    override fun getSmallMarkerIcon(): Int = when (newstype) {
-        NewsType.HOTEL.code -> R.mipmap.ic_marker_hotel
-        NewsType.RESTAURANT.code -> R.mipmap.ic_marker_restaurants
+    override fun getSmallMarkerIcon(): Int = when (newstypename) {
+        NewsType.TYPE_NAME_HOTEL.code -> R.mipmap.ic_marker_hotel
+        NewsType.TYPE_NAME_RESTAURANT.code -> R.mipmap.ic_marker_restaurants
         else -> R.mipmap.ic_marker_attractions
     }
 
-    override fun getBigMarkerIcon(): Int = when (newstype) {
-        NewsType.HOTEL.code -> R.mipmap.ic_marker_hotel_big
-        NewsType.RESTAURANT.code -> R.mipmap.ic_marker_restaurants_big
+    override fun getBigMarkerIcon(): Int = when (newstypename) {
+        NewsType.TYPE_NAME_HOTEL.code -> R.mipmap.ic_marker_hotel_big
+        NewsType.TYPE_NAME_RESTAURANT.code -> R.mipmap.ic_marker_restaurants_big
         else -> R.mipmap.ic_marker_attractions_big
     }
 

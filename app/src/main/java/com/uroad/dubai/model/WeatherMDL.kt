@@ -2,7 +2,7 @@ package com.uroad.dubai.model
 
 import com.mapbox.mapboxsdk.geometry.LatLng
 
-class WeatherMDL : MapPointItem {
+class WeatherMDL : MapPointItem() {
     var temperature: String? = null
     var weather: String? = null
     var city: String? = null

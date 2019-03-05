@@ -3,7 +3,7 @@ package com.uroad.dubai.model
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.R
 
-class PoliceMDL :MapPointItem{
+class PoliceMDL : MapPointItem() {
 
     var id: String? = null
     var time: String? = null

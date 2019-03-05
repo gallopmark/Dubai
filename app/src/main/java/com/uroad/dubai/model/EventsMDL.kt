@@ -21,7 +21,7 @@ congestiondistance	拥堵距离	单位 km
 starttime	开始时间
 endtime	结束时间
  */
-class EventsMDL : MapPointItem {
+class EventsMDL : MapPointItem() {
     var icon: String? = null
     var eventid: String? = null    //事件ID
     var eventinfo: String? = null   // 事件描述

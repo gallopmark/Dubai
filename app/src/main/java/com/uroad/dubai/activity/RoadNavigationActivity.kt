@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer
 import com.uroad.dubai.R
-import com.uroad.dubai.common.BaseNoTitleMapBoxActivity
 import com.uroad.library.utils.DisplayUtils
 import kotlinx.android.synthetic.main.activity_roadnavigation.*
 import kotlinx.android.synthetic.main.content_maplayeroption.*
@@ -21,12 +21,12 @@ import android.support.v4.util.ArrayMap
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
+import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.Icon
 import com.mapbox.mapboxsdk.annotations.IconFactory
@@ -36,20 +36,22 @@ import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.maps.Style
 import com.uroad.dubai.adapter.PoiSearchAdapter
 import com.uroad.dubai.adapter.PoiSearchHistoryAdapter
-import com.uroad.dubai.api.presenter.FunctionStatisticsPresenter
-import com.uroad.dubai.api.presenter.PoiSearchPresenter
-import com.uroad.dubai.api.presenter.RoadNavigationPresenter
-import com.uroad.dubai.api.presenter.UserAddressPresenter
+import com.uroad.dubai.api.presenter.*
 import com.uroad.dubai.api.view.PoiSearchView
 import com.uroad.dubai.api.view.RoadNavigationView
 import com.uroad.dubai.api.view.UserAddressView
+import com.uroad.dubai.common.BaseMapBoxLocationActivity
 import com.uroad.dubai.common.BaseRecyclerAdapter
+import com.uroad.dubai.common.DubaiApplication
 import com.uroad.dubai.enumeration.AddressType
 import com.uroad.dubai.enumeration.MapDataType
 import com.uroad.dubai.enumeration.StatisticsType
 import com.uroad.dubai.local.PoiSearchSource
 import com.uroad.dubai.model.*
+import com.uroad.dubai.utils.MapController
+import com.uroad.dubai.utils.MyMapUtils
 import com.uroad.library.utils.InputMethodUtils
+import kotlinx.android.synthetic.main.content_mapview.*
 import kotlinx.android.synthetic.main.content_routepoisearch.*
 import java.lang.Exception
 
@@ -59,11 +61,11 @@ import java.lang.Exception
  * @create 2018/12/18
  * @describe Road navigation
  */
-class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, PoiSearchView, UserAddressView {
+class RoadNavigationActivity : BaseMapBoxLocationActivity(), RoadNavigationView, PoiSearchView, UserAddressView, MapboxMap.OnMapClickListener {
     private var statusHeight = 0
     private var isMapAsync = false
+    private var mapBoxMap: MapboxMap? = null
     private var fillExtrusionLayer: FillExtrusionLayer? = null
-    private var userMarker: Marker? = null
     private val markerMap = ArrayMap<String, MutableList<Marker>>()
     private var markerObjMap = ArrayMap<Long, MapPointItem>()
     private lateinit var presenter: RoadNavigationPresenter
@@ -77,11 +79,15 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     private lateinit var userAddressPresenter: UserAddressPresenter
     private var userAddressType: Int = 1
 
-    private var mUserLocation: Location? = null
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
 
     private lateinit var statisticsPresenter: FunctionStatisticsPresenter
+
+    private var isUserLocation = false
+    private var isDrawBundleMarker = false
+    private var myLocation: Location? = null
+    private lateinit var mapController: MapController
 
     companion object {
         private const val TYPE_DEFAULT = "default"
@@ -91,15 +97,58 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
 
     private var mapType = TYPE_DEFAULT
 
-    override fun setBaseMapBoxView(): Int = R.layout.activity_roadnavigation
-
-    override fun onMapSetUp(savedInstanceState: Bundle?) {
+    override fun setUp(savedInstanceState: Bundle?) {
+        setBaseContentViewWithoutTitle(R.layout.activity_roadnavigation)
+        mapView.onCreate(savedInstanceState)
+        mapController = MapController(this)
+        getMapAsync()
         initSource()
         initView()
         initSearch()
         initLayer()
         initMenu()
         statisticsPresenter = FunctionStatisticsPresenter(this)
+    }
+
+    private fun getMapAsync() {
+        mapView.getMapAsync {
+            isMapAsync = true
+            this.mapBoxMap = it
+            setDefaultValue(it)
+            it.setOnMarkerClickListener { marker ->
+                markerObjMap[marker.id]?.let { `object` -> presenter.onMarkerClick(marker, `object`) }
+                return@setOnMarkerClickListener true
+            }
+            it.addOnMapClickListener(this)
+            isUserLocation = false
+        }
+    }
+
+    private fun setDefaultValue(mapBoxMap: MapboxMap) {
+        val position = CameraPosition.Builder()
+                .target(DubaiApplication.DEFAULT_LATLNG)
+                .zoom(DubaiApplication.DEFAULT_ZOOM)
+                .build()
+        mapBoxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+        cbTrafficLayer.isChecked = true
+        mapBoxMap.setStyle(getString(R.string.map_default_url)) { openLocation() }
+    }
+
+    override fun onMapClick(point: LatLng): Boolean {
+        val pointF = mapBoxMap?.projection?.toScreenLocation(point) ?: return false
+        val features = mapBoxMap?.queryRenderedFeatures(pointF) ?: return false
+        if (features.isNotEmpty()) {
+            var pointProperty: String? = null
+            for (feature in features) {
+                val property = feature.properties()?.get("pointProperty")?.asString
+                if (property != null && mapController.pointMap()[property] != null) {
+                    pointProperty = property
+                    break
+                }
+            }
+            mapController.pointMap()[pointProperty]?.let { presenter.onMapClick(it) }
+        }
+        return true
     }
 
     private fun initSource() {
@@ -124,7 +173,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         ivReportLayer.setOnClickListener { showTipsDialog(getString(R.string.developing)) }
         ivEnlarge.setOnClickListener { enlargeMap() }
         ivNarrow.setOnClickListener { narrowMap() }
-        ivLocation.setOnClickListener { mUserLocation?.let { moveToUserLocation(it) } }
+        ivLocation.setOnClickListener {
+            isUserLocation = true
+            openLocation()
+        }
         ivRouteArrow.setOnClickListener { openActivity(RouteNavigationActivity::class.java) }
     }
 
@@ -300,17 +352,9 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun moveToUserLocation(location: Location) {
-        userMarker?.let { mapBoxMap?.removeMarker(it) }
-        val options = MarkerOptions()
-                .position(LatLng(location.latitude, location.longitude))
-                .icon(IconFactory.getInstance(this).fromResource(R.mipmap.ic_user_location))
-        userMarker = mapBoxMap?.addMarker(options)
-        var zoom = 17.toDouble()
-        mapBoxMap?.cameraPosition?.let { zoom = it.zoom }
-        val position = CameraPosition.Builder()
-                .target(LatLng(location.latitude, location.longitude))
-                .zoom(zoom).build()
-        mapBoxMap?.animateCamera(CameraUpdateFactory.newCameraPosition(position))
+        MyMapUtils.clearMyLocationMarker(mapBoxMap?.style)
+        MyMapUtils.drawMyLocationMarker(mapBoxMap?.style, location, ContextCompat.getDrawable(this, R.mipmap.ic_user_location))
+        MyMapUtils.animateCamera(mapBoxMap, LatLng(location.latitude, location.longitude), 17.toDouble())
     }
 
     private fun changeTrafficLayer(isChecked: Boolean) {
@@ -341,11 +385,11 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         }
     }
 
-    private fun setDefaultStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_default_url))
+    private fun setDefaultStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_default_url)) { whenStyleLoaded() }
 
-    private fun set3DStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_3d_url))
+    private fun set3DStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_3d_url)) { whenStyleLoaded() }
 
-    private fun setSatelliteStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_satellite_url))
+    private fun setSatelliteStyleUrl() = mapBoxMap?.setStyle(getString(R.string.map_satellite_url)) { whenStyleLoaded() }
 
     //侧滑菜单占屏幕的7/10
     private fun setDrawerEdgeSize() {
@@ -395,7 +439,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         if (cbTrafficLayer.isChecked) {
             setDefaultStyleUrl()
         } else {
-            mapBoxMap?.setStyle(Style.MAPBOX_STREETS)
+            mapBoxMap?.setStyle(Style.MAPBOX_STREETS) { whenStyleLoaded() }
         }
     }
 
@@ -407,7 +451,10 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         if (cbTrafficLayer.isChecked) {
             set3DStyleUrl()
         } else {
-            mapBoxMap?.setStyle(Style.LIGHT) { fill3DLayer() }
+            mapBoxMap?.setStyle(Style.LIGHT) {
+                whenStyleLoaded()
+                fill3DLayer()
+            }
         }
     }
 
@@ -424,40 +471,33 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         if (cbTrafficLayer.isChecked) {
             setSatelliteStyleUrl()
         } else {
-            mapBoxMap?.setStyle(Style.SATELLITE)
+            mapBoxMap?.setStyle(Style.SATELLITE) { whenStyleLoaded() }
+        }
+    }
+
+    private fun whenStyleLoaded() {
+        if (isUserLocation) myLocation?.let { moveToUserLocation(it) }
+        for ((k, v) in mapController.dataMap()) {
+            showPoint(k, v)
         }
     }
 
     /*clear map*/
     private fun clearLayer() {
 //        mapBoxMap?.clear()
+        mapController.removeAllWhenStyleChanged(mapBoxMap?.style)
         fillExtrusionLayer?.let { layer -> mapBoxMap?.style?.removeLayer(layer) }
         fillExtrusionLayer = null
     }
 
     /*enlarge map*/
     private fun enlargeMap() {
-        mapBoxMap?.let {
-            it.cameraPosition.apply {
-                var mapZoom = zoom
-                scaleMap(target, ++mapZoom)
-            }
-        }
+        mapController.enlargeMap(mapBoxMap)
     }
 
     /*narrow map*/
     private fun narrowMap() {
-        mapBoxMap?.let {
-            it.cameraPosition.apply {
-                var mapZoom = zoom
-                scaleMap(target, --mapZoom)
-            }
-        }
-    }
-
-    /*map enlarge or narrow*/
-    private fun scaleMap(nowLocation: LatLng, scaleValue: Double) {
-        mapBoxMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(nowLocation, scaleValue))
+        mapController.narrowMap(mapBoxMap)
     }
 
     private fun initMenu() {
@@ -492,17 +532,9 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun removePointFromMap(code: String) {
+        val style = mapBoxMap?.style
+        mapController.removePoint(style, code)
         markerMap[code]?.let { for (marker in it) mapBoxMap?.removeMarker(marker) }
-    }
-
-    /*map load complete*/
-    override fun onMapAsync(mapBoxMap: MapboxMap) {
-        isMapAsync = true
-        mapBoxMap.setOnMarkerClickListener { marker ->
-            markerObjMap[marker.id]?.let { `object` -> presenter.onMarkerClick(marker, `object`) }
-            return@setOnMarkerClickListener true
-        }
-        openLocation()
     }
 
     override fun onDismissLocationPermission() {
@@ -514,10 +546,14 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     override fun afterLocation(location: Location) {
-        mUserLocation = location
+        myLocation = location
         longitude = location.longitude
         latitude = location.latitude
         onMapDataSource()
+        if (isUserLocation) {
+            moveToUserLocation(location)
+        }
+        closeLocation()
     }
 
     override fun onLocationFailure(exception: Exception) {
@@ -525,23 +561,30 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun onMapDataSource() {
+        if (isDrawBundleMarker) return
         val mdl = intent.extras?.getSerializable("dataMDL")
         if (mdl != null) {
             drawMarker(mdl as NewsMDL)
         } else {
             setCheckLayer()
         }
+        isDrawBundleMarker = true
     }
 
     private fun drawMarker(mdl: NewsMDL) {
-        val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(mdl.getSmallMarkerIcon()), mdl.getLatLng()))
-        marker?.let { markerObjMap[it.id] = mdl }
+        val sourceId = "bundle-point-source-id"
+        val feature = Feature.fromGeometry(Point.fromLngLat(mdl.getLatLng().longitude, mdl.getLatLng().latitude)).apply { addStringProperty("pointProperty", "bundle-point-property") }
+        val layerId = "bundle-point-layer-id"
+        val imageName = "bundle-point-image-id"
+        MyMapUtils.addSinglePoint(mapBoxMap?.style, sourceId, feature, layerId, imageName, ContextCompat.getDrawable(this, mdl.getSmallMarkerIcon()))
+        mapController.pointMap()["bundle-point-property"] = mdl
         mapBoxMap?.animateCamera(CameraUpdateFactory.newLatLng(mdl.getLatLng()))
-        marker?.let { presenter.onMarkerClick(it, mdl) }
+//        val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(mdl.getSmallMarkerIcon()), mdl.getLatLng()))
+//        marker?.let { markerObjMap[it.id] = mdl }
+//        marker?.let { presenter.onMarkerClick(it, mdl) }
     }
 
     private fun setCheckLayer() {
-        cbTrafficLayer.isChecked = true
         cbEvents.isChecked = true
         cbParking.isChecked = true
         cbCCTV.isChecked = true
@@ -592,15 +635,7 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
     }
 
     private fun showPoint(code: String, data: MutableList<MapPointItem>) {
-        val markers = ArrayList<Marker>()
-        for (item in data) {
-            val marker = mapBoxMap?.addMarker(createMarkerOptions(IconFactory.getInstance(this).fromResource(item.getSmallMarkerIcon()), item.getLatLng()))
-            marker?.let {
-                markerObjMap[it.id] = item
-                markers.add(it)
-            }
-        }
-        markerMap[code] = markers
+        mapController.showPoint(mapBoxMap?.style, code, data)
     }
 
     private fun showWeather(code: String, items: MutableList<MapPointItem>) {
@@ -674,8 +709,39 @@ class RoadNavigationActivity : BaseNoTitleMapBoxActivity(), RoadNavigationView, 
         return super.onKeyDown(keyCode, event)
     }
 
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.let { mapView.onSaveInstanceState(it) }
+    }
+
     override fun onDestroy() {
         release()
+        mapView.onDestroy()
         super.onDestroy()
     }
 

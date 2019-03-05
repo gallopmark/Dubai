@@ -305,11 +305,62 @@ class RoadNavigationPresenter(private val activity: BaseActivity,
         return SymbolGenerator.generate(view)
     }
 
+    fun onMapClick(item: MapPointItem) {
+        if (item is ScenicMDL) {
+            activity.openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", item.newsid) })
+        } else {
+            var dialog: Dialog? = null
+            when (item) {
+                is EventsMDL -> dialog = EventsDetailDialog(activity, item)
+                is ParkingMDL -> {
+                    dialog = ParkingDetailDialog(activity, item).setOnNavigateListener(object : ParkingDetailDialog.OnNavigateListener {
+                        override fun onNavigate(mdl: ParkingMDL, dialog: ParkingDetailDialog) {
+
+                        }
+                    })
+                }
+                is CCTVSnapMDL -> dialog = CCTVSnapDetailDialog(activity, item)
+                is DMSysMDL -> dialog = DMSDetailDialog(activity, item)
+                is PoliceMDL -> {
+                    dialog = PoliceDetailDialog(activity, item).setOnNavigateListener(object : PoliceDetailDialog.OnNavigateListener {
+                        override fun onNavigate(mdl: PoliceMDL, dialog: PoliceDetailDialog) {
+
+                        }
+                    })
+                }
+                is RWISMDL -> dialog = RWISDetailDialog(activity, item)
+                is BusStopMDL -> {
+                    dialog = BusStopDetailDialog(activity, item).setOnNavigateListener(object : BusStopDetailDialog.OnNavigateListener {
+                        override fun onNavigate(mdl: BusStopMDL, dialog: BusStopDetailDialog) {
+
+                        }
+                    })
+                }
+                is NewsMDL -> {
+                    dialog = NewsDetailDialog(activity, item).setOnDialogViewClickListener(object : NewsDetailDialog.OnDialogViewClickListener {
+                        override fun onDetailClick(dialog: NewsDetailDialog) {
+                            dialog.dismiss()
+                            activity.finish()
+                        }
+
+                        override fun onNavigation(mdl: NewsMDL, dialog: NewsDetailDialog) {
+                            val point = Point.fromLngLat(mdl.getLatLng().longitude, mdl.getLatLng().latitude)
+                            activity.openActivity(RouteNavigationActivity::class.java, Bundle().apply {
+                                putString("endPoint", point.toJson())
+                                putString("endPointName", mdl.title)
+                            })
+                        }
+                    })
+                }
+            }
+            dialog?.show()
+        }
+    }
+
     fun onMarkerClick(marker: Marker, item: MapPointItem) {
         marker.icon = IconFactory.getInstance(activity).fromResource(item.getBigMarkerIcon())
         if (item is ScenicMDL) {
-            DubaiApplication.clickItemScenic = item
-            activity.openActivity(ScenicDetailActivity::class.java)
+            activity.openActivity(ScenicDetailActivity::class.java, Bundle().apply { putString("newsId", item.newsid) })
             marker.icon = IconFactory.getInstance(activity).fromResource(item.getSmallMarkerIcon())
         } else {
             var dialog: Dialog? = null

@@ -18,7 +18,7 @@ abstract class BaseMapBoxLocationFragment : BaseFragment(), PermissionsListener,
     open var locationEngine: LocationEngine? = null
     private var handler: Handler? = null
     private var interval: Long = 0L
-    private var isDestroyView = false
+    private var isLocationClosed = false
 
     open fun openLocation() {
         onLocationGranted()
@@ -94,12 +94,12 @@ abstract class BaseMapBoxLocationFragment : BaseFragment(), PermissionsListener,
     }
 
     override fun onSuccess(result: LocationEngineResult?) {
-        if (isDestroyView) return
+        if (isLocationClosed) return
         result?.lastLocation?.let { afterLocation(it) }
     }
 
     override fun onFailure(exception: Exception) {
-        if (isDestroyView) return
+        if (isLocationClosed) return
         onLocationFailure(exception)
     }
 
@@ -126,6 +126,6 @@ abstract class BaseMapBoxLocationFragment : BaseFragment(), PermissionsListener,
             locationEngine = null
         }
         handler?.removeCallbacks(locationRun)
-        isDestroyView = true
+        isLocationClosed = true
     }
 }

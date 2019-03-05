@@ -3,7 +3,7 @@ package com.uroad.dubai.model
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.uroad.dubai.R
 
-class CCTVSnapMDL : MapPointItem {
+class CCTVSnapMDL : MapPointItem() {
     var cctvids: String? = null
     var roadoldid: String? = null
 

@@ -48,7 +48,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView, GroupsPresenter
     private lateinit var handler: Handler
     private var animator: ObjectAnimator? = null
     private lateinit var statisticsPresenter: FunctionStatisticsPresenter
-    private var groupsStateMDL: GroupsStateMDL? = null
+//    private var groupsStateMDL: GroupsStateMDL? = null
 
     companion object {
         private const val TAG_BANNER = "banner"
@@ -110,10 +110,10 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView, GroupsPresenter
         tvMore.setOnClickListener { openActivity(MoreActivity::class.java) }
         ivMore.setOnClickListener { openActivity(MoreActivity::class.java) }
         ivCenterLogo.setOnClickListener {
-            val content = groupsStateMDL?.content
-            if (!content.isNullOrEmpty()) {
-                openActivity(GroupsDetailActivity::class.java, Bundle().apply { putString("teamId", content[0].teamid) })
-            }
+//            val content = groupsStateMDL?.content
+//            if (!content.isNullOrEmpty()) {
+//                openActivity(GroupsDetailActivity::class.java, Bundle().apply { putString("teamId", content[0].teamid) })
+//            }
         }
     }
 
@@ -368,7 +368,7 @@ class MainFragment : BaseMapBoxLocationFragment(), MessagesView, GroupsPresenter
     }
 
     override fun onCheckCarResult(mdl: GroupsStateMDL?) {
-        this.groupsStateMDL = mdl
+//        this.groupsStateMDL = mdl
     }
 
     override fun onCheckCarFailure(errorMsg: String?) {
